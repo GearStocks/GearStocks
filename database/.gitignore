@@ -1,3 +1,0 @@
-mongo/*
-secrets.env
-!mongo/.gitkeep
