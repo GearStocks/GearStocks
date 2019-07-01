@@ -1,7 +1,0 @@
-#!usr/bin/python3
-
-URLSLIST = (
-    'https://www.rosepassion.com/en/cat/porsche-356-pre-a-1950-1100-369-cabrio-pre-a-manual-gearbox-4-speed/M2939/engine-and-fuel-feed/engine-lubrication-oil-cooling/B1738/dynamo-demarreur-faisceau-allumage-bobine-tete-allumage-rotor-allumage-courroie-dynamo-poulie-dynamo-contacteur-pression-huile-sonde-temperature/I6226/oil-pressure-switch/P14178',
-    'https://www.rosepassion.com/en/cat/porsche-356-pre-a-1950-1100-369-cabrio-pre-a-manual-gearbox-4-speed/M2939/engine-and-fuel-feed/engine-lubrication-oil-cooling/B1738/dynamo-demarreur-faisceau-allumage-bobine-tete-allumage-rotor-allumage-courroie-dynamo-poulie-dynamo-contacteur-pression-huile-sonde-temperature/I6226/dynamo-356-6-volt-200-watt-50-amp-circumference-285-mm-part-exchange-part-exchange-send-us-your-old-part-to-receive-the-new-one-6-volt/P112280',
-    'https://www.rosepassion.com/en/cat/porsche-356-pre-a-1950-1100-369-cabrio-pre-a-manual-gearbox-4-speed/M2939/engine-and-fuel-feed/engine-lubrication-oil-cooling/B1738/dynamo-demarreur-faisceau-allumage-bobine-tete-allumage-rotor-allumage-courroie-dynamo-poulie-dynamo-contacteur-pression-huile-sonde-temperature/I6226/starter-part-exchange-send-us-your-old-part-to-receive-the-new-one-6-volt/P9659'
-)
