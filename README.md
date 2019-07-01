@@ -6,13 +6,13 @@ Enter the following commands to enter inside the application file:
 cd application
 ```
 
-Install dependencies
+Install dependencies:
 
 ```shell
 npm install
 ```
 
-Start the project
+Start the project:
 
 ```shell
 npm start
