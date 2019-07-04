@@ -1,0 +1,78 @@
+header.cover-photo {
+    width: 100%;
+    height: 180px;
+    background-image: url(../../../../assets/img/Login-banner.jpg);
+    background-size: cover;
+    border-bottom: 1px solid #e1e1e1;
+    color: white;
+    button {
+        outline: none;
+    }
+    mat-icon {
+        color: white;
+        &:hover {
+            opacity: 0.7;
+        }
+    }
+}
+
+.mat-dialog-container {
+    padding: 0 !important;
+}
+
+.mat-dialog-content {
+    margin: 0 !important;
+    padding: 24px;
+}
+
+.box {
+    border-bottom: 1px solid #e1e1e1;
+}
+
+.loginButton {
+    margin: 10px;
+    padding: 10px 30%;
+    cursor: pointer;
+    color: limegreen;
+    border-color: limegreen;
+
+    &:hover {
+        color: #fff;
+        background: limegreen;
+        border-color: limegreen;
+    }
+}
+
+.forgotPassword {
+    font-size: 14px;
+    line-height: 32px;
+    color: #666;
+
+    &:hover {
+        opacity: 0.7
+    }
+}
+
+mat-checkbox {
+    color: darkslateblue;
+
+    /deep/ &.mat-checkbox-focused {
+        .mat-ink-ripple {
+            background-color: darkslateblue;
+        }
+        .mat-checkbox-background {
+            background-color: #3B5998;
+        }
+    }
+}
+
+.footer {
+    float: left;
+    color: #a0a0a0;
+    font-size: 14px;
+
+    a {
+        color: #666;
+        font-weight: 600;
+    }
+}

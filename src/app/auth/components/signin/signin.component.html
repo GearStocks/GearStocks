@@ -1,0 +1,34 @@
+<header class="cover-photo">
+    <button type="button" class="close" aria-label="Close" (click)="close()">
+        <mat-icon>clear</mat-icon>
+    </button>
+</header>
+<mat-dialog-content>
+    <form [formGroup]="signForm">
+        <div class="mb-4">
+            <input matInput type="email" class="form-control" placeholder="Email" formControlName="email">
+            <mat-error *ngIf="error">
+                <app-errors [errors]="signForm.get('email').errors" [errorPrefix]="'Email requis'"></app-errors>
+            </mat-error>
+        </div>
+        <div class="mb-4">
+            <input matInput type="password" class="form-control" placeholder="Mot de passe" formControlName="password">
+            <mat-error *ngIf="error">
+                <app-errors [errors]="signForm.get('password').errors" [errorPrefix]="'Mot de passe requis'"></app-errors>
+            </mat-error>
+        </div>
+        <mat-checkbox (change)="getCheckBoxvalue($event)">Se souvenir de moi!</mat-checkbox>
+    </form>
+    <div class="text-center box">
+        <div class="d-flex text-center justify-content-around">
+            <div>
+                <a class='forgotPassword' (click)="resetPassword()">Mot de passe oublié ?</a>
+            </div>
+        </div>
+        <button class="loginButton btn btn-outline-primary" (click)="login()" type="button">Connexion</button>
+    </div>
+    <p class="footer">
+        Besoin d'un compte ? -
+        <a (click)="register()" id="register">Inscrivez-vous</a>
+    </p>
+</mat-dialog-content>

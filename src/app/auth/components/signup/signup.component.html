@@ -1,0 +1,86 @@
+<div class="wrap">
+    <div class="wrap__container">
+        <div class="wrap__box1"></div>
+        <div class="wrap__box2">
+            <h1 class="wrap__box2__title">S'inscrire</h1>
+            <form class="wrap__box2__form form" [formGroup]="signForm">
+                <div class="form__row form__row--two">
+                    <div class="input form__inline-input">
+                        <div class="input__container">
+                            <input formControlName="firstName" class="input__field" id="first-name" placeholder="Prénom*" required="" type="text">
+                            <mat-error *ngIf="error">
+                                <app-errors [errors]="signForm.get('firstName').errors" [errorPrefix]="'Prénom requis'" [name]="'firstName'"></app-errors>
+                            </mat-error>
+                        </div>
+                    </div>
+                    <div class="input form__inline-input">
+                        <div class="input__container">
+                            <input formControlName="lastName" class="input__field" id="last-name" placeholder="Nom*" required="" type="text">
+                            <mat-error *ngIf="error">
+                                <app-errors [errors]="signForm.get('lastName').errors" [errorPrefix]="'Nom requis'" [name]="'lastName'"></app-errors>
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+                <div class="form__row">
+                    <div class="input">
+                        <div class="input__container">
+                            <input formControlName="username" class="input__field" id="username" placeholder="Pseudo*" type="text">
+                            <mat-error *ngIf="error">
+                                <app-errors [errors]="signForm.get('username').errors" [errorPrefix]="'Pseudo requis'" [name]="'username'"></app-errors>
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+                <div class="form__row">
+                    <div class="input">
+                        <div class="input__container">
+                            <input formControlName="email" class="input__field" id="email" placeholder="Email*" required="" type="email">
+                            <mat-error *ngIf="error">
+                                <app-errors [errors]="signForm.get('email').errors" [errorPrefix]="'Email requis'"></app-errors>
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+                <div class="form__row">
+                    <div class="input">
+                        <div class="input__container">
+                            <input formControlName="password" class="input__field" id="password" placeholder="Mot de passe*" required="" type="password">
+                            <mat-error *ngIf="error">
+                                <app-errors [errors]="signForm.get('password').errors" [errorPrefix]="'Mot de passe requis'" [name]="'password'"></app-errors>
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+                <div class="form__row">
+                    <div class="input">
+                        <div class="input__container">
+                            <input class="input__field" id="confirm-password" placeholder="Confirmation du mot de passe*" required="" type="password">
+                            <mat-error *ngIf="error">
+                                <app-errors [errors]="signForm.errors"></app-errors>
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+                <div class="form__row">
+                    <div class="input-checkbox">
+                        <div class="input-checkbox__container">
+                            <ngx-recaptcha2 #captchaElem [siteKey]="siteKey" formControlName="recaptcha"></ngx-recaptcha2>
+                            <mat-error *ngIf="error">
+                                <app-errors [errors]="signForm.get('recaptcha').errors" [errorPrefix]="'Vérification requise'"></app-errors>
+                            </mat-error>
+                        </div>
+                    </div>
+                </div>
+                <div class="form__row">
+                    <div class="component component--primary form__button">
+                        <button class="loginButton btn btn-outline-primary" type="button" (click)="register()">Inscription</button>
+                    </div>
+                </div>
+                <div class="form__row wrap__box2__sign">
+                    Déjà inscrit ? -&nbsp;<a (click)="login()">Se connecter</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

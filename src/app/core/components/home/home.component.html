@@ -1,0 +1,40 @@
+<!-- Header content -->
+<div class="homeHeader">
+  <div class="homeSearch">
+    <form class="container input-group mb-3 input-group-lg">
+      <div class="input-group-prepend">
+        <button type="submit" class="input-group-text" (click)="search()">Rechercher</button>
+      </div>
+      <input type="text" [(ngModel)]="keyword" name="keyword" class="form-control" placeholder='Que recherchez-vous ?'>
+    </form>
+  </div>
+  <a (click)="scrollTo(target)" class="ca3-scroll-down-link ca3-scroll-down-arrow" data-ca3_iconfont="ETmodules" data-ca3_icon=""></a>
+</div>
+
+<!-- slide content -->
+<div #target class="homeSlide">
+  <div class="head-slide">
+    <p>GearStocks, la passion sans erreurs</p>
+    <div class="wrapper">
+      <div class="block-resp">
+        <img width="100px" src="../../../../assets/img/courbe-logo.png" class="img-fluid" alt="Responsive image">
+        <h4>Référentiel financier sur un grand nombre de pièces détachés.</h4>
+      </div>
+      <div class="block-resp">
+        <img width="100px" src="../../../../assets/img/shop.png" class="img-fluid" alt="Responsive image">
+        <h4>Marketplace de pièces détachés d'ocasion entre particuliers.</h4>
+      </div>
+      <div class="block-resp">
+        <img width="200px" src="../../../../assets/img/auto-moto-Logo-RED.png" class="img-fluid" alt="Responsive image">
+        <h4>Un grand nombre de pièces auto et moto de collections.</h4>
+      </div>
+    </div>
+  </div>
+  <div class="container foot-slide">
+    <video controls>
+      <source [src]="video" type="video/mp4">
+      Your browser does not support HTML5 video.
+    </video>
+    <h4>Vous êtes collectionneur de voiture ? Vous voulez simplement retaper une vieille voiture ? Très bien ! Mais comment faites-vous pour évaluer le prix de la pièce qu’il vous manque ? Faites-vous confiance à votre garagiste ? Demandez vous à un ami qui s’y connait un peu ou l’évaluez vous vous-même ? Avec GearStocks, vous pouvez consulter le cours d’une pièce en spécifiant sa référence ou tout simplement en recherchant par marque ou par type de pièce.</h4>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+{
+  "login": {
+    "body": {
+      "email": "d@d.fr",
+      "password": "ddd",
+      "rememberMe": false
+    }
+  },
+  "register": {
+    "body": {
+      "email": "f@f",
+      "username": "ff",
+      "password": "ffffffff"
+    }
+  },
+  "resetPassword": {
+    "email": ""
+  }
+}

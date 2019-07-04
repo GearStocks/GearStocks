@@ -1,0 +1,20 @@
+.item{
+    width:200px;
+    text-align:center;
+    display: block;
+    justify-content:space-around;
+    background-color: transparent;
+    border: 1px solid transparent;
+    margin-right: 5px;
+    margin-left: 250px;
+    margin-bottom: 1px;
+    float:none;
+  }
+  
+  #index-gallery{
+    width:465px;
+    display: flex;
+    margin-left: 520px;
+    justify-content:space-around;
+    align-content: center;
+  }

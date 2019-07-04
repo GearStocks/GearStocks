@@ -1,0 +1,99 @@
+<section class="profile">
+    <div class="profile__list">
+        <div class="profile__list__content">
+            <ul>
+                <li (click)="activeClass(element)" *ngFor="let element of list" [ngClass]="{'active-li': element.active}">{{element.name}}</li>
+            </ul>
+        </div>
+    </div>
+    <div class="profile__edit">
+        <div id="general" class="profile__edit__content">
+            <h2> Mes informations personnelles </h2>
+            <div class="profile__edit__content__form">
+                <form autocomplete="off">
+                    <div>
+                        <label>Civilité</label>
+                        <div>
+                            <select name="gender"></select>
+                        </div>
+                    </div>
+                    <div>
+                        <label>Nom *</label>
+                        <div>
+                            <input type="text" value="test">
+                        </div>
+                    </div>
+                    <div>
+                        <label>Prénom *</label>
+                        <div>
+                            <input type="text" value="test">
+                        </div>
+                    </div>
+                    <div>
+                        <label>Pseudo *</label>
+                        <div>
+                            <input type="text" value="test">
+                        </div>
+                    </div>
+                    <div>
+                        <label>Adresse *</label>
+                        <div>
+                            <input type="text" value="test">
+                        </div>
+                    </div>
+                    <div>
+                        <label>Ville ou code postal *</label>
+                        <div>
+                            <input type="text" value="test">
+                        </div>
+                    </div>
+                    <div>
+                        <label>Téléphone</label>
+                        <div>
+                            <input type="text" value="test">
+                        </div>
+                    </div>
+                    <div class="grid">
+                        <label>Date de naissance</label>
+                        <div>
+                            <select></select>
+                        </div>
+                        <div>
+                            <select></select>
+                        </div>
+                        <div>
+                            <select></select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="email" class="profile__edit__content">
+            <h2> Mon email </h2>
+            <div class="profile__edit__content__form">
+                <form autocomplete="off">
+                    <div>
+                        <label>Email *</label>
+                        <div>
+                            <input disabled type="email" value="test@test">
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div id="password" class="profile__edit__content">
+            <h2> Mon mot de passe </h2>
+            <div class="profile__edit__content__form">
+                <form autocomplete="off">
+                    <div>
+                        <label>Mot de passe actuel*</label>
+                        <div>
+                            <input disabled type="password" value="test">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

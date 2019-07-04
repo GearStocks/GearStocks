@@ -1,0 +1,64 @@
+.navbar {
+  background-color: black !important;
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  a {
+    padding-top: 10px;
+    padding-right: 10px;
+    text-decoration: none;
+    color: white;
+    text-align: center;
+    font-size: 15px;
+    cursor: pointer;
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  &__button {
+    float: left;
+    position: relative;
+    z-index: 1;
+    height: 64px;
+    padding-left: 20px;
+    padding-right: 10px;
+  }
+
+  &__logo {
+    line-height: 70px;
+    img {
+      width: 60px;
+      vertical-align: top;
+    }
+  }
+
+  &__navigation-items {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__iconAbove {
+   display: inline-block;
+    mat-icon {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    p {
+      margin-top: -9px;
+    }
+  }
+}
+
+.mat-icon-button {
+  padding: 0;
+  min-width: 0;
+  height: 40px;
+  width: 0;
+  flex-shrink: 0;
+  line-height: 40px;
+  border-radius: 50%;
+  color: white;
+}
