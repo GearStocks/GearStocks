@@ -1,6 +1,5 @@
-import { LoginComponent } from './LoginComponent'
+import Login from './Login/Login.component'
 import React from 'react';
-import { Text, View } from 'react-native'
 import { RegisterComponent } from './RegisterComponent'
 import { ForgotPasswordComponent } from './ForgotPasswordComponent'
 
@@ -11,9 +10,9 @@ export class ConnectionComponent extends React.Component {
       }
       render() {
           return (
-              <LoginComponent />,
-              <RegisterComponent />,
-              <ForgotPasswordComponent />
+              <Login />
+              /*<RegisterComponent />,
+              <ForgotPasswordComponent />*/
           )
       };
 };
