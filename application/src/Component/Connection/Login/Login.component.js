@@ -4,7 +4,7 @@ import { Button, Input, Icon } from 'react-native-elements';
 import strings from '../../../../config/strings';
 import styles from './Login.component.style';
 
-class Login extends React.Component {
+export default class Login extends React.Component {
 
   constructor(props) {
     super(props);
@@ -17,7 +17,7 @@ class Login extends React.Component {
 
   handleClick(event) {
     if (this.state.password == '') {
-      console.log('mdr');
+      //console.log('mdr');
     }
   }
 
@@ -32,14 +32,14 @@ class Login extends React.Component {
           returnKeyType='next'
           onSubmitEditing={() => this.password.focus() }
           blurOnSubmit={false}
-          placeholder='Email'
+          placeholder={styles.email}
           leftIcon={<Icon name='person' size={24} color='black' />}
           onChangeText={(email) => this.setState({ email })}
         />
         <Input
           ref={(input) => { this.password = input; }}
           returnKeyType="go"
-          placeholder='Password'
+          placeholder={styles.password}
           secureTextEntry={true}
           leftIcon={<Icon name='lock' size={24} color='black' />}
           onChangeText={(password) => this.setState({ password })}
@@ -49,5 +49,3 @@ class Login extends React.Component {
     )
   }
 }
-
-export default Login;
