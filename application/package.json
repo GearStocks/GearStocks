@@ -5,26 +5,18 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject",
-    "lint:fix": "eslint src/*.js --fix",
-    "lint": "eslint src/*.js",
-    "test": "lint-staged"
+    "test": "cross-env CI=true react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "lint": "eslint src"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "npm run lint && npm test",
+      "pre-push": "npm run lint && npm test"
     }
-  },
-  "lint-staged": {
-    "*.js": [
-      "eslint --fix",
-      "git add"
-    ]
-  },
+  },  
   "dependencies": {
     "expo": "^33.0.0",
-    "husky": "^3.0.0",
-    "lint-staged": "^9.1.0",
     "prettier": "^1.18.2",
     "react": "16.8.3",
     "react-dom": "^16.8.6",
@@ -35,12 +27,15 @@
   "devDependencies": {
     "babel-eslint": "^10.0.2",
     "babel-preset-expo": "^5.1.1",
+    "cross-env": "^5.2.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.18.0",
     "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-react": "^7.14.2"
+    "eslint-plugin-react": "^7.14.2",
+    "husky": "^3.0.0",
+    "lint-staged": "^9.1.0"
   },
   "private": true
 }
