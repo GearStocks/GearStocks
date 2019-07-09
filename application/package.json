@@ -6,16 +6,20 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "lint": "eslint --fix *.js **/*.js",
-    "lint:fix": "eslint src/*.js --fix"
+    "lint:fix": "eslint src/*.js --fix",
+    "lint": "eslint src/*.js",
+    "test": "lint-staged"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
-    "*.js": ["eslint --fix", "git add"]
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "dependencies": {
     "expo": "^33.0.0",
