@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import Login from './Login/Login.component';
 import { RegisterComponent } from './RegisterComponent';
 import { ForgotPasswordComponent } from './ForgotPasswordComponent';
