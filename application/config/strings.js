@@ -2,9 +2,13 @@ export const strings = {
   LOGIN: 'Log In',
   LOGOUT: 'Log Out',
   REGISTER: 'Register',
+  CONNECTION: 'Connection',
+  
+  USERNAME: 'Username',
+  FIRSTNAME: 'Firstname',
+  LASTNAME: 'Lastname',
   EMAIL: 'Email',
-  PASSWORD: 'Password',
-  CONNECTION: 'Connection'
+  PASSWORD: 'Password'
 };
 
 export const errors = {

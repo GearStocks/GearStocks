@@ -1,10 +1,10 @@
 import React from 'react';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import ConnectionComponent from './Component/Connection/ConnectionComponent';
-import RegisterComponent from './Component/Connection/RegisterComponent';
+import RegisterComponent from './Component/Connection/Register/Register.component';
 
 const AppNavigator = createStackNavigator({
-  ConnectionComponent: { 
+  ConnectionComponent: {
     screen: ConnectionComponent,
     navigationOptions: {
       header: null

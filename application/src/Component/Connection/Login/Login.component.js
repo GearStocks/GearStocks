@@ -1,12 +1,10 @@
 import React from 'react';
 import { View, Alert } from 'react-native';
-import RegisterComponent from '../RegisterComponent';
 import { Button, Input, Icon, Text } from 'react-native-elements';
 import { strings, errors } from '../../../../config/strings';
 import styles from './Login.component.style';
 
 export default class Login extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -37,16 +35,16 @@ export default class Login extends React.Component {
           autoCorrect={false}
           keyboardType='email-address'
           returnKeyType='next'
-          onSubmitEditing={() => this.password.focus() }
+          onSubmitEditing={() => this.password.focus()}
           blurOnSubmit={false}
-          placeholder={styles.email}
+          placeholder={strings.EMAIL}
           leftIcon={<Icon name='person' size={24} color='black' />}
           onChangeText={(email) => this.setState({ email })}
         />
         <Input
           ref={(input) => { this.password = input; }}
           returnKeyType="go"
-          placeholder={styles.password}
+          placeholder={strings.PASSWORD}
           secureTextEntry={true}
           leftIcon={<Icon name='lock' size={24} color='black' />}
           onChangeText={(password) => this.setState({ password })}
