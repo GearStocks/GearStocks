@@ -8,7 +8,7 @@ module.exports = {
     'no-use-before-define': 'off',
     'react/jsx-filename-extension': 'off',
     'react/prop-types': 'off',
-    'comma-dangle': 'off',
+    'comma-dangle': [2, 'never'],
     'no-unused-vars': ['off', { 'vars': 'local', 'args': 'after-used', 'ignoreRestSiblings': true }],
     'quotes': ['error', 'single', 'avoid-escape'],
     'semi': [2, 'always']

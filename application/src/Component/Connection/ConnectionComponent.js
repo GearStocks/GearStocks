@@ -6,7 +6,7 @@ import { ForgotPasswordComponent } from './ForgotPasswordComponent';
 export default class ConnectionComponent extends React.Component {
     render() {
         return (
-            <Login />
-        )
+            <Login navigation={this.props.navigation} />
+        );
     }
 }

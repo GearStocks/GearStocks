@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Alert } from 'react-native';
+import RegisterComponent from '../RegisterComponent';
 import { Button, Input, Icon, Text } from 'react-native-elements';
 import { strings, errors } from '../../../../config/strings';
 import styles from './Login.component.style';
@@ -51,7 +52,7 @@ export default class Login extends React.Component {
           onChangeText={(password) => this.setState({ password })}
         />
         <Button title={strings.CONNECTION} type="outline" onPress={() => this.handleClick()} />
-        <Button title={strings.REGISTER} type="outline" onPress={() => this.handleClick()} />
+        <Button title={strings.REGISTER} type="outline" onPress={() => this.props.navigation.navigate('RegisterComponent')} />
       </View>
     );
   }
