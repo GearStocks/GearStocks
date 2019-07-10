@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/bin/node /usr/share/yarn/bin/yarn.js remove lint-staged husky
+  /usr/bin/node /usr/share/yarn/bin/yarn.js install
 
 PATH: 
   /home/ixtazia/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
@@ -24,15 +24,8 @@ npm manifest:
       "android": "expo start --android",
       "ios": "expo start --ios",
       "web": "expo start --web",
-      "test": "cross-env CI=true react-scripts test --env=jsdom",
-      "eject": "react-scripts eject",
-      "lint": "eslint src"
-    },
-    "husky": {
-      "hooks": {
-        "pre-commit": "npm run lint && npm test",
-        "pre-push": "npm run lint && npm test"
-      }
+      "eject": "expo eject",
+      "lint": "eslint --fix *.js **/*.js"
     },
     "dependencies": {
       "expo": "^33.0.0",

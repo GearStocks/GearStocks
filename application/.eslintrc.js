@@ -10,7 +10,8 @@ module.exports = {
     'react/prop-types': 'off',
     'comma-dangle': 'off',
     'no-unused-vars': ['off', { 'vars': 'local', 'args': 'after-used', 'ignoreRestSiblings': true }],
-    'quotes': ['error', 'single', 'avoid-escape']
+    'quotes': ['error', 'single', 'avoid-escape'],
+    'semi': [2, 'always']
   },
   'globals': {
     'fetch': false

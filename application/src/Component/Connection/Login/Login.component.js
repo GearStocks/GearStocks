@@ -1,7 +1,7 @@
 import React from 'react';
-import { Text, View } from 'react-native';
-import { Button, Input, Icon } from 'react-native-elements';
-import strings from '../../../../config/strings';
+import { View, Alert } from 'react-native';
+import { Button, Input, Icon, Text } from 'react-native-elements';
+import { strings, errors } from '../../../../config/strings';
 import styles from './Login.component.style';
 
 export default class Login extends React.Component {
@@ -11,20 +11,26 @@ export default class Login extends React.Component {
 
     this.state = {
       email: '',
-      password: ''
-    }
+      password: '',
+      login: false
+    };
   }
 
-  handleClick(event) {
-    if (this.state.password == '') {
-      //console.log('mdr');
-    }
+  handleClick() {
+    const { email, password } = this.state;
+
+    if (`${email}` === '' && `${password}` === '')
+      Alert.alert(errors.ERR, errors.ERR_EMAIL_PASSWORD);
+    else if (`${email}` === '')
+      Alert.alert(errors.ERR, errors.ERR_EMAIL);
+    else if (`${password}` === '')
+      Alert.alert(errors.ERR, errors.ERR_PASSWORD);
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Text>Welcome to the login screen!</Text>
+        <Text h2>Login</Text>
         <Input
           autoCapitalize='none'
           autoCorrect={false}
@@ -44,8 +50,9 @@ export default class Login extends React.Component {
           leftIcon={<Icon name='lock' size={24} color='black' />}
           onChangeText={(password) => this.setState({ password })}
         />
-        <Button title={strings.LOGIN} type="outline" onPress={() => this.handleClick('login')} />
+        <Button title={strings.CONNECTION} type="outline" onPress={() => this.handleClick()} />
+        <Button title={strings.REGISTER} type="outline" onPress={() => this.handleClick()} />
       </View>
-    )
+    );
   }
 }
