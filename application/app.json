@@ -24,7 +24,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "G.com.gearstocks.ios"
+
+    },
+    "android": {
+      "package": "com.android.geartocks"
     }
   }
 }
