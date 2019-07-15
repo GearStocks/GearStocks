@@ -16,12 +16,16 @@ export default class Login extends React.Component {
   }
 
   handleClick() {
+    // eslint-disable-next-line no-useless-escape
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     const { email, password } = this.state;
 
     if (`${email}` === '' && `${password}` === '')
       Alert.alert(errors.ERR, errors.ERR_EMAIL_PASSWORD);
     else if (`${email}` === '')
       Alert.alert(errors.ERR, errors.ERR_EMAIL);
+    else if (reg.test(`${email}`) === false)
+      Alert.alert(errors.ERR, errors.ERR_INVALID_EMAIL);
     else if (`${password}` === '')
       Alert.alert(errors.ERR, errors.ERR_PASSWORD);
   }

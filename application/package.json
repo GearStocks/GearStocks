@@ -9,6 +9,9 @@
     "lint": "eslint --fix *.js **/*.js"
   },
   "dependencies": {
+    "appcenter": "2.1.0",
+    "appcenter-analytics": "2.1.0",
+    "appcenter-crashes": "2.1.0",
     "expo": "^33.0.0",
     "prettier": "^1.18.2",
     "react": "16.8.3",

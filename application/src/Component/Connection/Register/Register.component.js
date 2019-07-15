@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Alert } from 'react-native';
-import { Input, Text, Icon } from 'react-native-elements';
+import { Input, Text, Icon, Button } from 'react-native-elements';
 import { strings, errors } from '../../../../config/strings';
 import styles from './Register.component.style';
 
@@ -17,6 +17,27 @@ export default class RegisterComponent extends React.Component {
       confirmPassword: '',
       login: false
     };
+  }
+
+  handleClick() {
+    // eslint-disable-next-line no-useless-escape
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const { email, password, confirmPassword, username, firstname, lastname } = this.state;
+
+    if (`${username}` ===  '')
+      Alert.alert(errors.ERR, errors.ERR_USERNAME);
+    else if (`${firstname}` ===  '')
+      Alert.alert(errors.ERR, errors.ERR_FIRSTNAME);
+      else if (`${lastname}` ===  '')
+      Alert.alert(errors.ERR, errors.ERR_LASTNAME);
+    else if (`${email}` === '')
+      Alert.alert(errors.ERR, errors.ERR_EMAIL);
+    else if (reg.test(`${email}`) === false)
+      Alert.alert(errors.ERR, errors.ERR_INVALID_EMAIL);
+    else if (`${password}` === '' && `${confirmPassword}` === '')
+      Alert.alert(errors.ERR, errors.ERR_PASSWORD);
+    else if (`${password}` != `${confirmPassword}`)
+    Alert.alert(errors.ERR, errors.ERR_MATCH_PASSWORD);
   }
 
   render() {
@@ -64,12 +85,23 @@ export default class RegisterComponent extends React.Component {
         />
         <Input
           ref={(input) => { this.password = input; }}
-          returnKeyType="go"
+          onSubmitEditing={() => this.confirmPassword.focus()}
+          returnKeyType="next"
           placeholder={strings.PASSWORD}
           secureTextEntry={true}
           leftIcon={<Icon name='lock' size={24} color='black' />}
           onChangeText={(password) => this.setState({ password })}
         />
+        <Input
+          ref={(input) => { this.confirmPassword = input; }}
+          returnKeyType="go"
+          placeholder={strings.CONFIRM_PASSWORD}
+          secureTextEntry={true}
+          leftIcon={<Icon name='lock' size={24} color='black' />}
+          onChangeText={(confirmPassword) => this.setState({ confirmPassword })}
+        />
+        <Button title={strings.REGISTER} type="outline" onPress={() => this.handleClick()} />
+        <Button title={strings.LOGIN} type="outline" onPress={() => this.props.navigation.navigate('ConnectionComponent')} />
       </View>
     );
   }

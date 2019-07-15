@@ -8,12 +8,18 @@ export const strings = {
   FIRSTNAME: 'Firstname',
   LASTNAME: 'Lastname',
   EMAIL: 'Email',
-  PASSWORD: 'Password'
+  PASSWORD: 'Password',
+  CONFIRM_PASSWORD: 'Confirm Password'
 };
 
 export const errors = {
   ERR: 'Error',
+  ERR_USERNAME: 'Please enter your username',
+  ERR_FIRSTNAME: 'Please enter your firstname',
+  ERR_LASTNAME: 'Please enter your lastname',
   ERR_EMAIL: 'Please enter your email',
+  ERR_INVALID_EMAIL: 'Please enter a valid email',
   ERR_PASSWORD: 'Please enter your password',
+  ERR_MATCH_PASSWORD: 'Password did not match',
   ERR_EMAIL_PASSWORD: 'Please enter your email and your password'
 };
