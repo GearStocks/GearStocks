@@ -1,17 +1,27 @@
 version: 2
 jobs:
   build:
+    shell: /bin/bash 
     working_directory: ~/application
     docker:
       - image: circleci/node:8
     steps:
       - checkout
       - run:
-          name: Update npm
+          name: Install npm
           command: 'sudo npm install -g npm@latest'
+      - run:
+          name: Install yarn
+          command: 'sudo npm install --global yarn'
+      - run:
+          name: Upgrade yarn
+          command: 'sudo npm upgrade --global yarn'
       - run:
           name: Install packages
           command: 'sudo yarn install'
+
+      - run:
+          command: pwd
       #- run:
       #    name: Tests Jest
       #    command: |
@@ -22,27 +32,44 @@ jobs:
       #- run:
 
   android:
-    working_directory: ~/application/android
-    docker:
-      - image: circleci/android:api-27-node8-alpha
-    steps:
-      - checkout:
-          path: ~/application
+    - checkout_code
 
-      - attach_workspace:
-          at: ~/application
+      # Analyze the Javascript using ESLint, Flow, and Jest
+      # Note: This is a job which is defined above and not part of the Orb
+      - analyse_js:
+          requires:
+            - checkout_code
 
-      - restore_cache:
-          key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
+      # Build the Android app in debug mode
+      - rn/android_build:
+          name: build_android_debug
+          project_path: "android"
+          build_type: debug
+          requires:
+            - analyse_js
 
-      - run:
-          name: lol
-          command: cd android/
+      # Build and test the Android app in release mode
+      # Note: We split these into seperate jobs because we can build the Android app on a Linux machine and preserve the expensive MacOS executor minutes for when it's required
+      - rn/android_build:
+          name: build_android_release
+          project_path: "android"
+          build_type: release
+          requires:
+            - analyse_js
+      - rn/android_test:
+          detox_configuration: "android.emu.release"
+          requires:
+            - build_android_release
 
-      - save_cache:
-          key: bundle-v1-{{ checksum "Gemfile.lock" }}-{{ arch }}
-          paths:
-            - vendor/bundle
+      # Build and test the iOS app in release mode
+      - rn/ios_build_and_test:
+          project_path: "ios/Example.xcodeproj"
+          device: "iPhone X"
+          build_configuration: "Release"
+          scheme: "Example"
+          detox_configuration: "ios.sim.release"
+          requires:
+            - analyse_js
 
     #  - run:
     #      name: fastlane tests
@@ -57,6 +84,8 @@ jobs:
     #path: test-results
 
   test:
+    shell: /bin/bash 
+    working_directory: ~/application
     docker:
       - image: circleci/node:4.8.2-jessie
       - image: mongo:3.4.4-jessie
