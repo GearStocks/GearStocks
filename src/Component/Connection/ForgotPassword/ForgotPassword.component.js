@@ -38,7 +38,7 @@ export default class ForgotPasswordComponent extends React.Component {
           placeholder={strings.ENTER_EMAIL}
           onChangeText={(email) => this.setState({ email })}
         />
-        <Button title={strings.SEND} type="outline" onPress={() => this.handleClick()} />
+        <Button title={strings.SEND} buttonStyle={styles.button} type="outline" onPress={() => this.handleClick()} />
       </View>
     );
   }

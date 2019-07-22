@@ -36,6 +36,7 @@ export default class Login extends React.Component {
       <View style={styles.container}>
         <Text h2>Login</Text>
         <Input
+          inputStyle={styles.input}
           autoCapitalize='none'
           autoCorrect={false}
           keyboardType='email-address'
@@ -54,9 +55,9 @@ export default class Login extends React.Component {
           leftIcon={<Icon name='lock' size={24} color='black' />}
           onChangeText={(password) => this.setState({ password })}
         />
-        <Button title={strings.CONNECTION} type="outline" onPress={() => this.handleClick()} />
-        <Button title={strings.REGISTER} type="outline" onPress={() => navigate('RegisterComponent')} />
-        <Button title={strings.FORGOT_PASSWORD} type="outline" onPress={() => navigate('ForgotPasswordComponent')} />
+        <Button title={strings.FORGOT_PASSWORD} type="clear" onPress={() => navigate('ForgotPasswordComponent')} />
+        <Button title={strings.CONNECTION} buttonStyle={styles.button} type="outline" onPress={() => this.handleClick()} />
+        <Button title={strings.REGISTER} buttonStyle={styles.button} type="outline" onPress={() => navigate('RegisterComponent')} />
       </View>
     );
   }
