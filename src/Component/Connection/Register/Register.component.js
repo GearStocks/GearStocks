@@ -101,7 +101,7 @@ export default class RegisterComponent extends React.Component {
           onChangeText={(confirmPassword) => this.setState({ confirmPassword })}
         />
         <Button title={strings.REGISTER} type="outline" onPress={() => this.handleClick()} />
-        <Button title={strings.LOGIN} type="outline" onPress={() => this.props.navigation.navigate('ConnectionComponent')} />
+        <Button title={strings.LOGIN} type="outline" onPress={() => this.props.navigation.navigate('LoginComponent')} />
       </View>
     );
   }

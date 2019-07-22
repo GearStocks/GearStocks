@@ -1,12 +1,20 @@
 import React from 'react';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
-import ConnectionComponent from './Component/Connection/ConnectionComponent';
+import LoginComponent from './Component/Connection/Login/Login.component';
 import RegisterComponent from './Component/Connection/Register/Register.component';
-//import ForgotPasswordComponent from './Component/Connection/ForgotPassword/ForgotPassword.component';
+import ForgotPasswordComponent from './Component/Connection/ForgotPassword/ForgotPassword.component';
+
+export default class App extends React.Component {
+  render() {
+    return (
+      <AppContainer />
+    );
+  }
+}
 
 const AppNavigator = createStackNavigator({
-  ConnectionComponent: {
-    screen: ConnectionComponent,
+  LoginComponent: {
+    screen: LoginComponent,
     navigationOptions: {
       header: null
     }
@@ -16,22 +24,13 @@ const AppNavigator = createStackNavigator({
     navigationOptions: {
       header: null
     }
-  }
-  /*ForgotPasswordComponent: {
+  },
+  ForgotPasswordComponent: {
     screen: ForgotPasswordComponent,
     navigationOptions: {
-      header: null
+      title: 'Forgot Password'
     }
-  }*/
+  }
 });
 
 const AppContainer = createAppContainer(AppNavigator);
-
-
-export default class App extends React.Component {
-  render() {
-    return (
-      <AppContainer />
-    );
-  }
-}

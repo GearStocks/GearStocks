@@ -3,13 +3,17 @@ export const strings = {
   LOGOUT: 'Log Out',
   REGISTER: 'Register',
   CONNECTION: 'Connection',
-  
+
   USERNAME: 'Username',
   FIRSTNAME: 'Firstname',
   LASTNAME: 'Lastname',
   EMAIL: 'Email',
   PASSWORD: 'Password',
-  CONFIRM_PASSWORD: 'Confirm Password'
+  CONFIRM_PASSWORD: 'Confirm Password',
+
+  FORGOT_PASSWORD: 'Forgot Password',
+  ENTER_EMAIL: 'Please, enter your email',
+  SEND: 'Send'
 };
 
 export const errors = {

@@ -31,6 +31,7 @@ export default class Login extends React.Component {
   }
 
   render() {
+    const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
         <Text h2>Login</Text>
@@ -54,7 +55,8 @@ export default class Login extends React.Component {
           onChangeText={(password) => this.setState({ password })}
         />
         <Button title={strings.CONNECTION} type="outline" onPress={() => this.handleClick()} />
-        <Button title={strings.REGISTER} type="outline" onPress={() => this.props.navigation.navigate('RegisterComponent')} />
+        <Button title={strings.REGISTER} type="outline" onPress={() => navigate('RegisterComponent')} />
+        <Button title={strings.FORGOT_PASSWORD} type="outline" onPress={() => navigate('ForgotPasswordComponent')} />
       </View>
     );
   }
