@@ -6,7 +6,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "lint": "eslint --fix *.js **/*.js"
+    "lint": "eslint --fix *.js **/*.js",
+    "clean": "sudo watchman watch-del-all && rm -rf node_modules/ && npm cache clean --force && npm install && npm start -- --reset-cache"
   },
   "dependencies": {
     "appcenter": "2.1.0",
