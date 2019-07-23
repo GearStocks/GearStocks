@@ -16,7 +16,8 @@ export default StyleSheet.create({
         top: 50
     },
     input: {
-        height: 10,
+        fontSize: 20,
+        height: 30,
         width: 100
     }
 });

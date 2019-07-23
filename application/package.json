@@ -2,8 +2,8 @@
   "main": "src/Main.js",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "sudo expo start --android",
+    "ios": "sudo expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
     "lint": "eslint --fix *.js **/*.js",
