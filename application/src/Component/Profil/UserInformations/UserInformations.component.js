@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Platform } from 'react-native';
 import { Text, SearchBar } from 'react-native-elements';
 import styles from './UserInformations.component.style';
 
@@ -27,6 +27,7 @@ export default class UserInformations extends React.Component {
         <Text h3>Welcome 'USER'</Text>
         <SearchBar
           lightTheme
+          platform={Platform.OS === 'android' ? 'android' : 'ios'}
           placeholder="Type Here"
           onChangeText={this.updateSearch}
           value={search}
