@@ -1,9 +1,7 @@
 /* Angular Modules */
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-
 
 /* RxJs Dependencies */
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -13,13 +11,14 @@ import { map } from 'rxjs/operators';
 import { AuthData } from '../models/auth-data.model';
 import { User } from '../models/user.model';
 
+import { environment } from '../../../environments/environment';
+
 @Injectable({
     providedIn: 'root'
 })
 export class UserService {
     private currentUserSubject: BehaviorSubject<User>;
     public currentUser: Observable<User>;
-
     public loginUrl = environment.loginUrl;
     public registerUrl = environment.registerUrl;
     public resetPasswordUrl = environment.resetPasswordUrl;
@@ -33,17 +32,16 @@ export class UserService {
         return this.currentUserSubject.value;
     }
 
-    login(authData: AuthData) {
+    login(authData: AuthData): Observable<User> {
         const body = {
             email: authData.email,
             password: authData.password,
             rememberMe: authData.rememberMe
         };
-        return this.http.post<any>(this.loginUrl, { body })
+        return this.http.post<User>(this.loginUrl, body)
             .pipe(map(user => {
                 // login successful if there's a jwt token in the response
-                if (user) {
-                    // store user details and jwt token in local storage to keep user logged in between page refreshes
+                if (user && user.token) {
                     localStorage.setItem('currentUser', JSON.stringify(user));
                     this.currentUserSubject.next(user);
                 }
@@ -53,22 +51,16 @@ export class UserService {
 
     register(authData: AuthData) {
         const body = {
+            firstName: authData.firstName,
+            lastName: authData.lastName,
+            userName: authData.userName,
             email: authData.email,
-            username: authData.username,
             password: authData.password
         };
-        return this.http.post<any>(this.registerUrl, { body })
-            .pipe(map(res => {
-                // login successful if there's a jwt token in the response
-                if (res) {
-                    // message de register success
-                }
-                return res;
-            }));
+        return this.http.post<any>(this.registerUrl,  body);
     }
 
-    logout() {
-        // remove user from local storage to log user out
+    logout(): void {
         localStorage.removeItem('currentUser');
         this.currentUserSubject.next(null);
         this.router.navigate(['/']);

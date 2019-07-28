@@ -1,5 +1,0 @@
-<ng-container *ngIf="errors && errors['required']">{{errorPrefix}}.</ng-container>
-<ng-container *ngIf="errors && errors['email']">Email invalide.</ng-container>
-<ng-container *ngIf="errors && !errors['required'] && name === 'username'">Le pseudo doit contenir entre 2 et 50 caractères.</ng-container>
-<ng-container *ngIf="errors && errors['minlength'] && name === 'password'">Votre mot de passe doit comprendre 8 caractères ou plus.</ng-container>
-<ng-container *ngIf="errors && errors['notSame']">Les mots de passe saisis sont différents. Veuillez réessayer.</ng-container>

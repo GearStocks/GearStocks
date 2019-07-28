@@ -14,7 +14,6 @@ import { ProfileComponent } from './profile/profile.component';
 
 /* Services */
 import { AuthGuardService } from './auth/services/auth.guard';
-import { RoleGuardService as RoleGuard } from './auth/services/role-guard.service';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -24,14 +23,15 @@ const routes: Routes = [
     { path: 'gallery', component: GalleryComponent },
     { path: 'item', component: ItemComponent },
     { path: 'item2', component: Item2Component },
-    /*{ path: 'admin', components: AdminComponent, canActivate: [RoleGuard], data: { expectedRole: 'admin' } },*/
     { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
-    providers: [AuthGuardService]
+    providers: [
+        AuthGuardService
+    ]
 })
 
 export class AppRoutingModule { }

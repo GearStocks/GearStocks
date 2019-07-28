@@ -1,7 +1,11 @@
+/* Angular modules */
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
+
+/* RxJs Dependencies */
 import { Observable } from 'rxjs';
 
+/* Services */
 import { UserService } from './user.service';
 
 @Injectable()

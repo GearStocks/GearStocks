@@ -9,29 +9,26 @@ import { SignupComponent } from './components/signup/signup.component';
 /* App Modules */
 import { SharedModule } from '../shared/shared.module';
 
-/* Angular Material */
-import { MatCheckboxModule, MatInputModule } from '@angular/material';
-
 /* Services */
 import { UserService } from './services/user.service';
 
 @NgModule({
-  declarations: [
-    SigninComponent,
-    SignupComponent
-  ],
-  entryComponents: [
-    SigninComponent
-  ],
+    declarations: [
+        SigninComponent,
+        SignupComponent
+    ],
+    entryComponents: [
+        SigninComponent
+    ],
     imports: [
         CommonModule,
-        SharedModule,
-        MatInputModule,
-        MatCheckboxModule
+        SharedModule
     ],
     exports: [
         SignupComponent
     ],
-    providers: [UserService]
+    providers: [
+        UserService
+    ]
 })
 export class AuthModule { }

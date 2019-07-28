@@ -1,6 +1,8 @@
 /* Angular Modules */
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { RouterOutlet } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
 
 /* App Modules */
@@ -10,10 +12,6 @@ import { AuthModule } from './auth/auth.module';
 
 /* Components */
 import { AppComponent } from './app.component';
-
-/* Directive */
-import { RouterOutlet } from '@angular/router';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {

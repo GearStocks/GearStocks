@@ -16,15 +16,6 @@ header.cover-photo {
     }
 }
 
-.mat-dialog-container {
-    padding: 0 !important;
-}
-
-.mat-dialog-content {
-    margin: 0 !important;
-    padding: 24px;
-}
-
 .box {
     border-bottom: 1px solid #e1e1e1;
 }
@@ -53,6 +44,35 @@ header.cover-photo {
     }
 }
 
+.footer {
+    float: left;
+    color: #a0a0a0;
+    font-size: 14px;
+
+    a {
+        font-weight: 600;
+    }
+    a:hover {
+            color: #5A55AA !important;
+    }
+}
+
+@media screen and (min-width: 700px) {
+    .signin__modal {
+        width: 35vw;
+    }
+}
+
+/* Material Design overwWrite */
+.mat-dialog-container {
+    padding: 0 !important;
+}
+
+.mat-dialog-content {
+    margin: 0 !important;
+    padding: 24px;
+}
+
 mat-checkbox {
     color: darkslateblue;
 
@@ -63,16 +83,5 @@ mat-checkbox {
         .mat-checkbox-background {
             background-color: #3B5998;
         }
-    }
-}
-
-.footer {
-    float: left;
-    color: #a0a0a0;
-    font-size: 14px;
-
-    a {
-        color: #666;
-        font-weight: 600;
     }
 }

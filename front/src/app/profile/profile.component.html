@@ -2,7 +2,7 @@
     <div class="profile__list">
         <div class="profile__list__content">
             <ul>
-                <li (click)="activeClass(element)" *ngFor="let element of list" [ngClass]="{'active-li': element.active}">{{element.name}}</li>
+                <li (click)="activeClass(element)" *ngFor="let element of profileDatalist" [ngClass]="{'active-li': element.active}">{{element.name}}</li>
             </ul>
         </div>
     </div>
@@ -10,74 +10,110 @@
         <div id="general" class="profile__edit__content">
             <h2> Mes informations personnelles </h2>
             <div class="profile__edit__content__form">
-                <form autocomplete="off">
-                    <div>
-                        <label>Civilité</label>
-                        <div>
-                            <select name="gender"></select>
-                        </div>
-                    </div>
-                    <div>
-                        <label>Nom *</label>
-                        <div>
-                            <input type="text" value="test">
-                        </div>
-                    </div>
-                    <div>
-                        <label>Prénom *</label>
-                        <div>
-                            <input type="text" value="test">
-                        </div>
-                    </div>
-                    <div>
-                        <label>Pseudo *</label>
-                        <div>
-                            <input type="text" value="test">
-                        </div>
-                    </div>
-                    <div>
-                        <label>Adresse *</label>
-                        <div>
-                            <input type="text" value="test">
-                        </div>
-                    </div>
-                    <div>
-                        <label>Ville ou code postal *</label>
-                        <div>
-                            <input type="text" value="test">
-                        </div>
-                    </div>
-                    <div>
-                        <label>Téléphone</label>
-                        <div>
-                            <input type="text" value="test">
-                        </div>
-                    </div>
-                    <div class="grid">
-                        <label>Date de naissance</label>
-                        <div>
-                            <select></select>
-                        </div>
-                        <div>
-                            <select></select>
-                        </div>
-                        <div>
-                            <select></select>
-                        </div>
-                    </div>
+                <form autocomplete="off" [formGroup]="profileDataGroup" (ngSubmit)="submitProfileData()">
+                    <app-gearstocks-select
+                            [group]="profileDataGroup"
+                            [name]="'civility'"
+                            [placeholder]="'Civilité'"
+                            [options]="civilitiesOptions"
+                            [required]="false"
+                            [validationError]="profileDataGroup.get('civility').errors"
+                            [validationErrorMessages]="errorMessages.civility">
+                    </app-gearstocks-select>
+                    <app-gearstocks-input
+                            [group]="profileDataGroup"
+                            [name]="'lastName'"
+                            [placeholder]="'Nom'"
+                            [type]="'text'"
+                            [required]="true"
+                            [validationError]="profileDataGroup.get('lastName').errors"
+                            [validationErrorMessages]="errorMessages.lastName">
+                    </app-gearstocks-input>
+                    <app-gearstocks-input
+                            [group]="profileDataGroup"
+                            [name]="'firstName'"
+                            [placeholder]="'Prénom'"
+                            [type]="'text'"
+                            [required]="true"
+                            [validationError]="profileDataGroup.get('firstName').errors"
+                            [validationErrorMessages]="errorMessages.firstName">
+                    </app-gearstocks-input>
+                    <app-gearstocks-input
+                            [group]="profileDataGroup"
+                            [name]="'userName'"
+                            [placeholder]="'Pseudo'"
+                            [type]="'text'"
+                            [required]="true"
+                            [validationError]="profileDataGroup.get('userName').errors"
+                            [validationErrorMessages]="errorMessages.userName">
+                    </app-gearstocks-input>
+                    <app-gearstocks-input
+                            [group]="profileDataGroup"
+                            [name]="'address'"
+                            [placeholder]="'Adresse'"
+                            [type]="'text'"
+                            [required]="false"
+                            [validationError]="profileDataGroup.get('address').errors"
+                            [validationErrorMessages]="errorMessages.address">
+                    </app-gearstocks-input>
+                    <app-gearstocks-input
+                            [group]="profileDataGroup"
+                            [name]="'city'"
+                            [placeholder]="'Ville ou code postal'"
+                            [type]="'text'"
+                            [required]="false"
+                            [validationError]="profileDataGroup.get('city').errors"
+                            [validationErrorMessages]="errorMessages.city">
+                    </app-gearstocks-input>
+                    <app-gearstocks-input
+                            [group]="profileDataGroup"
+                            [name]="'phone'"
+                            [placeholder]="'Téléphone'"
+                            [type]="'text'"
+                            [required]="false"
+                            [validationError]="profileDataGroup.get('phone').errors"
+                            [validationErrorMessages]="errorMessages.phone">
+                    </app-gearstocks-input>
+                    <button class="btn btn-outline-primary" type="submit" [disabled]="!dirty || !profileDataGroup.valid">Valider les modifications</button>
                 </form>
             </div>
         </div>
         <div id="email" class="profile__edit__content">
             <h2> Mon email </h2>
             <div class="profile__edit__content__form">
-                <form autocomplete="off">
-                    <div>
-                        <label>Email *</label>
-                        <div>
-                            <input disabled type="email" value="test@test">
-                        </div>
+                <form autocomplete="off" [formGroup]="profileEmailGroup" (ngSubmit)="submitProfileEmail()">
+                    <app-gearstocks-input
+                            [group]="profileEmailGroup"
+                            [name]="'email'"
+                            [placeholder]="'Email'"
+                            [type]="'email'"
+                            [required]="true"
+                            [validationError]="profileEmailGroup.get('email').errors"
+                            [validationErrorMessages]="errorMessages.email">
+                    </app-gearstocks-input>
+                    <div *ngIf="editEmail" class="profile__edit__content__form__mail">
+                        <app-gearstocks-input
+                                [group]="profileEmailGroup"
+                                [name]="'emailConfirm'"
+                                [placeholder]="'Confirmation de l\'email'"
+                                [type]="'email'"
+                                [required]="true"
+                                [validationError]="profileEmailGroup.get('emailConfirm').errors"
+                                [validationErrorMessages]="errorMessages.emailConfirm">
+                        </app-gearstocks-input>
+                        <app-gearstocks-input
+                                [group]="profileEmailGroup"
+                                [name]="'password'"
+                                [placeholder]="'Mot de passe'"
+                                [type]="'password'"
+                                [required]="true"
+                                [validationError]="profileEmailGroup.get('password').errors"
+                                [validationErrorMessages]="errorMessages.password">
+                        </app-gearstocks-input>
+                        <button class="btn btn-outline-primary" type="submit">Modifier mon adresse email</button>
+                        <button class="btn btn-outline-danger" type="button" (click)="cancelEditMail()">Annuler</button>
                     </div>
+                    <button class="btn btn-outline-primary" type="button" (click)="editMail()" *ngIf="!editEmail">Modifier mon adresse email</button>
                 </form>
             </div>
 
@@ -85,12 +121,49 @@
         <div id="password" class="profile__edit__content">
             <h2> Mon mot de passe </h2>
             <div class="profile__edit__content__form">
-                <form autocomplete="off">
-                    <div>
-                        <label>Mot de passe actuel*</label>
-                        <div>
-                            <input disabled type="password" value="test">
-                        </div>
+                <form autocomplete="off" [formGroup]="profilePasswordGroup" (ngSubmit)="submitProfilePassword()">
+                    <div *ngIf="editPass" class="profile__edit__content__form__mail">
+                        <app-gearstocks-input
+                                [group]="profilePasswordGroup"
+                                [name]="'oldPassword'"
+                                [placeholder]="'Mot de passe'"
+                                [type]="'password'"
+                                [required]="true"
+                                [validationError]="profilePasswordGroup.get('oldPassword').errors"
+                                [validationErrorMessages]="errorMessages.password">
+                        </app-gearstocks-input>
+                        <app-gearstocks-input
+                                [group]="profilePasswordGroup"
+                                [name]="'password'"
+                                [placeholder]="'Nouveau mot de passe'"
+                                [type]="'password'"
+                                [required]="true"
+                                [validationError]="profilePasswordGroup.get('password').errors"
+                                [validationErrorMessages]="errorMessages.password">
+                        </app-gearstocks-input>
+                        <app-gearstocks-input
+                                [group]="profilePasswordGroup"
+                                [name]="'confirmPassword'"
+                                [placeholder]="'Confirmation du mot de passe'"
+                                [type]="'password'"
+                                [required]="true"
+                                [validationError]="profilePasswordGroup.get('confirmPassword').errors"
+                                [validationErrorMessages]="errorMessages.password">
+                        </app-gearstocks-input>
+                        <button class="btn btn-outline-primary" type="submit">Modifier mon mot de passe</button>
+                        <button class="btn btn-outline-danger" type="button" (click)="cancelEditPassword()">Annuler</button>
+                    </div>
+                    <div *ngIf="!editPass">
+                        <app-gearstocks-input
+                                [group]="profilePasswordGroup"
+                                [name]="'showPassword'"
+                                [placeholder]="'Mot de passe'"
+                                [type]="'password'"
+                                [required]="true"
+                                [validationError]="profilePasswordGroup.get('showPassword').errors"
+                                [validationErrorMessages]="errorMessages.password">
+                        </app-gearstocks-input>
+                        <button class="btn btn-outline-primary" type="button" (click)="editPassword()">Modifier mon mot de passe</button>
                     </div>
                 </form>
             </div>

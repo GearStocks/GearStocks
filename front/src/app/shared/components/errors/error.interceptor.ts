@@ -11,6 +11,7 @@ import { UserService } from '../../../auth/services/user.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
+
     constructor(private userService: UserService) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

@@ -1,22 +1,20 @@
-/* Angular Modules */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-/* Components */
-import { ErrorsComponent } from './errors.component';
+import { GearstocksSelectComponent } from './gearstocks-select.component';
 
-describe('ErrorsComponent', () => {
-  let component: ErrorsComponent;
-  let fixture: ComponentFixture<ErrorsComponent>;
+xdescribe('GearstocksSelectComponent', () => {
+  let component: GearstocksSelectComponent;
+  let fixture: ComponentFixture<GearstocksSelectComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ErrorsComponent ]
+      declarations: [ GearstocksSelectComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ErrorsComponent);
+    fixture = TestBed.createComponent(GearstocksSelectComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,6 +1,6 @@
 /* Angular Modules */
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
 /* Material Angular */
@@ -14,66 +14,60 @@ import { UserService } from '../../services/user.service';
 
 /* Components */
 import { SigninComponent } from '../signin/signin.component';
+import { SignupFormService } from './services/signup-form.service';
 
 /* Models */
 import { AuthData } from '../../models/auth-data.model';
+import { ErrorMessages } from './signup-errors';
 
 @Component({
     selector: 'app-signup',
     templateUrl: './signup.component.html',
-    styleUrls: ['./signup.component.scss']
+    styleUrls: ['./signup.component.scss'],
+    providers: [SignupFormService]
 })
 export class SignupComponent implements OnInit {
     signForm: FormGroup;
-    error: boolean;
-    registerError: string;
-    public siteKey = '6LczU6MUAAAAAGaba5u9Qt_Peq3_mKk6bKnZ72Ju';
+    errorMessages = ErrorMessages;
+    captchaError: boolean;
+    submit = false;
+    captchaSiteKey = '6LczU6MUAAAAAGaba5u9Qt_Peq3_mKk6bKnZ72Ju';
 
     constructor(
         private userService: UserService,
-        private formBuilder: FormBuilder,
+        private signupFormService: SignupFormService,
         public dialog: MatDialog,
         private router: Router) {}
 
-    static checkPasswords(group: FormGroup) {
-        const pass = group.controls.password.value;
-        const confirmPass = group.controls.confirmPassword.value;
-        return pass === confirmPass ? null : { notSame: true };
-    }
-
     ngOnInit() {
-        this.signForm = this.buildForm();
-    }
-
-    buildForm(): FormGroup {
-        return this.formBuilder.group({
-                firstName: (['', [Validators.required]]),
-                lastName: (['', [Validators.required]]),
-                username: (['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]]),
-                email: (['', [Validators.required, Validators.email]]),
-                password: (['', [Validators.required, Validators.minLength(8)]]),
-                confirmPassword: (['', Validators.required]),
-                recaptcha: (['', Validators.required])
-            }, { validator: SignupComponent.checkPasswords }
-        );
+        this.signForm = this.signupFormService.buildForm();
+        this.signForm.get('confirmPassword').valueChanges.subscribe(val => {
+            if (SignupFormService.checkPasswords(this.signForm)) {
+                this.signForm.get('confirmPassword').setErrors([{'passwordMismatch': true}]);
+            }
+        });
     }
 
     register(): void {
+        this.submit = true;
         if (this.signForm.valid) {
             const authData = <AuthData>this.signForm.getRawValue();
             this.userService.register(authData)
                 .pipe(first())
                 .subscribe(
-                    data => {
+                    () => {},
+                    () => {},
+                    () => {
                         this.router.navigate(['/']);
                         this.login();
-                    },
-                    error => {
-                        this.registerError = error;
                     });
-            this.error = false;
+            this.captchaError = false;
         } else {
-            this.error = true;
+            Object.keys(this.signForm.controls).forEach((field => {
+                const control = this.signForm.get(field);
+                control.markAsTouched({onlySelf: true});
+            }));
+            this.captchaError = true;
         }
     }
 

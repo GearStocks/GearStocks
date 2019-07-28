@@ -3,19 +3,29 @@
         <mat-icon>clear</mat-icon>
     </button>
 </header>
-<mat-dialog-content>
+<mat-dialog-content class="signin__modal">
     <form [formGroup]="signForm">
         <div class="mb-4">
-            <input matInput type="email" class="form-control" placeholder="Email" formControlName="email">
-            <mat-error *ngIf="error">
-                <app-errors [errors]="signForm.get('email').errors" [errorPrefix]="'Email requis'"></app-errors>
-            </mat-error>
+            <app-gearstocks-input
+                    [group]="signForm"
+                    [name]="'email'"
+                    [placeholder]="'Email'"
+                    [type]="'email'"
+                    [required]="true"
+                    [validationError]="signForm.get('email').errors"
+                    [validationErrorMessages]="errorMessages.email">
+            </app-gearstocks-input>
         </div>
         <div class="mb-4">
-            <input matInput type="password" class="form-control" placeholder="Mot de passe" formControlName="password">
-            <mat-error *ngIf="error">
-                <app-errors [errors]="signForm.get('password').errors" [errorPrefix]="'Mot de passe requis'"></app-errors>
-            </mat-error>
+            <app-gearstocks-input
+                    [group]="signForm"
+                    [name]="'password'"
+                    [placeholder]="'Mot de passe'"
+                    [type]="'password'"
+                    [required]="true"
+                    [validationError]="signForm.get('password').errors"
+                    [validationErrorMessages]="errorMessages.password">
+            </app-gearstocks-input>
         </div>
         <mat-checkbox (change)="getCheckBoxvalue($event)">Se souvenir de moi!</mat-checkbox>
     </form>

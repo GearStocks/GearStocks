@@ -108,13 +108,4 @@ describe('NavbarComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('should navigate to the home', function () {
-    const de = fixture.debugElement;
-    const href = de.nativeElement.querySelector('.navbar__logo');
-    href.click();
-    fixture.whenStable().then(() => {
-      expect(location.path()).toBe('');
-    });
-  });
-
 });

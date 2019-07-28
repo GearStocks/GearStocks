@@ -17,7 +17,6 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { CoreModule } from './core/core.module';
 import { AuthModule } from './auth/auth.module';
 import { SharedModule } from './shared/shared.module';
-import {MatTableModule} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -35,10 +34,8 @@ import {MatTableModule} from '@angular/material';
         AppRoutingModule,
         AuthModule,
         CoreModule,
-        SharedModule,
-        MatTableModule
+        SharedModule
     ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

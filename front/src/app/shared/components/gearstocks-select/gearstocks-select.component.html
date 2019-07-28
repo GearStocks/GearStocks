@@ -1,0 +1,10 @@
+<mat-form-field [formGroup]="group">
+  <mat-select [formControlName]="name" [placeholder]="placeholder" [required]="required" [compareWith]="compareFn">
+    <mat-option *ngFor="let elem of options" [value]="elem">
+      {{elem.viewValue}}
+    </mat-option>
+    <mat-error *ngIf="validationError?.required">{{validationErrorMessages.required}}</mat-error>
+    <mat-error *ngIf="!validationError?.required">{{validationErrorMessages.pattern}}</mat-error>
+  </mat-select>
+</mat-form-field>
+

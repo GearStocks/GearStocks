@@ -1,19 +1,31 @@
 {
-  "login": {
-    "body": {
-      "email": "d@d.fr",
-      "password": "ddd",
-      "rememberMe": false
-    }
+  "connect": {
+    "firstName": "François",
+    "lastName": "MILHET",
+    "userName": "SkuSku",
+    "email": "francois97180@hotmail.fr",
+    "password": "password",
+    "token": "12345"
   },
   "register": {
-    "body": {
-      "email": "f@f",
-      "username": "ff",
-      "password": "ffffffff"
-    }
+    "firstName": "francois",
+    "lastName": "MILHET",
+    "userName": "dd",
+    "email": "d@d",
+    "password": "dddddddd"
   },
   "resetPassword": {
     "email": ""
+  },
+  "user": {
+    "civility": null,
+    "firstName": "François",
+    "lastName": "MILHET",
+    "userName": "SkuSku",
+    "address": "",
+    "city": "",
+    "phone": "salut",
+    "email": "francois97180@hotmail.fr",
+    "password": "password"
   }
 }

@@ -4,7 +4,7 @@ html, body {
     height: 100%;
     padding: 0 !important;
     margin: 0;
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-family: 'Roboto', sans-serif !important;
 }
 
 a {
@@ -19,4 +19,29 @@ mat-sidenav-container, mat-sidenav-content, mat-sidenav {
 
 mat-sidenav {
     width: 250px;
+}
+
+app-signup, app-signin {
+    .mat-form-field {
+        width: 100%;
+    }
+}
+
+app-profile {
+    .mat-form-field {
+        padding-top: 6px;
+        padding-bottom: 6px;
+        width: 100%;
+    }
+    .mat-form-field-underline {
+        display: none;
+    }
+    .mat-form-field-appearance-legacy .mat-form-field-infix {
+        background-color: white;
+        border: 1px solid #cad1d9;
+        border-radius: 4px;
+    }
+    .mat-form-field-appearance-legacy .mat-form-field-label, input.mat-input-element, .mat-select-value {
+        padding: 0 2px;
+    }
 }

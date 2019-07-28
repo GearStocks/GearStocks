@@ -1,5 +1,5 @@
 /* Angular Modules */
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 /* Models */
@@ -14,7 +14,7 @@ import { UserService } from '../../../auth/services/user.service';
   styleUrls: ['./home.component.scss']
 })
 
-export class HomeComponent implements OnInit {
+export class HomeComponent {
   currentUser: User;
   video = 'assets/video/gearstocks.mp4';
   keyword: string;
@@ -22,8 +22,6 @@ export class HomeComponent implements OnInit {
   constructor(private router: Router, private userService: UserService) {
     this.userService.currentUser.subscribe(x => this.currentUser = x);
   }
-
-  ngOnInit() {}
 
   search() {
     /* provisoir pour démo */

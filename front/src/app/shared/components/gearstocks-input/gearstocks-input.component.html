@@ -1,0 +1,5 @@
+<mat-form-field [formGroup]="group">
+  <input matInput [type]="type" [placeholder]="placeholder" [formControlName]="name" [required]="required"/>
+  <mat-error *ngIf="validationError?.required">{{validationErrorMessages.required}}</mat-error>
+  <mat-error *ngIf="!validationError?.required">{{validationErrorMessages.pattern}}</mat-error>
+</mat-form-field>
