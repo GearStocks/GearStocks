@@ -14,14 +14,15 @@ import { ProfileComponent } from './profile/profile.component';
 
 /* Services */
 import { AuthGuardService } from './auth/services/auth.guard';
+import { ItemResolverService } from './item/services/item-resolver.service';
 
 const routes: Routes = [
     { path: '', component: HomeComponent, pathMatch: 'full' },
     { path: 'register', component: SignupComponent },
     { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
+    { path: 'item', component: ItemComponent, resolve: {item: ItemResolverService} },
     { path: 'search', component: SearchPageComponent },
     { path: 'gallery', component: GalleryComponent },
-    { path: 'item', component: ItemComponent },
     { path: 'item2', component: Item2Component },
     { path: '**', component: PageNotFoundComponent }
 ];
@@ -30,7 +31,8 @@ const routes: Routes = [
     imports: [RouterModule.forRoot(routes)],
     exports: [RouterModule],
     providers: [
-        AuthGuardService
+        AuthGuardService,
+        ItemResolverService
     ]
 })
 

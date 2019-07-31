@@ -1,97 +1,61 @@
-<!-- Page Content -->
-<div class="bg-white">
-  <div class="container">
+<div class="container">
 
-    <!-- Portfolio Item Heading -->
-    <!--<h1 style="padding-top: 20px; padding-bottom: 20px">Pneu de 2 CV</h1> -->
-
-    <h1 style="padding-top: 20px; padding-bottom: 20px">
-      <p>Pneu de 2 CV</p>
-      <button (click)="myFunc()" id="FavoriteButton"  class="favorite styled" type="button">
-	Ajouter aux favoris
-      </button>
-    </h1>  
-
-    <!-- Portfolio Item Row -->
-    <div class="row">
-      <div class="col-md-4">
-	<img class="img-fluid" src="https://www.picclickimg.com/d/l400/pict/323246913041_/Pneu-Nankang-135R15-73T-2CV-Dyane-M%C3%A9hari.jpg" alt="">
-	<h3 style="padding-top: 10px; padding-bottom: 10px">Details du produit</h3>
-	<ul>
-          <li>Citroën</li>
-          <li>Pneu Collection MICHELIN X 125 R15 68 S Tubeless</li>
-          <li>1996</li>
-          <li>Vendeur:GarageRoger</li>
-	  <li>Référence de la pièce:956392A</li>
-	</ul>
-      </div>
-      <div class="col-md-8">
-	<img class="img-fluid" src="https://appdividend.com/wp-content/uploads/2018/09/Charts-in-Angular-6.png" alt="">
-      </div>
-    </div>
-    <br>
-    
-    <div class="row">
-
-      <div class="col-md-3 col-sm-6 mb-4">
-        <img class="img-fluid" src="https://www.picclickimg.com/d/l400/pict/323246913041_/Pneu-Nankang-135R15-73T-2CV-Dyane-M%C3%A9hari.jpg" alt="">
-      </div>
-
-      <div class="col-md-3 col-sm-6 mb-4">
-        <img class="img-fluid" src="https://s2.medias-norauto.fr/images_produits/v329_1/650x650/pneu-collection-vee-rubber-v329-125-80-r15-68-s-tubeless-citroen-2cv-dyane-mehari-acadiane--904516.jpg" alt="">
-      </div>
-
-      <div class="col-md-3 col-sm-6 mb-4">
-        <img class="img-fluid" src="http://www.euroretro-pieces.com/2643-large_default/pneu-neuf-125-x-15-tubeless-wearwell.jpg" alt="">
-      </div>
-
-      <div class="col-md-3 col-sm-6 mb-4">
-        <img class="img-fluid" src="https://www.meharipassion.com/images/Image/lot-de-2-pneus-135x15-nankang.jpg" alt="">
-      </div>
-
+    <div class="item__title">
+        <h1> {{itemData.name}} </h1>
     </div>
 
-    <h3 style="padding-top: 10px; padding-bottom: 10px">Description du produit</h3>
-    <p>Le pneu Michelin X pour voiture de collection est un pneu radial conventionnel qui apporte plus de sécurité.
-      Ce profil Michelin apporte également une économie à l'usage et un plus grand confort grâce à la souplesse de ses flancs.
-      Le Michelin X équipe différentes catégories de voitures, des originales et populaires 2CV ou Coccinelleaux fascinantes Mercedes 190SL ou encore Facel Vega.</p>
-    <!-- /.row -->
+    <div class="row">
+        <div class="col-md-4 item__desc">
+            <img class="img-fluid" src="https://www.picclickimg.com/d/l400/pict/323246913041_/Pneu-Nankang-135R15-73T-2CV-Dyane-M%C3%A9hari.jpg" alt="">
+            <h3>Details du produit</h3>
+            <ul>
+                <li>Marque: {{itemData.details.brand}}</li>
+                <li>Année: {{itemData.details.year}}</li>
+                <li>Référence de la pièce: {{itemData.details.ref}}</li>
+            </ul>
+        </div>
+        <div class="col-md-8 item__desc">
+            <canvas id="canvas">{{ chart }}</canvas>
+        </div>
+    </div>
+
+    <div class="item__desc row">
+        <h3>Description du produit</h3>
+        <p> {{itemData.description}} </p>
+    </div>
 
     <!-- Related Projects Row -->
     <h3 class="my-4">Related Product</h3>
 
     <div class="row">
 
-      <div class="col-md-3 col-sm-6 mb-4">
-	<a routerLink="">
-          <img class="img-fluid" style="height:200px; width:340px" src="https://medias.mehariclub.com/3335165_index_1.jpg" alt="">
-	</a>
-      </div>
+        <div class="col-md-3 col-sm-6 mb-4">
+            <a routerLink="">
+                <img class="img-fluid" style="height:200px; width:340px" src="https://medias.mehariclub.com/3335165_index_1.jpg" alt="">
+            </a>
+        </div>
 
-      <div class="col-md-3 col-sm-6 mb-4">
-	<a routerLink="">
-          <img class="img-fluid" style="height:200px; width:340px" src="http://photo.slideperformance.com/home_box_2/hb-2003-2-2.png" alt="">
-	</a>
-      </div>
+        <div class="col-md-3 col-sm-6 mb-4">
+            <a routerLink="">
+                <img class="img-fluid" style="height:200px; width:340px" src="http://photo.slideperformance.com/home_box_2/hb-2003-2-2.png" alt="">
+            </a>
+        </div>
 
-      <div class="col-md-3 col-sm-6 mb-4">
-	<a routerLink="">
-          <img class="img-fluid" style="height:200px; width:340px" src="https://az25411.vo.msecnd.net/bmp/zoom/15/2667-bkr7eix.jpg" alt="">
-	</a>
-      </div>
+        <div class="col-md-3 col-sm-6 mb-4">
+            <a routerLink="">
+                <img class="img-fluid" style="height:200px; width:340px" src="https://az25411.vo.msecnd.net/bmp/zoom/15/2667-bkr7eix.jpg" alt="">
+            </a>
+        </div>
 
-      <div class="col-md-3 col-sm-6 mb-4">
-	<a routerLink="">
-          <img class="img-fluid" style="height:200px; width:340px" src="https://medias.mehariclub.com/1200500_index_1.jpg" alt="">
-	</a>
-      </div>
+        <div class="col-md-3 col-sm-6 mb-4">
+            <a routerLink="">
+                <img class="img-fluid" style="height:200px; width:340px" src="https://medias.mehariclub.com/1200500_index_1.jpg" alt="">
+            </a>
+        </div>
 
     </div>
-    
+
     <!-- /.row -->
 
-  </div>
-  <!-- /.container -->
-
 </div>
-<!-- /.bg-white -->
+<!-- /.container -->

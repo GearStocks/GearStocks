@@ -1,3 +1,18 @@
+.item {
+    &__title {
+        padding-top: 100px;
+        padding-bottom: 40px;
+    }
+
+    &__desc {
+        padding: 0 10px 10px;
+        h3, h4 {
+            padding-top: 1.5em;
+        }
+    }
+}
+
+
 .styled {
     border: 0;
     line-height: 2.5;

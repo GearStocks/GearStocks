@@ -1,5 +1,15 @@
+/* Angular modules */
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../auth/services/user.service';
+import { ActivatedRoute } from '@angular/router';
+
+/* RxJs Dependencies */
+import { Subscription } from 'rxjs';
+
+/* Charts */
+import { Chart } from 'chart.js';
+
+/* Models */
+import { Item } from './models/item.model';
 
 @Component({
   selector: 'app-item',
@@ -7,17 +17,60 @@ import { UserService } from '../auth/services/user.service';
   styleUrls: ['./item.component.scss']
 })
 export class ItemComponent implements OnInit {
+  itemData: Item;
+  itemSubscription: Subscription;
+  chart = [];
+  chartLabel = [];
+  chartPrice = [];
 
-  constructor(private userService: UserService) { }
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.itemSubscription = this.route.data
+        .subscribe((data: Item) => {
+          this.itemData = data['item'];
+          data['item'].chartData.forEach(elem => {
+            this.chartLabel.push(elem.month);
+            this.chartPrice.push(elem.price);
+          });
+        });
+    this.createChart();
   }
 
-  myFunc() {
-    if (document.getElementById('FavoriteButton').innerHTML === 'Retirer des favoris') {
-      document.getElementById('FavoriteButton').innerHTML = 'Ajouter aux favoris';
-    } else {
-      document.getElementById('FavoriteButton').innerHTML = 'Retirer des favoris';
-    }
+  createChart(): void {
+    this.chart = new Chart('canvas', {
+      type: 'line',
+      data: {
+        labels: this.chartLabel,
+        datasets: [
+          {
+            data: this.chartPrice,
+            backgroundColor: 'red',
+            borderColor: 'orange',
+            fill: false
+          }
+        ]
+      },
+      options: {
+        legend: {
+          display: false
+        },
+        title: {
+          display: true,
+          text: 'Prix de la pièce sur les 12 derniers mois'
+        },
+        tooltips: {
+          intersect: false,
+        },
+        scales: {
+          xAxes: [{
+            display: true
+          }],
+          yAxes: [{
+            display: true
+          }],
+        }
+      }
+    });
   }
 }
