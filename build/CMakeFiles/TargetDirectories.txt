@@ -1,0 +1,3 @@
+/home/raphigo/GearStocks/build/CMakeFiles/rebuild_cache.dir
+/home/raphigo/GearStocks/build/CMakeFiles/App.dir
+/home/raphigo/GearStocks/build/CMakeFiles/edit_cache.dir

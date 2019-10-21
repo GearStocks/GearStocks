@@ -1,0 +1,90 @@
+{
+  "connect": {
+    "firstName": "François",
+    "lastName": "MILHET",
+    "userName": "SkuSku",
+    "email": "francois97180@hotmail.fr",
+    "password": "password",
+    "token": "12345"
+  },
+  "register": {
+    "firstName": "francois",
+    "lastName": "MILHET",
+    "userName": "dd",
+    "email": "d@d",
+    "password": "dddddddd"
+  },
+  "resetPassword": {
+    "email": ""
+  },
+  "user": {
+    "civility": null,
+    "firstName": "François",
+    "lastName": "MILHET",
+    "userName": "SkuSku",
+    "address": "",
+    "city": "",
+    "phone": "salut",
+    "email": "francois97180@hotmail.fr",
+    "password": "password"
+  },
+  "item": {
+    "name": "Pneu continental GT",
+    "chartData": [
+      {
+        "month": "Janv",
+        "price": "180"
+      },
+      {
+        "month": "Fev",
+        "price": "200"
+      },
+      {
+        "month": "Mars",
+        "price": "210"
+      },
+      {
+        "month": "Avril",
+        "price": "190"
+      },
+      {
+        "month": "Mai",
+        "price": "240"
+      },
+      {
+        "month": "Juin",
+        "price": "230"
+      },
+      {
+        "month": "Juil",
+        "price": "260"
+      },
+      {
+        "month": "Aôut",
+        "price": "210"
+      },
+      {
+        "month": "Sept",
+        "price": "300"
+      },
+      {
+        "month": "Oct",
+        "price": "210"
+      },
+      {
+        "month": "Nov",
+        "price": "210"
+      },
+      {
+        "month": "Déc",
+        "price": "210"
+      }
+    ],
+    "details": {
+      "brand": "Continental",
+      "ref": "54031708",
+      "year": "1997"
+    },
+    "description": "Le pneu continental GT pour voiture de collection est un pneu radial conventionnel qui apporte plus de sécurité. Ce profil continental apporte également une économie à l'usage et un plus grand confort grâce à la souplesse de ses flancs. Le continental GT équipe différentes catégories de voitures, des originales et populaires 2CV ou Coccinelleaux fascinantes Mercedes 190SL ou encore Facel Vega."
+  }
+}

@@ -1,0 +1,61 @@
+<div class="container">
+
+    <div class="item__title">
+        <h1> {{itemData.name}} </h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 item__desc">
+            <img class="img-fluid" src="https://www.picclickimg.com/d/l400/pict/323246913041_/Pneu-Nankang-135R15-73T-2CV-Dyane-M%C3%A9hari.jpg" alt="">
+            <h3>Details du produit</h3>
+            <ul>
+                <li>Marque: {{itemData.details.brand}}</li>
+                <li>Année: {{itemData.details.year}}</li>
+                <li>Référence de la pièce: {{itemData.details.ref}}</li>
+            </ul>
+        </div>
+        <div class="col-md-8 item__desc">
+            <canvas id="canvas">{{ chart }}</canvas>
+        </div>
+    </div>
+
+    <div class="item__desc row">
+        <h3>Description du produit</h3>
+        <p> {{itemData.description}} </p>
+    </div>
+
+    <!-- Related Projects Row -->
+    <h3 class="my-4">Related Product</h3>
+
+    <div class="row">
+
+        <div class="col-md-3 col-sm-6 mb-4">
+            <a routerLink="">
+                <img class="img-fluid" style="height:200px; width:340px" src="https://medias.mehariclub.com/3335165_index_1.jpg" alt="">
+            </a>
+        </div>
+
+        <div class="col-md-3 col-sm-6 mb-4">
+            <a routerLink="">
+                <img class="img-fluid" style="height:200px; width:340px" src="http://photo.slideperformance.com/home_box_2/hb-2003-2-2.png" alt="">
+            </a>
+        </div>
+
+        <div class="col-md-3 col-sm-6 mb-4">
+            <a routerLink="">
+                <img class="img-fluid" style="height:200px; width:340px" src="https://az25411.vo.msecnd.net/bmp/zoom/15/2667-bkr7eix.jpg" alt="">
+            </a>
+        </div>
+
+        <div class="col-md-3 col-sm-6 mb-4">
+            <a routerLink="">
+                <img class="img-fluid" style="height:200px; width:340px" src="https://medias.mehariclub.com/1200500_index_1.jpg" alt="">
+            </a>
+        </div>
+
+    </div>
+
+    <!-- /.row -->
+
+</div>
+<!-- /.container -->

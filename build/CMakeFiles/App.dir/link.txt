@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/App.dir/src/Main.cpp.o CMakeFiles/App.dir/src/BddManager.cpp.o CMakeFiles/App.dir/src/Server.cpp.o CMakeFiles/App.dir/src/TokenManager.cpp.o  -o App -Wl,-rpath,/usr/local/lib /usr/local/lib/libmongocxx.so /usr/local/lib/libbsoncxx.so /usr/local/lib/libbsoncxx.so /usr/local/lib/libpistache.a -pthread -lcryptopp 
