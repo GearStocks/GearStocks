@@ -42,7 +42,7 @@ private:
 	std::string	getTime();
 	std::string cryptPass(std::string nonHashPass);
 	mongocxx::instance _inst{};
-        mongocxx::client _conn{mongocxx::uri{}};
+        mongocxx::client _conn{mongocxx::uri{"mongodb://mongo:27017"}};
 	mongocxx::collection _collection;
 };
 
