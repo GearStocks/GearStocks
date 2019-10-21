@@ -22,7 +22,7 @@ RUN mkdir -p /home/dep
 
 WORKDIR /home/dep
 
-RUN apt -y install libmongoc-1.0-0 git libbson-1.0 libssl-dev libsasl2-dev wget &&\
+RUN apt -y install libmongoc-1.0-0 git libbson-1.0 libssl-dev libsasl2-dev wget libcrypto++-dev &&\
  wget https://github.com/mongodb/mongo-c-driver/releases/download/1.14.0/mongo-c-driver-1.14.0.tar.gz &&\
  tar xzf mongo-c-driver-1.14.0.tar.gz &&\
  cd mongo-c-driver-1.14.0 &&\
