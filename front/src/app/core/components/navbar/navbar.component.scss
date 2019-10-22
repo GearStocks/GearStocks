@@ -16,6 +16,10 @@
     }
   }
 
+  ul {
+    margin-bottom: 0;
+  }
+
   &__button {
     float: left;
     position: relative;
@@ -25,11 +29,13 @@
     padding-right: 10px;
   }
 
-  &__logo {
-    line-height: 70px;
+  &__brand {
+    a {
+      padding: 0;
+    }
+
     img {
       width: 60px;
-      vertical-align: top;
     }
   }
 

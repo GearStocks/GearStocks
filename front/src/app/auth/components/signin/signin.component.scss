@@ -76,7 +76,7 @@ header.cover-photo {
 mat-checkbox {
     color: darkslateblue;
 
-    /deep/ &.mat-checkbox-focused {
+    ::ng-deep &.mat-checkbox-focused {
         .mat-ink-ripple {
             background-color: darkslateblue;
         }

@@ -19,6 +19,10 @@ class Server
 		      Pistache::Http::ResponseWriter response);
         int     GetRegister(const Pistache::Rest::Request& request,
 			    Pistache::Http::ResponseWriter response);
+        int     PostRegister(const Pistache::Rest::Request& request,
+			    Pistache::Http::ResponseWriter response);
+        int     PostConnect(const Pistache::Rest::Request& request,
+			    Pistache::Http::ResponseWriter response);
         void    setupRoutes();
         std::shared_ptr<Pistache::Http::Endpoint> httpEndpoint;
         Pistache::Rest::Router router;

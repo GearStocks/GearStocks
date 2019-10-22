@@ -2,4 +2,4 @@ FROM debian:latest
 
 WORKDIR /home/files/build
 
-CMD ./App
+CMD ./App ${API_PORT}

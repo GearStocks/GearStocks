@@ -30,15 +30,19 @@ set(SRC
   src/
   src/Main.cpp
   src/BddManager.cpp
-  src/Server.cpp)
+  src/Server.cpp
+  src/TokenManager.cpp)
 
 set(INC
   include/
   include/BddManager.hpp
-  include/Server.hpp)
+  include/Server.hpp
+  include/TokenManager.hpp)
 
 #SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} $(pkg-config --cflags --libs libmongocxx) -Wl,-rpath,/usr/lib")
-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -lmongoc-1.0 -lbson-1.0")
+
+#Link the shared libraries manually, because mongoc won't (because it's statically linked)
+#set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} -lrt -lcrypto -lssl -lresolv -lsasl2")
 
 add_executable(App ${INC} ${SRC})
 target_include_directories(App PUBLIC ${LIBMONGOCXX_INCLUDE_DIRS})
@@ -46,4 +50,4 @@ target_include_directories(App PUBLIC ${LIBBSONCXX_INCLUDE_DIRS})
 target_link_libraries(App ${LIBMONGOCXX_LIBRARIES} /usr/lib/libmongoc-1.0.so /usr/lib/libbson-1.0.so ${LIBBSONCXX_LIBRARIES})
 
 include_directories(/usr/include/pistache ./include)
-target_link_libraries(App /usr/lib/libpistache.a -pthread)
+target_link_libraries(App /usr/lib/libpistache.a -pthread -lcryptopp)

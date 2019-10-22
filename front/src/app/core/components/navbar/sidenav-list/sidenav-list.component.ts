@@ -2,7 +2,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 
 /* Material Angular */
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 /* Models */
 import { User } from '../../../../auth/models/user.model';
