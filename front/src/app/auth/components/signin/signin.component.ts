@@ -11,7 +11,7 @@ import { UserService } from '../../services/user.service';
 import { SigninFormService } from './services/signin-form.service';
 
 /* Material Angular */
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material/dialog';
 
 /* Models */
 import { ErrorMessages } from './signin-errors';
