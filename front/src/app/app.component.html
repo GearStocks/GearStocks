@@ -5,7 +5,7 @@
     <mat-sidenav-content>
         <app-navbar (sidenavToggle)="sidenav.toggle()"></app-navbar>
         <main>
-            <router-outlet></router-outlet>
+            <router-outlet (activate)="onActivate($event)"></router-outlet>
         </main>
         <footer>
             <app-footer></app-footer>
