@@ -93,7 +93,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
             return el;
         });
         const target = this.myElement.nativeElement.querySelector(element.target);
-        target.scrollIntoView({behavior: 'smooth'});
+        const y = target.getBoundingClientRect().top + window.pageYOffset + 10;
+        target.scrollIntoView({ block: 'start', behavior: 'smooth' });
         element.active = !element.active;
     }
 
