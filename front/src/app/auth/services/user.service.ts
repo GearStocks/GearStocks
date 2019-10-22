@@ -34,7 +34,7 @@ export class UserService {
 
     login(authData: AuthData): Observable<User> {
         const body = {
-            email: authData.email,
+            mail: authData.email,
             password: authData.password,
             rememberMe: authData.rememberMe
         };
@@ -51,10 +51,10 @@ export class UserService {
 
     register(authData: AuthData) {
         const body = {
-            firstName: authData.firstName,
-            lastName: authData.lastName,
-            userName: authData.userName,
-            email: authData.email,
+            firstname: authData.firstName,
+            lastname: authData.lastName,
+            username: authData.userName,
+            mail: authData.email,
             password: authData.password
         };
         return this.http.post<any>(this.registerUrl,  body);

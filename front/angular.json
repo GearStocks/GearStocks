@@ -41,6 +41,14 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
+              "mock": {
+                "fileReplacements": [
+                  {
+                    "replace": "src/environments/environment.ts",
+                    "with": "src/environments/environment.mock.ts"
+                  }
+                ]
+              },
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
