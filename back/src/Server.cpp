@@ -46,7 +46,7 @@ int Server::PostConnect(const Pistache::Rest::Request& request, Pistache::Http::
     size_t	i = 3;
     
     document.Parse(request.body().c_str());
-    i = _manager->userConnect(document["username"].GetString(), document["password"].GetString(), token);
+    i = _manager->userConnect(document["mail"].GetString(), document["password"].GetString(), token);
     if (i == 0) {
       std::cout << token << std::endl;
       response.send(Pistache::Http::Code::Ok, token);

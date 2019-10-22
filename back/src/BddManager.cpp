@@ -56,7 +56,7 @@ size_t	BddManager::userConnect(std::string username, std::string password, std::
   
 
 	//std::cout << "il est:" << getTime() << std::endl;
-	valueInBDD = checkIfExist(_collection, "username", username);
+	valueInBDD = checkIfExist(_collection, "email", username);
 	if (valueInBDD != "")
 	 {
 		valueInBDD = valueInBDD.substr(valueInBDD.find("password") + 13);
