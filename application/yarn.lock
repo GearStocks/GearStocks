@@ -6438,6 +6438,13 @@ react-native-status-bar-height@^2.2.0:
   resolved "https://registry.yarnpkg.com/react-native-status-bar-height/-/react-native-status-bar-height-2.3.1.tgz#b92ce9112c2367290847ac11284d9d84a6330169"
   integrity sha512-m9nGKYfFn6ljF1abafzF5cFaD9JCzXwj7kNE9CuF+g0TgtItH70eY2uHaCV9moENTftqd5XIS3Cx0mf4WfistA==
 
+react-native-super-grid@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-super-grid/-/react-native-super-grid-3.1.1.tgz#27652de0827d158ba0ab400631f30c74a68f8550"
+  integrity sha512-qtnoXDKDG/hfqPzmXt34HGNjlOL1D7+efYlaaECCGp2MwOZxE7MTDy9pHGtpTcrM8JRTVyqB1Piy1SkkWEa80Q==
+  dependencies:
+    prop-types "^15.6.0"
+
 react-native-svg@9.4.0:
   version "9.4.0"
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-9.4.0.tgz#e428e0eae55aebd2355f1ff4f22675dad4611960"
