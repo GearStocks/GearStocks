@@ -7,6 +7,7 @@
 
 import React from 'react';
 import { Text, View } from 'react-native';
+import { Icon } from 'react-native-elements';
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
 
 export default class AppMenu extends React.Component {
@@ -41,7 +42,7 @@ class ProfilComponent extends React.Component {
   render() {
     return(
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Text> This is my Explore screen </Text>
+        <Text> This is my Profil screen </Text>
       </View>
     );
   }
@@ -49,9 +50,30 @@ class ProfilComponent extends React.Component {
 
 const bottomTabNavigator = createBottomTabNavigator(
   {
-    Home: HomeComponent,
-    Search: SearchComponent,
-    Profil: ProfilComponent
+    Home: {
+      screen: HomeComponent,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => (
+          <Icon name="home" size={25} color={tintColor} />
+        )
+      }
+    },
+    Search: {
+      screen: SearchComponent,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => (
+          <Icon name="search" size={25} color={tintColor} />
+        )
+      }
+    },
+    Profil: {
+      screen: ProfilComponent,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => (
+          <Icon name="person" size={25} color={tintColor} />
+        )
+      }
+    }
   },
   {
     initialRouteName: 'Home'
