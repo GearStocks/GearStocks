@@ -1,7 +1,15 @@
+/**
+ * @author Nicolas  BOULOGNE-CURRIEZ <nicolas.boulogne-curriez@epitech.eu>
+ * @file Description
+ * @desc Created on 2019-12-05 4:19:32 pm
+ * @copyright GearStocks
+ */
+
 import React from 'react';
-import { View, Alert } from 'react-native';
+import { View, TouchableOpacity, Image } from 'react-native';
 import { Button, Input, Icon, Text } from 'react-native-elements';
 import { strings, errors } from '../../../../config/strings';
+
 import styles from './Login.component.style';
 import getUserInfo from '../../../services/FetchEmail';
 
@@ -12,8 +20,13 @@ export default class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
+      hidePassword: true,
       login: false
     };
+  }
+
+  managePasswordVisibility = () => {
+    this.setState({ hidePassword: !this.state.hidePassword });
   }
 
   handleClick() {
@@ -31,7 +44,7 @@ export default class Login extends React.Component {
     else if (`${password}` === '')
       Alert.alert(errors.ERR, errors.ERR_PASSWORD);
     else {*/
-      navigate('UserInformationsComponent');
+    navigate('UserInformationsComponent');
     //}
   }
 
@@ -52,12 +65,18 @@ export default class Login extends React.Component {
           leftIcon={<Icon name='person' size={24} color='black' />}
           onChangeText={(email) => this.setState({ email })}
         />
+
         <Input
           ref={(input) => { this.password = input; }}
           returnKeyType="go"
           placeholder={strings.PASSWORD}
-          secureTextEntry={true}
+          secureTextEntry={this.state.hidePassword}
           leftIcon={<Icon name='lock' size={24} color='black' />}
+          rightIcon={
+            <TouchableOpacity activeOpacity={0.8} style={styles.visibilityBtn} onPress={this.managePasswordVisibility}>
+              <Image source={(this.state.hidePassword) ? require('../../../../assets/hide.png') : require('../../../../assets/view.png')} style={styles.btnImage} />
+            </TouchableOpacity>
+          }
           onChangeText={(password) => this.setState({ password })}
         />
         <Button title={strings.FORGOT_PASSWORD} type="clear" onPress={() => navigate('ForgotPasswordComponent')} />

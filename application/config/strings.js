@@ -1,3 +1,10 @@
+/**
+ * @author Nicolas  BOULOGNE-CURRIEZ <nicolas.boulogne-curriez@epitech.eu>
+ * @file Description
+ * @desc Created on 2019-12-05 5:17:59 pm
+ * @copyright GearStocks
+ */
+
 export const strings = {
   LOGIN: 'Log In',
   LOGOUT: 'Log Out',
