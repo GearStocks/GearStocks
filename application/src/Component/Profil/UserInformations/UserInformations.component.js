@@ -1,7 +1,16 @@
+/**
+ * @author Nicolas  BOULOGNE-CURRIEZ <nicolas.boulogne-curriez@epitech.eu>
+ * @file Description
+ * @desc Created on 2019-12-05 4:04:35 pm
+ * @copyright GearStocks
+ */
+
 import React from 'react';
 import { View, Platform } from 'react-native';
 import { Text, SearchBar } from 'react-native-elements';
 import styles from './UserInformations.component.style';
+
+import AppMenu  from '../../Menu/Menu.component';
 
 export default class UserInformations extends React.Component {
   constructor(props) {
@@ -38,7 +47,8 @@ export default class UserInformations extends React.Component {
           Your firstname is : firstname
           Your lastname is : lastname
         </Text>
-      </View>
+      </View>,
+      <AppMenu />
     );
   }
 }

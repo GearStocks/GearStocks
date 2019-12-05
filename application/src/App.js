@@ -1,3 +1,10 @@
+/**
+ * @author Nicolas  BOULOGNE-CURRIEZ <nicolas.boulogne-curriez@epitech.eu>
+ * @file Description
+ * @desc Created on 2019-12-05 4:06:08 pm
+ * @copyright GearStocks
+ */
+
 import React from 'react';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import LoginComponent from './Component/Connection/Login/Login.component';
