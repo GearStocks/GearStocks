@@ -6,12 +6,13 @@
  */
 
 import React from 'react';
-import { View, TouchableOpacity, Image } from 'react-native';
+import { View, TouchableOpacity, Image, Alert } from 'react-native';
 import { Button, Input, Icon, Text } from 'react-native-elements';
 import { strings, errors } from '../../../../config/strings';
 
 import styles from './Login.component.style';
 import getUserInfo from '../../../services/FetchEmail';
+const axios = require('axios');
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -33,9 +34,26 @@ export default class Login extends React.Component {
     // eslint-disable-next-line no-useless-escape
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     const { email, password } = this.state;
+
+    const JSONObj = JSON.stringify({
+      mail: this.state.email,
+      password: this.state.password
+    });
+
+    axios.post('http://10.0.2.2:8000/connect', JSONObj, {
+      headers: {
+        'Content-Type': 'application/json'
+      }})
+      .then((res) => {
+        console.log('RESPONSE RECEIVED: ', res);
+      })
+      .catch((err) => {
+        console.log('AXIOS ERROR: ', err);
+      });
+    
     const { navigate } = this.props.navigation;
 
-    /*if (`${email}` === '' && `${password}` === '')
+    if (`${email}` === '' && `${password}` === '')
       Alert.alert(errors.ERR, errors.ERR_EMAIL_PASSWORD);
     else if (`${email}` === '')
       Alert.alert(errors.ERR, errors.ERR_EMAIL);
@@ -43,9 +61,9 @@ export default class Login extends React.Component {
       Alert.alert(errors.ERR, errors.ERR_INVALID_EMAIL);
     else if (`${password}` === '')
       Alert.alert(errors.ERR, errors.ERR_PASSWORD);
-    else {*/
+    else {
     navigate('UserInformationsComponent');
-    //}
+    }
   }
 
   render() {

@@ -3,6 +3,7 @@ import { View, Alert } from 'react-native';
 import { Input, Text, Icon, Button } from 'react-native-elements';
 import { strings, errors } from '../../../../config/strings';
 import styles from './Register.component.style';
+const axios = require('axios');
 
 export default class RegisterComponent extends React.Component {
   constructor(props) {
@@ -19,16 +20,34 @@ export default class RegisterComponent extends React.Component {
     };
   }
 
+
   handleClick() {
     // eslint-disable-next-line no-useless-escape
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    const { email, password, confirmPassword, username, firstname, lastname } = this.state;
 
-    if (`${username}` ===  '')
+    const JSONObj = JSON.stringify({
+      mail: this.state.email,
+      password: this.state.password,
+      username: this.state.username
+    });
+
+    axios.post('http://10.0.2.2:8000/register', JSONObj, {
+      headers: {
+        'Content-Type': 'application/json'
+      }})
+      .then((res) => {
+        console.log('RESPONSE RECEIVED: ', res);
+      })
+      .catch((err) => {
+        console.log('AXIOS ERROR: ', err);
+      });
+
+
+    /*if (`${username}` === '')
       Alert.alert(errors.ERR, errors.ERR_USERNAME);
-    else if (`${firstname}` ===  '')
+    else if (`${firstname}` === '')
       Alert.alert(errors.ERR, errors.ERR_FIRSTNAME);
-      else if (`${lastname}` ===  '')
+    else if (`${lastname}` === '')
       Alert.alert(errors.ERR, errors.ERR_LASTNAME);
     else if (`${email}` === '')
       Alert.alert(errors.ERR, errors.ERR_EMAIL);
@@ -37,7 +56,7 @@ export default class RegisterComponent extends React.Component {
     else if (`${password}` === '' && `${confirmPassword}` === '')
       Alert.alert(errors.ERR, errors.ERR_PASSWORD);
     else if (`${password}` != `${confirmPassword}`)
-    Alert.alert(errors.ERR, errors.ERR_MATCH_PASSWORD);
+      Alert.alert(errors.ERR, errors.ERR_MATCH_PASSWORD);*/
   }
 
   render() {
