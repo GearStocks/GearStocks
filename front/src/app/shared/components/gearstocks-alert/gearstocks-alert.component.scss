@@ -1,0 +1,10 @@
+button {
+  outline: none;
+}
+mat-icon {
+  color: black;
+  padding-left: 0.3em;
+  &:hover {
+    opacity: 0.7;
+  }
+}

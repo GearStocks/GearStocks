@@ -4,5 +4,7 @@ export const environment = {
   registerUrl: 'http://localhost:8000/register',
   resetPasswordUrl: 'http://localhost:8000/resetPassword',
   updateProfileUrl: 'http://localhost:8000/user',
+  updateEmailUrl: 'http://localhost:8000/user',
+  updatePasswordUrl: 'http://localhost:8000/user',
   getItemUrl: 'http://localhost:8000/item'
 };

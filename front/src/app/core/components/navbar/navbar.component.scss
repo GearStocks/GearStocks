@@ -37,6 +37,12 @@
     img {
       width: 60px;
     }
+
+    &__align {
+      img {
+        vertical-align: baseline;
+      }
+    }
   }
 
   &__navigation-items {
@@ -58,6 +64,24 @@
   }
 }
 
+@media screen and (max-width: 800px) {
+  .navbar {
+    &__brand {
+      img {
+        width: 60px;
+        vertical-align: middle;
+      }
+
+      &__align {
+        img {
+          vertical-align: middle;
+        }
+      }
+    }
+  }
+}
+
+/* Material Overwrite */
 .mat-icon-button {
   padding: 0;
   min-width: 0;

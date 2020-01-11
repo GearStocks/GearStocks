@@ -1,107 +1,107 @@
 .homeHeader {
-    height: 80vh;
-    width: 100%;
-    background: url(../../../../assets/img/HomeHeader.jpg) no-repeat center fixed;
-    background-size: cover;
-    -webkit-background-size: cover; /* pour anciens Chrome et Safari */
-    margin: 0;
-    padding: 0;
+  height: 80vh;
+  width: 100%;
+  background: url(../../../../assets/img/HomeHeader.jpg) no-repeat center fixed;
+  background-size: cover;
+  -webkit-background-size: cover; /* pour anciens Chrome et Safari */
+  margin: 0;
+  padding: 0;
 
-    &__search {
-        position: absolute;
-        top: 35vh;
-        left: 15vw;
-        right: 15vw;
-        text-align: center;
-        color: white;
+  &__search {
+    position: absolute;
+    top: 35vh;
+    left: 15vw;
+    right: 15vw;
+    text-align: center;
+    color: white;
 
-        button, input {
-            color: white;
-            background: rgba(0, 0, 0, 0.3)
-        }
-
-        button {
-            cursor: pointer;
-        }
+    button, input {
+      color: white;
+      background: rgba(0, 0, 0, 0.3)
     }
+
+    button {
+      cursor: pointer;
+    }
+  }
 }
 
 /* Scroll Down Arrow */
 .ca3-scroll-down-arrow {
-    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iQ2hldnJvbl90aGluX2Rvd24iIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMjAgMjAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDIwIDIwIiBmaWxsPSJ3aGl0ZSIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHBhdGggZD0iTTE3LjQxOCw2LjEwOWMwLjI3Mi0wLjI2OCwwLjcwOS0wLjI2OCwwLjk3OSwwYzAuMjcsMC4yNjgsMC4yNzEsMC43MDEsMCwwLjk2OWwtNy45MDgsNy44M2MtMC4yNywwLjI2OC0wLjcwNywwLjI2OC0wLjk3OSwwbC03LjkwOC03LjgzYy0wLjI3LTAuMjY4LTAuMjctMC43MDEsMC0wLjk2OWMwLjI3MS0wLjI2OCwwLjcwOS0wLjI2OCwwLjk3OSwwTDEwLDEzLjI1TDE3LjQxOCw2LjEwOXoiLz48L3N2Zz4=);
-    background-size: contain;
-    background-repeat: no-repeat;
+  background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iQ2hldnJvbl90aGluX2Rvd24iIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4IiB2aWV3Qm94PSIwIDAgMjAgMjAiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDIwIDIwIiBmaWxsPSJ3aGl0ZSIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+PHBhdGggZD0iTTE3LjQxOCw2LjEwOWMwLjI3Mi0wLjI2OCwwLjcwOS0wLjI2OCwwLjk3OSwwYzAuMjcsMC4yNjgsMC4yNzEsMC43MDEsMCwwLjk2OWwtNy45MDgsNy44M2MtMC4yNywwLjI2OC0wLjcwNywwLjI2OC0wLjk3OSwwbC03LjkwOC03LjgzYy0wLjI3LTAuMjY4LTAuMjctMC43MDEsMC0wLjk2OWMwLjI3MS0wLjI2OCwwLjcwOS0wLjI2OCwwLjk3OSwwTDEwLDEzLjI1TDE3LjQxOCw2LjEwOXoiLz48L3N2Zz4=);
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 .ca3-scroll-down-link {
-    cursor:pointer;
-    height: 60px;
-    width: 80px;
-    margin: 0 0 0 -40px;
-    line-height: 60px;
-    position: absolute;
-    left: 50%;
-    bottom: 18vh;
-    color: #FFF;
-    text-align: center;
-    font-size: 70px;
-    z-index: 100;
-    text-decoration: none;
-    text-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
-    -webkit-animation: ca3_fade_move_down 2s ease-in-out infinite;
-    -moz-animation:    ca3_fade_move_down 2s ease-in-out infinite;
-    animation:         ca3_fade_move_down 2s ease-in-out infinite;
+  cursor:pointer;
+  height: 60px;
+  width: 80px;
+  margin: 0 0 0 -40px;
+  line-height: 60px;
+  position: absolute;
+  left: 50%;
+  bottom: 18vh;
+  color: #FFF;
+  text-align: center;
+  font-size: 70px;
+  z-index: 100;
+  text-decoration: none;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+  -webkit-animation: ca3_fade_move_down 2s ease-in-out infinite;
+  -moz-animation:    ca3_fade_move_down 2s ease-in-out infinite;
+  animation:         ca3_fade_move_down 2s ease-in-out infinite;
 }
 
 /*animated scroll arrow animation*/
 @-webkit-keyframes ca3_fade_move_down {
-    0%   { -webkit-transform:translate(0,-20px); opacity: 0;  }
-    50%  { opacity: 1;  }
-    100% { -webkit-transform:translate(0,20px); opacity: 0; }
+  0%   { -webkit-transform:translate(0,-20px); opacity: 0;  }
+  50%  { opacity: 1;  }
+  100% { -webkit-transform:translate(0,20px); opacity: 0; }
 }
 @-moz-keyframes ca3_fade_move_down {
-    0%   { -moz-transform:translate(0,-20px); opacity: 0;  }
-    50%  { opacity: 1;  }
-    100% { -moz-transform:translate(0,20px); opacity: 0; }
+  0%   { -moz-transform:translate(0,-20px); opacity: 0;  }
+  50%  { opacity: 1;  }
+  100% { -moz-transform:translate(0,20px); opacity: 0; }
 }
 @keyframes ca3_fade_move_down {
-    0%   { transform:translate(0,-20px); opacity: 0;  }
-    50%  { opacity: 1;  }
-    100% { transform:translate(0,20px); opacity: 0; }
+  0%   { transform:translate(0,-20px); opacity: 0;  }
+  50%  { opacity: 1;  }
+  100% { transform:translate(0,20px); opacity: 0; }
 }
 
 /* GearStocks description slide */
 .homeSlide {
-    width: 100%;
-    background: linear-gradient(120deg, #171616 50%, #22202B 50%);
-    padding-top: 10vh;
-    color: white;
-    text-align: center;
+  width: 100%;
+  background: linear-gradient(120deg, #171616 50%, #22202B 50%);
+  padding-top: 10vh;
+  color: white;
+  text-align: center;
 
-    &__head {
-        p {
-            font-size: 35px;
-        }
-        .wrapper {
-            width: 100%;
-            margin-top: 30px;
-            .block-resp {
-                width: 20vw;
-                display: inline-block;
-                margin: 0 20px;
-            }
-        }
+  &__head {
+    p {
+      font-size: 35px;
     }
+    .wrapper {
+      width: 100%;
+      margin-top: 30px;
+      .block-resp {
+        width: 20vw;
+        display: inline-block;
+        margin: 0 20px;
+      }
+    }
+  }
 
-    &__foot {
-        font-size:35px;
-        video {
-            margin-top: 30px;
-            margin-bottom: 30px;
-            width: 60vw;
-        }
-        h4 {
-            padding-bottom: 30px;
-            margin: 0;
-        }
+  &__foot {
+    font-size:35px;
+    video {
+      margin-top: 30px;
+      margin-bottom: 30px;
+      width: 60vw;
     }
+    h4 {
+      padding-bottom: 30px;
+      margin: 0;
+    }
+  }
 }
