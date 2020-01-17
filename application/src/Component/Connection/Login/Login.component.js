@@ -9,10 +9,14 @@ import React from 'react';
 import { View, TouchableOpacity, Image, Alert } from 'react-native';
 import { Button, Input, Icon, Text } from 'react-native-elements';
 import { strings, errors } from '../../../../config/strings';
+import { routes } from '../../../../config/routes';
 
 import styles from './Login.component.style';
 import getUserInfo from '../../../services/FetchEmail';
 const axios = require('axios');
+
+/* eslint-disable no-undef */
+/* eslint-disable no-console */
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -22,7 +26,7 @@ export default class Login extends React.Component {
       email: '',
       password: '',
       hidePassword: true,
-      login: false
+      isAuthorized: false
     };
   }
 
@@ -32,6 +36,7 @@ export default class Login extends React.Component {
 
   handleClick() {
     // eslint-disable-next-line no-useless-escape
+    const { navigate } = this.props.navigation;
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     const { email, password } = this.state;
 
@@ -40,19 +45,21 @@ export default class Login extends React.Component {
       password: this.state.password
     });
 
-    axios.post('http://10.0.2.2:8000/connect', JSONObj, {
+    axios.post(routes.CONNECT, JSONObj, {
       headers: {
         'Content-Type': 'application/json'
       }})
       .then((res) => {
         console.log('RESPONSE RECEIVED: ', res);
+        this.setState({ isAuthorized: true });
+        navigate('UserInformationsComponent');
       })
       .catch((err) => {
+        //Alert.alert('AXIOS ERROR: ' , err);
         console.log('AXIOS ERROR: ', err);
       });
-    
-    const { navigate } = this.props.navigation;
 
+      /*
     if (`${email}` === '' && `${password}` === '')
       Alert.alert(errors.ERR, errors.ERR_EMAIL_PASSWORD);
     else if (`${email}` === '')
@@ -63,7 +70,9 @@ export default class Login extends React.Component {
       Alert.alert(errors.ERR, errors.ERR_PASSWORD);
     else {
     navigate('UserInformationsComponent');
-    }
+    }*/
+    
+
   }
 
   render() {
