@@ -24,9 +24,7 @@
     float: left;
     position: relative;
     z-index: 1;
-    height: 64px;
-    padding-left: 20px;
-    padding-right: 10px;
+    font-size: 30px;
   }
 
   &__brand {
@@ -82,7 +80,7 @@
 }
 
 /* Material Overwrite */
-.mat-icon-button {
+::ng-deep .mat-icon-button {
   padding: 0;
   min-width: 0;
   height: 40px;
@@ -91,4 +89,8 @@
   line-height: 40px;
   border-radius: 50%;
   color: white;
+}
+
+.material-icons {
+  font-size: 30px;
 }
