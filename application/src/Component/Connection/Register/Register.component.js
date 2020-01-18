@@ -1,9 +1,21 @@
+/**
+ * @author Nicolas  BOULOGNE-CURRIEZ <nicolas.boulogne-curriez@epitech.eu>
+ * @file Description
+ * @desc Created on 2020-01-18 8:11:53 pm
+ * @copyright GearStocks
+ */
+
 import React from 'react';
 import { View, Alert } from 'react-native';
 import { Input, Text, Icon, Button } from 'react-native-elements';
 import { strings, errors } from '../../../../config/strings';
 import styles from './Register.component.style';
+import { routes } from '../../../../config/routes';
+
 const axios = require('axios');
+
+/* eslint-disable no-undef */
+/* eslint-disable no-console */
 
 export default class RegisterComponent extends React.Component {
   constructor(props) {
@@ -31,15 +43,16 @@ export default class RegisterComponent extends React.Component {
       username: this.state.username
     });
 
-    axios.post('http://10.0.2.2:8000/register', JSONObj, {
+    axios.post(routes.REGISTER, JSONObj, {
       headers: {
         'Content-Type': 'application/json'
-      }})
+      }
+    })
       .then((res) => {
         console.log('RESPONSE RECEIVED: ', res);
       })
       .catch((err) => {
-        console.log('AXIOS ERROR: ', err);
+        Alert.alert(err.name, err.message);
       });
 
 

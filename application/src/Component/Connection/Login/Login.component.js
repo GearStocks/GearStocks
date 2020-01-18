@@ -6,13 +6,13 @@
  */
 
 import React from 'react';
-import { View, TouchableOpacity, Image, Alert } from 'react-native';
+import { View, TouchableOpacity, Image, Alert, AsyncStorage } from 'react-native';
 import { Button, Input, Icon, Text } from 'react-native-elements';
 import { strings, errors } from '../../../../config/strings';
 import { routes } from '../../../../config/routes';
+import * as onLogin from '../../../services/POST/PostLogin';
 
 import styles from './Login.component.style';
-import getUserInfo from '../../../services/FetchEmail';
 const axios = require('axios');
 
 /* eslint-disable no-undef */
@@ -35,8 +35,8 @@ export default class Login extends React.Component {
   }
 
   handleClick() {
-    // eslint-disable-next-line no-useless-escape
     const { navigate } = this.props.navigation;
+    // eslint-disable-next-line no-useless-escape
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     const { email, password } = this.state;
 
@@ -45,33 +45,44 @@ export default class Login extends React.Component {
       password: this.state.password
     });
 
+    /*onLogin.onLogin(JSONObj).then((res) => { //any payload you want to send just for example
+      navigate('UserInformationsComponent');
+    });*/
+
     axios.post(routes.CONNECT, JSONObj, {
       headers: {
         'Content-Type': 'application/json'
-      }})
+      }
+    })
       .then((res) => {
         console.log('RESPONSE RECEIVED: ', res);
+        console.log('JSON => ', JSON.stringify(res));
         this.setState({ isAuthorized: true });
         navigate('UserInformationsComponent');
       })
       .catch((err) => {
-        //Alert.alert('AXIOS ERROR: ' , err);
-        console.log('AXIOS ERROR: ', err);
+        Alert.alert(err.name, err.message);
+        console.log('message', err.status);
+
+        // DEBUG
+        //console.log('JSON => ', JSON.stringify(err));
+
+        navigate('UserInformationsComponent');
       });
 
-      /*
-    if (`${email}` === '' && `${password}` === '')
-      Alert.alert(errors.ERR, errors.ERR_EMAIL_PASSWORD);
-    else if (`${email}` === '')
-      Alert.alert(errors.ERR, errors.ERR_EMAIL);
-    else if (reg.test(`${email}`) === false)
-      Alert.alert(errors.ERR, errors.ERR_INVALID_EMAIL);
-    else if (`${password}` === '')
-      Alert.alert(errors.ERR, errors.ERR_PASSWORD);
-    else {
-    navigate('UserInformationsComponent');
-    }*/
-    
+    /*
+  if (`${email}` === '' && `${password}` === '')
+    Alert.alert(errors.ERR, errors.ERR_EMAIL_PASSWORD);
+  else if (`${email}` === '')
+    Alert.alert(errors.ERR, errors.ERR_EMAIL);
+  else if (reg.test(`${email}`) === false)
+    Alert.alert(errors.ERR, errors.ERR_INVALID_EMAIL);
+  else if (`${password}` === '')
+    Alert.alert(errors.ERR, errors.ERR_PASSWORD);
+  else {
+  navigate('UserInformationsComponent');
+  }*/
+
 
   }
 
