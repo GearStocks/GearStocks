@@ -76,32 +76,54 @@
   padding-top: 10vh;
   color: white;
   text-align: center;
+  overflow: auto;
 
-  &__head {
+  video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  &__content {
     p {
       font-size: 35px;
     }
     .wrapper {
       width: 100%;
-      margin-top: 30px;
+      padding-bottom: 4em;
+      padding-top: 4em;
+      display: grid;
+      grid-gap: 2rem;
+
       .block-resp {
-        width: 20vw;
-        display: inline-block;
-        margin: 0 20px;
+        margin: auto;
+        max-width: 400px;
+
+        h4 {
+          padding-left: 0.4em;
+          padding-right: 0.4em;
+        }
       }
     }
   }
+}
 
-  &__foot {
-    font-size:35px;
-    video {
-      margin-top: 30px;
-      margin-bottom: 30px;
-      width: 60vw;
-    }
-    h4 {
-      padding-bottom: 30px;
-      margin: 0;
+.desc {
+    padding-bottom: 30px;
+}
+
+@media (min-width: 600px) {
+  .wrapper { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .homeSlide {
+    &__content {
+      p {
+        font-size: 27px;
+      }
+      h4 {
+        font-size: 20px;
+      }
     }
   }
 }
