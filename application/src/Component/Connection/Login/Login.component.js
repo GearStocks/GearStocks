@@ -87,7 +87,7 @@ export default class Login extends React.Component {
           onSubmitEditing={() => this.password.focus()}
           blurOnSubmit={false}
           placeholder={strings.EMAIL}
-          leftIcon={<Icon name='person' size={24} color='black' />}
+          leftIcon={<Icon name='mail' size={24} color='black' />}
           onChangeText={(email) => this.setState({ email })}
         />
 
