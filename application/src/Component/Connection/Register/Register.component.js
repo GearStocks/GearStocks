@@ -47,7 +47,7 @@ export default class RegisterComponent extends React.Component {
     const JSONObj = JSON.stringify({
       mail: this.state.email,
       password: this.state.password,
-      username: this.state.username,
+      userName: this.state.username,
       firstName: this.state.firstname,
       lastName: this.state.lastname,
       civility: this.state.civility,
