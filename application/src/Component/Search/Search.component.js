@@ -27,7 +27,7 @@ export default class SearchComponent extends React.Component {
     const { search } = this.state;
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text> This is my Explore screen </Text>
+        <Text> This is my Explore screeen </Text>
         <SearchBar
           lightTheme
           platform={Platform.OS === 'android' ? 'android' : 'ios'}

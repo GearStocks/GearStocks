@@ -44,7 +44,7 @@ export default class Login extends React.Component {
       password: this.state.password
     });
 
-    if (`${email}` === '' && `${password}` === '')
+    /*if (`${email}` === '' && `${password}` === '')
       Alert.alert(errors.ERR, errors.ERR_EMAIL_PASSWORD);
     else if (`${email}` === '')
       Alert.alert(errors.ERR, errors.ERR_EMAIL);
@@ -52,7 +52,7 @@ export default class Login extends React.Component {
       Alert.alert(errors.ERR, errors.ERR_INVALID_EMAIL);
     else if (`${password}` === '')
       Alert.alert(errors.ERR, errors.ERR_PASSWORD);
-    else {
+    else {*/
       axios.post(routes.CONNECT, JSONObj, {
       headers: {
         'Content-Type': 'application/json'
@@ -70,7 +70,7 @@ export default class Login extends React.Component {
         // DEBUG
         //console.log('JSON => ', JSON.stringify(err));
       });
-    }
+    //}
   }
 
   render() {
