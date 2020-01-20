@@ -1,0 +1,28 @@
+<mat-toolbar class="navbar">
+  <div fxHide.gt-xs>
+    <button mat-icon-button class="navbar__button" (click)="onToggleSidenav()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </div>
+  <div class="navbar__brand">
+    <a routerLink="">
+      <img src="../../../../assets/img/logo.png" alt="Gearstocks"/>
+    </a>
+  </div>
+  <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
+    <ul fxLayout fxLayoutGap="15px">
+      <li *ngIf="currentUser">
+        <a routerLink="/profile">Profile</a>
+      </li>
+      <li *ngIf="currentUser">
+        <a (click)="userService.logout()" id="logout">Se déconnecter</a>
+      </li>
+      <li *ngIf="!currentUser">
+        <a class="navbar__iconAbove" (click)="open()" id="login">
+          <mat-icon>person</mat-icon>
+          <p>Se connecter</p>
+        </a>
+      </li>
+    </ul>
+  </div>
+</mat-toolbar>

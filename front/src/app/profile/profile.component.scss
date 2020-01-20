@@ -1,0 +1,87 @@
+.profile {
+  display: flex;
+  background-color: #fafafa;
+  margin: 2rem;
+  min-height: 100vh;
+
+  &__list {
+    margin-top: 3rem;
+
+    &__content {
+      width: 25rem;
+      margin-right: 6rem;
+      padding-bottom: 1rem;
+      top: 8rem;
+      position: sticky;
+      position: -webkit-sticky;
+
+      li {
+        cursor: pointer;
+        padding-left: 1.5rem;
+        line-height: 4rem;
+        margin-bottom: .5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        list-style-type: none;
+
+        &:hover {
+          background-color: #fef0e9;
+          border-radius: .4rem;
+          color: #f56b2a;
+        }
+      }
+    }
+  }
+
+  &__edit {
+    width: 100%;
+    margin-top: 3rem;
+
+    &__content {
+      margin: 2rem 0;
+      padding: 2rem;
+      background-color: #fef0e9;
+      border-radius: .4em;
+      max-width: 80rem;
+
+      h2 {
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      &__form {
+        padding-top: 10px;
+
+        &__mail {
+          .btn-outline-danger {
+            margin-left: 10px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.grid {
+  display: flex;
+  select {
+    width: 30%;
+  }
+}
+
+.active-li {
+  background-color: #fef0e9;
+  border-radius: .4rem;
+  color: #f56b2a;
+}
+
+.btn:disabled {
+  opacity: 0.65;
+  color: #a8b4c0;
+  background-color: #e6ebef;}
+
+@media screen and (max-width: 770px) {
+  .profile__list {
+    display: none;
+  }
+}

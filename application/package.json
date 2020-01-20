@@ -1,0 +1,39 @@
+{
+  "main": "src/Main.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "sudo expo start --android",
+    "ios": "sudo expo start --ios",
+    "web": "expo start --web",
+    "eject": "expo eject",
+    "lint": "eslint --fix *.js **/*.js",
+    "clean": "sudo watchman watch-del-all && rm -rf node_modules/ && npm cache clean --force && npm install && npm start -- --reset-cache",
+    "test": "jest"
+  },
+  "dependencies": {
+    "appcenter": "2.1.0",
+    "appcenter-analytics": "2.1.0",
+    "appcenter-crashes": "2.1.0",
+    "expo": "^33.0.0",
+    "prettier": "^1.18.2",
+    "react": "16.8.3",
+    "react-dom": "^16.8.6",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
+    "react-native-elements": "^1.1.0",
+    "react-native-web": "^0.11.4",
+    "react-navigation": "^3.11.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^10.0.2",
+    "babel-preset-expo": "^5.1.1",
+    "cross-env": "^5.2.0",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.2",
+    "jest": "^24.9.0"
+  },
+  "private": true
+}

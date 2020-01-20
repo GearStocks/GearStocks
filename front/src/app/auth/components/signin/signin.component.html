@@ -1,0 +1,44 @@
+<header class="cover-photo">
+    <button type="button" class="close" aria-label="Close" (click)="close()">
+        <mat-icon>clear</mat-icon>
+    </button>
+</header>
+<mat-dialog-content class="signin__modal">
+    <form [formGroup]="signForm">
+        <div class="mb-4">
+            <app-gearstocks-input
+                    [group]="signForm"
+                    [name]="'email'"
+                    [placeholder]="'Email'"
+                    [type]="'email'"
+                    [required]="true"
+                    [validationError]="signForm.get('email').errors"
+                    [validationErrorMessages]="errorMessages.email">
+            </app-gearstocks-input>
+        </div>
+        <div class="mb-4">
+            <app-gearstocks-input
+                    [group]="signForm"
+                    [name]="'password'"
+                    [placeholder]="'Mot de passe'"
+                    [type]="'password'"
+                    [required]="true"
+                    [validationError]="signForm.get('password').errors"
+                    [validationErrorMessages]="errorMessages.password">
+            </app-gearstocks-input>
+        </div>
+        <mat-checkbox (change)="getCheckBoxvalue($event)">Se souvenir de moi!</mat-checkbox>
+    </form>
+    <div class="text-center box">
+        <div class="d-flex text-center justify-content-around">
+            <div>
+                <a class='forgotPassword' (click)="resetPassword()">Mot de passe oublié ?</a>
+            </div>
+        </div>
+        <button class="loginButton btn btn-outline-primary" (click)="login()" type="button">Connexion</button>
+    </div>
+    <p class="footer">
+        Besoin d'un compte ? -
+        <a (click)="register()" id="register">Inscrivez-vous</a>
+    </p>
+</mat-dialog-content>

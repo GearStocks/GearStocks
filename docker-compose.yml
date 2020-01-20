@@ -1,0 +1,132 @@
+version: '3'
+
+networks:
+  gearstocks:
+    driver: bridge
+
+services:
+
+  #Open the mongodb port to be externaly accessible. If you want to remove the external access to the database, just remove the "ports" option.
+  #It will be accessible only through "gearstocks" network (IE: by the back).
+  #Volume is for persistant data.
+  mongo:
+    image: mongo:latest
+    env_file:
+     - ./database/secrets.env
+    networks:
+      - gearstocks
+    ports:
+      - 27017:27017
+    volumes:
+      - database:/data/db
+    restart: always
+    stdin_open: false
+    tty: false
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  #Create and renew certificates for SSL purposes
+  certbot:
+    build: ./certbot
+    volumes:
+      - ./apache/certificates:/etc/letsencrypt
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  #Serve the website, so need both HTTP and HTTPS ports (HSTS).
+  apache:
+    build: ./apache
+    environment:
+      - API_PORT=${API_PORT}
+    networks:
+      - gearstocks
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./front/dist:/home/files
+      - ./apache/certificates:/etc/letsencrypt
+      - ./apk:/home/files/apk:ro
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  #Use to build the Angular Apps. The App will be served by the apache docker.
+  front:
+    build: ./front
+    environment:
+      - API_PORT=${API_PORT}
+    networks:
+      - gearstocks
+    volumes:
+      - ./front:/home/files
+    restart: "no"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  api_builder:
+    image: gearstocks/api_builder:latest
+    volumes:
+      - ./back:/home/files
+      - ./api_builder/lib:/home/lib
+      - ./api_builder/build:/home/files/build
+    restart: "no"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+  
+  #Open the api port to be externaly accessible. If you want to remove the external access to the api, just remove the "ports" option.
+  #It will be accessible only through "gearstocks" network (IE: by the front).
+  api:
+    build: ./back
+    depends_on:
+      - api_builder
+    env_file:
+      - ./database/secrets.env
+    environment:
+      - API_PORT=${API_PORT}
+    networks:
+      - gearstocks
+    volumes:
+      - ./api_builder/lib:/usr/lib
+      - ./api_builder/build:/home/files/build      
+    stdin_open: false
+    tty: false
+    #restart: "always"
+    restart: "no"
+    ports:
+      - ${API_PORT}:${API_PORT}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+  ### build the mobile client
+  app:
+    build: './application'
+    #volumes:
+    #  - ./apk:/home/apk
+    stdin_open: false
+    tty: false
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
+
+volumes:
+  database:
