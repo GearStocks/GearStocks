@@ -20,6 +20,8 @@ steps:
 
 - script: |
     echo Test the pull request on dev.
+    set -e
+    echo MONGO_INITDB_ROOT_USERNAME=mongoadmin\nMONGO_INITDB_ROOT_PASSWORD=mongoadmin > database/secrets.env
     docker-compose up front api_builder
     echo Front and Back successfully build.
   displayName: 'Compilation Check'
