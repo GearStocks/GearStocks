@@ -18,7 +18,8 @@ steps:
 #    echo See https://aka.ms/yaml
 #  displayName: 'Run a multi-line script'
 
-- script:
+- script: |
     echo Test the pull request on dev.
     docker-compose up front api_builder
     echo Front and Back successfully build.
+  displayName: 'Compilation Check'
