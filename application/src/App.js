@@ -10,7 +10,8 @@ import { createStackNavigator, createAppContainer } from 'react-navigation';
 import LoginComponent from './Component/Connection/Login/Login.component';
 import RegisterComponent from './Component/Connection/Register/Register.component';
 import ForgotPasswordComponent from './Component/Connection/ForgotPassword/ForgotPassword.component';
-import UserInformationsComponent from './Component/Profil/UserInformations/UserInformations.component';
+
+import AppMenu from './Component/Menu/Menu.component';
 
 export default class App extends React.Component {
   render() {
@@ -39,8 +40,8 @@ const AppNavigator = createStackNavigator({
       title: 'Forgot Password'
     }
   },
-  UserInformationsComponent: {
-    screen: UserInformationsComponent,
+  AppMenu: {
+    screen: AppMenu,
     navigationOptions: {
       header: null
     }

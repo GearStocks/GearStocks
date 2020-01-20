@@ -61,11 +61,11 @@ export default class Login extends React.Component {
       .then((res) => {
         console.log('RESPONSE RECEIVED: ', res);
         this.setState({ isAuthorized: true });
-        navigate('UserInformationsComponent');
+        navigate('AppMenu');
       })
       .catch((err) => {
         console.log(err.name, err.message);
-        navigate('UserInformationsComponent');
+        navigate('AppMenu');
 
         // DEBUG
         //console.log('JSON => ', JSON.stringify(err));

@@ -88,10 +88,10 @@ export default class RegisterComponent extends React.Component {
       })
         .then((res) => {
           console.log('RESPONSE RECEIVED: ', res);
-          navigate('UserInformationsComponent');
+          navigate('AppMenu');
         })
         .catch((err) => {
-          navigate('UserInformationsComponent');
+          navigate('AppMenu');
           //Alert.alert(err.name, err.message);
         });
     //}
