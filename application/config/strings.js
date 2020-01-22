@@ -10,6 +10,8 @@ export const strings = {
   LOGOUT: 'Log Out',
   REGISTER: 'Register',
   CONNECTION: 'Connection',
+  SEARCH: 'Search',
+  DISCONNECT: 'Disconnect',
 
   USERNAME: 'Username',
   FIRSTNAME: 'Firstname',
@@ -40,5 +42,6 @@ export const errors = {
   ERR_CIVILITY: 'Please enter your civility',
   ERR_ADDRESS: 'Please enter your address',
   ERR_PHONE_NUMBER: 'Please enter your phonenumber',
-  ERR_BIRTHDAY: 'Please enter your birthday'
+  ERR_BIRTHDAY: 'Please enter your birthday',
+  ERR_SEARCH: 'Please enter a word'
 };

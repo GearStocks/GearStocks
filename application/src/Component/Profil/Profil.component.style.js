@@ -13,5 +13,13 @@ export default StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  button: {
+    height: 50,
+    width: 200,
+    borderRadius: 20,
+    backgroundColor: '#050175',
+    elevation: 10,
+    top: 50
   }
 });

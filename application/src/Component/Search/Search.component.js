@@ -6,8 +6,11 @@
  */
 
 import React from 'react';
-import { Text, View, Platform } from 'react-native';
-import { SearchBar } from 'react-native-elements';
+import { Text, View, Platform, Alert } from 'react-native';
+import { SearchBar, Button } from 'react-native-elements';
+
+import styles from './Search.component.style';
+import { strings, errors } from '../../../config/strings';
 
 export default class SearchComponent extends React.Component {
 
@@ -23,11 +26,18 @@ export default class SearchComponent extends React.Component {
     this.setState({ search });
   };
 
+  handleClick = () => {
+    const { search } = this.state;
+
+    if (`${search}` === '')
+      Alert.alert(errors.ERR, errors.ERR_SEARCH);
+  };
+
   render() {
     const { search } = this.state;
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text> This is my Explore screeen </Text>
+        <Text> Search </Text>
         <SearchBar
           lightTheme
           platform={Platform.OS === 'android' ? 'android' : 'ios'}
@@ -35,6 +45,7 @@ export default class SearchComponent extends React.Component {
           onChangeText={this.updateSearch}
           value={search}
         />
+        <Button title={strings.SEARCH} buttonStyle={styles.button} type="outline" onPress={() => this.handleClick()} />
       </View>
     );
   }

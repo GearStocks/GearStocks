@@ -1,3 +1,10 @@
+/**
+ * @author Nicolas  BOULOGNE-CURRIEZ <nicolas.boulogne-curriez@epitech.eu>
+ * @file Description
+ * @desc Created on 2020-01-22 7:06:18 pm
+ * @copyright GearStocks
+ */
+
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
