@@ -7,10 +7,11 @@
 
 import React from 'react';
 import { View, Alert } from 'react-native';
-import { Input, Text, Icon, Button, CheckBox } from 'react-native-elements';
+import { Input, Text, Icon, Button } from 'react-native-elements';
+
 import { strings, errors } from '../../../../config/strings';
 import styles from './Register.component.style';
-import { routes } from '../../../../config/routes';
+import PostRegister from '../../../services/POST/PostRegister';
 
 const axios = require('axios');
 
@@ -27,26 +28,12 @@ export default class RegisterComponent extends React.Component {
       lastname: '',
       email: '',
       password: '',
-      confirmPassword: '',
-      address: '',
-      phonenumber: '',
-      birthday: '',
-      civility: '',
-      checked: false,
-      checked2: true,
-      login: false
+      confirmPassword: ''
     };
   }
 
-  manageCivility = () => {
-      this.setState({ checked: this.state.checked2 });
-      this.setState({ checked2: !this.state.checked2 });
-  }
-
-  handleClick() {
-    const { navigate } = this.props.navigation;
-    const { email, password, username, firstname, lastname,
-      confirmPassword } = this.state;
+  handleClick = (navigate) => {
+    const { email, password, username, firstname, lastname, confirmPassword } = this.state;
     // eslint-disable-next-line no-useless-escape
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
@@ -57,8 +44,6 @@ export default class RegisterComponent extends React.Component {
       firstName: this.state.firstname,
       lastName: this.state.lastname
     });
-
-    //console.log(JSONObj);
 
     if (`${username}` === '')
       Alert.alert(errors.ERR, errors.ERR_USERNAME);
@@ -74,27 +59,13 @@ export default class RegisterComponent extends React.Component {
       Alert.alert(errors.ERR, errors.ERR_PASSWORD);
     else if (`${password}` != `${confirmPassword}`)
       Alert.alert(errors.ERR, errors.ERR_MATCH_PASSWORD);
-      
-    axios.post(routes.REGISTER, JSONObj, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then((res) => {
-        console.log('RESPONSE RECEIVED: ', res);
-        navigate('AppMenu');
-      })
-      .catch((err) => {
-        //console.log(err.name, err.message);
-        console.log(JSONObj);
-        navigate('AppMenu');
-
-        //Alert.alert(err.name, err.message);
-      });
+    else {
+      new PostRegister().register(JSONObj, navigate);
     }
-  
+  }
 
   render() {
+    const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
         <Text h2>Register</Text>
@@ -158,8 +129,8 @@ export default class RegisterComponent extends React.Component {
           leftIcon={<Icon name='lock' size={24} color='black' />}
           onChangeText={(confirmPassword) => this.setState({ confirmPassword })}
         />
-        <Button title={strings.REGISTER} buttonStyle={styles.button} type="outline" onPress={() => this.handleClick()} />
-        <Button title={strings.LOGIN} buttonStyle={styles.button} type="outline" onPress={() => this.props.navigation.navigate('LoginComponent')} />
+        <Button title={strings.REGISTER} buttonStyle={styles.button} type="outline" onPress={() => this.handleClick(navigate)} />
+        <Button title={strings.LOGIN} buttonStyle={styles.button} type="outline" onPress={() => navigate('LoginComponent')} />
       </View>
     );
   }

@@ -5,16 +5,17 @@
  * @copyright GearStocks
  */
 
+/* eslint-disable no-undef */
+/* eslint-disable no-console */
+
 import React from 'react';
 
 import { routes } from '../../../config/routes';
 
 const axios = require('axios');
 
-/* eslint-disable no-undef */
-/* eslint-disable no-console */
-
 export default class PostLogin extends React.Component {
+
   login = (JSONObj, navigate) => {
     axios.post(routes.CONNECT, JSONObj, {
       headers: {
@@ -27,8 +28,6 @@ export default class PostLogin extends React.Component {
       })
       .catch((err) => {
         console.log(err.name, err.message);
-        navigate('AppMenu');
-
         // DEBUG
         //console.log('JSON => ', JSON.stringify(err));
       });
