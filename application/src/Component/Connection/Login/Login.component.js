@@ -58,7 +58,7 @@ export default class Login extends React.Component {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-        <Text h2>Login</Text>
+        <Text style={styles.title}>Welcome</Text>
         <Input
           inputStyle={styles.input}
           autoCapitalize='none'
@@ -73,6 +73,7 @@ export default class Login extends React.Component {
         />
         <Input
           ref={(input) => { this.password = input; }}
+          inputStyle={styles.input}
           returnKeyType="go"
           placeholder={strings.PASSWORD}
           secureTextEntry={this.state.hidePassword}

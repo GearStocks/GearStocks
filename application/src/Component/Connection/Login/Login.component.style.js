@@ -16,21 +16,27 @@ export default StyleSheet.create({
     },
     button: {
         height: 50,
-        width: 200,
+        width: 300,
         borderRadius: 20,
         backgroundColor: '#050175',
-        elevation: 10,
-        top: 50
+        top: 50,
+        marginBottom: 10
     },
     input: {
         fontSize: 20,
         height: 30,
-        width: 100
+        width: 100,
+        left: 10
     },
     btnImage: {
-        flex: 1,
         width: 24,
         height: 24,
         resizeMode: 'contain'
+    },
+    title: {
+        fontWeight: 'bold',
+        bottom: 100,
+        alignItems: 'center',
+        fontSize: 50
     }
 });

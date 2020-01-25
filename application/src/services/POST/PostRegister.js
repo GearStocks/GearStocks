@@ -27,7 +27,7 @@ export default class PostRegister extends React.Component {
         navigate('AppMenu');
       })
       .catch((err) => {
-        console.log(err.name, err.message);
+        console.log("ici", err.message);
       });
   }
 }
