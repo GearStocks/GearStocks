@@ -5,6 +5,8 @@
  * @copyright GearStocks
  */
 
+import React from 'react';
+
 import { routes } from '../../../config/routes';
 
 const axios = require('axios');
@@ -12,22 +14,23 @@ const axios = require('axios');
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
 
-/*export const onLogin = axios.post(routes.CONNECT, JSONObj, {
-  headers: {
-    'Content-Type': 'application/json'
-  }
-})
-  .then((res) => {
-    console.log('RESPONSE RECEIVED: ', res);
-    console.log('JSON => ', JSON.stringify(res));
-    this.setState({ isAuthorized: true });
-    //navigate('UserInformationsComponent');
-  })
-  .catch((err) => {
-    Alert.alert(err.name, err.message);
-    console.log('message', err.status);
+export default class PostLogin extends React.Component {
+  login = (JSONObj, navigate) => {
+    axios.post(routes.CONNECT, JSONObj, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((res) => {
+        console.log('RESPONSE RECEIVED: ', res);
+        navigate('AppMenu');
+      })
+      .catch((err) => {
+        console.log(err.name, err.message);
+        navigate('AppMenu');
 
-    // DEBUG
-    //console.log('JSON => ', JSON.stringify(err));
-  });
-  */
+        // DEBUG
+        //console.log('JSON => ', JSON.stringify(err));
+      });
+  }
+}

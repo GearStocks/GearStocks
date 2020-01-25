@@ -85,7 +85,9 @@ export default class RegisterComponent extends React.Component {
         navigate('AppMenu');
       })
       .catch((err) => {
-        console.log(err.name, err.message);
+        //console.log(err.name, err.message);
+        console.log(JSONObj);
+        navigate('AppMenu');
 
         //Alert.alert(err.name, err.message);
       });
