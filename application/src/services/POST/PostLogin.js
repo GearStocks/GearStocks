@@ -9,6 +9,7 @@
 /* eslint-disable no-console */
 
 import React from 'react';
+import { Alert } from 'react-native';
 
 import { routes } from '../../../config/routes';
 
@@ -27,7 +28,8 @@ export default class PostLogin extends React.Component {
         navigate('AppMenu');
       })
       .catch((err) => {
-        console.log("ici", err.message);
+        //Alert.alert(err.name, err.message);
+        console.log(err.name, err.message);
         // DEBUG
         //console.log('JSON => ', JSON.stringify(err));
       });

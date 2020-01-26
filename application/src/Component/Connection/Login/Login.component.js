@@ -23,6 +23,8 @@ export default class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
+      errorMail: '',
+      errorPassword: '',
       hidePassword: true
     };
   } 
@@ -31,7 +33,7 @@ export default class Login extends React.Component {
     this.setState({ hidePassword: !this.state.hidePassword });
   }
 
-  handleClick = (navigate) => {
+  checkError = (navigate) => {
     // eslint-disable-next-line no-useless-escape
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     const { email, password } = this.state;
@@ -41,15 +43,25 @@ export default class Login extends React.Component {
       password: this.state.password
     });
 
-    if (`${email}` === '' && `${password}` === '')
-      Alert.alert(errors.ERR, errors.ERR_EMAIL_PASSWORD);
-    else if (`${email}` === '')
-      Alert.alert(errors.ERR, errors.ERR_EMAIL);
-    else if (reg.test(`${email}`) === false)
-      Alert.alert(errors.ERR, errors.ERR_INVALID_EMAIL);
-    else if (`${password}` === '')
-      Alert.alert(errors.ERR, errors.ERR_PASSWORD);
+    if (`${email}` === '' && `${password}` === '') {
+      this.setState({ errorMail: errors.ERR_ADDRESS });
+      this.setState({ errorPassword: errors.ERR_PASSWORD });
+    }
+    else if (`${email}` === '') {
+      this.setState({ errorMail: errors.ERR_ADDRESS });
+      this.setState({ errorPassword: '' });
+    }
+    else if (reg.test(`${email}`) === false) {
+      this.setState({ errorMail: errors.ERR_INVALID_EMAIL });
+      this.setState({ errorPassword: '' });
+    }
+    else if (`${password}` === '') {
+      this.setState({ errorMail: '' });
+      this.setState({ errorPassword: errors.ERR_PASSWORD });
+    }
     else {
+      this.setState({ errorMail: '' });
+      this.setState({ errorPassword: '' });
       new PostLogin().login(JSONObj, navigate);
     }
   }
@@ -65,6 +77,7 @@ export default class Login extends React.Component {
           autoCorrect={false}
           keyboardType='email-address'
           returnKeyType='next'
+          errorMessage={this.state.errorMail}
           onSubmitEditing={() => this.password.focus()}
           blurOnSubmit={false}
           placeholder={strings.EMAIL}
@@ -75,6 +88,7 @@ export default class Login extends React.Component {
           ref={(input) => { this.password = input; }}
           inputStyle={styles.input}
           returnKeyType="go"
+          errorMessage={this.state.errorPassword}
           placeholder={strings.PASSWORD}
           secureTextEntry={this.state.hidePassword}
           leftIcon={<Icon name='lock' size={24} color='black' />}
@@ -86,7 +100,7 @@ export default class Login extends React.Component {
           onChangeText={(password) => this.setState({ password })}
         />
         <Button title={strings.FORGOT_PASSWORD} type="clear" onPress={() => navigate('ForgotPasswordComponent')} />
-        <Button title={strings.CONNECTION} buttonStyle={styles.button} type="outline" onPress={() => this.handleClick(navigate)} />
+        <Button title={strings.CONNECTION} buttonStyle={styles.button} type="outline" onPress={() => this.checkError(navigate)} />
         <Button title={strings.REGISTER} buttonStyle={styles.button} type="outline" onPress={() => navigate('RegisterComponent')} />
       </View>
     );

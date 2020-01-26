@@ -12,15 +12,16 @@ export default StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginRight: 10,
+        marginLeft: 10
     },
     button: {
         height: 50,
-        width: 300,
-        borderRadius: 20,
-        backgroundColor: '#050175',
-        top: 50,
-        marginBottom: 10
+        width: 350,
+        borderRadius: 5,
+        top: 150,
+        marginBottom: 20
     },
     input: {
         fontSize: 20,
