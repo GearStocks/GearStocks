@@ -20,8 +20,11 @@ export default StyleSheet.create({
         height: 50,
         width: 350,
         borderRadius: 5,
-        top: 150,
+        top: 130,
         marginBottom: 20
+    },
+    forgetPassword: {
+        top: 60
     },
     input: {
         fontSize: 20,
@@ -32,6 +35,7 @@ export default StyleSheet.create({
     btnImage: {
         width: 24,
         height: 24,
+        right: 10,
         resizeMode: 'contain'
     },
     title: {

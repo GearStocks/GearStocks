@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { View, TouchableOpacity, Image, Alert } from 'react-native';
+import { View, TouchableOpacity, Image } from 'react-native';
 import { Button, Input, Icon, Text } from 'react-native-elements';
 
 import { strings, errors } from '../../../../config/strings';
@@ -70,13 +70,18 @@ export default class Login extends React.Component {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Welcome</Text>
+        <Text style={styles.title}>GearStocks</Text>
         <Input
           inputStyle={styles.input}
           autoCapitalize='none'
           autoCorrect={false}
           keyboardType='email-address'
+          label='Email'
+          labelStyle={{bottom: 10, left: 10}}
           returnKeyType='next'
+          inputContainerStyle={{borderColor: '#5dade2', borderTopWidth: 2,
+          borderRightWidth: 2, borderLeftWidth: 2, borderBottomWidth: 2}}
+          containerStyle={{top: 20}}
           errorMessage={this.state.errorMail}
           onSubmitEditing={() => this.password.focus()}
           blurOnSubmit={false}
@@ -88,6 +93,11 @@ export default class Login extends React.Component {
           ref={(input) => { this.password = input; }}
           inputStyle={styles.input}
           returnKeyType="go"
+          containerStyle={{top: 50}}
+          label='Password'
+          labelStyle={{bottom: 10, left: 10}}
+          inputContainerStyle={{borderColor: '#5dade2', borderTopWidth: 2,
+          borderRightWidth: 2, borderLeftWidth: 2, borderBottomWidth: 2}}
           errorMessage={this.state.errorPassword}
           placeholder={strings.PASSWORD}
           secureTextEntry={this.state.hidePassword}
@@ -99,7 +109,7 @@ export default class Login extends React.Component {
           }
           onChangeText={(password) => this.setState({ password })}
         />
-        <Button title={strings.FORGOT_PASSWORD} type="clear" onPress={() => navigate('ForgotPasswordComponent')} />
+        <Button title={strings.FORGOT_PASSWORD} buttonStyle={styles.forgetPassword} type="clear" onPress={() => navigate('ForgotPasswordComponent')} />
         <Button title={strings.CONNECTION} buttonStyle={styles.button} type="outline" onPress={() => this.checkError(navigate)} />
         <Button title={strings.REGISTER} buttonStyle={styles.button} type="outline" onPress={() => navigate('RegisterComponent')} />
       </View>
