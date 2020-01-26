@@ -6,14 +6,35 @@
  */
 
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Platform, Alert } from 'react-native';
+import { SearchBar, Icon } from 'react-native-elements';
 import FlatGrid from 'react-native-super-grid';
 
 import { styles } from './Home.component.style';
 
 export default class HomeComponent extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      search: ''
+    };
+  }
+
+  updateSearch = (search) => {
+    this.setState({ search });
+  };
+
+  handleClick = () => {
+    const { search } = this.state;
+
+    if (`${search}` === '')
+      Alert.alert("zob", "obe");
+  };
   
   render() {
+    const { search } = this.state;
     const items = [
       { name: 'TURQUOISE', code: '#1abc9c', brand: 'Porsche' }, { name: 'EMERALD', code: '#2ecc71', brand: 'Porsche' },
       { name: 'PETER RIVER', code: '#3498db', brand: 'Porsche' }, { name: 'AMETHYST', code: '#9b59b6', brand: 'Porsche' },
@@ -23,6 +44,18 @@ export default class HomeComponent extends React.Component {
     ];
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={{ fontSize: 30, top: 35 }}>GearStocks</Text>
+        <Icon name='format-align-justify' size={30} color='black'
+        containerStyle={{ right: 170, top: 2 }} />
+        <SearchBar
+          containerStyle={{ top: 20, borderColor: '#5dade2', borderTopWidth: 2, borderBottomWidth: 2,
+          borderLeftWidth: 2, borderRightWidth: 2 }}
+          lightTheme
+          platform={Platform.OS === 'android' ? 'android' : 'ios'}
+          placeholder="What do you want ?"
+          onChangeText={this.updateSearch}
+          value={search}
+        />
         <FlatGrid
           itemDimension={130}
           items={items}

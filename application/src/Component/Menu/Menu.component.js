@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { Icon } from 'react-native-elements';
-import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
+import { createBottomTabNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation';
 
 import HomeComponent from '../Home/Home.component';
 import ProfilComponent from '../Profil/Profil.component';
@@ -21,7 +21,7 @@ export default class AppMenu extends React.Component {
   }
 }
 
-const bottomTabNavigator = createBottomTabNavigator(
+const bottomTabNavigator = createDrawerNavigator(
   {
     Home: {
       screen: HomeComponent,

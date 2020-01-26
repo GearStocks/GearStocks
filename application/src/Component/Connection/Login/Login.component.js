@@ -43,6 +43,9 @@ export default class Login extends React.Component {
       password: this.state.password
     });
 
+    // REMOVE BEFORE TO BUILD APK
+    navigate('AppMenu');
+
     if (`${email}` === '' && `${password}` === '') {
       this.setState({ errorMail: errors.ERR_ADDRESS });
       this.setState({ errorPassword: errors.ERR_PASSWORD });
