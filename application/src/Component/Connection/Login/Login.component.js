@@ -79,6 +79,7 @@ export default class Login extends React.Component {
           label='Email'
           labelStyle={{bottom: 10, left: 10}}
           returnKeyType='next'
+          errorStyle={{fontSize: 18}}
           inputContainerStyle={{borderColor: '#5dade2', borderTopWidth: 2,
           borderRightWidth: 2, borderLeftWidth: 2, borderBottomWidth: 2}}
           containerStyle={{top: 20}}
@@ -93,6 +94,7 @@ export default class Login extends React.Component {
           ref={(input) => { this.password = input; }}
           inputStyle={styles.input}
           returnKeyType="go"
+          errorStyle={{fontSize: 18}}
           containerStyle={{top: 50}}
           label='Password'
           labelStyle={{bottom: 10, left: 10}}

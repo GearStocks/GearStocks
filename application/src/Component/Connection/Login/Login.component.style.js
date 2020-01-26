@@ -40,7 +40,7 @@ export default StyleSheet.create({
     },
     title: {
         fontWeight: 'bold',
-        bottom: 100,
+        bottom: 50,
         alignItems: 'center',
         fontSize: 50
     }
