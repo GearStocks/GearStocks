@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { Icon } from 'react-native-elements';
-import { createBottomTabNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation';
+import { createDrawerNavigator, createAppContainer } from 'react-navigation';
 
 import HomeComponent from '../Home/Home.component';
 import ProfilComponent from '../Profil/Profil.component';

@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { Text, View, Platform, Alert } from 'react-native';
+import { Text, View, Platform } from 'react-native';
 import { SearchBar, Icon } from 'react-native-elements';
 import FlatGrid from 'react-native-super-grid';
 
@@ -26,13 +26,6 @@ export default class HomeComponent extends React.Component {
     this.setState({ search });
   };
 
-  handleClick = () => {
-    const { search } = this.state;
-
-    if (`${search}` === '')
-      Alert.alert("zob", "obe");
-  };
-  
   render() {
     const { search } = this.state;
     const items = [
@@ -45,11 +38,13 @@ export default class HomeComponent extends React.Component {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ fontSize: 30, top: 35 }}>GearStocks</Text>
-        <Icon name='format-align-justify' size={30} color='black'
-        containerStyle={{ right: 170, top: 2 }} />
+          <Icon name='format-align-justify' size={30} color='black'
+            containerStyle={{ right: 170, top: 2 }} onPress={() => { this.props.navigation.openDrawer(); }} />
         <SearchBar
-          containerStyle={{ top: 20, borderColor: '#5dade2', borderTopWidth: 2, borderBottomWidth: 2,
-          borderLeftWidth: 2, borderRightWidth: 2 }}
+          containerStyle={{
+            top: 20, borderColor: '#5dade2', borderTopWidth: 2, borderBottomWidth: 2,
+            borderLeftWidth: 2, borderRightWidth: 2
+          }}
           lightTheme
           platform={Platform.OS === 'android' ? 'android' : 'ios'}
           placeholder="What do you want ?"
