@@ -4,7 +4,7 @@ Technical documentation
 
 See User documentation: [USER.md](USER.md)
 
-Document Version: 1.0 (10.10.2019 - MM/DD/YYYY)
+Document Version: 1.1 (05.02.2020 - MM/DD/YYYY)
 
 Author: Valentin Lebon (valentin.lebon@epitech.eu)
 
@@ -22,7 +22,7 @@ Author: Valentin Lebon (valentin.lebon@epitech.eu)
     - [4. Updating website](#4-Updating-website)
     - [5. Updating API](#5-Updating-API)
     - [6. Changing MongoDB's admin's password](#6-Changing-MongoDBs-admins-password)
-    - [7. Pipeline and pull request](#7-Pipelines-and-pull-request)
+    - [7. Pipelines and pull requests](#7-Pipelines-and-pull-requests)
 
 ## Documentation
 
@@ -115,6 +115,26 @@ docker-compose stop api && docker-compose up -d api
 
 //The previous part has to be updated to fit with mongo documentation !
 
-#### 7. Pipeline and pull requests
+#### 7. Pipelines and pull requests
 
--TODO-
+Gearstock's project's deployment's automatation is taking place in two environements: ```Dev``` and ```Prod```, each hosted on an Azure VM.
+
+##### 1. The Dev environement
+
+The ```Dev``` environement's behavior is to test together all the ressources from the diferents branches to handle and correct (on other relevant branches) bugs and defects before uploading the ressources to the ```Prod``` environement.
+
+When a ```pull request``` is made to the ```dev branch```, a ```pipeline``` is triggered. This ```pipeline``` will run tests on a separated environement, where the acceptance of the ```pull request``` is simulated.
+
+If all the tests succeed, the ```pull request``` is accepted and the resulted ressources are updated to the ```dev branch``` and then to the ```Dev``` environement.
+
+##### 2. The Prod environement
+
+The ```Prod``` environement's behavior is to provide the Gearstock's project to the final users.
+
+When a ```pull request``` is made from the ```dev branch``` to the ```master branch```, a ```pipeline``` is triggered. This ```pipeline``` will run tests on a separated environement, where the acceptance of the ```pull request``` is simulated.
+
+If all the tests succeed, the ```pull request``` is accepted and the resulted ressources are updated to the ```master branch``` and then to the ```Prod``` environement. The new version of the project is then available on Internet.
+
+##### 3. The pipelines' schem
+
+//TODO add shems
