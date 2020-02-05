@@ -121,7 +121,7 @@ Gearstock's project's deployment's automatation is taking place in two environem
 
 ##### 1. The Dev environement
 
-The ```Dev``` environement's behavior is to test together all the ressources from the diferents branches to handle and correct (on other relevant branches) bugs and defects before uploading the ressources to the ```Prod``` environement.
+The ```Dev``` environement's behavior is to test together all the ressources from the diferents branches to handle and correct (on those branches and NOT on dev branch) bugs and defects before uploading the ressources to the ```Prod``` environement.
 
 When a ```pull request``` is made to the ```dev branch```, a ```pipeline``` is triggered. This ```pipeline``` will run tests on a separated environement, where the acceptance of the ```pull request``` is simulated.
 
