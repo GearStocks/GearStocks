@@ -22,6 +22,7 @@ Author: Valentin Lebon (valentin.lebon@epitech.eu)
     - [4. Updating website](#4-Updating-website)
     - [5. Updating API](#5-Updating-API)
     - [6. Changing MongoDB's admin's password](#6-Changing-MongoDBs-admins-password)
+    - [7. Pipeline and pull request](#7-Pipelines-and-pull-request)
 
 ## Documentation
 
@@ -111,3 +112,9 @@ Then, press ```Ctrl+C``` follow by ```Ctrl+D``` to quit, and execute:
 ```bash
 docker-compose stop api && docker-compose up -d api
 ```
+
+//The previous part has to be updated to fit with mongo documentation !
+
+#### 7. Pipeline and pull requests
+
+-TODO-
