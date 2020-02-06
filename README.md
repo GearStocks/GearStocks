@@ -117,7 +117,7 @@ docker-compose stop api && docker-compose up -d api
 
 #### 7. Pipelines and pull requests
 
-Gearstock's project's deployment's automatation is taking place in two environments: ```Dev``` and ```Prod```, each hosted on an Azure VM.
+Gearstock's project's deployment's automation is taking place in two environments: ```Dev``` and ```Prod```, each hosted on an Azure VM.
 
 ##### 1. The Dev environment
 
