@@ -40,7 +40,7 @@ Services are describes in the docker-compose.yml file.
 
 ### 3. Build and launch Application
 
-To build and launch the application, first check if the ```database/secrets.env``` file exist (see [6. Changing MongoDB's root's password](#6-Changing-MongoDBs-roots-password)). Then, open a console/terminal and execute the following command in the root directory of this application.
+To build and launch the application, first check if the ```database/secrets.env``` file exist (see [6. Changing MongoDB's admin's password](#6-Changing-MongoDBs-admins-password)). Then, open a console/terminal and execute the following command in the root directory of this application.
 
 ```bash
 docker-compose up --build -d
