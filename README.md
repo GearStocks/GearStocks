@@ -117,24 +117,24 @@ docker-compose stop api && docker-compose up -d api
 
 #### 7. Pipelines and pull requests
 
-Gearstock's project's deployment's automatation is taking place in two environements: ```Dev``` and ```Prod```, each hosted on an Azure VM.
+Gearstock's project's deployment's automatation is taking place in two environments: ```Dev``` and ```Prod```, each hosted on an Azure VM.
 
-##### 1. The Dev environement
+##### 1. The Dev environment
 
-The ```Dev``` environement's behavior is to test together all the ressources from the diferents branches to handle and correct (on other relevant branches) bugs and defects before uploading the ressources to the ```Prod``` environement.
+The ```Dev``` environment's behavior is to test together all the resources from the diferents branches to handle and correct (on other relevant branches) bugs and defects before uploading the resources to the ```Prod``` environment.
 
-When a ```pull request``` is made to the ```dev branch```, a ```pipeline``` is triggered. This ```pipeline``` will run tests on a separated environement, where the acceptance of the ```pull request``` is simulated.
+When a ```pull request``` is made to the ```dev branch```, a ```pipeline``` is triggered. This ```pipeline``` will run tests on a separated environment, where the acceptance of the ```pull request``` is simulated.
 
-If all the tests succeed, the ```pull request``` is accepted and the resulted ressources are updated to the ```dev branch``` and then to the ```Dev``` environement.
+If all the tests succeed, the ```pull request``` is accepted and the resulted resources are updated to the ```dev branch``` and then to the ```Dev``` environment.
 
-##### 2. The Prod environement
+##### 2. The Prod environment
 
-The ```Prod``` environement's behavior is to provide the Gearstock's project to the final users.
+The ```Prod``` environment's behavior is to provide the Gearstock's project to the final users.
 
-When a ```pull request``` is made from the ```dev branch``` to the ```master branch```, a ```pipeline``` is triggered. This ```pipeline``` will run tests on a separated environement, where the acceptance of the ```pull request``` is simulated.
+When a ```pull request``` is made from the ```dev branch``` to the ```master branch```, a ```pipeline``` is triggered. This ```pipeline``` will run tests on a separated environment, where the acceptance of the ```pull request``` is simulated.
 
-If all the tests succeed, the ```pull request``` is accepted and the resulted ressources are updated to the ```master branch``` and then to the ```Prod``` environement. The new version of the project is then available on Internet.
+If all the tests succeed, the ```pull request``` is accepted and the resulted resources are updated to the ```master branch``` and then to the ```Prod``` environment. The new version of the project is then available on Internet.
 
 ##### 3. The pipelines' schem
 
-//TODO add shems
+![Pipelines](pipelines.png "Pipelines")
