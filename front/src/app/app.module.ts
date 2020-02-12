@@ -11,7 +11,7 @@ import { ItemComponent } from './item/item.component';
 import { Item2Component } from './item2/item2.component';
 import { SearchPageComponent } from './search-page/search-page.component';
 import { GalleryComponent } from './gallery/gallery.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
 /* App Modules */
 import { CoreModule } from './core/core.module';
