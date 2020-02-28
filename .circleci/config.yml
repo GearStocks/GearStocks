@@ -9,7 +9,6 @@ jobs:
       - run: echo Test the pull request on dev.
       - run: echo MONGO_INITDB_ROOT_USERNAME=mongoadmin\nMONGO_INITDB_ROOT_PASSWORD=mongoadmin > database/secrets.env
       - run: docker-compose up front api_builder
-      - run: echo Front and Back successfully build.
 
 workflows:
   version: 2
