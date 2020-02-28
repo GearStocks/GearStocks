@@ -9,7 +9,7 @@ Technical documentation
 
 See User documentation: [USER.md](USER.md)
 
-Document Version: 1.2 (28.02.2020 - MM/DD/YYYY)
+Document Version: 1.2 (28.02.2020 - DD/MM/YYYY)
 
 Author: Valentin Lebon (valentin.lebon@epitech.eu)
 
