@@ -2,7 +2,7 @@ pull_request_rules:
   - name: Automatic merge Dev on Azure validation
     conditions:
       - base=dev
-      - "status-success=GearStocks.GearStocks"
+      - status-success=continuous-integration/azure-pipelines/GearStocks.GearStocks
     actions:
       merge:
         method: merge
@@ -10,8 +10,30 @@ pull_request_rules:
   - name: Automatic merge Master on Azure Validation
     conditions:
       - base=master
-      - "status-success=GearStocks.GearStocks"
+      - status-success=GearStocks.GearStocks
       #- "#approved-reviews-by>=1"
+    actions:
+      merge:
+        method: merge
+
+  - name: TEST
+    conditions:
+      - status-success=gearStocks.gearStocks
+    actions:
+      merge:
+        method: merge
+        
+        
+  - name: TEST2
+    conditions:
+      - "status-success=gearStocks.gearStocks"
+    actions:
+      merge:
+        method: merge
+        
+   - name: TEST3
+    conditions:
+      - "status-success=continuous-integration/azure-pipelines/GearStocks.GearStocks"
     actions:
       merge:
         method: merge
