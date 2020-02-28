@@ -2,7 +2,7 @@ pull_request_rules:
   - name: Automatic merge Dev on Azure validation
     conditions:
       - base=dev
-      - "status-success=ci/circleci: testDocker"
+      - "status-success=gearstocks-dev-CI"
     actions:
       merge:
         method: merge
