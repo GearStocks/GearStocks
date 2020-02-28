@@ -5,9 +5,7 @@ jobs:
       - image: ubuntu:latest
     steps:
       - checkout
-      - run:
-        name: Install Docker Compose
-        command: 'set -x; curl -L https://github.com/docker/compose/releases/download/1.25.3/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose; chmod +x /usr/local/bin/docker-compose'
+      - run: set -x; curl -L https://github.com/docker/compose/releases/download/1.25.3/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose; chmod +x /usr/local/bin/docker-compose
       - run: echo Test the pull request on dev.
       - run: echo MONGO_INITDB_ROOT_USERNAME=mongoadmin\nMONGO_INITDB_ROOT_PASSWORD=mongoadmin > database/secrets.env
       - run: docker-compose up front api_builder
@@ -18,9 +16,7 @@ jobs:
       - image: ubuntu:latest
     steps:
       - checkout
-      - run:
-        name: Install Docker Compose
-        command: 'set -x; curl -L https://github.com/docker/compose/releases/download/1.25.3/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose; chmod +x /usr/local/bin/docker-compose'
+      - run: set -x; curl -L https://github.com/docker/compose/releases/download/1.25.3/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose; chmod +x /usr/local/bin/docker-compose
       - run: echo Test the pull request on master.
       - run: echo MONGO_INITDB_ROOT_USERNAME=mongoadmin\nMONGO_INITDB_ROOT_PASSWORD=mongoadmin > database/secrets.env
       - run: docker-compose up front api_builder
