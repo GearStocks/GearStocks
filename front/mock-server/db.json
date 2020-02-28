@@ -2,31 +2,37 @@
   "connect": {
     "firstName": "François",
     "lastName": "MILHET",
-    "userName": "SkuSku",
+    "userName": "SkuSku971",
     "email": "francois97180@hotmail.fr",
     "password": "password",
-    "token": "12345"
+    "token": "12345",
+    "address": "",
+    "city": "",
+    "phone": ""
   },
   "register": {
-    "firstName": "francois",
+    "firstName": "françois",
     "lastName": "MILHET",
-    "userName": "dd",
-    "email": "d@d",
-    "password": "dddddddd"
+    "username": "Skullz971",
+    "mail": "francois97180@hotmail.fr",
+    "password": "test123456"
   },
   "resetPassword": {
     "email": "f@f"
   },
   "user": {
-    "civility": null,
+    "showPassword": "azerty",
+    "password": "dddddddd",
+    "confirmPassword": "dddddddd",
+    "oldPassword": "dd",
     "firstName": "François",
     "lastName": "MILHET",
-    "userName": "SkuSku",
+    "userName": "SkuSku971",
     "address": "",
     "city": "",
-    "phone": "salut",
+    "phone": "",
     "email": "francois97180@hotmail.fr",
-    "password": "password"
+    "emailConfirm": "francois97180@hotmail.fr"
   },
   "item": {
     "name": "Pneu continental GT",

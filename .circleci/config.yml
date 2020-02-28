@@ -1,118 +1,39 @@
-version: 2
+version: 2.1
 jobs:
-  build:
-    shell: /bin/bash 
-    working_directory: ~/application
+  dev:
     docker:
-      - image: circleci/node:8
+      - image: cimg/base:2020.01
     steps:
       - checkout
-      - run:
-          name: Install npm
-          command: 'sudo npm install -g npm@latest'
-      - run:
-          name: Install yarn
-          command: 'sudo npm install --global yarn'
-      - run:
-          name: Upgrade yarn
-          command: 'sudo npm upgrade --global yarn'
-      - run:
-          name: Install packages
-          command: 'sudo yarn install'
+      - setup_remote_docker
+      - run: echo Test the pull request on dev.
+      - run: echo MONGO_INITDB_ROOT_USERNAME=mongoadmin\nMONGO_INITDB_ROOT_PASSWORD=mongoadmin > database/secrets.env
+      - run: docker-compose up front api_builder
+      - run: echo Front and Back successfully build.
 
-      - run:
-          command: pwd
-      #- run:
-      #    name: Tests Jest
-      #    command: |
-      #      mkdir -p tests_results/jest
-      #      'echo Hello World'
-      #    environment:
-      #      JEST_JUNIT_OUTPUT: test_results/jest/junit.xml
-      #- run:
-
-  android:
-    - checkout_code
-
-      # Analyze the Javascript using ESLint, Flow, and Jest
-      # Note: This is a job which is defined above and not part of the Orb
-      - analyse_js:
-          requires:
-            - checkout_code
-
-      # Build the Android app in debug mode
-      - rn/android_build:
-          name: build_android_debug
-          project_path: "android"
-          build_type: debug
-          requires:
-            - analyse_js
-
-      # Build and test the Android app in release mode
-      # Note: We split these into seperate jobs because we can build the Android app on a Linux machine and preserve the expensive MacOS executor minutes for when it's required
-      - rn/android_build:
-          name: build_android_release
-          project_path: "android"
-          build_type: release
-          requires:
-            - analyse_js
-      - rn/android_test:
-          detox_configuration: "android.emu.release"
-          requires:
-            - build_android_release
-
-      # Build and test the iOS app in release mode
-      - rn/ios_build_and_test:
-          project_path: "ios/Example.xcodeproj"
-          device: "iPhone X"
-          build_configuration: "Release"
-          scheme: "Example"
-          detox_configuration: "ios.sim.release"
-          requires:
-            - analyse_js
-
-    #  - run:
-    #      name: fastlane tests
-    #      command: |
-    #        mkdir -p test-results/fastlane
-    #        bundle exec fastlane test
-    #        mv fastlane/report.xml test-results/fastlane
-    #  - store_test_results:
-    #      path: test-results
-
-      #- store_artifacts:
-    #path: test-results
-
-  test:
-    shell: /bin/bash 
-    working_directory: ~/application
+  master:
     docker:
-      - image: circleci/node:4.8.2-jessie
-      - image: mongo:3.4.4-jessie
+      - image: cimg/base:2020.01
     steps:
       - checkout
-      - run:
-          name: Test
-          command: npm test
-      - run:
-          name: Generate code coverage
-          command: './node_modules/.bin/nyc report --reporter=text-lcov'
-      - store_artifacts:
-          path: test-results.xml
-          prefix: tests
-      - store_artifacts:
-          path: coverage
-          prefix: coverage
+      - setup_remote_docker
+      - run: echo Test the pull request on master.
+      - run: echo MONGO_INITDB_ROOT_USERNAME=mongoadmin\nMONGO_INITDB_ROOT_PASSWORD=mongoadmin > database/secrets.env
+      - run: docker-compose up front api_builder
+      - run: echo Front and Back successfully build.
 
+      
 workflows:
   version: 2
-  build_and_test:
+  workflow:
     jobs:
-      - android
-      - build
-      - test:
-          requires:
-            - build
-          filters:
-            branches:
-              only: master
+      - dev:
+        filters:
+          branches:
+            only:
+              - dev
+      - master:
+        filters:
+          branches:
+            only:
+              - master

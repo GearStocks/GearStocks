@@ -3,7 +3,7 @@
         <div class="wrap__box1"></div>
         <div class="wrap__box2">
             <h1 class="wrap__box2__title">S'inscrire</h1>
-            <form class="wrap__box2__form form" [formGroup]="signForm" (ngSubmit)="register()">
+            <form class="wrap__box2__form form" [formGroup]="signForm" (ngSubmit)="onSubmit()">
                 <div class="form__row form__row--two">
                     <div class="input form__inline-input">
                         <div class="input__container">
@@ -13,7 +13,7 @@
                             [placeholder]="'Prénom'"
                             [type]="'texte'"
                             [required]="true"
-                            [validationError]="signForm.get('firstName').errors"
+                            [validationError]="f.firstName.errors"
                             [validationErrorMessages]="errorMessages.firstName">
                             </app-gearstocks-input>
                         </div>
@@ -26,7 +26,7 @@
                                     [placeholder]="'Nom'"
                                     [type]="'texte'"
                                     [required]="true"
-                                    [validationError]="signForm.get('lastName').errors"
+                                    [validationError]="f.lastName.errors"
                                     [validationErrorMessages]="errorMessages.lastName">
                             </app-gearstocks-input>
                         </div>
@@ -41,7 +41,7 @@
                                     [placeholder]="'Pseudo'"
                                     [type]="'texte'"
                                     [required]="true"
-                                    [validationError]="signForm.get('userName').errors"
+                                    [validationError]="f.userName.errors"
                                     [validationErrorMessages]="errorMessages.userName">
                             </app-gearstocks-input>
                         </div>
@@ -56,7 +56,7 @@
                                     [placeholder]="'Email'"
                                     [type]="'email'"
                                     [required]="true"
-                                    [validationError]="signForm.get('email').errors"
+                                    [validationError]="f.email.errors"
                                     [validationErrorMessages]="errorMessages.email">
                             </app-gearstocks-input>
                         </div>
@@ -71,7 +71,7 @@
                                     [placeholder]="'Mot de passe'"
                                     [type]="'password'"
                                     [required]="true"
-                                    [validationError]="signForm.get('password').errors"
+                                    [validationError]="f.password.errors"
                                     [validationErrorMessages]="errorMessages.password">
                             </app-gearstocks-input>
                         </div>
@@ -86,7 +86,7 @@
                                     [placeholder]="'Confirmation du mot de passe'"
                                     [type]="'password'"
                                     [required]="true"
-                                    [validationError]="signForm.get('confirmPassword').errors"
+                                    [validationError]="f.confirmPassword.errors"
                                     [validationErrorMessages]="errorMessages.confirmPassword">
                             </app-gearstocks-input>
                         </div>
@@ -102,7 +102,7 @@
                 </div>
                 <div class="form__row">
                     <div class="component component--primary form__button">
-                        <button class="loginButton btn btn-outline-primary" type="submit">Inscription</button>
+                        <button [disabled]="loading" class="loginButton btn btn-outline-primary" type="submit">Inscription</button>
                     </div>
                 </div>
                 <div class="form__row wrap__box2__sign">

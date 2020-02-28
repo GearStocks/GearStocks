@@ -1,10 +1,17 @@
 # Gearstock
 
+[![Mergify Status][mergify-status]][mergify]
+[![CircleCI](https://circleci.com/gh/GearStocks/GearStocks/tree/master.svg?style=svg)](https://circleci.com/gh/GearStocks/GearStocks/tree/master)
+[![CircleCI](https://circleci.com/gh/GearStocks/GearStocks/tree/dev.svg?style=svg)](https://circleci.com/gh/GearStocks/GearStocks/tree/dev)
+
+[mergify]: https://mergify.io
+[mergify-status]: https://img.shields.io/endpoint.svg?url=https://gh.mergify.io/badges/GearStocks/GearStocks&style=flat
+
 Technical documentation
 
 See User documentation: [USER.md](USER.md)
 
-Document Version: 1.0 (10.10.2019 - MM/DD/YYYY)
+Document Version: 1.2 (28.02.2020 - DD/MM/YYYY)
 
 Author: Valentin Lebon (valentin.lebon@epitech.eu)
 
@@ -22,6 +29,7 @@ Author: Valentin Lebon (valentin.lebon@epitech.eu)
     - [4. Updating website](#4-Updating-website)
     - [5. Updating API](#5-Updating-API)
     - [6. Changing MongoDB's admin's password](#6-Changing-MongoDBs-admins-password)
+    - [7. Pipelines and pull requests](#7-Pipelines-and-pull-requests)
 
 ## Documentation
 
@@ -39,7 +47,7 @@ Services are describes in the docker-compose.yml file.
 
 ### 3. Build and launch Application
 
-To build and launch the application, first check if the ```database/secrets.env``` file exist (see [6. Changing MongoDB's root's password](#6-Changing-MongoDBs-roots-password)). Then, open a console/terminal and execute the following command in the root directory of this application.
+To build and launch the application, first check if the ```database/secrets.env``` file exist (see [6. Changing MongoDB's admin's password](#6-Changing-MongoDBs-admins-password)). Then, open a console/terminal and execute the following command in the root directory of this application.
 
 ```bash
 docker-compose up --build -d
@@ -111,3 +119,29 @@ Then, press ```Ctrl+C``` follow by ```Ctrl+D``` to quit, and execute:
 ```bash
 docker-compose stop api && docker-compose up -d api
 ```
+
+//The previous part has to be updated to fit with mongo documentation !
+
+#### 7. Pipelines and pull requests
+
+Gearstock's project's deployment's automation is taking place in two environments: ```Dev``` and ```Prod```, each hosted on an Azure VM.
+
+##### 1. The Dev environment
+
+The ```Dev``` environment's behavior is to test together all the resources from the diferents branches to handle and correct (on those branches and NOT on dev branch) bugs and defects before uploading the resources to the ```Prod``` environment.
+
+When a ```pull request``` is made to the ```dev branch```, a ```pipeline``` is triggered. This ```pipeline``` will run tests on a separated environment, where the acceptance of the ```pull request``` is simulated.
+
+If all the tests succeed, the ```pull request``` is accepted and the resulted resources are updated to the ```dev branch``` and then to the ```Dev``` environment.
+
+##### 2. The Prod environment
+
+The ```Prod``` environment's behavior is to provide the Gearstock's project to the final users.
+
+When a ```pull request``` is made from the ```dev branch``` to the ```master branch```, a ```pipeline``` is triggered. This ```pipeline``` will run tests on a separated environment, where the acceptance of the ```pull request``` is simulated.
+
+If all the tests succeed, the ```pull request``` is accepted and the resulted resources are updated to the ```master branch``` and then to the ```Prod``` environment. The new version of the project is then available on Internet.
+
+##### 3. The pipelines' schem
+
+![Pipelines](pipelines.png "Pipelines")
