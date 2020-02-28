@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   dev:
     docker:
-      - image: ubuntu-latest
+      - image: ubuntu:latest
     steps:
       - checkout
       - run: echo Test the pull request on dev.
@@ -12,7 +12,7 @@ jobs:
 
   master:
     docker:
-      - image: ubuntu-latest
+      - image: ubuntu:latest
     steps:
       - checkout
       - run: echo Test the pull request on master.
