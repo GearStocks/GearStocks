@@ -10,7 +10,7 @@ pull_request_rules:
   - name: Automatic merge Master on Azure Validation
     conditions:
       - base=master
-      - "status-success=ci/circleci: testDocker"
+      - "status-success=gearstocks-master-CI"
       #- "#approved-reviews-by>=1"
     actions:
       merge:
