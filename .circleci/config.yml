@@ -27,8 +27,10 @@ workflows:
       - dev:
         filters:
           branches:
-            only: dev
+            only:
+              - dev
       - master:
         filters:
           branches:
-            only: master
+            only:
+              - master
