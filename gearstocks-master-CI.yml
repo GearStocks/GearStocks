@@ -1,0 +1,23 @@
+pr:
+- master
+
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+#- script: echo Hello, world!
+#  displayName: 'Run a one-line script'
+
+#- script: |
+#    echo Add other tasks to build, test, and deploy your project.
+#    echo See https://aka.ms/yaml
+#  displayName: 'Run a multi-line script'
+
+- script: |
+    set -e
+    echo MONGO_INITDB_ROOT_USERNAME=mongoadmin\nMONGO_INITDB_ROOT_PASSWORD=mongoadmin > database/secrets.env
+    docker-compose up front api_builder
+    echo Front and Back successfully build.
+  displayName: 'Compilation Check'
