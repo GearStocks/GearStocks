@@ -2,9 +2,10 @@ version: 2.1
 jobs:
   dev:
     docker:
-      - image: ubuntu:latest
+      - image: docker/compose
     steps:
       - checkout
+      - run: 
       - run: echo Test the pull request on dev.
       - run: echo MONGO_INITDB_ROOT_USERNAME=mongoadmin\nMONGO_INITDB_ROOT_PASSWORD=mongoadmin > database/secrets.env
       - run: docker-compose up front api_builder
@@ -12,7 +13,7 @@ jobs:
 
   master:
     docker:
-      - image: ubuntu:latest
+      - image: docker/compose
     steps:
       - checkout
       - run: echo Test the pull request on master.
