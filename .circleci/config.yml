@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   dev:
     docker:
-      - image: cimg/base:latest
+      - image: cimg/base:2020.01
     steps:
       - checkout
       - run: echo Test the pull request on dev.
@@ -12,7 +12,7 @@ jobs:
 
   master:
     docker:
-      - image: cimg/base:latest
+      - image: cimg/base:2020.01
     steps:
       - checkout
       - run: echo Test the pull request on master.
