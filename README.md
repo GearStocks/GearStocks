@@ -1,6 +1,8 @@
 # Gearstock
 
 [![Mergify Status][mergify-status]][mergify]
+[![CircleCI](https://circleci.com/gh/GearStocks/GearStocks/tree/master.svg?style=svg)](https://circleci.com/gh/GearStocks/GearStocks/tree/master)
+[![CircleCI](https://circleci.com/gh/GearStocks/GearStocks/tree/dev.svg?style=svg)](https://circleci.com/gh/GearStocks/GearStocks/tree/dev)
 
 [mergify]: https://mergify.io
 [mergify-status]: https://img.shields.io/endpoint.svg?url=https://gh.mergify.io/badges/GearStocks/GearStocks&style=flat
