@@ -5,10 +5,10 @@ jobs:
       - image: cimg/base:2020.01
     steps:
       - checkout
-      - run: service docker start
+      - run: sudo service docker start
       - run: echo Test the pull request on dev.
       - run: echo MONGO_INITDB_ROOT_USERNAME=mongoadmin\nMONGO_INITDB_ROOT_PASSWORD=mongoadmin > database/secrets.env
-      - run: docker-compose up front api_builder
+      - run: sudo docker-compose up front api_builder
       - run: echo Front and Back successfully build.
 
   master:
@@ -16,10 +16,10 @@ jobs:
       - image: cimg/base:2020.01
     steps:
       - checkout
-      - run: service docker start
+      - run: sudo service docker start
       - run: echo Test the pull request on master.
       - run: echo MONGO_INITDB_ROOT_USERNAME=mongoadmin\nMONGO_INITDB_ROOT_PASSWORD=mongoadmin > database/secrets.env
-      - run: docker-compose up front api_builder
+      - run: sudo docker-compose up front api_builder
       - run: echo Front and Back successfully build.
 
       
