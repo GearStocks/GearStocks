@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  dev:
+  testDocker:
     docker:
       - image: cimg/base:2020.01
     steps:
@@ -11,29 +11,13 @@ jobs:
       - run: docker-compose up front api_builder
       - run: echo Front and Back successfully build.
 
-  master:
-    docker:
-      - image: cimg/base:2020.01
-    steps:
-      - checkout
-      - setup_remote_docker
-      - run: echo Test the pull request on master.
-      - run: echo MONGO_INITDB_ROOT_USERNAME=mongoadmin\nMONGO_INITDB_ROOT_PASSWORD=mongoadmin > database/secrets.env
-      - run: docker-compose up front api_builder
-      - run: echo Front and Back successfully build.
-
-      
 workflows:
   version: 2
   workflow:
     jobs:
-      - dev:
+      - testDocker:
         filters:
           branches:
             only:
               - dev
-      - master:
-        filters:
-          branches:
-            only:
               - master
