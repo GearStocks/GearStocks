@@ -1,5 +1,10 @@
 # Gearstock
 
+[![Mergify Status][mergify-status]][mergify]
+
+[mergify]: https://mergify.io
+[mergify-status]: https://img.shields.io/endpoint.svg?url=https://gh.mergify.io/badges/GearStocks/GearStocks&style=flat
+
 Technical documentation
 
 See User documentation: [USER.md](USER.md)
