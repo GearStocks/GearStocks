@@ -23,6 +23,8 @@ class Server
 			    Pistache::Http::ResponseWriter response);
         int     PostConnect(const Pistache::Rest::Request& request,
 			    Pistache::Http::ResponseWriter response);
+	int	UpdateUser(const Pistache::Rest::Request &request,
+			   Pistache::Http::ResponseWriter reponse);
         void    setupRoutes();
         std::shared_ptr<Pistache::Http::Endpoint> httpEndpoint;
         Pistache::Rest::Router router;

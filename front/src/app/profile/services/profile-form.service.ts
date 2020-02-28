@@ -33,9 +33,6 @@ export class ProfileFormService {
 
   createProfileDataGroup(user: User): FormGroup {
     return this.formBuilder.group({
-      civility: [
-        !isNullOrUndefined(user.civility) ? user.civility : null,
-      ],
       firstName: [
         !isNullOrUndefined(user.firstName) ? user.firstName : '',
         [Validators.required]
@@ -57,11 +54,7 @@ export class ProfileFormService {
       phone: [
         !isNullOrUndefined(user.phone) ? user.phone : '',
         [Validators.maxLength(10)]
-      ],
-      email: [
-        !isNullOrUndefined(user.email) ? user.email : '',
-        [Validators.required, Validators.email]
-      ],
+      ]
     });
   }
 

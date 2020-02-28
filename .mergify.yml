@@ -1,0 +1,24 @@
+pull_request_rules:
+  - name: Automatic merge Dev on Azure validation
+    conditions:
+      - base=dev
+      - "status-success=gearstocks-dev-CI"
+    actions:
+      merge:
+        method: merge
+
+  - name: Automatic merge Master on Azure Validation
+    conditions:
+      - base=master
+      - "status-success=gearstocks-master-CI"
+      #- "#approved-reviews-by>=1"
+    actions:
+      merge:
+        method: merge
+
+  - name: ask to resolve conflict
+    conditions:
+      - conflict
+    actions:
+      comment:
+        message: This pull request is now in conflicts. Could you fix it? 🙏

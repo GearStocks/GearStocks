@@ -12,10 +12,20 @@ import { environment } from '../../../environments/environment';
 @Injectable()
 export class ProfileService {
   updateProfileUrl = environment.updateProfileUrl;
+  updateEmailUrl = environment.updateEmailUrl;
+  updatePasswordUrl = environment.updatePasswordUrl;
 
   constructor(private http: HttpClient) {}
 
   updateProfileData(user: User): Observable<any> {
-    return this.http.post<User>(this.updateProfileUrl, user);
+    return this.http.patch<User>(this.updateProfileUrl, user);
+  }
+
+  updateEmail(user: User): Observable<any> {
+    return this.http.patch<User>(this.updateEmailUrl, user);
+  }
+
+  updatePassword(user: User): Observable<any> {
+    return this.http.patch<User>(this.updatePasswordUrl, user);
   }
 }

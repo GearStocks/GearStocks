@@ -18,7 +18,7 @@ services:
     ports:
       - 27017:27017
     volumes:
-      - ./database/mongo:/data/db
+      - database:/data/db
     restart: always
     stdin_open: false
     tty: false
@@ -76,7 +76,7 @@ services:
         max-file: "10"
 
   api_builder:
-    build: ./api_builder
+    image: gearstocks/api_builder:latest
     volumes:
       - ./back:/home/files
       - ./api_builder/lib:/home/lib
@@ -127,3 +127,6 @@ services:
       options:
         max-size: "200k"
         max-file: "10"
+
+volumes:
+  database:

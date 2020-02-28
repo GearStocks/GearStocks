@@ -21,7 +21,7 @@ export class SignupFormService {
                 email: (['', [Validators.required, Validators.email]]),
                 password: (['', [Validators.required, Validators.minLength(8)]]),
                 confirmPassword: (['', Validators.required]),
-                recaptcha: (['', Validators.required])
+                recaptcha: ([''])
             }, { validator: SignupFormService.checkPasswords }
         );
     }

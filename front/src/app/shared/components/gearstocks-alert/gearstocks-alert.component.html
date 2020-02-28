@@ -1,0 +1,6 @@
+<div *ngIf="message" [ngClass]="message.cssClass">
+  <button type="button" class="close" aria-label="Close" (click)="close()">
+    <mat-icon>clear</mat-icon>
+  </button>
+  {{message.text}}
+</div>

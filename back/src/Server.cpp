@@ -31,6 +31,7 @@ void Server::setupRoutes() {
         Pistache::Rest::Routes::Get(router, "/register", Pistache::Rest::Routes::bind(&Server::GetRegister, this));
         Pistache::Rest::Routes::Post(router, "/register", Pistache::Rest::Routes::bind(&Server::PostRegister, this));
         Pistache::Rest::Routes::Post(router, "/connect", Pistache::Rest::Routes::bind(&Server::PostConnect, this));
+	Pistache::Rest::Routes::Post(router, "/updateInfoUser", Pistache::Rest::Routes::bind(&Server::UpdateUser, this));
 }
 
 int Server::Hello(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){
@@ -45,7 +46,7 @@ int Server::PostConnect(const Pistache::Rest::Request& request, Pistache::Http::
     size_t	i = 3;
     
     document.Parse(request.body().c_str());
-    i = _manager->userConnect(document["username"].GetString(), document["password"].GetString(), token);
+    i = _manager->userConnect(document["mail"].GetString(), document["password"].GetString(), token);
     if (i == 0) {
       std::cout << token << std::endl;
       response.send(Pistache::Http::Code::Ok, token);
@@ -81,4 +82,24 @@ int Server::GetRegister(const Pistache::Rest::Request& request, Pistache::Http::
     Pistache::Http::serveFile(response, "./src/test.html");
     //response.send(Pistache::Http::Code::Ok, "test");
     return 0;
+}
+
+int Server::UpdateUser(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){
+  std::cout << "Update Profil" << std::endl;
+  rapidjson::Document document;
+  document.Parse(request.body().c_str());
+  /*
+    if (checkIfExist(document, "mail") == -1 || checkIfExist(document, "oldUsername") == -1 || check \
+    IfExist(document, "newUsername") == -1){
+    response.send(Pistache::Http::Code::Bad_Request, "");
+    return 0;
+    }
+  */
+  _manager->updateNameUser(document["mail"].GetString(), document["oldUsername"].GetString(), document["newUsername"].GetString());
+  /*_manager->updatePseudoUser(document["mail"].GetString(), document["newPseudo"].GetString(), do \
+    cument["oldPseudo"].GetString());*/
+  _manager->updatePasswordUser(document["mail"].GetString(), document["oldPass"].GetString(), document["newPass"].GetString());
+  _manager->updateMailUser(document["oldMail"].GetString(), document["newMail"].GetString());
+  response.send(Pistache::Http::Code::Ok, "");
+  return 0;
 }

@@ -4,8 +4,8 @@
       <mat-icon>menu</mat-icon>
     </button>
   </div>
-  <div class="navbar__logo">
-    <a routerLink="">
+  <div class="navbar__brand">
+    <a routerLink="" [class.navbar__brand__align]="!currentUser">
       <img src="../../../../assets/img/logo.png" alt="Gearstocks"/>
     </a>
   </div>
