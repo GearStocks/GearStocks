@@ -8,7 +8,7 @@ server.use(jsonServer.bodyParser);
 
 server.post('/connect', function (req, res, next) {
   req.method = 'GET';
-  next()
+  next();
 });
 
 server.use(router);

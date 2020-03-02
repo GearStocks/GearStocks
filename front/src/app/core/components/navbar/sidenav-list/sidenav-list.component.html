@@ -5,7 +5,7 @@
   <a *ngIf="currentUser" mat-list-item routerLink="/profile" (click)="onSidenavClose()">
     <mat-icon>assignment_ind</mat-icon> <span class="nav-caption">Profile</span>
   </a>
-  <a *ngIf="currentUser" mat-list-item routerLink="#" (click)="logout()" id="logout">
+  <a *ngIf="currentUser" mat-list-item (click)="logout()" id="logout">
     <mat-icon>account_balance</mat-icon><span class="nav-caption">Se déconnecter</span>
   </a>
   <a *ngIf="!currentUser" mat-list-item (click)="login()" id="login">

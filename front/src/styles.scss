@@ -1,47 +1,57 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300');
 
 html, body {
-    height: 100%;
-    padding: 0 !important;
-    margin: 0;
-    font-family: 'Roboto', sans-serif !important;
+  height: 100%;
+  padding: 0 !important;
+  margin: 0;
+  font-family: 'Roboto', sans-serif !important;
 }
 
 a {
-    text-decoration-line: none !important;
-    cursor: pointer;
+  text-decoration-line: none !important;
+  cursor: pointer;
+}
+
+app-gearstocks-alert {
+  padding-top: 8vh;
+  z-index: 10;
+  text-align: center;
+  position: absolute;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%)
 }
 
 /* Material Overwrite */
 mat-sidenav-container, mat-sidenav-content, mat-sidenav {
-    height: 100%;
+  height: 100%;
 }
 
 mat-sidenav {
-    width: 250px;
+  width: 250px;
 }
 
-app-signup, app-signin {
-    .mat-form-field {
-        width: 100%;
-    }
+app-signup, app-signin, app-lost-password {
+  .mat-form-field {
+    width: 100%;
+  }
 }
 
 app-profile {
-    .mat-form-field {
-        padding-top: 6px;
-        padding-bottom: 6px;
-        width: 100%;
-    }
-    .mat-form-field-underline {
-        display: none;
-    }
-    .mat-form-field-appearance-legacy .mat-form-field-infix {
-        background-color: white;
-        border: 1px solid #cad1d9;
-        border-radius: 4px;
-    }
-    .mat-form-field-appearance-legacy .mat-form-field-label, input.mat-input-element, .mat-select-value {
-        padding: 0 2px;
-    }
+  .mat-form-field {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    width: 100%;
+  }
+  .mat-form-field-underline {
+    display: none;
+  }
+  .mat-form-field-appearance-legacy .mat-form-field-infix {
+    background-color: white;
+    border: 1px solid #cad1d9;
+    border-radius: 4px;
+  }
+  .mat-form-field-appearance-legacy .mat-form-field-label, input.mat-input-element, .mat-select-value {
+    padding: 0 2px;
+  }
 }

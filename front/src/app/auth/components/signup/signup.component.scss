@@ -4,7 +4,7 @@
     &__container {
         display: flex;
         flex-flow: row nowrap;
-        height: 100%;
+        min-height: 100vh;
     }
 
     &__box1 {
@@ -106,13 +106,13 @@
 
 .loginButton {
     cursor: pointer;
-    color: limegreen;
-    border-color: limegreen;
+    color: dodgerblue;
+    border-color: dodgerblue;
 
     &:hover {
         color: #fff;
-        background: limegreen;
-        border-color: limegreen;
+        background: dodgerblue;
+        border-color: dodgerblue;
     }
 }
 

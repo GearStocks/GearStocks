@@ -4,13 +4,14 @@ import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
 /* Material Angular */
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 /* RxJs dependencies */
 import { first } from 'rxjs/operators';
 
 /* Services */
 import { UserService } from '../../services/user.service';
+import { AlertService } from '../../../shared/components/gearstocks-alert/services/alert.service';
 
 /* Components */
 import { SigninComponent } from '../signin/signin.component';
@@ -21,58 +22,70 @@ import { AuthData } from '../../models/auth-data.model';
 import { ErrorMessages } from './signup-errors';
 
 @Component({
-    selector: 'app-signup',
-    templateUrl: './signup.component.html',
-    styleUrls: ['./signup.component.scss'],
-    providers: [SignupFormService]
+  selector: 'app-signup',
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.scss'],
+  providers: [SignupFormService]
 })
 export class SignupComponent implements OnInit {
-    signForm: FormGroup;
-    errorMessages = ErrorMessages;
-    captchaError: boolean;
-    submit = false;
-    captchaSiteKey = '6LczU6MUAAAAAGaba5u9Qt_Peq3_mKk6bKnZ72Ju';
+  signForm: FormGroup;
+  loading = false;
+  submitted = false;
+  captchaError: boolean;
+  errorMessages = ErrorMessages;
+  captchaSiteKey = '6LczU6MUAAAAAGaba5u9Qt_Peq3_mKk6bKnZ72Ju';
 
-    constructor(
-        private userService: UserService,
-        private signupFormService: SignupFormService,
-        public dialog: MatDialog,
-        private router: Router) {}
+  constructor(
+    private userService: UserService,
+    private alertService: AlertService,
+    private signupFormService: SignupFormService,
+    public dialog: MatDialog,
+    private router: Router) {
+    if (this.userService.currentUserValue) {
+      this.router.navigate(['/']);
+    }
+  }
 
-    ngOnInit() {
-        this.signForm = this.signupFormService.buildForm();
-        this.signForm.get('confirmPassword').valueChanges.subscribe(val => {
-            if (SignupFormService.checkPasswords(this.signForm)) {
-                this.signForm.get('confirmPassword').setErrors([{'passwordMismatch': true}]);
-            }
+  ngOnInit() {
+    this.signForm = this.signupFormService.buildForm();
+    this.signForm.get('confirmPassword').valueChanges.subscribe(val => {
+      if (SignupFormService.checkPasswords(this.signForm)) {
+        this.signForm.get('confirmPassword').setErrors([{'passwordMismatch': true}]);
+      }
+    });
+  }
+
+  get f() { return this.signForm.controls; }
+
+  onSubmit(): void {
+    this.submitted = true;
+
+    if (this.signForm.invalid) {
+      this.captchaError = true;
+      Object.keys(this.signForm.controls).forEach((field => {
+        const control = this.signForm.get(field);
+        control.markAsTouched({onlySelf: true});
+      }));
+      return;
+    }
+
+    this.loading = true;
+    const authData = <AuthData>this.signForm.getRawValue();
+    this.userService.register(authData)
+      .pipe(first())
+      .subscribe(
+        () => {
+          this.router.navigate(['/confirmation']);
+        },
+        (err) => {
+          this.loading = false;
+          this.alertService.error(err);
         });
-    }
+    this.captchaError = false;
+  }
 
-    register(): void {
-        this.submit = true;
-        if (this.signForm.valid) {
-            const authData = <AuthData>this.signForm.getRawValue();
-            this.userService.register(authData)
-                .pipe(first())
-                .subscribe(
-                    () => {},
-                    () => {},
-                    () => {
-                        this.router.navigate(['/']);
-                        this.login();
-                    });
-            this.captchaError = false;
-        } else {
-            Object.keys(this.signForm.controls).forEach((field => {
-                const control = this.signForm.get(field);
-                control.markAsTouched({onlySelf: true});
-            }));
-            this.captchaError = true;
-        }
-    }
-
-    login(): void {
-        this.dialog.open(SigninComponent);
-    }
+  login(): void {
+    this.dialog.open(SigninComponent);
+  }
 
 }

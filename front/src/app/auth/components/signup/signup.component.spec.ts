@@ -4,7 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 /* Material Angular */
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 /* App Modules */
 import { SharedModule } from '../../../shared/shared.module';

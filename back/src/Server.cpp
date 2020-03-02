@@ -15,6 +15,7 @@ Server::Server(Pistache::Address addr, BddManager *manager){
 }
 
 Server::~Server(){
+  shutdown();
 }
 
 void Server::start(){
@@ -28,14 +29,18 @@ void Server::shutdown(){
 
 void Server::setupRoutes() {
         Pistache::Rest::Routes::Get(router, "/", Pistache::Rest::Routes::bind(&Server::Hello, this));
-        Pistache::Rest::Routes::Get(router, "/register", Pistache::Rest::Routes::bind(&Server::GetRegister, this));
         Pistache::Rest::Routes::Post(router, "/register", Pistache::Rest::Routes::bind(&Server::PostRegister, this));
         Pistache::Rest::Routes::Post(router, "/connect", Pistache::Rest::Routes::bind(&Server::PostConnect, this));
+	Pistache::Rest::Routes::Post(router, "/updateInfoUser", Pistache::Rest::Routes::bind(&Server::UpdateUser, this));
+	Pistache::Rest::Routes::Post(router, "/disconnect", Pistache::Rest::Routes::bind(&Server::disconnect, this));
+	Pistache::Rest::Routes::Post(router, "/infoUser", Pistache::Rest::Routes::bind(&Server::infoUser, this));
+	Pistache::Rest::Routes::Post(router, "/addCarPart", Pistache::Rest::Routes::bind(&Server::addCarPart, this));
+	Pistache::Rest::Routes::Post(router, "/getCarPart", Pistache::Rest::Routes::bind(&Server::getCarPart, this));
 }
 
 int Server::Hello(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){
     std::cout << "Hello World" << std::endl;
-    response.send(Pistache::Http::Code::Ok, "Hello World");
+    response.send(Pistache::Http::Code::Ok, "Hello World. The API is online. Port:8000");
 }
 
 int Server::PostConnect(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response) {
@@ -45,9 +50,11 @@ int Server::PostConnect(const Pistache::Rest::Request& request, Pistache::Http::
     size_t	i = 3;
     
     document.Parse(request.body().c_str());
-    i = _manager->userConnect(document["username"].GetString(), document["password"].GetString(), token);
+    i = _manager->userConnect(document["mail"].GetString(), document["password"].GetString(), token);
     if (i == 0) {
       std::cout << token << std::endl;
+      _manager->updateDateInBDD(document["mail"].GetString(), _manager->getTime());
+      _manager->updateTokenInBDD(document["mail"].GetString(), token);
       response.send(Pistache::Http::Code::Ok, token);
     }
     else if (i == 1)
@@ -60,12 +67,23 @@ int Server::PostConnect(const Pistache::Rest::Request& request, Pistache::Http::
 
 int Server::PostRegister(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){
     //parsing json
+    std::vector<std::string> documentContent;
     rapidjson::Document document;
     size_t	i = 3;
     
     document.Parse(request.body().c_str());
-    //appel function BDD
-    i = _manager->userRegister(document["username"].GetString(), document["password"].GetString(), document["mail"].GetString());
+    //std::cout << "ICI ON AFFICHE LE REQUEST:" << request.body().c_str() << std::endl;
+    documentContent.push_back(document["username"].GetString());
+    documentContent.push_back(document["password"].GetString());
+    documentContent.push_back(document["mail"].GetString());
+    documentContent.push_back(document["firstName"].GetString());
+    documentContent.push_back(document["lastName"].GetString());
+    documentContent.push_back(document["civility"].GetString());
+    documentContent.push_back(document["address"].GetString());
+    documentContent.push_back(document["phone"].GetString());
+    documentContent.push_back(document["birthDay"].GetString());
+    i = _manager->userRegister(documentContent);
+
     if (i == 0)
       response.send(Pistache::Http::Code::Ok, "");
     else if (i == 1)
@@ -77,8 +95,60 @@ int Server::PostRegister(const Pistache::Rest::Request& request, Pistache::Http:
     return 0;
 }
 
-int Server::GetRegister(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){
-    Pistache::Http::serveFile(response, "./src/test.html");
-    //response.send(Pistache::Http::Code::Ok, "test");
+int Server::UpdateUser(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){
+  std::cout << "Update Profil" << std::endl;
+  rapidjson::Document document;
+  document.Parse(request.body().c_str());
+  /*
+    if (checkIfExist(document, "mail") == -1 || checkIfExist(document, "oldUsername") == -1 || check \
+    IfExist(document, "newUsername") == -1){
+    response.send(Pistache::Http::Code::Bad_Request, "");
     return 0;
+    }
+  */
+  _manager->updateNameUser(document["mail"].GetString(), document["oldUsername"].GetString(), document["newUsername"].GetString());
+  /*_manager->updatePseudoUser(document["mail"].GetString(), document["newPseudo"].GetString(), do \
+    cument["oldPseudo"].GetString());*/
+  _manager->updatePasswordUser(document["mail"].GetString(), document["oldPass"].GetString(), document["newPass"].GetString());
+  _manager->updateMailUser(document["oldMail"].GetString(), document["newMail"].GetString());
+  response.send(Pistache::Http::Code::Ok, "");
+  return 0;
+}
+
+int Server::disconnect(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){ 
+  rapidjson::Document document;
+  document.Parse(request.body().c_str());
+   _manager->disconnectUser(document["mail"].GetString(), "");
+  response.send(Pistache::Http::Code::Ok, "");
+  return 0;
+}
+
+int Server::infoUser(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){ 
+  rapidjson::Document document;
+  std::pair<size_t, std::string> jsonResult;
+  document.Parse(request.body().c_str());
+  jsonResult = _manager->getInfoUser(document["userToken"].GetString(), document["mail"].GetString());
+  response.send(Pistache::Http::Code::Ok, jsonResult.second);
+  return 0;
+}
+
+int Server::addCarPart(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){
+  rapidjson::Document	document;
+  size_t		result;
+
+  document.Parse(request.body().c_str());
+  result = _manager->addCarPartInBDD(document["name"].GetString(), document["price"].GetString(), document["photo"].GetString());
+  response.send(Pistache::Http::Code::Ok, "route addCarPart");
+  return 0;
+}
+
+int Server::getCarPart(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){ 
+  rapidjson::Document document;
+  std::pair<size_t, std::string> jsonResult;
+  
+  document.Parse(request.body().c_str());
+  jsonResult = _manager->getInfoUser(document["userToken"].GetString(), document["partName"].GetString());
+  //std::cout << "Get car Part"  << std::endl;
+  response.send(Pistache::Http::Code::Ok, jsonResult.second);
+  return 0;
 }

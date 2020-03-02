@@ -9,7 +9,9 @@ import { By } from '@angular/platform-browser';
 import { SharedModule } from '../../../shared/shared.module';
 
 /* Angular Material */
-import {MatCheckboxModule, MatDialog, MatDialogModule, MatDialogRef, MatInputModule} from '@angular/material';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
 
 /* Components */
 import { SigninComponent } from './signin.component';

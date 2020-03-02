@@ -7,7 +7,7 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 
 /* Material Angular */
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 /* Components */
 import { NavbarComponent } from './navbar.component';
