@@ -6,14 +6,13 @@
  */
 
 import React from 'react';
-import { View, Alert } from 'react-native';
-import { Input, Text, Icon, Button } from 'react-native-elements';
+import { View, Text } from 'react-native';
+import { Input, Icon, Button } from 'react-native-elements';
 
 import { strings, errors } from '../../../../config/strings';
 import styles from './Register.component.style';
+import colors from '../../../../config/colors';
 import PostRegister from '../../../services/POST/PostRegister';
-
-const axios = require('axios');
 
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
@@ -28,7 +27,13 @@ export default class RegisterComponent extends React.Component {
       lastname: '',
       email: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      errorUsername: '',
+      errorFirstname: '',
+      errorLastname: '',
+      errorEmail: '',
+      errorPassword: '',
+      errorConfirmPassword: ''
     };
   }
 
@@ -46,33 +51,38 @@ export default class RegisterComponent extends React.Component {
     });
 
     if (`${username}` === '')
-      Alert.alert(errors.ERR, errors.ERR_USERNAME);
-    else if (`${firstname}` === '')
-      Alert.alert(errors.ERR, errors.ERR_FIRSTNAME);
-    else if (`${lastname}` === '')
-      Alert.alert(errors.ERR, errors.ERR_LASTNAME);
-    else if (`${email}` === '')
-      Alert.alert(errors.ERR, errors.ERR_EMAIL);
-    else if (reg.test(`${email}`) === false)
-      Alert.alert(errors.ERR, errors.ERR_INVALID_EMAIL);
-    else if (`${password}` === '' && `${confirmPassword}` === '')
-      Alert.alert(errors.ERR, errors.ERR_PASSWORD);
-    else if (`${password}` != `${confirmPassword}`)
-      Alert.alert(errors.ERR, errors.ERR_MATCH_PASSWORD);
-    else {
+      this.setState({ errorUsername: errors.ERR_USERNAME });
+    if (`${firstname}` === '')
+      this.setState({ errorFirstname: errors.ERR_FIRSTNAME });
+    if (`${lastname}` === '')
+      this.setState({ errorLastname: errors.ERR_LASTNAME });
+    if (`${email}` === '')
+      this.setState({ errorEmail: errors.ERR_EMAIL });
+    if (reg.test(`${email}`) === false)
+      this.setState({ errorEmail: errors.ERR_INVALID_EMAIL });
+    if (`${password}` === '' && `${confirmPassword}` === '')
+      this.setState({ errorPassword: errors.ERR_PASSWORD });
+    if (`${password}` != `${confirmPassword}`)
+      this.setState({ errorPassword: errors.ERR_MATCH_PASSWORD });
+    else
       new PostRegister().register(JSONObj, navigate);
-    }
   }
 
   render() {
     const { navigate } = this.props.navigation;
     return (
       <View style={styles.container}>
-        <Text h2>Register</Text>
+        <Text style={styles.title}>Register</Text>
         <Input
           autoCapitalize='none'
           autoCorrect={false}
+          label='Username'
+          labelStyle={{bottom: 5, left: 10}}
           returnKeyType='next'
+          errorMessage={this.state.errorUsername}
+          errorStyle={{fontSize: 13}}
+          inputContainerStyle={{borderColor: colors.PRIMARY_COLOR, borderTopWidth: 2,
+          borderRightWidth: 2, borderLeftWidth: 2, borderBottomWidth: 2}}
           onSubmitEditing={() => this.firstname.focus()}
           ref={(input) => { this.username = input; }}
           leftIcon={<Icon name='person' size={24} color='black' />}
@@ -81,8 +91,15 @@ export default class RegisterComponent extends React.Component {
         />
         <Input
           autoCapitalize='none'
+          label='Firstname'
+          labelStyle={{bottom: 5, left: 10}}
+          containerStyle={{top: 5}}
           autoCorrect={false}
           returnKeyType='next'
+          errorMessage={this.state.errorFirstname}
+          errorStyle={{fontSize: 13}}
+          inputContainerStyle={{borderColor: colors.PRIMARY_COLOR, borderTopWidth: 2,
+          borderRightWidth: 2, borderLeftWidth: 2, borderBottomWidth: 2}}
           ref={(input) => { this.firstname = input; }}
           onSubmitEditing={() => this.lastname.focus()}
           leftIcon={<Icon name='contacts' size={24} color='black' />}
@@ -92,7 +109,14 @@ export default class RegisterComponent extends React.Component {
         <Input
           autoCapitalize='none'
           autoCorrect={false}
+          label='Lastname'
+          containerStyle={{top: 10}}
+          labelStyle={{bottom: 5, left: 10}}
           returnKeyType='next'
+          errorMessage={this.state.errorLastname}
+          errorStyle={{fontSize: 13}}
+          inputContainerStyle={{borderColor: colors.PRIMARY_COLOR, borderTopWidth: 2,
+          borderRightWidth: 2, borderLeftWidth: 2, borderBottomWidth: 2}}
           onSubmitEditing={() => this.email.focus()}
           leftIcon={<Icon name='contacts' size={24} color='black' />}
           ref={(input) => { this.lastname = input; }}
@@ -103,7 +127,14 @@ export default class RegisterComponent extends React.Component {
           autoCapitalize='none'
           autoCorrect={false}
           keyboardType='email-address'
+          errorMessage={this.state.errorEmail}
+          containerStyle={{top: 15}}
+          errorStyle={{fontSize: 13}}
+          label='Email'
+          labelStyle={{bottom: 5, left: 10}}
           returnKeyType='next'
+          inputContainerStyle={{borderColor: colors.PRIMARY_COLOR, borderTopWidth: 2,
+          borderRightWidth: 2, borderLeftWidth: 2, borderBottomWidth: 2}}
           ref={(input) => { this.email = input; }}
           onSubmitEditing={() => this.password.focus()}
           blurOnSubmit={false}
@@ -114,6 +145,13 @@ export default class RegisterComponent extends React.Component {
         <Input
           ref={(input) => { this.password = input; }}
           onSubmitEditing={() => this.confirmPassword.focus()}
+          errorMessage={this.state.errorPassword}
+          containerStyle={{top: 20}}
+          label='Password'
+          labelStyle={{bottom: 5, left: 10}}
+          errorStyle={{fontSize: 13}}
+          inputContainerStyle={{borderColor: colors.PRIMARY_COLOR, borderTopWidth: 2,
+          borderRightWidth: 2, borderLeftWidth: 2, borderBottomWidth: 2}}
           returnKeyType="next"
           placeholder={strings.PASSWORD}
           secureTextEntry={true}
@@ -122,6 +160,13 @@ export default class RegisterComponent extends React.Component {
         />
         <Input
           ref={(input) => { this.confirmPassword = input; }}
+          inputContainerStyle={{borderColor: colors.PRIMARY_COLOR, borderTopWidth: 2,
+          borderRightWidth: 2, borderLeftWidth: 2, borderBottomWidth: 2}}
+          errorStyle={{fontSize: 13}}
+          containerStyle={{top: 25}}
+          errorMessage={this.state.errorConfirmPassword}
+          label='Confirm Password'
+          labelStyle={{bottom: 5, left: 10}}
           onSubmitEditing={() => this.civility.focus()}
           returnKeyType="next"
           placeholder={strings.CONFIRM_PASSWORD}

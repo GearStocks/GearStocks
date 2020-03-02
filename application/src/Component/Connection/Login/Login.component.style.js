@@ -7,10 +7,12 @@
 
 import { StyleSheet } from 'react-native';
 
+import colors from '../../../../config/colors';
+
 export default StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: colors.WHITE,
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 10,

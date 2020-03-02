@@ -9,7 +9,6 @@ export const strings = {
   LOGIN: 'Log In',
   LOGOUT: 'Log Out',
   REGISTER: 'Register',
-  CONNECTION: 'Connection',
   SEARCH: 'Search',
   DISCONNECT: 'Disconnect',
 
