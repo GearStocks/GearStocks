@@ -30,12 +30,18 @@ void Server::shutdown(){
 void Server::setupRoutes() {
         Pistache::Rest::Routes::Get(router, "/", Pistache::Rest::Routes::bind(&Server::Hello, this));
         Pistache::Rest::Routes::Post(router, "/register", Pistache::Rest::Routes::bind(&Server::PostRegister, this));
+	Pistache::Rest::Routes::Options(router, "/register", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
         Pistache::Rest::Routes::Post(router, "/connect", Pistache::Rest::Routes::bind(&Server::PostConnect, this));
+	Pistache::Rest::Routes::Options(router, "/connect", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
 	Pistache::Rest::Routes::Post(router, "/updateInfoUser", Pistache::Rest::Routes::bind(&Server::UpdateUser, this));
+	Pistache::Rest::Routes::Options(router, "/updateInfoUser", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
 	Pistache::Rest::Routes::Post(router, "/disconnect", Pistache::Rest::Routes::bind(&Server::disconnect, this));
+	Pistache::Rest::Routes::Options(router, "/disconnect", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
 	Pistache::Rest::Routes::Post(router, "/infoUser", Pistache::Rest::Routes::bind(&Server::infoUser, this));
+	Pistache::Rest::Routes::Options(router, "/infoUser", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
 	Pistache::Rest::Routes::Post(router, "/addCarPart", Pistache::Rest::Routes::bind(&Server::addCarPart, this));
 	Pistache::Rest::Routes::Post(router, "/getCarPart", Pistache::Rest::Routes::bind(&Server::getCarPart, this));
+	Pistache::Rest::Routes::Options(router, "/getCarPart", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
 }
 
 int Server::Hello(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){
@@ -43,13 +49,23 @@ int Server::Hello(const Pistache::Rest::Request& request, Pistache::Http::Respon
     response.send(Pistache::Http::Code::Ok, "Hello World. The API is online. Port:8000");
 }
 
+int Server::OptionsConnect(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response) {
+    response.headers().add<Pistache::Http::Header::AccessControlAllowOrigin>("*");
+    response.headers().add<Pistache::Http::Header::AccessControlAllowMethods>("*");
+    response.headers().add<Pistache::Http::Header::AccessControlAllowHeaders>("*");
+    response.send(Pistache::Http::Code::Ok, "Options done");
+}
+
 int Server::PostConnect(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response) {
     rapidjson::Document document;
     TokenManager	tokenManager;
     std::string token = tokenManager.generateToken();
     size_t	i = 3;
-    
     document.Parse(request.body().c_str());
+    response.headers().add<Pistache::Http::Header::AccessControlAllowOrigin>("*");
+    response.headers().add<Pistache::Http::Header::AccessControlAllowMethods>("*");
+    response.headers().add<Pistache::Http::Header::AccessControlAllowHeaders>("*");
+
     i = _manager->userConnect(document["mail"].GetString(), document["password"].GetString(), token);
     if (i == 0) {
       std::cout << token << std::endl;
