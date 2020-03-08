@@ -10,13 +10,15 @@ import { SidenavListComponent } from './components/navbar/sidenav-list/sidenav-l
 
 /* App Modules */
 import { SharedModule } from '../shared/shared.module';
+import { SearchListComponent } from './components/search-list/search-list.component';
 
 @NgModule({
   declarations: [
     FooterComponent,
     NavbarComponent,
     HomeComponent,
-    SidenavListComponent
+    SidenavListComponent,
+    SearchListComponent
   ],
     imports: [
         CommonModule,

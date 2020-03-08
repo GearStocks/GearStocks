@@ -127,3 +127,10 @@
     }
   }
 }
+
+@media (max-width: 600px) {
+  .homeHeader__search {
+    left: 0;
+    right: 0;
+  }
+}

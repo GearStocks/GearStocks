@@ -2,16 +2,22 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
+/* RxJs */
+import { first } from 'rxjs/operators';
+
 /* Models */
 import { User } from '../../../auth/models/user.model';
 
 /* Services */
 import { UserService } from '../../../auth/services/user.service';
+import { HomeService } from './services/home.service';
+import { AlertService } from '../../../shared/components/gearstocks-alert/services/alert.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  providers: [HomeService]
 })
 
 export class HomeComponent {
@@ -19,18 +25,21 @@ export class HomeComponent {
   video = 'assets/video/gearstocks.mp4';
   keyword: string;
 
-  constructor(private router: Router, private userService: UserService) {
+  constructor(private router: Router, private userService: UserService, private homeService: HomeService,
+              private alertService: AlertService) {
     this.userService.currentUser.subscribe(x => this.currentUser = x);
   }
 
   search() {
-    /* provisoir pour démo */
-    if (this.keyword.match('pneu')) {
-      this.router.navigateByUrl('/item');
-    } else if (this.keyword.match('bougie')) {
-      this.router.navigateByUrl('/item2');
-         }
-
+    this.homeService.search(this.keyword)
+      .pipe(first())
+      .subscribe(
+        (data) => {
+          this.router.navigateByUrl('/search-list', { state: data });
+        },
+        (err) => {
+          this.alertService.error(err);
+        });
   }
 
   scrollTo(element: HTMLElement): void {

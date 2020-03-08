@@ -6,5 +6,6 @@ export const environment = {
   updateProfileUrl: 'http://localhost:3000/connect',
   updateEmailUrl: 'http://localhost:3000/user',
   updatePasswordUrl: 'http://localhost:3000/user',
+  searchUrl: 'http://localhost:3000/search',
   getItemUrl: 'http://localhost:3000/item'
 };
