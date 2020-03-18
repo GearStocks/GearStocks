@@ -21,6 +21,9 @@ class Server
 			    Pistache::Http::ResponseWriter response);
         int     PostConnect(const Pistache::Rest::Request& request,
 			    Pistache::Http::ResponseWriter response);
+	int     OptionsConnect(const Pistache::Rest::Request& request,
+			    Pistache::Http::ResponseWriter response);
+  
 	int	UpdateUser(const Pistache::Rest::Request &request,
 			   Pistache::Http::ResponseWriter reponse);
 	int	disconnect(const Pistache::Rest::Request &request,

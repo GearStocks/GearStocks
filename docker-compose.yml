@@ -102,7 +102,7 @@ services:
       - gearstocks
     volumes:
       - ./api_builder/lib:/usr/lib
-      - ./api_builder/build:/home/files/build      
+      - ./api_builder/build:/home/files/build
     stdin_open: false
     tty: false
     #restart: "always"
