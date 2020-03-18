@@ -22,8 +22,9 @@ export class ErrorInterceptor implements HttpInterceptor {
         this.userService.logout();
         location.reload(true);
         err.message = 'Veuillez vous connecter à nouveau.';
-      }
-      if (err.status === 404 || err.status === 500 || err.status === 503 || err.status === 504) {
+      }  else if (err.status === 404 || err.status === 500 || err.status === 503 || err.status === 504) {
+        err.message = 'Erreur, réessayer plus tard.';
+      } else {
         err.message = 'Erreur, réessayer plus tard.';
       }
 
