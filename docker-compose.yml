@@ -92,8 +92,8 @@ services:
   #It will be accessible only through "gearstocks" network (IE: by the front).
   api:
     build: ./back
-    depends_on:
-      - api_builder
+  #  depends_on:
+  #    - api_builder
     env_file:
       - ./database/secrets.env
     environment:

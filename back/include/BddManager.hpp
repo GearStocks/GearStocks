@@ -48,7 +48,7 @@ private:
 	std::string	checkIfExist(auto collection, std::string field, std::string value);
 	std::string cryptPass(std::string nonHashPass);
 	mongocxx::instance _inst{};
-        mongocxx::client _conn{mongocxx::uri{"mongodb://mongo:27017"}};
+	mongocxx::client _conn;
 	mongocxx::collection _userCollection;
 	mongocxx::collection _carPartCollection;
 };
