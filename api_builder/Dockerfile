@@ -3,11 +3,12 @@ FROM debian:stretch
 # build latest cmake
 
 ARG cmake_sources="https://cmake.org/files/v3.8/cmake-3.8.0.tar.gz"
+ARG pistache_commit="7bb0132129a9ef2ca5fbd47db23641bb47743670"
 
 RUN apt -y update && apt -y upgrade &&\
  apt remove --purge -y cmake &&\
  apt autoremove -y && apt autoclean -y && apt clean &&\
- apt install -y gcc curl build-essential &&\
+ apt install -y gcc curl libcurl4-openssl-dev build-essential &&\
  cd /opt &&\
  mkdir src &&\
  curl -s $cmake_sources | tar -xz --strip-components=1 -C src &&\
@@ -45,6 +46,7 @@ WORKDIR /home/dep
 
 RUN git clone https://github.com/oktal/pistache.git &&\
  cd pistache &&\
+ git checkout ${pistache_commit} &&\
  git submodule update --init &&\
  mkdir build &&\
  cd build &&\
@@ -65,5 +67,6 @@ CMD cd /home/files && mkdir -p build && cd build && cmake .. && make &&\
   cp --remove-destination /usr/lib/x86_64-linux-gnu/libssl* /home/lib/x86_64-linux-gnu/ &&\
   cp --remove-destination /usr/lib/x86_64-linux-gnu/libsasl* /home/lib/x86_64-linux-gnu/ &&\
   cp --remove-destination /usr/lib/x86_64-linux-gnu/libstdc++* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/libcurl* /home/lib/x86_64-linux-gnu/ &&\
   cp --remove-destination /usr/lib/libmongo* /home/lib/ &&\
   cp --remove-destination /usr/lib/libbson* /home/lib/

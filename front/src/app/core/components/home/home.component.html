@@ -3,7 +3,9 @@
   <div class="homeHeader__search">
     <form class="container input-group mb-3 input-group-lg">
       <div class="input-group-prepend">
-        <button type="submit" class="input-group-text" (click)="search()">Rechercher</button>
+        <button type="submit" class="input-group-text" (click)="search()">
+          <i class="material-icons"> search </i>
+        </button>
       </div>
       <input type="text" [(ngModel)]="keyword" name="keyword" class="form-control" placeholder='Que recherchez-vous ?'>
     </form>

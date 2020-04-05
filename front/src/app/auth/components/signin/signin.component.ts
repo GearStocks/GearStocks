@@ -21,6 +21,7 @@ import { ErrorMessages } from './signin-errors';
   selector: 'app-signin',
   templateUrl: './signin.component.html',
   styleUrls: ['./signin.component.scss'],
+  providers: [SigninFormService],
   encapsulation: ViewEncapsulation.None
 })
 export class SigninComponent implements OnInit {

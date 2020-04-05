@@ -10,7 +10,7 @@ import { catchError } from 'rxjs/operators';
 /* Services */
 import { UserService } from './user.service';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ErrorInterceptor implements HttpInterceptor {
 
   constructor(private userService: UserService, private router: Router) { }
@@ -21,13 +21,14 @@ export class ErrorInterceptor implements HttpInterceptor {
         // auto logout if 401 response returned from api
         this.userService.logout();
         location.reload(true);
-      } else if (err.status === 404) {
-        // auto redirection to page not found
-        this.router.navigate(['/page-not-found']);
+        err.message = 'Veuillez vous connecter à nouveau.';
+      }  else if (err.status === 404 || err.status === 500 || err.status === 503 || err.status === 504) {
+        err.message = 'Erreur, réessayer plus tard.';
+      } else {
+        err.message = 'Erreur, réessayer plus tard.';
       }
 
-      const error = err.error.message || err.statusText;
-      return throwError(error);
+      return throwError(err);
     }));
   }
 }
