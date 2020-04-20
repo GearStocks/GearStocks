@@ -20,7 +20,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       if (err.status === 401) {
         // auto logout if 401 response returned from api
         this.userService.logout();
-        location.reload(true);
+        location.reload();
         err.message = 'Veuillez vous connecter à nouveau.';
       }  else if (err.status === 404 || err.status === 500 || err.status === 503 || err.status === 504) {
         err.message = 'Erreur, réessayer plus tard.';

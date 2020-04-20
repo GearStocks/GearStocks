@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GearstocksAlertComponent } from './gearstocks-alert.component';
+import { GearstocksTextareaComponent } from './gearstocks-textarea.component';
 
-describe('GearstocksAlertComponent', () => {
-  let component: GearstocksAlertComponent;
-  let fixture: ComponentFixture<GearstocksAlertComponent>;
+describe('GearstocksTextareaComponent', () => {
+  let component: GearstocksTextareaComponent;
+  let fixture: ComponentFixture<GearstocksTextareaComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ GearstocksAlertComponent ]
+      declarations: [ GearstocksTextareaComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GearstocksAlertComponent);
+    fixture = TestBed.createComponent(GearstocksTextareaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

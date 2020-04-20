@@ -5,7 +5,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
-
 /* Components */
 import { AppComponent } from './app.component';
 import { ProfileComponent } from './profile/profile.component';

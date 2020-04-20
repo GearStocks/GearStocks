@@ -1,10 +1,20 @@
 <div class="wrap">
     <div class="wrap__container">
-        <div class="wrap__box1"></div>
+
+        <div class="wrap__box1">
+          <div class="wrap__box1__lottie">
+            <ng-lottie [options]="options"></ng-lottie>
+          </div>
+        </div>
+
         <div class="wrap__box2">
+
             <h1 class="wrap__box2__title">S'inscrire</h1>
+
             <form class="wrap__box2__form form" [formGroup]="signForm" (ngSubmit)="onSubmit()">
+
                 <div class="form__row form__row--two">
+
                     <div class="input form__inline-input">
                         <div class="input__container">
                             <app-gearstocks-input
@@ -18,6 +28,7 @@
                             </app-gearstocks-input>
                         </div>
                     </div>
+
                     <div class="input form__inline-input">
                         <div class="input__container">
                             <app-gearstocks-input
@@ -31,8 +42,11 @@
                             </app-gearstocks-input>
                         </div>
                     </div>
+
                 </div>
+
                 <div class="form__row">
+
                     <div class="input">
                         <div class="input__container">
                             <app-gearstocks-input
@@ -46,8 +60,11 @@
                             </app-gearstocks-input>
                         </div>
                     </div>
+
                 </div>
+
                 <div class="form__row">
+
                     <div class="input">
                         <div class="input__container">
                             <app-gearstocks-input
@@ -61,8 +78,11 @@
                             </app-gearstocks-input>
                         </div>
                     </div>
+
                 </div>
+
                 <div class="form__row">
+
                     <div class="input">
                         <div class="input__container">
                             <app-gearstocks-input
@@ -76,8 +96,11 @@
                             </app-gearstocks-input>
                         </div>
                     </div>
+
                 </div>
+
                 <div class="form__row">
+
                     <div class="input">
                         <div class="input__container">
                             <app-gearstocks-input
@@ -91,7 +114,9 @@
                             </app-gearstocks-input>
                         </div>
                     </div>
+
                 </div>
+
                 <div class="form__row">
                     <!-- <div class="input-checkbox">
                         <div class="input-checkbox__container">
@@ -100,15 +125,19 @@
                         </div>
                     </div> -->
                 </div>
+
                 <div class="form__row">
                     <div class="component component--primary form__button">
                         <button [disabled]="loading" class="loginButton btn btn-outline-primary" type="submit">Inscription</button>
                     </div>
                 </div>
+
                 <div class="form__row wrap__box2__sign">
                     Déjà inscrit ? -&nbsp;<a (click)="login()">Se connecter</a>
                 </div>
+
             </form>
         </div>
+
     </div>
 </div>

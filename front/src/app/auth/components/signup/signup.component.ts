@@ -9,6 +9,10 @@ import { MatDialog } from '@angular/material/dialog';
 /* RxJs dependencies */
 import { first } from 'rxjs/operators';
 
+/* Lottie Animation */
+import { AnimationItem } from 'lottie-web';
+import { AnimationOptions } from 'ngx-lottie';
+
 /* Services */
 import { UserService } from '../../services/user.service';
 import { AlertService } from '../../../shared/components/gearstocks-alert/services/alert.service';
@@ -33,6 +37,9 @@ export class SignupComponent implements OnInit {
   submitted = false;
   captchaError: boolean;
   errorMessages = ErrorMessages;
+  options: AnimationOptions = {
+    path: '../../../../assets/lottie/15413-registro.json',
+  };
   captchaSiteKey = '6LczU6MUAAAAAGaba5u9Qt_Peq3_mKk6bKnZ72Ju';
 
   constructor(
@@ -56,6 +63,10 @@ export class SignupComponent implements OnInit {
   }
 
   get f() { return this.signForm.controls; }
+
+  animationCreated(animationItem: AnimationItem): void {
+    console.log(animationItem);
+  }
 
   onSubmit(): void {
     this.submitted = true;
