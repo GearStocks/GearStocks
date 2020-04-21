@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/bin/node /usr/share/yarn/bin/yarn.js add react-native-gesture-handler@~1.5.0
+  /usr/bin/node /usr/share/yarn/bin/yarn.js upgrade minimist
 
 PATH: 
   /home/ixtazia/bin:/usr/local/bin:/home/ixtazia/bin/:/home/ixtazia/bin:/usr/local/bin:/home/ixtazia/bin/:/home/ixtazia/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
@@ -42,7 +42,7 @@ npm manifest:
       "react-dom": "16.9.0",
       "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.1.tar.gz",
       "react-native-elements": "^1.1.0",
-      "react-native-gesture-handler": "^1.6.1",
+      "react-native-gesture-handler": "~1.5.0",
       "react-native-super-grid": "^3.1.1",
       "react-native-web": "^0.11.7",
       "react-navigation": "^3.11.0"
@@ -3910,6 +3910,12 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/growly/-/growly-1.3.0.tgz#f10748cbe76af964b7c96c93c6bcc28af120c081"
     integrity sha1-8QdIy+dq+WS3yWyTxrzCivEgwIE=
   
+  "hammerjs@git+https://github.com/naver/hammer.js.git":
+    version "2.0.17-snapshot"
+    resolved "git+https://github.com/naver/hammer.js.git#54bc698b25edd6e1b76ca975ebaced5ce0467d51"
+    dependencies:
+      "@types/hammerjs" "^2.0.36"
+  
   handlebars@^4.1.2:
     version "4.1.2"
     resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.1.2.tgz#b6b37c1ced0306b221e094fc7aca3ec23b131b67"
@@ -6437,12 +6443,13 @@ Lockfile:
       react-native-ratings "^6.3.0"
       react-native-status-bar-height "^2.2.0"
   
-  react-native-gesture-handler@^1.6.1:
-    version "1.6.1"
-    resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.6.1.tgz#678e2dce250ed66e93af409759be22cd6375dd17"
-    integrity sha512-gQgIKhDiYf754yzhhliagLuLupvGb6ZyBdzYzr7aus3Fyi87TLOw63ers+r4kGw0h26oAWTAdHd34JnF4NeL6Q==
+  react-native-gesture-handler@~1.5.0:
+    version "1.5.6"
+    resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.5.6.tgz#5d90145f624e3707db2930f43ab41579683e2375"
+    integrity sha512-z2jLUkRiRc0PBAC9UcXYkqy3VUzBG0cYQAGMsDHsd90JgrzudHAFRJV9fvFm18wNauFTNnJievjZ0C3rI2ydhw==
     dependencies:
       "@egjs/hammerjs" "^2.0.17"
+      hammerjs "https://github.com/naver/hammer.js.git"
       hoist-non-react-statics "^2.3.1"
       invariant "^2.2.4"
       prop-types "^15.7.2"
