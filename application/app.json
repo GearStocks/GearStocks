@@ -2,6 +2,7 @@
   "expo": {
     "name": "GearStocks",
     "slug": "application",
+    "sdkVersion": "36.0.0",
     "privacy": "public",
     "platforms": [
       "ios",
