@@ -23,6 +23,8 @@ BddManager::BddManager()
 {
 	std::string dbUser = std::getenv("MONGO_INITDB_ROOT_USERNAME");
 	std::string dbPass = std::getenv("MONGO_INITDB_ROOT_PASSWORD");
+	std::cout << "DBUSER:" << dbUser << std::endl;
+	std::cout << "DBPASS:" << dbPass << std::endl;
 	if (!dbUser.empty() && !dbPass.empty()) {
 		_conn = {mongocxx::uri{"mongodb://" + dbUser + ":" + dbPass + "@mongo:27017/?authSource=admin"}};
 	} else {

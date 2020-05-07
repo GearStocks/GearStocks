@@ -61,7 +61,24 @@ int Server::PostConnect(const Pistache::Rest::Request& request, Pistache::Http::
     TokenManager	tokenManager;
     std::string token = tokenManager.generateToken();
     size_t	i = 3;
+
     document.Parse(request.body().c_str());
+    if(!document.HasMember("mail")) {
+      std::cout << "il manque le champ mail" << std::endl;
+      response.send(Pistache::Http::Code::Bad_Request, "Bad JSON. Need a field 'mail'");
+      return -1;
+    }
+    if(!document.HasMember("password")) {
+      std::cout << "Il manque le champ password" << std::endl;
+      response.send(Pistache::Http::Code::Bad_Request, "Bad JSON. Need a field 'password'");
+      return -1;
+    }
+    if(!document.HasMember("rememberMe")) {
+      std::cout << "Il manque le champ rememberMe" << std::endl;
+      response.send(Pistache::Http::Code::Bad_Request, "Bad JSON. Need a field 'rememberMe'");
+      return -1;
+    }
+    
     response.headers().add<Pistache::Http::Header::AccessControlAllowOrigin>("*");
     response.headers().add<Pistache::Http::Header::AccessControlAllowMethods>("*");
     response.headers().add<Pistache::Http::Header::AccessControlAllowHeaders>("*");
@@ -88,7 +105,52 @@ int Server::PostRegister(const Pistache::Rest::Request& request, Pistache::Http:
     size_t	i = 3;
     
     document.Parse(request.body().c_str());
-    //std::cout << "ICI ON AFFICHE LE REQUEST:" << request.body().c_str() << std::endl;
+    if(!document.HasMember("username")) {
+      std::cout << "Il manque le champ username" << std::endl;
+      response.send(Pistache::Http::Code::Bad_Request, "Bad JSON. Need a field 'username'");
+      return -1;
+    }
+    if(!document.HasMember("password")) {
+      std::cout << "Il manque le champ password" << std::endl;
+      response.send(Pistache::Http::Code::Bad_Request, "Bad JSON. Need a field 'password'");
+      return -1;
+    }
+    if(!document.HasMember("mail")) {
+      std::cout << "Il manque le champ mail" << std::endl;
+      response.send(Pistache::Http::Code::Bad_Request, "Bad JSON. Need a field 'mail'");
+      return -1;
+    }
+    if(!document.HasMember("firstName")) {
+      std::cout << "Il manque le champ firstName" << std::endl;
+      response.send(Pistache::Http::Code::Bad_Request, "Bad JSON. Need a field 'firstName'");
+      return -1;
+    }
+    if(!document.HasMember("lastName")) {
+      std::cout << "Il manque le champ lastName" << std::endl;
+      response.send(Pistache::Http::Code::Bad_Request, "Bad JSON. Need a field 'lastName'");
+      return -1;
+    }
+    if(!document.HasMember("civility")) {
+      std::cout << "Il manque le champ civility" << std::endl;
+      response.send(Pistache::Http::Code::Bad_Request, "Bad JSON. Need a field 'civility'");
+      return -1;
+    }
+    if(!document.HasMember("address")) {
+      std::cout << "Il manque le champ address" << std::endl;
+      response.send(Pistache::Http::Code::Bad_Request, "Bad JSON. Need a field 'address'");
+      return -1;
+    }
+    if(!document.HasMember("phone")) {
+      std::cout << "Il manque le champ phone" << std::endl;
+      response.send(Pistache::Http::Code::Bad_Request, "Bad JSON. Need a field 'phone'");
+      return -1;
+    }
+    if(!document.HasMember("birthDay")) {
+      std::cout << "Il manque le champ birthDay" << std::endl;
+      response.send(Pistache::Http::Code::Bad_Request, "Bad JSON. Need a field 'birthDay'");
+      return -1;
+    }
+ 
     documentContent.push_back(document["username"].GetString());
     documentContent.push_back(document["password"].GetString());
     documentContent.push_back(document["mail"].GetString());
