@@ -53,8 +53,7 @@ export class UserService {
           }
           this.currentUserSubject.next(user);
           return user;
-        }),
-        catchError(this.handleError)
+        })
       );
   }
 
@@ -62,14 +61,12 @@ export class UserService {
     const body = {
       firstName: authData.firstName,
       lastName: authData.lastName,
+      birthDay: authData.birthDay,
       username: authData.userName,
       mail: authData.email,
       password: authData.password
     };
-    return this.http.post<any>(this.registerUrl, body, httpOptions)
-      .pipe(
-        catchError(this.handleError)
-      );
+    return this.http.post<any>(this.registerUrl, body, httpOptions);
   }
 
   logout(): void {
@@ -79,20 +76,7 @@ export class UserService {
   }
 
   resetPassword(email: string) {
-    return this.http.post<any>(this.resetPasswordUrl, { email: email }, httpOptions)
-      .pipe(
-        catchError(this.handleError)
-      );
+    return this.http.post<any>(this.resetPasswordUrl, { email: email }, httpOptions);
   }
 
-  private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      console.error('An error occurred:', error.error.message);
-    } else {
-      console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
-    }
-    // return an observable with a user-facing error message
-    return throwError(error.message);
-  }}
+}

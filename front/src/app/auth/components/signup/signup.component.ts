@@ -88,9 +88,8 @@ export class SignupComponent implements OnInit {
         () => {
           this.router.navigate(['/confirmation']);
         },
-        (err) => {
+        () => {
           this.loading = false;
-          this.alertService.error(err);
         });
     this.captchaError = false;
   }
