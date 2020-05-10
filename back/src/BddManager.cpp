@@ -103,7 +103,8 @@ size_t	BddManager::userRegister(std::vector<std::string> documentContent)
 	bsoncxx::builder::stream::document document{};
 	std::cout << "MDP avant hashage:" << documentContent[1] << std::endl;
 	std::cout << "MDP après hashage:" << cryptPass(documentContent[1]) << std::endl;
-	document << "username" << documentContent[0] << "email" << documentContent[2] << "password" << cryptPass(documentContent[1]) << "token" << "" << "date" << "" << "firstName" << documentContent[3] << "lastName" << documentContent[4] << "civility" << documentContent[5] << "address" << documentContent[6] << "phone" << documentContent[7] << "birthDay" << documentContent[8];
+	//document << "username" << documentContent[0] << "email" << documentContent[2] << "password" << cryptPass(documentContent[1]) << "token" << "" << "date" << "" << "firstName" << documentContent[3] << "lastName" << documentContent[4] << "civility" << documentContent[5] << "address" << documentContent[6] << "phone" << documentContent[7] << "birthDay" << documentContent[8];
+	document << "username" << documentContent[0] << "email" << documentContent[2] << "password" << cryptPass(documentContent[1]) << "token" << "" << "date" << "" << "firstName" << documentContent[3] << "lastName" << documentContent[4] << "birthDay" << documentContent[5];
 	addContentInBDD(_userCollection, document);
 	std::cout << "A new user is registered :" << documentContent[0] << std::endl;
 	
