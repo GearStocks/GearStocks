@@ -3,6 +3,7 @@
 #include "pistache/router.h"
 #include "pistache/http.h"
 #include <memory>
+#include <cstdlib>
 #include "../include/Server.hpp"
 #include "../include/BddManager.hpp"
 #include "../include/TokenManager.hpp"
@@ -42,6 +43,9 @@ void Server::setupRoutes() {
 	Pistache::Rest::Routes::Post(router, "/addCarPart", Pistache::Rest::Routes::bind(&Server::addCarPart, this));
 	Pistache::Rest::Routes::Post(router, "/getCarPart", Pistache::Rest::Routes::bind(&Server::getCarPart, this));
 	Pistache::Rest::Routes::Options(router, "/getCarPart", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
+	Pistache::Rest::Routes::Post(router, "/forgottenPassword", Pistache::Rest::Routes::bind(&Server::forgottenPassword, this));
+	Pistache::Rest::Routes::Options(router, "/forgottenPassword", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
+	
 }
 
 int Server::Hello(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){
@@ -306,5 +310,24 @@ int Server::getCarPart(const Pistache::Rest::Request& request, Pistache::Http::R
   jsonResult = _manager->getInfoUser(document["userToken"].GetString(), document["partName"].GetString());
   //std::cout << "Get car Part"  << std::endl;
   response.send(Pistache::Http::Code::Ok, jsonResult.second);
+  return 0;
+}
+
+int Server::forgottenPassword(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){ 
+  rapidjson::Document document;
+  
+  document.Parse(request.body().c_str());
+  response.headers().add<Pistache::Http::Header::AccessControlAllowOrigin>("*");
+  response.headers().add<Pistache::Http::Header::AccessControlAllowMethods>("*");
+  response.headers().add<Pistache::Http::Header::AccessControlAllowHeaders>("*");
+  if(!document.HasMember("mail")) {
+      std::cout << "Il manque le champ mail" << std::endl;
+      response.send(Pistache::Http::Code::Bad_Request, "Bad JSON. Need a field 'mail'");
+      return -1;
+    }
+  // _manager->disconnectUser(document["mail"].GetString(), "");
+  //std::system("./ResetPassword raphael.sebaon@epitech.eu mdrptdr");
+  _manager->generateRandomString();
+  response.send(Pistache::Http::Code::Ok, "");
   return 0;
 }

@@ -18,6 +18,8 @@
 #include "cryptopp/modes.h"
 #include "cryptopp/aes.h"
 #include "cryptopp/filters.h"
+#include "cryptopp/osrng.h"
+#include "cryptopp/hex.h"
 
 BddManager::BddManager()
 {
@@ -400,4 +402,19 @@ std::string	BddManager::cryptPass(std::string nonHashPass)
 	
 	// return pass;                                                                            
 	return (finalCipher.str());
+}
+
+std::string     BddManager::generateRandomString()
+{
+  CryptoPP::SecByteBlock key(CryptoPP::AES::DEFAULT_KEYLENGTH), iv(CryptoPP::AES::BLOCKSIZE);
+  std::string random;
+  
+  CryptoPP::OS_GenerateRandomBlock(false, iv, iv.size());
+  
+  CryptoPP::HexEncoder hex(new CryptoPP::StringSink(random));
+  hex.Put(iv, iv.size());
+  hex.MessageEnd();
+  
+  std::cout << "IV: " << random << std::endl;
+  return random;
 }
