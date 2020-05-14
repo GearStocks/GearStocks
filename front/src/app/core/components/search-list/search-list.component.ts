@@ -26,7 +26,7 @@ export class SearchListComponent implements OnInit, OnDestroy {
   scroll = (event: any): void => {
     const number = event.srcElement.scrollTop;
     this.onScroll = number > 30;
-  };
+  }
 
   scrollTo(element: HTMLElement): void {
     element.scrollIntoView({behavior: 'smooth'});

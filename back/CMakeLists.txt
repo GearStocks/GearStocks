@@ -19,6 +19,8 @@ find_package(libmongocxx REQUIRED)
 find_package(libbsoncxx REQUIRED)
 find_package(CURL REQUIRED)
 
+#find_package(CURL REQUIRED)
+
 #message("LIBMONGOCXX_INCLUDE_DIRS = ${LIBMONGOCXX_INCLUDE_DIRS}")
 #message("LIBMONGOCXX_LIBRARIES = ${LIBMONGOCXX_LIBRARIES}")
 

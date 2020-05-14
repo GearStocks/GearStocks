@@ -11,14 +11,14 @@
     "phone": ""
   },
   "register": {
-    "firstName": "françois",
-    "lastName": "MILHET",
+    "firstName": "francois",
+    "lastName": "milhet",
     "username": "Skullz971",
     "mail": "francois97180@hotmail.fr",
     "password": "test123456"
   },
   "resetPassword": {
-    "email": "francois97180@hotmail.fr"
+    "email": "f@f"
   },
   "user": {
     "showPassword": "azerty",

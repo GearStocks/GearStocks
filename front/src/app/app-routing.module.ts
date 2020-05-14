@@ -9,6 +9,7 @@ import { ConfirmationComponent } from './auth/components/confirmation/confirmati
 import { LostPasswordComponent } from './auth/components/lost-password/lost-password.component';
 import { ProfileComponent } from './profile/profile.component';
 import { SearchListComponent } from './core/components/search-list/search-list.component';
+import { ContactComponent } from './core/components/contact/contact.component';
 import { ItemComponent } from './item/item.component';
 import { SearchPageComponent } from './search-page/search-page.component';
 import { Item2Component } from './item2/item2.component';
@@ -24,6 +25,7 @@ const routes: Routes = [
   { path: 'lost-password', component: LostPasswordComponent },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
   { path: 'search-list', component: SearchListComponent },
+  { path: 'contact', component: ContactComponent },
 
   { path: 'item', component: ItemComponent, resolve: {item: ItemResolverService} },
   { path: 'search', component: SearchPageComponent },

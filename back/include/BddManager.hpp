@@ -37,6 +37,7 @@ public:
 	std::pair<size_t, std::string>	getInfoUser(std::string userToken, std::string userMail);
 	size_t		addCarPartInBDD(std::string name, std::string price, std::string photo);
 	std::pair<size_t, std::string>	getCarPart(std::string userToken, std::string partName);
+	std::string generateRandomString();
 private:
 	void	connect();
 	

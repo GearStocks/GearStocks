@@ -1,114 +1,161 @@
 <div class="wrap">
-    <div class="wrap__container">
-        <div class="wrap__box1"></div>
-        <div class="wrap__box2">
-            <h1 class="wrap__box2__title">S'inscrire</h1>
-            <form class="wrap__box2__form form" [formGroup]="signForm" (ngSubmit)="onSubmit()">
-                <div class="form__row form__row--two">
-                    <div class="input form__inline-input">
-                        <div class="input__container">
-                            <app-gearstocks-input
-                            [group]="signForm"
-                            [name]="'firstName'"
-                            [placeholder]="'Prénom'"
-                            [type]="'texte'"
-                            [required]="true"
-                            [validationError]="f.firstName.errors"
-                            [validationErrorMessages]="errorMessages.firstName">
-                            </app-gearstocks-input>
-                        </div>
-                    </div>
-                    <div class="input form__inline-input">
-                        <div class="input__container">
-                            <app-gearstocks-input
-                                    [group]="signForm"
-                                    [name]="'lastName'"
-                                    [placeholder]="'Nom'"
-                                    [type]="'texte'"
-                                    [required]="true"
-                                    [validationError]="f.lastName.errors"
-                                    [validationErrorMessages]="errorMessages.lastName">
-                            </app-gearstocks-input>
-                        </div>
-                    </div>
-                </div>
-                <div class="form__row">
-                    <div class="input">
-                        <div class="input__container">
-                            <app-gearstocks-input
-                                    [group]="signForm"
-                                    [name]="'userName'"
-                                    [placeholder]="'Pseudo'"
-                                    [type]="'texte'"
-                                    [required]="true"
-                                    [validationError]="f.userName.errors"
-                                    [validationErrorMessages]="errorMessages.userName">
-                            </app-gearstocks-input>
-                        </div>
-                    </div>
-                </div>
-                <div class="form__row">
-                    <div class="input">
-                        <div class="input__container">
-                            <app-gearstocks-input
-                                    [group]="signForm"
-                                    [name]="'email'"
-                                    [placeholder]="'Email'"
-                                    [type]="'email'"
-                                    [required]="true"
-                                    [validationError]="f.email.errors"
-                                    [validationErrorMessages]="errorMessages.email">
-                            </app-gearstocks-input>
-                        </div>
-                    </div>
-                </div>
-                <div class="form__row">
-                    <div class="input">
-                        <div class="input__container">
-                            <app-gearstocks-input
-                                    [group]="signForm"
-                                    [name]="'password'"
-                                    [placeholder]="'Mot de passe'"
-                                    [type]="'password'"
-                                    [required]="true"
-                                    [validationError]="f.password.errors"
-                                    [validationErrorMessages]="errorMessages.password">
-                            </app-gearstocks-input>
-                        </div>
-                    </div>
-                </div>
-                <div class="form__row">
-                    <div class="input">
-                        <div class="input__container">
-                            <app-gearstocks-input
-                                    [group]="signForm"
-                                    [name]="'confirmPassword'"
-                                    [placeholder]="'Confirmation du mot de passe'"
-                                    [type]="'password'"
-                                    [required]="true"
-                                    [validationError]="f.confirmPassword.errors"
-                                    [validationErrorMessages]="errorMessages.confirmPassword">
-                            </app-gearstocks-input>
-                        </div>
-                    </div>
-                </div>
-                <div class="form__row">
-                    <!-- <div class="input-checkbox">
-                        <div class="input-checkbox__container">
-                            <ngx-recaptcha2 [siteKey]="captchaSiteKey" formControlName="recaptcha"></ngx-recaptcha2>
-                            <mat-error *ngIf="captchaError">{{errorMessages.recaptcha.required}}</mat-error>
-                        </div>
-                    </div> -->
-                </div>
-                <div class="form__row">
-                    <div class="component component--primary form__button">
-                        <button [disabled]="loading" class="loginButton btn btn-outline-primary" type="submit">Inscription</button>
-                    </div>
-                </div>
-                <div class="form__row wrap__box2__sign">
-                    Déjà inscrit ? -&nbsp;<a (click)="login()">Se connecter</a>
-                </div>
-            </form>
-        </div>
+  <div class="wrap__container">
+
+    <div class="wrap__box1">
+      <div class="wrap__box1__lottie">
+        <ng-lottie [options]="options"></ng-lottie>
+      </div>
     </div>
+
+    <div class="wrap__box2">
+
+      <h1 class="wrap__box2__title">S'inscrire</h1>
+
+      <form class="wrap__box2__form form" [formGroup]="signForm" (ngSubmit)="onSubmit()">
+
+        <div class="form__row form__row--two">
+
+          <div class="input form__inline-input">
+            <div class="input__container">
+              <app-gearstocks-input
+                [group]="signForm"
+                [name]="'firstName'"
+                [placeholder]="'Prénom'"
+                [type]="'texte'"
+                [required]="true"
+                [validationError]="f.firstName.errors"
+                [validationErrorMessages]="errorMessages.firstName">
+              </app-gearstocks-input>
+            </div>
+          </div>
+
+          <div class="input form__inline-input">
+            <div class="input__container">
+              <app-gearstocks-input
+                [group]="signForm"
+                [name]="'lastName'"
+                [placeholder]="'Nom'"
+                [type]="'texte'"
+                [required]="true"
+                [validationError]="f.lastName.errors"
+                [validationErrorMessages]="errorMessages.lastName">
+              </app-gearstocks-input>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form__row">
+
+          <div class="input">
+            <div class="input__container">
+              <app-gearstocks-input
+                [group]="signForm"
+                [name]="'birthDay'"
+                [placeholder]="'Date de naissance'"
+                [type]="'date'"
+                [required]="true"
+                [validationError]="f.birthDay.errors"
+                [validationErrorMessages]="errorMessages.birthDay">
+              </app-gearstocks-input>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form__row">
+
+          <div class="input">
+            <div class="input__container">
+              <app-gearstocks-input
+                [group]="signForm"
+                [name]="'userName'"
+                [placeholder]="'Pseudo'"
+                [type]="'texte'"
+                [required]="true"
+                [validationError]="f.userName.errors"
+                [validationErrorMessages]="errorMessages.userName">
+              </app-gearstocks-input>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form__row">
+
+          <div class="input">
+            <div class="input__container">
+              <app-gearstocks-input
+                [group]="signForm"
+                [name]="'email'"
+                [placeholder]="'Email'"
+                [type]="'email'"
+                [required]="true"
+                [validationError]="f.email.errors"
+                [validationErrorMessages]="errorMessages.email">
+              </app-gearstocks-input>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form__row">
+
+          <div class="input">
+            <div class="input__container">
+              <app-gearstocks-input
+                [group]="signForm"
+                [name]="'password'"
+                [placeholder]="'Mot de passe'"
+                [type]="'password'"
+                [required]="true"
+                [validationError]="f.password.errors"
+                [validationErrorMessages]="errorMessages.password">
+              </app-gearstocks-input>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form__row">
+
+          <div class="input">
+            <div class="input__container">
+              <app-gearstocks-input
+                [group]="signForm"
+                [name]="'confirmPassword'"
+                [placeholder]="'Confirmation du mot de passe'"
+                [type]="'password'"
+                [required]="true"
+                [validationError]="f.confirmPassword.errors"
+                [validationErrorMessages]="errorMessages.confirmPassword">
+              </app-gearstocks-input>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="form__row">
+          <!-- <div class="input-checkbox">
+              <div class="input-checkbox__container">
+                  <ngx-recaptcha2 [siteKey]="captchaSiteKey" formControlName="recaptcha"></ngx-recaptcha2>
+                  <mat-error *ngIf="captchaError">{{errorMessages.recaptcha.required}}</mat-error>
+              </div>
+          </div> -->
+        </div>
+
+        <div class="form__row">
+          <div class="component component--primary form__button">
+            <button [disabled]="loading" class="loginButton btn btn-outline-primary" type="submit">Inscription</button>
+          </div>
+        </div>
+
+        <div class="form__row wrap__box2__sign">
+          Déjà inscrit ? -&nbsp;<a (click)="login()">Se connecter</a>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
 </div>

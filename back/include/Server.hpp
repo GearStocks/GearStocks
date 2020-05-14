@@ -34,6 +34,9 @@ class Server
 			   Pistache::Http::ResponseWriter reponse);
 	int	getCarPart(const Pistache::Rest::Request &request,
 			   Pistache::Http::ResponseWriter reponse);
+	int	forgottenPassword(const Pistache::Rest::Request &request,
+			   Pistache::Http::ResponseWriter reponse);
+  
         void    setupRoutes();
         std::shared_ptr<Pistache::Http::Endpoint> httpEndpoint;
         Pistache::Rest::Router router;
