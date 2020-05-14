@@ -76,7 +76,7 @@ services:
         max-file: "10"
 
   api_builder:
-    image: gearstocks/api_builder:latest
+    build: ./api_builder
     volumes:
       - ./back:/home/files
       - ./api_builder/lib:/home/lib
