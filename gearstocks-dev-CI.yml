@@ -23,6 +23,7 @@ steps:
 - script: |
     set -e
     echo MONGO_INITDB_ROOT_USERNAME=mongoadmin\nMONGO_INITDB_ROOT_PASSWORD=mongoadmin > database/secrets.env
+    docker pull gearstocks/api_builder:latest
     docker-compose up front api_builder
     echo Front and Back successfully build.
   displayName: 'Compilation Check'
