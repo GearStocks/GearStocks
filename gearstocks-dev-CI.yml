@@ -11,7 +11,7 @@ trigger: none
 pool:
   vmImage: 'ubuntu-latest'
 
-steps:
+#steps:
 #- script: echo Hello, world!
 #  displayName: 'Run a one-line script'
 
@@ -20,10 +20,42 @@ steps:
 #    echo See https://aka.ms/yaml
 #  displayName: 'Run a multi-line script'
 
-- script: |
-    set -e
-    echo MONGO_INITDB_ROOT_USERNAME=mongoadmin\nMONGO_INITDB_ROOT_PASSWORD=mongoadmin > database/secrets.env
-    docker pull gearstocks/api_builder:latest
-    docker-compose up front api_builder
-    echo Front and Back successfully build.
-  displayName: 'Compilation Check'
+stages:
+  - stage: Build
+    displayName: Build stage
+    jobs:
+    - job: BuildFrontAndApi
+      displayName: 'Build Front and API'
+      steps:
+      - script: |
+          set -e
+          echo MONGO_INITDB_ROOT_USERNAME=mongoadmin\nMONGO_INITDB_ROOT_PASSWORD=mongoadmin > database/secrets.env
+          docker pull gearstocks/api_builder:latest
+          docker-compose up front api_builder
+          echo Front and Back successfully build.
+        displayName: 'Front and API Compilation Check'
+      - task: ArchiveFiles@2
+        displayName: 'Archive Front and API files'
+        inputs:
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+          includeRootFolder: false
+          archiveType: zip
+          archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+          replaceExistingArchive: true
+      - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        artifact: drop
+  - stage: Deploy
+    displayName: Deploy
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - deployment: GearStock-dev
+        displayName: 'Deploy Dev'
+        environment:
+          name: 'Gearstocks Dev'
+          resourceType: VirtualMachine
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              - script: echo my first deployment
