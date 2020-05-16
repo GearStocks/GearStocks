@@ -34,26 +34,19 @@ stages:
           docker-compose up front api_builder
           echo Front and Back successfully build.
         displayName: 'Front and API Compilation Check'
-    - job: docker
-      displayName: Prepare Docker Config for Archive
-      steps:
       - script: |
           set -e
           mkdir -p drop
           cp -R docker-compose.yml drop/
           cp -R .env drop/
           echo Docker Config OK
-    - job: database
-      displayName: Prepare Database for Archive
-      steps:
+        displayName: Prepare Docker Config for Archive
       - script: |
           set -e
           rm database/secrets.env
           cp -R database drop/
           echo Database OK
-    - job: api
-      displayName: Prepare API for Archive
-      steps:
+        displayName: Prepare Database for Archive
       - script: |
           set -e
           mkdir -p drop/api_builder/build
@@ -61,25 +54,20 @@ stages:
           cp -R api_builder/lib drop/api_builder/
           cp -R back drop/
           echo API OK
-    - job: front
-      displayName: Prepare Front for Archive
-      steps:
+        displayName: Prepare API for Archive
       - script: |
           set -e
           mkdir -p drop/front
           cp -R front/dist drop/front/
           cp -R apache drop/
           echo Front OK
-    - job: android
-      displayName: Prepare Android App for Archive
-      steps:
+        displayName: Prepare Front for Archive
       - script: |
           set -e
           echo Application KO
-    - job: archive
-      displayName: Archive Files
-      steps:
+        displayName: Prepare Android App for Archive
       - script: echo Archive OK
+        displayName: Archive Files
       - task: ArchiveFiles@2
         displayName: 'Archive Front and API files'
         inputs:
