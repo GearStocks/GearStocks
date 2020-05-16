@@ -34,10 +34,33 @@ stages:
           docker-compose up front api_builder
           echo Front and Back successfully build.
         displayName: 'Front and API Compilation Check'
+      - script: |
+          set -e
+          mkdir -p drop
+          echo Archive Preparation
+
+          rm database/secrets.env
+          mv database drop/
+          echo Database OK
+          
+          mkdir -p drop/api_builder/build
+          mv api_builder/build/App drop/api_builder/build/
+          mv api_builder/lib drop/api_builder/
+          mv back drop/
+          echo API OK
+
+          mkdir -p drop/front
+          mv front/dist drop/front/
+          mv apache drop/
+          echo Front OK
+
+          echo Application KO
+          echo Archive OK
+        displayName: 'Archive preparation'
       - task: ArchiveFiles@2
         displayName: 'Archive Front and API files'
         inputs:
-          rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/drop'
           includeRootFolder: false
           archiveType: zip
           archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
@@ -58,4 +81,6 @@ stages:
           runOnce:
             deploy:
               steps:
-              - script: echo my first deployment
+              - script: |
+                  set -e
+                  unzip $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip /home
