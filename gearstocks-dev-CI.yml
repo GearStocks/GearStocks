@@ -34,42 +34,74 @@ stages:
           docker-compose up front api_builder
           echo Front and Back successfully build.
         displayName: 'Front and API Compilation Check'
-      - script: |
-          set -e
-          mkdir -p drop
-          echo Archive Preparation
-
-          rm database/secrets.env
-          cp -R database drop/
-          echo Database OK
-          
-          mkdir -p drop/api_builder/build
-          cp -R api_builder/build/App drop/api_builder/build/
-          cp -R api_builder/lib drop/api_builder/
-          cp -R back drop/
-          echo API OK
-
-          mkdir -p drop/front
-          cp -R front/dist drop/front/
-          cp -R apache drop/
-          echo Front OK
-
-          echo Application KO
-          echo Archive OK
-        displayName: 'Archive preparation'
-      - task: ArchiveFiles@2
-        displayName: 'Archive Front and API files'
-        inputs:
-          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/drop'
-          includeRootFolder: false
-          archiveType: zip
-          archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-          replaceExistingArchive: true
-      - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-        artifact: drop
+  - stage: PrepareArchive
+    dependsOn: Build
+    condition: succeeded()
+    displayName: Prepare Archive
+    jobs:
+      - job: docker
+        displayName: Archive Docker Config
+        steps:
+        - script: |
+            set -e
+            mkdir -p drop
+            cp -R docker-compose.yml drop/
+            cp -R .env drop/
+            echo Docker Config OK
+      - job: database
+        displayName: Archive Database
+        steps:
+        - script: |
+            set -e
+            rm database/secrets.env
+            cp -R database drop/
+            echo Database OK
+      - job: api
+        displayName: Archive API
+        steps:
+        - script: |
+            set -e
+            mkdir -p drop/api_builder/build
+            cp -R api_builder/build/App drop/api_builder/build/
+            cp -R api_builder/lib drop/api_builder/
+            cp -R back drop/
+            echo API OK
+      - job: front
+        displayName: Archive Front
+        steps:
+        - script: |
+            set -e
+            mkdir -p drop/front
+            cp -R front/dist drop/front/
+            cp -R apache drop/
+            echo Front OK
+      - job: android
+        displayName: Archive Android App
+        steps:
+        - script: |
+            set -e
+            echo Application KO
+            echo Archive OK
+  - stage: ArchiveFiles
+    dependsOn: PrepareArchive
+    condition: succeeded()
+    displayName: Archive Files
+    jobs:
+      - job: archive
+        steps:
+        - task: ArchiveFiles@2
+          displayName: 'Archive Front and API files'
+          inputs:
+            rootFolderOrFile: '$(System.DefaultWorkingDirectory)/drop'
+            includeRootFolder: false
+            archiveType: zip
+            archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+            replaceExistingArchive: true
+        - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+          artifact: drop
   - stage: Deploy
     displayName: Deploy
-    dependsOn: Build
+    dependsOn: ArchiveFiles
     condition: succeeded()
     jobs:
       - deployment: GearStockDev
@@ -83,4 +115,4 @@ stages:
               steps:
               - script: |
                   set -e
-                  unzip $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip /home
+                  unzip drop/$(Build.BuildId).zip /home/GearStocks/
