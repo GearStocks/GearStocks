@@ -34,71 +34,62 @@ stages:
           docker-compose up front api_builder
           echo Front and Back successfully build.
         displayName: 'Front and API Compilation Check'
-  - stage: PrepareArchive
-    dependsOn: Build
-    condition: succeeded()
-    displayName: Prepare Archive
-    jobs:
-      - job: docker
-        displayName: Archive Docker Config
-        steps:
-        - script: |
-            set -e
-            mkdir -p drop
-            cp -R docker-compose.yml drop/
-            cp -R .env drop/
-            echo Docker Config OK
-      - job: database
-        displayName: Archive Database
-        steps:
-        - script: |
-            set -e
-            rm database/secrets.env
-            cp -R database drop/
-            echo Database OK
-      - job: api
-        displayName: Archive API
-        steps:
-        - script: |
-            set -e
-            mkdir -p drop/api_builder/build
-            cp -R api_builder/build/App drop/api_builder/build/
-            cp -R api_builder/lib drop/api_builder/
-            cp -R back drop/
-            echo API OK
-      - job: front
-        displayName: Archive Front
-        steps:
-        - script: |
-            set -e
-            mkdir -p drop/front
-            cp -R front/dist drop/front/
-            cp -R apache drop/
-            echo Front OK
-      - job: android
-        displayName: Archive Android App
-        steps:
-        - script: |
-            set -e
-            echo Application KO
-            echo Archive OK
-  - stage: ArchiveFiles
-    dependsOn: PrepareArchive
-    condition: succeeded()
-    displayName: Archive Files
-    jobs:
-      - job: archive
-        steps:
-        - task: ArchiveFiles@2
-          displayName: 'Archive Front and API files'
-          inputs:
-            rootFolderOrFile: '$(System.DefaultWorkingDirectory)/drop'
-            includeRootFolder: false
-            archiveType: zip
-            archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-            replaceExistingArchive: true
-        - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-          artifact: drop
+    - job: docker
+      displayName: Prepare Docker Config for Archive
+      steps:
+      - script: |
+          set -e
+          mkdir -p drop
+          cp -R docker-compose.yml drop/
+          cp -R .env drop/
+          echo Docker Config OK
+    - job: database
+      displayName: Prepare Database for Archive
+      steps:
+      - script: |
+          set -e
+          rm database/secrets.env
+          cp -R database drop/
+          echo Database OK
+    - job: api
+      displayName: Prepare API for Archive
+      steps:
+      - script: |
+          set -e
+          mkdir -p drop/api_builder/build
+          cp -R api_builder/build/App drop/api_builder/build/
+          cp -R api_builder/lib drop/api_builder/
+          cp -R back drop/
+          echo API OK
+    - job: front
+      displayName: Prepare Front for Archive
+      steps:
+      - script: |
+          set -e
+          mkdir -p drop/front
+          cp -R front/dist drop/front/
+          cp -R apache drop/
+          echo Front OK
+    - job: android
+      displayName: Prepare Android App for Archive
+      steps:
+      - script: |
+          set -e
+          echo Application KO
+    - job: archive
+      displayName: Archive Files
+      steps:
+      - script: echo Archive OK
+      - task: ArchiveFiles@2
+        displayName: 'Archive Front and API files'
+        inputs:
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/drop'
+          includeRootFolder: false
+          archiveType: zip
+          archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+          replaceExistingArchive: true
+      - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        artifact: drop
   - stage: Deploy
     displayName: Deploy
     dependsOn: ArchiveFiles
@@ -116,3 +107,5 @@ stages:
               - script: |
                   set -e
                   unzip drop/$(Build.BuildId).zip /home/GearStocks/
+                  cd /home/GearStocks
+                  docker-compose restart mongo && docker-compose restart api front
