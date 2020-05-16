@@ -94,6 +94,7 @@ stages:
               steps:
               - script: |
                   set -e
+                  ls $(Build.ArtifactStagingDirectory)
                   unzip drop/$(Build.BuildId).zip /home/GearStocks/
                   cd /home/GearStocks
                   docker-compose restart mongo && docker-compose restart api front
