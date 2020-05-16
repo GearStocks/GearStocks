@@ -37,6 +37,7 @@ public:
 	std::pair<size_t, std::string>	getInfoUser(std::string userToken, std::string userMail);
 	size_t		addCarPartInBDD(std::string name, std::string price, std::string photo);
 	std::pair<size_t, std::string>	getCarPart(std::string userToken, std::string partName);
+	std::string generateRandomString();
 private:
 	void	connect();
 	
@@ -48,7 +49,7 @@ private:
 	std::string	checkIfExist(auto collection, std::string field, std::string value);
 	std::string cryptPass(std::string nonHashPass);
 	mongocxx::instance _inst{};
-        mongocxx::client _conn{mongocxx::uri{"mongodb://mongo:27017"}};
+	mongocxx::client _conn;
 	mongocxx::collection _userCollection;
 	mongocxx::collection _carPartCollection;
 };

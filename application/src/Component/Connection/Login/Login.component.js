@@ -10,6 +10,7 @@ import { View, TouchableOpacity, Image } from 'react-native';
 import { Button, Input, Icon, Text } from 'react-native-elements';
 
 import { strings, errors } from '../../../../config/strings';
+import colors from '../../../../config/colors';
 import styles from './Login.component.style';
 import PostLogin from '../../../services/POST/PostLogin';
 
@@ -23,7 +24,7 @@ export default class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
-      errorMail: '',
+      errorEmail: '',
       errorPassword: '',
       hidePassword: true
     };
@@ -47,23 +48,23 @@ export default class Login extends React.Component {
     navigate('AppMenu');
 
     if (`${email}` === '' && `${password}` === '') {
-      this.setState({ errorMail: errors.ERR_ADDRESS });
+      this.setState({ errorEmail: errors.ERR_ADDRESS });
       this.setState({ errorPassword: errors.ERR_PASSWORD });
     }
     else if (`${email}` === '') {
-      this.setState({ errorMail: errors.ERR_ADDRESS });
+      this.setState({ errorEmail: errors.ERR_ADDRESS });
       this.setState({ errorPassword: '' });
     }
     else if (reg.test(`${email}`) === false) {
-      this.setState({ errorMail: errors.ERR_INVALID_EMAIL });
+      this.setState({ errorEmail: errors.ERR_INVALID_EMAIL });
       this.setState({ errorPassword: '' });
     }
     else if (`${password}` === '') {
-      this.setState({ errorMail: '' });
+      this.setState({ errorEmail: '' });
       this.setState({ errorPassword: errors.ERR_PASSWORD });
     }
     else {
-      this.setState({ errorMail: '' });
+      this.setState({ errorEmail: '' });
       this.setState({ errorPassword: '' });
       new PostLogin().login(JSONObj, navigate);
     }
@@ -83,10 +84,10 @@ export default class Login extends React.Component {
           labelStyle={{bottom: 10, left: 10}}
           returnKeyType='next'
           errorStyle={{fontSize: 18}}
-          inputContainerStyle={{borderColor: '#5dade2', borderTopWidth: 2,
+          inputContainerStyle={{borderColor: colors.PRIMARY_COLOR, borderTopWidth: 2,
           borderRightWidth: 2, borderLeftWidth: 2, borderBottomWidth: 2}}
           containerStyle={{top: 20}}
-          errorMessage={this.state.errorMail}
+          errorMessage={this.state.errorEmail}
           onSubmitEditing={() => this.password.focus()}
           blurOnSubmit={false}
           placeholder={strings.EMAIL}
@@ -101,7 +102,7 @@ export default class Login extends React.Component {
           containerStyle={{top: 50}}
           label='Password'
           labelStyle={{bottom: 10, left: 10}}
-          inputContainerStyle={{borderColor: '#5dade2', borderTopWidth: 2,
+          inputContainerStyle={{borderColor: colors.PRIMARY_COLOR, borderTopWidth: 2,
           borderRightWidth: 2, borderLeftWidth: 2, borderBottomWidth: 2}}
           errorMessage={this.state.errorPassword}
           placeholder={strings.PASSWORD}
@@ -115,7 +116,7 @@ export default class Login extends React.Component {
           onChangeText={(password) => this.setState({ password })}
         />
         <Button title={strings.FORGOT_PASSWORD} buttonStyle={styles.forgetPassword} type="clear" onPress={() => navigate('ForgotPasswordComponent')} />
-        <Button title={strings.CONNECTION} buttonStyle={styles.button} type="outline" onPress={() => this.checkError(navigate)} />
+        <Button title={strings.LOGIN} buttonStyle={styles.button} type="outline" onPress={() => this.checkError(navigate)} />
         <Button title={strings.REGISTER} buttonStyle={styles.button} type="outline" onPress={() => navigate('RegisterComponent')} />
       </View>
     );

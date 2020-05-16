@@ -18,9 +18,20 @@
 #include "cryptopp/modes.h"
 #include "cryptopp/aes.h"
 #include "cryptopp/filters.h"
+#include "cryptopp/osrng.h"
+#include "cryptopp/hex.h"
 
 BddManager::BddManager()
 {
+	std::string dbUser = std::getenv("MONGO_INITDB_ROOT_USERNAME");
+	std::string dbPass = std::getenv("MONGO_INITDB_ROOT_PASSWORD");
+	std::cout << "DBUSER:" << dbUser << std::endl;
+	std::cout << "DBPASS:" << dbPass << std::endl;
+	if (!dbUser.empty() && !dbPass.empty()) {
+		_conn = {mongocxx::uri{"mongodb://" + dbUser + ":" + dbPass + "@mongo:27017/?authSource=admin"}};
+	} else {
+		_conn = {mongocxx::uri{"mongodb://mongo:27017"}};
+	}
 	connect();
 }
 
@@ -94,7 +105,8 @@ size_t	BddManager::userRegister(std::vector<std::string> documentContent)
 	bsoncxx::builder::stream::document document{};
 	std::cout << "MDP avant hashage:" << documentContent[1] << std::endl;
 	std::cout << "MDP après hashage:" << cryptPass(documentContent[1]) << std::endl;
-	document << "username" << documentContent[0] << "email" << documentContent[2] << "password" << cryptPass(documentContent[1]) << "token" << "" << "date" << "" << "firstName" << documentContent[3] << "lastName" << documentContent[4] << "civility" << documentContent[5] << "address" << documentContent[6] << "phone" << documentContent[7] << "birthDay" << documentContent[8];
+	//document << "username" << documentContent[0] << "email" << documentContent[2] << "password" << cryptPass(documentContent[1]) << "token" << "" << "date" << "" << "firstName" << documentContent[3] << "lastName" << documentContent[4] << "civility" << documentContent[5] << "address" << documentContent[6] << "phone" << documentContent[7] << "birthDay" << documentContent[8];
+	document << "username" << documentContent[0] << "email" << documentContent[2] << "password" << cryptPass(documentContent[1]) << "token" << "" << "date" << "" << "firstName" << documentContent[3] << "lastName" << documentContent[4] << "birthDay" << documentContent[5];
 	addContentInBDD(_userCollection, document);
 	std::cout << "A new user is registered :" << documentContent[0] << std::endl;
 	
@@ -390,4 +402,19 @@ std::string	BddManager::cryptPass(std::string nonHashPass)
 	
 	// return pass;                                                                            
 	return (finalCipher.str());
+}
+
+std::string     BddManager::generateRandomString()
+{
+  CryptoPP::SecByteBlock key(CryptoPP::AES::DEFAULT_KEYLENGTH), iv(CryptoPP::AES::BLOCKSIZE);
+  std::string random;
+  
+  CryptoPP::OS_GenerateRandomBlock(false, iv, iv.size());
+  
+  CryptoPP::HexEncoder hex(new CryptoPP::StringSink(random));
+  hex.Put(iv, iv.size());
+  hex.MessageEnd();
+  
+  std::cout << "IV: " << random << std::endl;
+  return random;
 }

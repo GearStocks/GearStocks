@@ -17,6 +17,9 @@ find_package(libmongoc-1.0 REQUIRED)
 find_package(libbson-1.0 REQUIRED)
 find_package(libmongocxx REQUIRED)
 find_package(libbsoncxx REQUIRED)
+find_package(CURL REQUIRED)
+
+#find_package(CURL REQUIRED)
 
 #message("LIBMONGOCXX_INCLUDE_DIRS = ${LIBMONGOCXX_INCLUDE_DIRS}")
 #message("LIBMONGOCXX_LIBRARIES = ${LIBMONGOCXX_LIBRARIES}")
@@ -50,4 +53,4 @@ target_include_directories(App PUBLIC ${LIBBSONCXX_INCLUDE_DIRS})
 target_link_libraries(App ${LIBMONGOCXX_LIBRARIES} /usr/lib/libmongoc-1.0.so /usr/lib/libbson-1.0.so ${LIBBSONCXX_LIBRARIES})
 
 include_directories(/usr/include/pistache ./include)
-target_link_libraries(App /usr/lib/libpistache.a -pthread -lcryptopp)
+target_link_libraries(App /usr/lib/libpistache.a -pthread -lcryptopp -lcurl)

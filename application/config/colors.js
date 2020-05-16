@@ -8,7 +8,7 @@
 const colors = {
   BLACK: '#000',
   WHITE: '#FFF',
-  TORCH_RED: '#F8262F'
+  PRIMARY_COLOR: '#5DADE2'
 };
 
 export default colors;

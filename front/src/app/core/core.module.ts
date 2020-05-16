@@ -10,18 +10,26 @@ import { SidenavListComponent } from './components/navbar/sidenav-list/sidenav-l
 
 /* App Modules */
 import { SharedModule } from '../shared/shared.module';
+import { SearchListComponent } from './components/search-list/search-list.component';
+import { ContactComponent } from './components/contact/contact.component';
+
+/* Font Awesome Module */
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
     FooterComponent,
     NavbarComponent,
     HomeComponent,
-    SidenavListComponent
+    SidenavListComponent,
+    SearchListComponent,
+    ContactComponent
   ],
-    imports: [
-        CommonModule,
-        SharedModule
-    ],
+  imports: [
+    CommonModule,
+    SharedModule,
+    FontAwesomeModule
+  ],
     exports: [
         FooterComponent,
         NavbarComponent,

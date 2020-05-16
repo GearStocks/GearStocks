@@ -7,19 +7,27 @@
 
 import { StyleSheet } from 'react-native';
 
+import colors from '../../../../config/colors';
+
 export default StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: colors.WHITE,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginRight: 10,
+        marginLeft: 10
+    },
+    title: {
+        fontWeight: 'bold',
+        fontSize: 20,
+        bottom: 40
     },
     button: {
         height: 50,
-        width: 200,
-        borderRadius: 20,
-        backgroundColor: '#050175',
-        elevation: 10,
-        top: 50
+        width: 350,
+        borderRadius: 5,
+        top: 60,
+        marginBottom: 10
     }
 });

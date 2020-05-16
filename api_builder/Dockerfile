@@ -1,63 +1,6 @@
-FROM debian:stretch
+FROM gearstocks/api_builder:latest
 
-# build latest cmake
-
-ARG cmake_sources="https://cmake.org/files/v3.8/cmake-3.8.0.tar.gz"
-
-RUN apt -y update && apt -y upgrade &&\
- apt remove --purge -y cmake &&\
- apt autoremove -y && apt autoclean -y && apt clean &&\
- apt install -y gcc curl build-essential &&\
- cd /opt &&\
- mkdir src &&\
- curl -s $cmake_sources | tar -xz --strip-components=1 -C src &&\
- cd src &&\
- ./bootstrap &&\
- make -j8 &&\
- make install &&\
- cd .. &&\
- rm -rf src
-
-RUN mkdir -p /home/dep
-
-WORKDIR /home/dep
-
-RUN apt -y install libmongoc-1.0-0 git libbson-1.0 libssl-dev libsasl2-dev wget libcrypto++-dev &&\
- wget https://github.com/mongodb/mongo-c-driver/releases/download/1.14.0/mongo-c-driver-1.14.0.tar.gz &&\
- tar xzf mongo-c-driver-1.14.0.tar.gz &&\
- cd mongo-c-driver-1.14.0 &&\
- mkdir cmake-build &&\
- cd cmake-build &&\
- cmake -DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF .. &&\
- make &&\
- make install
-
-WORKDIR /home/dep
-
-RUN git clone https://github.com/mongodb/mongo-cxx-driver.git --branch releases/stable --depth 1 &&\
- cd mongo-cxx-driver/build &&\
- cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local .. &&\
- make EP_mnmlstc_core &&\
- make &&\
- make install
-
-WORKDIR /home/dep
-
-RUN git clone https://github.com/oktal/pistache.git &&\
- cd pistache &&\
- git submodule update --init &&\
- mkdir build &&\
- cd build &&\
- cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release .. &&\
- make &&\
- make install
-
-WORKDIR /home/dep
-
-RUN git clone https://github.com/Tencent/rapidjson.git &&\
- cp -r rapidjson/include/* /usr/local/include
-
-RUN cp -r /usr/local/* /usr/
+RUN ldconfig -v
 
 CMD cd /home/files && mkdir -p build && cd build && cmake .. && make &&\
   mkdir -p /home/lib/ && mkdir -p /home/lib/x86_64-linux-gnu/ &&\
@@ -65,5 +8,28 @@ CMD cd /home/files && mkdir -p build && cd build && cmake .. && make &&\
   cp --remove-destination /usr/lib/x86_64-linux-gnu/libssl* /home/lib/x86_64-linux-gnu/ &&\
   cp --remove-destination /usr/lib/x86_64-linux-gnu/libsasl* /home/lib/x86_64-linux-gnu/ &&\
   cp --remove-destination /usr/lib/x86_64-linux-gnu/libstdc++* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/libcurl* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/libnghttp2* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/libidn2* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/librtmp* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/libssh* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/libpsl* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/libgssapi_krb5* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/libkrb5.so.3 /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/libk5crypto* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/liblber-2.4* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/libldap_r-2.4* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/libunistring* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/libgnutls.so* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/libhogweed* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/libnettle* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/libgmp* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/libkrb5support* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /lib/x86_64-linux-gnu/libkeyutils* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/libp11-kit.so* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/libpsl* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /lib/x86_64-linux-gnu/libidn.so* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/libtasn1.so* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/libffi.so* /home/lib/x86_64-linux-gnu/ &&\
   cp --remove-destination /usr/lib/libmongo* /home/lib/ &&\
   cp --remove-destination /usr/lib/libbson* /home/lib/

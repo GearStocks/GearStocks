@@ -21,6 +21,9 @@ class Server
 			    Pistache::Http::ResponseWriter response);
         int     PostConnect(const Pistache::Rest::Request& request,
 			    Pistache::Http::ResponseWriter response);
+	int     OptionsConnect(const Pistache::Rest::Request& request,
+			    Pistache::Http::ResponseWriter response);
+  
 	int	UpdateUser(const Pistache::Rest::Request &request,
 			   Pistache::Http::ResponseWriter reponse);
 	int	disconnect(const Pistache::Rest::Request &request,
@@ -31,6 +34,9 @@ class Server
 			   Pistache::Http::ResponseWriter reponse);
 	int	getCarPart(const Pistache::Rest::Request &request,
 			   Pistache::Http::ResponseWriter reponse);
+	int	forgottenPassword(const Pistache::Rest::Request &request,
+			   Pistache::Http::ResponseWriter reponse);
+  
         void    setupRoutes();
         std::shared_ptr<Pistache::Http::Endpoint> httpEndpoint;
         Pistache::Rest::Router router;
