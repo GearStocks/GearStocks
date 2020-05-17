@@ -2,8 +2,8 @@
   "expo": {
     "name": "GearStocks",
     "slug": "application",
+    "sdkVersion": "36.0.0",
     "privacy": "public",
-    "sdkVersion": "33.0.0",
     "platforms": [
       "ios",
       "android",
@@ -26,7 +26,6 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.gearstocks.gearstocks"
-
     },
     "android": {
       "package": "com.gearstocks.gearstocks"
