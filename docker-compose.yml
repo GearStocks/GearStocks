@@ -105,8 +105,7 @@ services:
       - ./api_builder/build:/home/files/build
     stdin_open: false
     tty: false
-    #restart: "always"
-    restart: "no"
+    restart: "always"
     ports:
       - ${API_PORT}:${API_PORT}
     logging:
