@@ -95,7 +95,6 @@ stages:
               steps:
               - script: |
                   set -e
-                  newgrp docker
                   unzip -o $(Build.ArtifactStagingDirectory)/../drop/$(Build.BuildId).zip -d /home/GearStocks/
                   cd /home/GearStocks/
                   docker-compose restart mongo && docker-compose restart api front
