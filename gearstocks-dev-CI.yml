@@ -64,6 +64,7 @@ stages:
         displayName: Prepare Front for Archive
       - script: |
           set -e
+          mkdir -p drop/application
           echo Application KO
         displayName: Prepare Android App for Archive
       - script: echo Archive OK
