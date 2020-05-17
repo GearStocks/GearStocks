@@ -25,25 +25,33 @@ public:
 	BddManager();
 	~BddManager();
   size_t	userConnect(std::string username, std::string password, std::string token);	
-	size_t	userRegister(std::string username, std::string password, std::string mail);
+  size_t	userRegister(std::vector<std::string> documentContent);
 	size_t	updateNameUser(std::string mailUser, std::string oldName, std::string newName);
 	size_t	updatePseudoUser(std::string mailUser, std::string oldPseudo, std::string newPseudo);
 	size_t	updateMailUser(std::string oldMail, std::string newMail);
+	size_t	updateDateInBDD(std::string mailUser, std::string date);
+	size_t	updateTokenInBDD(std::string mailUser, std::string token);
 	size_t	updatePasswordUser(std::string mailUser, std::string oldPass, std::string newPass);
+	std::string	getTime();
+	void	disconnectUser(std::string mailUser, std::string token);
+	std::pair<size_t, std::string>	getInfoUser(std::string userToken, std::string userMail);
+	size_t		addCarPartInBDD(std::string name, std::string price, std::string photo);
+	std::pair<size_t, std::string>	getCarPart(std::string userToken, std::string partName);
+	std::string generateRandomString();
 private:
 	void	connect();
-	void	disconnect();
+	
 	void	addContentInBDD(auto collection, bsoncxx::builder::stream::document &doc);
 	void	printCollection(auto collection);
 	void	deleteContentInBDD(auto collection, std::string field, std::string value);
 	void	updateContentInBDD(auto collection, std::string field,
 				   std::string oldValue, std::string newValue);
 	std::string	checkIfExist(auto collection, std::string field, std::string value);
-	std::string	getTime();
 	std::string cryptPass(std::string nonHashPass);
 	mongocxx::instance _inst{};
-        mongocxx::client _conn{mongocxx::uri{"mongodb://mongo:27017"}};
-	mongocxx::collection _collection;
+	mongocxx::client _conn;
+	mongocxx::collection _userCollection;
+	mongocxx::collection _carPartCollection;
 };
 
 #endif

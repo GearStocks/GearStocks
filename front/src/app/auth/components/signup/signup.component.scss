@@ -13,6 +13,12 @@
         position: relative;
         overflow: hidden;
         flex: 1;
+
+      &__lottie {
+        width: 70%;
+        height: 100%;
+        margin: auto;
+      }
     }
 
     &__box2 {

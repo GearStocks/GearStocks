@@ -1,3 +1,10 @@
+/**
+ * @author Nicolas  BOULOGNE-CURRIEZ <nicolas.boulogne-curriez@epitech.eu>
+ * @file Description
+ * @desc Created on 2020-03-02 6:31:31 pm
+ * @copyright GearStocks
+ */
+
 import React from 'react';
 import { View, Alert } from 'react-native';
 import { Input, Button, Text } from 'react-native-elements';

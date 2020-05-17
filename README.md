@@ -88,7 +88,7 @@ docker-compose up front
 If you want to update the API, you'll need to execute this command:
 
 ```bash
-docker-compose stop api && docker-compose run api_builder && docker-compose up -d api
+docker-compose stop api && docker-compose up api_builder && docker-compose up -d api
 ```
 
 #### 6. Changing MongoDB's admin's password

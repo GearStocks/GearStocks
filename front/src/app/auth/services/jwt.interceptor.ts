@@ -8,8 +8,9 @@ import { Observable } from 'rxjs';
 /* Services */
 import { UserService } from './user.service';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class JwtInterceptor implements HttpInterceptor {
+
   constructor(private userService: UserService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
