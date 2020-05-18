@@ -117,8 +117,8 @@ services:
   ### build the mobile client
   app:
     build: './application'
-    #volumes:
-    #  - ./apk:/home/apk
+    volumes:
+      - ./apk:/home/apk
     stdin_open: false
     tty: false
     logging:

@@ -29,7 +29,7 @@ stages:
           sed -i 's/localhost/gearstocks.northeurope.cloudapp.azure.com/g' front/src/environments/environment.prod.ts
           sed -i 's/localhost/gearstocks.northeurope.cloudapp.azure.com/g' front/src/environments/environment.mock.ts
           sed -i 's/localhost/gearstocks.northeurope.cloudapp.azure.com/g' front/src/environments/environment.ts
-          docker-compose up front api_builder
+          docker-compose up front api_builder app
           echo Front and Back successfully build.
         displayName: 'Front and API Compilation Check'
       - script: |
@@ -47,10 +47,10 @@ stages:
         displayName: Prepare Database for Archive
       - script: |
           set -e
-          mkdir -p drop/api_builder/build
+          mkdir -p drop/api_builder/build drop/back
           cp -R api_builder/build/App drop/api_builder/build/
           cp -R api_builder/lib drop/api_builder/
-          cp -R back drop/
+          cp -R back/Dockerfile drop/back
           echo API OK
         displayName: Prepare API for Archive
       - script: |
@@ -62,8 +62,8 @@ stages:
         displayName: Prepare Front for Archive
       - script: |
           set -e
-          mkdir -p drop/application
-          echo Application KO
+          cp -R apk drop/
+          echo Application OK
         displayName: Prepare Android App for Archive
       - script: echo Archive OK
         displayName: Archive Files
