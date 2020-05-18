@@ -2,8 +2,7 @@ FROM node:latest
 
 COPY ./ /home/files
 
-RUN cd app &&\
- yarn install &&\
+RUN yarn install &&\
  npm install -g expo-cli &&\
  npm install -g turtle-cli &&\
  npm install -g http-server
