@@ -3,9 +3,8 @@ FROM node:latest
 COPY ./ /home/files
 
 RUN yarn install &&\
- npm install -g expo-cli &&\
- npm install -g turtle-cli &&\
- npm install -g http-server
+ npm install -g expo-cli --unsafe &&\
+ npm install -g turtle-cli --unsafe
 
 CMD cd turtle &&\
  openssl req -new -x509 -keyout server.pem -out server.pem -days 365 -nodes &&\
