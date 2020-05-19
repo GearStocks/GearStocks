@@ -64,6 +64,7 @@ services:
     build: ./front
     environment:
       - API_PORT=${API_PORT}
+      - API_ADDR=${API_ADDR}
     networks:
       - gearstocks
     volumes:
@@ -98,6 +99,7 @@ services:
       - ./database/secrets.env
     environment:
       - API_PORT=${API_PORT}
+      - API_ADDR=${API_ADDR}
     networks:
       - gearstocks
     volumes:
@@ -117,8 +119,13 @@ services:
   ### build the mobile client
   app:
     build: './application'
-    #volumes:
-    #  - ./apk:/home/apk
+    env_file:
+      - ./application/secrets.env
+    environment:
+      - API_PORT=${API_PORT}
+      - API_ADDR=${API_ADDR}
+    volumes:
+      - ./apk:/home/apk
     stdin_open: false
     tty: false
     logging:
