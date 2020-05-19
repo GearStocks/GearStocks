@@ -18,7 +18,7 @@ const axios = require('axios');
 export default class PostLogin extends React.Component {
 
   login = (JSONObj, navigate) => {
-    axios.post(routes.CONNECT, JSONObj, {
+    axios.post(routes.CONNECT(), JSONObj, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': 'application/json',
