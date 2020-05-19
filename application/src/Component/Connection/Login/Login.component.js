@@ -13,6 +13,7 @@ import { strings, errors } from '../../../../config/strings';
 import colors from '../../../../config/colors';
 import styles from './Login.component.style';
 import PostLogin from '../../../services/POST/PostLogin';
+import { MABITE } from '../../../../config/routes';
 
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
@@ -41,11 +42,12 @@ export default class Login extends React.Component {
 
     const JSONObj = JSON.stringify({
       mail: this.state.email,
-      password: this.state.password
+      password: this.state.password,
+      rememberMe: 0
     });
 
     // REMOVE BEFORE TO BUILD APK
-    navigate('AppMenu');
+    //navigate('AppMenu');
 
     if (`${email}` === '' && `${password}` === '') {
       this.setState({ errorEmail: errors.ERR_ADDRESS });
@@ -66,8 +68,10 @@ export default class Login extends React.Component {
     else {
       this.setState({ errorEmail: '' });
       this.setState({ errorPassword: '' });
-      new PostLogin().login(JSONObj, navigate);
+      //console.log("ROUTE" + MABITE);
     }
+    console.log("test");
+    new PostLogin().login(JSONObj, navigate);
   }
 
   render() {

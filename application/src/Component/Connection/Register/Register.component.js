@@ -65,7 +65,7 @@ export default class RegisterComponent extends React.Component {
     if (`${password}` != `${confirmPassword}`)
       this.setState({ errorPassword: errors.ERR_MATCH_PASSWORD });
     else
-      new PostRegister().register(JSONObj, navigate);
+    new PostRegister().register(JSONObj, navigate);
   }
 
   render() {

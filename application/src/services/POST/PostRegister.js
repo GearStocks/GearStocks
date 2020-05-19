@@ -24,6 +24,7 @@ export default class PostRegister extends React.Component {
     })
       .then((res) => {
         console.log('RESPONSE RECEIVED: ', res);
+        console.log(JSONObj);
         navigate('AppMenu');
       })
       .catch((err) => {

@@ -5,7 +5,7 @@
  * @copyright GearStocks
  */
 
-const localAddress = 'http://10.0.2.2:8000/';
+const localAddress = 'http://192.168.0.9:8000/';
 
 //const prodAddress = ;
 
