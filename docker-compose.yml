@@ -99,7 +99,6 @@ services:
       - ./database/secrets.env
     environment:
       - API_PORT=${API_PORT}
-      - API_ADDR=${API_ADDR}
     networks:
       - gearstocks
     volumes:
