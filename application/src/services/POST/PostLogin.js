@@ -18,9 +18,11 @@ const axios = require('axios');
 export default class PostLogin extends React.Component {
 
   login = (JSONObj, navigate) => {
-    axios.post(routes.CONNECT, JSONObj, {
+    axios.post(routes.CONNECT(), JSONObj, {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*'
       }
     })
       .then((res) => {
@@ -28,10 +30,7 @@ export default class PostLogin extends React.Component {
         navigate('AppMenu');
       })
       .catch((err) => {
-        //Alert.alert(err.name, err.message);
         console.log(err.name, err.message);
-        // DEBUG
-        //console.log('JSON => ', JSON.stringify(err));
       });
   }
 }

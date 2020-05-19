@@ -17,6 +17,7 @@
     "axios": "^0.19.1",
     "eslint-utils": "^1.4.1",
     "expo": "^36.0.0",
+    "expo-network": "~2.0.0",
     "handlebars": "^4.3.0",
     "prettier": "^1.18.2",
     "react": "16.9.0",

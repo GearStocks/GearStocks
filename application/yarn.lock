@@ -3328,6 +3328,11 @@ expo-location@~8.0.0:
   dependencies:
     invariant "^2.2.4"
 
+expo-network@~2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/expo-network/-/expo-network-2.0.0.tgz#4a6019f613bb3dcbe933973d0bd2fcd4cb07ef7d"
+  integrity sha512-LgWu0CqWzSRYbtIK9egHDGEHG07QaZ51LVMENmIuuZ5w7qJAdrM6MXdOB5nJcfjj1npXxX3TMlR6VoYkUWYU/Q==
+
 expo-permissions@~8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/expo-permissions/-/expo-permissions-8.0.0.tgz#5a45e8451dd7ff37c9e6ce5e2447818372547813"
