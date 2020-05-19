@@ -1,17 +1,24 @@
 /* Angular Modules */
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 /* RxJs Dependencies */
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 /* Models */
 import { AuthData } from '../models/auth-data.model';
 import { User } from '../models/user.model';
 
 import { environment } from '../../../environments/environment';
+
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type':  'application/json',
+    'Access-Control-Allow-Origin': '*',
+  })
+};
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -36,28 +43,30 @@ export class UserService {
       password: authData.password,
       rememberMe: authData.rememberMe
     };
-    return this.http.post<User>(this.loginUrl, body)
+    return this.http.post<User>(this.loginUrl, body, httpOptions)
       .pipe(map(user => {
-        // login successful if there's a jwt token in the response
-        if (authData.rememberMe) {
-          localStorage.setItem('currentUser', JSON.stringify(user));
-        } else {
-          sessionStorage.setItem('currentUser', JSON.stringify(user));
-        }
-        this.currentUserSubject.next(user);
-        return user;
-      }));
+          // login successful if there's a jwt token in the response
+          if (authData.rememberMe) {
+            localStorage.setItem('currentUser', JSON.stringify(user));
+          } else {
+            sessionStorage.setItem('currentUser', JSON.stringify(user));
+          }
+          this.currentUserSubject.next(user);
+          return user;
+        })
+      );
   }
 
   register(authData: AuthData) {
     const body = {
       firstName: authData.firstName,
       lastName: authData.lastName,
+      birthDay: authData.birthDay,
       username: authData.userName,
       mail: authData.email,
       password: authData.password
     };
-    return this.http.post<any>(this.registerUrl, body);
+    return this.http.post<any>(this.registerUrl, body, httpOptions);
   }
 
   logout(): void {
@@ -67,6 +76,7 @@ export class UserService {
   }
 
   resetPassword(email: string) {
-    return this.http.post<any>(this.resetPasswordUrl, { email });
+    return this.http.post<any>(this.resetPasswordUrl, { email: email }, httpOptions);
   }
+
 }

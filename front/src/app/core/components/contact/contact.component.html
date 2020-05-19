@@ -1,0 +1,111 @@
+<div class="contact">
+
+  <div class="contact__background-layer">
+
+    <div class="row">
+      <h4>Une question ? Un problème ?</h4>
+    </div>
+
+    <div class="row">
+      <h1>Nous sommes la pour vous répondre !</h1>
+    </div>
+
+    <div class="row input-container">
+
+      <form [formGroup]="contactForm">
+
+        <div *ngIf="value == 20" class="contact__slide1">
+
+          <label>
+            De quel genre de demande sagit-il ?
+          </label>
+
+          <span>
+          <div>
+            <h5 *ngIf="showError">Veuillez sélectionner une image</h5>
+            <ul [ngClass]="{'contact__slide1__ul-error': showError}">
+              <li *ngFor="let elem of options" (click)="activeItem(elem)" [ngClass]="{'sm-active': elem.active}">
+                <div class="contact__slide1__button" [ngClass]="{'active': elem.active}">
+                  <fa-icon [icon]="elem.icon"></fa-icon>
+                </div>
+                {{elem.name}}
+              </li>
+            </ul>
+          </div>
+        </span>
+
+        </div>
+
+        <div *ngIf="value == 60" class="contact__slide2">
+
+          <label>
+            Décrivez votre demande
+          </label>
+
+          <div class="contact__slide2__textarea">
+            <app-gearstocks-textarea
+              [group]="contactForm"
+              [name]="'content'"
+              [required]="true"
+              [validationError]="f.content.errors"
+              [validationErrorMessages]="errorMessages.content">
+            </app-gearstocks-textarea>
+          </div>
+
+        </div>
+
+        <div *ngIf="value == 100" class="contact__slide3">
+
+          <label>
+            Quel est votre Nom ?
+          </label>
+
+          <div class="contact__slide3__input">
+            <app-gearstocks-input
+              [group]="contactForm"
+              [name]="'name'"
+              [type]="'texte'"
+              [required]="true"
+              [validationError]="f.name.errors"
+              [validationErrorMessages]="errorMessages.name">
+            </app-gearstocks-input>
+          </div>
+
+          <label class="contact__slide3__label">
+            Quel est votre Email ?
+          </label>
+
+          <div class="contact__slide3__input">
+            <app-gearstocks-input
+              [group]="contactForm"
+              [name]="'email'"
+              [type]="'email'"
+              [required]="true"
+              [validationError]="f.email.errors"
+              [validationErrorMessages]="errorMessages.email">
+            </app-gearstocks-input>
+          </div>
+
+        </div>
+
+        <div class="col-xs-12 contact__col">
+          <div *ngIf="value < 100" class="contact__submit-btn" (click)="nextStep()">Continuer</div>
+          <div *ngIf="value == 100" class="contact__submit-btn" (click)="submit()">Envoyer</div>
+        </div>
+
+      </form>
+
+      <div *ngIf="value > 100" class="contact__success">
+        <h2>Merci! Notre équipe vous contactera sous peu.</h2>
+        <div class="contact__success__lottie">
+          <ng-lottie [options]="lottie"></ng-lottie>
+        </div>
+      </div>
+
+      <mat-progress-bar mode="determinate" [value]=value></mat-progress-bar>
+
+    </div>
+
+  </div>
+
+</div>

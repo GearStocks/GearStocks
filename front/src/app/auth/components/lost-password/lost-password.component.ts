@@ -17,7 +17,8 @@ import { ErrorMessages } from '../signup/signup-errors';
 @Component({
   selector: 'app-lost-password',
   templateUrl: './lost-password.component.html',
-  styleUrls: ['./lost-password.component.scss']
+  styleUrls: ['./lost-password.component.scss'],
+  providers: [LostPasswordFormService]
 })
 export class LostPasswordComponent implements OnInit {
   lostPasswordForm: FormGroup;
@@ -56,11 +57,11 @@ export class LostPasswordComponent implements OnInit {
       .pipe(first())
       .subscribe(
         () => {
-          // this.display = true; test pour montrer les modals
-          this.alertService.error('Email Invalide');
+          this.display = true;
         },
-        () => {
+        (err) => {
           this.loading = false;
+          this.alertService.error(err);
         });
   }
 }

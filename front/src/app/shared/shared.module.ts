@@ -19,9 +19,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 /* LottieAnimation */
-import { LottieAnimationViewModule } from 'ng-lottie';
+import { LottieModule } from 'ngx-lottie';
+import player from 'lottie-web';
 
 /* captcha */
 import { NgxCaptchaModule } from 'ngx-captcha';
@@ -30,9 +32,14 @@ import { NgxCaptchaModule } from 'ngx-captcha';
 import { GearstocksInputComponent } from './components/gearstocks-input/gearstocks-input.component';
 import { GearstocksSelectComponent } from './components/gearstocks-select/gearstocks-select.component';
 import { GearstocksAlertComponent } from './components/gearstocks-alert/gearstocks-alert.component';
+import { GearstocksTextareaComponent } from './components/gearstocks-textarea/gearstocks-textarea.component';
+
+export function playerFactory() {
+  return player;
+}
 
 @NgModule({
-  declarations: [GearstocksInputComponent, GearstocksSelectComponent, GearstocksAlertComponent],
+  declarations: [GearstocksInputComponent, GearstocksSelectComponent, GearstocksAlertComponent, GearstocksTextareaComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -53,7 +60,8 @@ import { GearstocksAlertComponent } from './components/gearstocks-alert/gearstoc
     MatTableModule,
     MatSelectModule,
     MatFormFieldModule,
-    LottieAnimationViewModule.forRoot(),
+    MatProgressBarModule,
+    LottieModule.forRoot({ player: playerFactory })
   ],
   exports: [
     CommonModule,
@@ -75,9 +83,12 @@ import { GearstocksAlertComponent } from './components/gearstocks-alert/gearstoc
     MatTableModule,
     MatSelectModule,
     MatFormFieldModule,
+    MatProgressBarModule,
+    LottieModule,
     GearstocksInputComponent,
     GearstocksSelectComponent,
-    GearstocksAlertComponent
+    GearstocksAlertComponent,
+    GearstocksTextareaComponent
   ]
 })
 export class SharedModule { }
