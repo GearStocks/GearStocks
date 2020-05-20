@@ -64,6 +64,7 @@ services:
     build: ./front
     environment:
       - API_PORT=${API_PORT}
+      - API_ADDR=${API_ADDR}
     networks:
       - gearstocks
     volumes:
@@ -117,6 +118,9 @@ services:
   ### build the mobile client
   app:
     build: './application'
+    environment:
+      - API_PORT=${API_PORT}
+      - API_ADDR=${API_ADDR}
     volumes:
       - ./apk:/home/apk
     stdin_open: false
