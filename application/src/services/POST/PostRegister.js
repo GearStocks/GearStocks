@@ -17,18 +17,19 @@ const axios = require('axios');
 export default class PostRegister extends React.Component {
 
   register = (JSONObj, navigate) => {
-    axios.post(routes.REGISTER(), JSONObj, {
+    axios.post(routes.REGISTER, JSONObj, {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*'
       }
     })
       .then((res) => {
         console.log('RESPONSE RECEIVED: ', res);
-        console.log(JSONObj);
         navigate('AppMenu');
       })
       .catch((err) => {
-        console.log("ici", err.message);
+        console.log(err.name, err.message);
       });
   }
 }
