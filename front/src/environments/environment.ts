@@ -1,3 +1,5 @@
+import * as process from 'process'
+
 export const environment = {
   production: false,
   loginUrl: 'http://' + process.env.API_ADDR  + ':' + process.env.API_PORT  + '/connect',
