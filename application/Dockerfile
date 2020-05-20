@@ -4,6 +4,8 @@ FROM node:latest
 
 COPY --from=java $JAVA_HOME $JAVA_HOME
 
+COPY ./ /home/files
+
 WORKDIR /home/files
 
 RUN npm install -g expo-cli --unsafe &&\
