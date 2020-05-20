@@ -7,11 +7,9 @@
 
 import * as Network from 'expo-network';
 
-const localAddress = 'http://192.168.0.27:8000/';
+var localAddress;
 
-//var localAddress;
-
-/*async function getAddress() {
+async function getAddress() {
   var address = process.env.API_ADDR
   var port = process.env.API_PORT
 
@@ -21,16 +19,16 @@ const localAddress = 'http://192.168.0.27:8000/';
     address = await Network.getIpAddressAsync()
   }
   localAddress = 'http://' + address + ':' + port + '/';
-};*/
+};
 
-//getAddress();
+getAddress();
 
 export const routes = {
-  CONNECT: localAddress + 'connect',
-  REGISTER: localAddress + 'register',
-  INFO_USER: localAddress + 'infoUser',
-  DISCONNECT: localAddress + 'disconnect',
-  ADD_CAR_PART: localAddress + 'addCarPart',
-  GET_CAR_PART: localAddress + 'getCarPart',
-  FORGOT_PASSWORD: localAddress + 'forgottenPassword'
+  CONNECT() {return localAddress + 'connect'},
+  REGISTER() {return localAddress + 'register'},
+  INFO_USER() {return localAddress + 'infoUser'},
+  DISCONNECT() {return localAddress + 'disconnect'},
+  ADD_CAR_PART() {return localAddress + 'addCarPart'},
+  GET_CAR_PART() {return localAddress + 'getCarPart'},
+  FORGOT_PASSWORD() {return localAddress + 'forgottenPassword'}
 };

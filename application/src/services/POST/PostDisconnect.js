@@ -8,7 +8,7 @@ const axios = require('axios');
 export default class Disconnect extends React.Component {
 
   disconnect = (mail) => {
-    axios.post(routes.DISCONNECT, mail, {
+    axios.post(routes.DISCONNECT(), mail, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': 'application/json',
