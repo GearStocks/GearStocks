@@ -19,4 +19,4 @@ CMD cd turtle &&\
  cd /home/files &&\
  expo export --public-url https://127.0.0.1/dist &&\
  turtle setup:android &&\
- turtle build:android -t apk -o /home/apk https://127.0.0.1/dist/android-index.json
+ turtle build:android -t apk -o /home/apk --public-url https://127.0.0.1/dist/android-index.json
