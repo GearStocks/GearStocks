@@ -52,7 +52,7 @@ services:
     volumes:
       - ./front/dist:/home/files
       - ./apache/certificates:/etc/letsencrypt
-      - ./apk:/home/files/apk:ro
+      - ./apk:/home/apk:ro
     logging:
       driver: "json-file"
       options:
@@ -64,6 +64,7 @@ services:
     build: ./front
     environment:
       - API_PORT=${API_PORT}
+      - API_ADDR=${API_ADDR}
     networks:
       - gearstocks
     volumes:
@@ -117,8 +118,11 @@ services:
   ### build the mobile client
   app:
     build: './application'
-    #volumes:
-    #  - ./apk:/home/apk
+    environment:
+      - API_PORT=${API_PORT}
+      - API_ADDR=${API_ADDR}
+    volumes:
+      - ./apk:/home/apk
     stdin_open: false
     tty: false
     logging:
