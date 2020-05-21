@@ -8,7 +8,7 @@ const axios = require('axios');
 export default class AddCarPart extends React.Component {
 
   addCarPart = (JSON) => {
-    axios.post(routes.ADD_CAR_PART(), JSON, {
+    axios.post(routes.ADD_CAR_PART, JSON, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': 'application/json',

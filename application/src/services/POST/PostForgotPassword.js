@@ -8,7 +8,7 @@ const axios = require('axios');
 export default class ForgotPassword extends React.Component {
 
   forgotPassword = (JSON, navigate) => {
-    axios.post(routes.ForgotPassword(), JSON, {
+    axios.post(routes.ForgotPassword, JSON, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': 'application/json',
