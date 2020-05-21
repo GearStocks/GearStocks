@@ -52,7 +52,7 @@ services:
     volumes:
       - ./front/dist:/home/files
       - ./apache/certificates:/etc/letsencrypt
-      - ./apk:/home/files/apk:ro
+      - ./apk:/home/apk:ro
     logging:
       driver: "json-file"
       options:
