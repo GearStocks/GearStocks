@@ -8,7 +8,7 @@ const axios = require('axios');
 export default class InfoUser extends React.Component {
 
   infoUser = (JSON, navigate) => {
-    axios.post(routes.INFO_USER(), JSON, {
+    axios.post(routes.INFO_USER, JSON, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': 'application/json',
