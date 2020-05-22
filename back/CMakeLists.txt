@@ -34,13 +34,15 @@ set(SRC
   src/Main.cpp
   src/BddManager.cpp
   src/Server.cpp
-  src/TokenManager.cpp)
+  src/TokenManager.cpp
+  src/Emailer.cpp)
 
 set(INC
   include/
   include/BddManager.hpp
   include/Server.hpp
-  include/TokenManager.hpp)
+  include/TokenManager.hpp
+  include/Emailer.hpp)
 
 #SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} $(pkg-config --cflags --libs libmongocxx) -Wl,-rpath,/usr/lib")
 
