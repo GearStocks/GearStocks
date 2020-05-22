@@ -49,10 +49,12 @@ services:
     ports:
       - 80:80
       - 443:443
+      - 9000:9000
     volumes:
       - ./front/dist:/home/files
       - ./apache/certificates:/etc/letsencrypt
       - ./apk:/home/apk:ro
+      - ./images:/home/images:ro
     logging:
       driver: "json-file"
       options:
@@ -104,6 +106,7 @@ services:
     volumes:
       - ./api_builder/lib:/usr/lib
       - ./api_builder/build:/home/files/build
+      - ./images:/home/images
     stdin_open: false
     tty: false
     restart: "always"
