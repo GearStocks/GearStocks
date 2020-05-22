@@ -32,10 +32,14 @@ private:
 		 Pistache::Http::ResponseWriter reponse);
   int	addCarPart(const Pistache::Rest::Request &request,
 		   Pistache::Http::ResponseWriter reponse);
-  int	getCarPart(const Pistache::Rest::Request &request,
+  int	getFullCarPart(const Pistache::Rest::Request &request,
 		   Pistache::Http::ResponseWriter reponse);
   int	forgottenPassword(const Pistache::Rest::Request &request,
 			  Pistache::Http::ResponseWriter reponse);
+  int	listParts(const Pistache::Rest::Request &request,
+			  Pistache::Http::ResponseWriter reponse);
+  void	mergeObjects(rapidjson::Value &dstObject, rapidjson::Value &srcObjects, rapidjson::Document::AllocatorType &allocator);
+  
   void	setupRoutes();
   
   std::shared_ptr<Pistache::Http::Endpoint>	httpEndpoint;

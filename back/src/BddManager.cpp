@@ -21,6 +21,10 @@
 #include "cryptopp/osrng.h"
 #include "cryptopp/hex.h"
 
+#include "rapidjson/document.h"
+#include "rapidjson/writer.h"
+#include "rapidjson/stringbuffer.h"
+
 BddManager::BddManager()
 {
   std::string dbUser = std::getenv("MONGO_INITDB_ROOT_USERNAME");
@@ -124,27 +128,112 @@ size_t  BddManager::updatePasswordUser(std::string mailUser, std::string oldPass
   updateContentInBDD(_userCollection, "password", mailUser, newPass); 
 }
 
-std::pair<size_t, std::string>	BddManager::getCarPart(std::string userToken, std::string partName)
+rapidjson::Document	BddManager::getFullCarPart(std::string userToken, std::string partName)
 {
-  std::string	valueInBDD;
-  
+  std::string	valueInBDD;  
   valueInBDD = checkIfExist(_userCollection, "token", userToken);
   if (valueInBDD.compare("") == 0) {
-    return (std::make_pair(1, "Invalid token"));
+    //return (std::make_pair(1, "Invalid token"));
   }
   valueInBDD = checkIfExist(_carPartCollection, "name", partName);
   if (valueInBDD.compare("") == 0) {
-    return (std::make_pair(1, "Invalid part name"));
+    //return (std::make_pair(1, "Invalid part name"));
   }
   bsoncxx::builder::stream::document document{};
   bsoncxx::stdx::optional<bsoncxx::document::value> maybe_result =
     _carPartCollection.find_one(document << "name" << partName
 				<< bsoncxx::builder::stream::finalize);
   if(maybe_result) {
-    std::string result;
-    return (std::make_pair(0, bsoncxx::to_json(*maybe_result)));
+    std::string name = bsoncxx::to_json(*maybe_result);
+    std::string	price = name;
+    std::string path = name;
+    std::string description = name;
+    rapidjson::Document document2;
+    document2.SetObject();
+    rapidjson::Document::AllocatorType& allocator = document2.GetAllocator();
+    rapidjson::StringBuffer strbuf;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
+    std::cout << name << std::endl;
+    name.erase(0, name.find("\"name\" :") + 10);
+    name.erase(name.find("\", \"price\" "));
+    price.erase(0, price.find("\"price\" :") + 11);
+    price.erase(price.find("\", \"photo\" "));
+    path.erase(0, path.find("\"photo\" :") + 11);
+    path.erase(path.find("\", \"descript"));
+    description.erase(0, description.find("\"description\" :") + 17);
+    description.erase(description.rfind("\" }"));
+    rapidjson::Value mdr(rapidjson::kArrayType);
+    rapidjson::Value test;
+    rapidjson::Value s;
+    s.SetObject();
+    test.SetString(name.c_str(), allocator);
+    s.AddMember("name", test, allocator);
+    test.SetString(price.c_str(), allocator);
+    s.AddMember("price", test, allocator);
+    test.SetString(path.c_str(), allocator);
+    s.AddMember("photo", test, allocator);
+    test.SetString(description.c_str(), allocator);
+    s.AddMember("description", test, allocator);
+    mdr.PushBack(s, allocator);
+    document2.AddMember("data", mdr, allocator);
+    return document2;
   }
-  return (std::make_pair(1, "Error encountered"));
+  //return (std::make_pair(1, "Error encountered"));
+}
+
+rapidjson::Document*	BddManager::getCarPart(std::string partName, std::string partNumber)
+{
+  std::string	valueInBDD;
+  
+  valueInBDD = checkIfExist(_carPartCollection, "name", partName);
+  if (valueInBDD.compare("") == 0) {
+    //return (std::make_pair(1, "Invalid part name"));
+  }
+  bsoncxx::builder::stream::document document{};
+  bsoncxx::stdx::optional<bsoncxx::document::value> maybe_result =
+    _carPartCollection.find_one(document << "name" << partName
+				<< bsoncxx::builder::stream::finalize);
+  if(maybe_result) {
+    std::string name = bsoncxx::to_json(*maybe_result);
+    std::string	price = name;
+    std::string path = name;
+    rapidjson::Document* document2 = new rapidjson::Document();
+    document2->SetObject();
+    rapidjson::Document::AllocatorType& allocator = document2->GetAllocator();
+    rapidjson::StringBuffer strbuf;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
+    name.erase(0, name.find("\"name\" :") + 10);
+    name.erase(name.find("\", \"price\" "));
+    price.erase(0, price.find("\"price\" :") + 11);
+    price.erase(price.find("\", \"photo\" "));
+    path.erase(0, path.find("\"photo\" :") + 11);
+    path.erase(path.find("\", \"descript"));
+    std::cout << "name:" << name << std::endl;
+    std::cout << "price:" << price << std::endl;
+    std::cout << "path:" << path << std::endl;
+    rapidjson::Value mdr(rapidjson::kArrayType);
+    rapidjson::Value test;
+    rapidjson::Value s;
+    // const char *ptdr = name.c_str();
+    s.SetObject();
+    test.SetString(name.c_str(), allocator);
+    s.AddMember("name", test, allocator);
+    test.SetString(price.c_str(), allocator);
+    s.AddMember("price", test, allocator);
+    test.SetString(path.c_str(), allocator);
+    s.AddMember("photo", test, allocator);
+    mdr.PushBack(s, allocator);
+    
+    
+    std::string jpp = "part";
+    std::string ptdr = jpp + partNumber;
+    rapidjson::Value  lolilol;
+    lolilol.SetString(ptdr.c_str(), allocator);
+    document2->AddMember(lolilol, mdr, allocator);
+    document2->Accept(writer);
+    return document2;
+  }
+      //return (std::make_pair(1, "Error encountered"));
 }
 
 size_t  BddManager::updateNameUser(std::string mailUser, std::string oldName, std::string newName)
@@ -244,12 +333,12 @@ std::pair<size_t, std::string> BddManager::getInfoUser(std::string userToken, st
   
 }
 
-size_t	BddManager::addCarPartInBDD(std::string name, std::string price, std::string photo)
+size_t	BddManager::addCarPartInBDD(std::string name, std::string price, std::string photo, std::string description)
 {
   bsoncxx::builder::stream::document document{};
   
   std::cout << "name:" << name << "|price:" << price << "|photo:" << photo << std::endl;
-  document << "name" << name << "price" << price << "photo" << photo;
+  document << "name" << name << "price" << price << "photo" << photo << "description" << description;
   addContentInBDD(_carPartCollection, document);
   std::cout << "A car part has been registered:" << name << std::endl;
   return 0;
@@ -427,4 +516,35 @@ std::string     BddManager::generateRandomString(size_t size)
   }
   std::cout << "Random String for password: " << random << std::endl;
   return random;
+}
+
+aho_corasick::trie	BddManager::generateTree()
+{
+  aho_corasick::trie	trie;
+  
+  auto cursor = _carPartCollection.find({});
+  for (auto&& doc : cursor) {
+    std::string name = bsoncxx::to_json(doc);
+    name.erase(0, name.find("\"name\" :") + 10);
+    name.erase(name.find("\", \"price\" "));
+    trie.insert(name.c_str());
+    //std::cout << name << std::endl;
+    //std::cout << bsoncxx::to_json(doc) << std::endl;
+  }
+  return trie;
+}
+
+std::vector<std::string>	BddManager::parseKeyWordInTree(aho_corasick::trie trie, std::string keyWord)
+{
+  std::vector<std::string>	parsingResult;
+  auto	result = trie.parse_text(keyWord.c_str());
+  auto mdr = result.begin();
+
+  while (mdr != result.end()) {
+    //std::cout << (*mdr).get_keyword() << " a la place " << (*mdr).get_index() << std::endl;
+    parsingResult.push_back((*mdr).get_keyword());
+    ++mdr;
+  }
+  
+  return parsingResult;
 }

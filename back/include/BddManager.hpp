@@ -9,6 +9,9 @@
 # define BDD_HPP_
 
 #include <string>
+#include <vector>
+#include <chrono>
+#include <ctime>
 
 #include <bsoncxx/builder/stream/document.hpp>
 #include <bsoncxx/json.hpp>
@@ -16,8 +19,11 @@
 #include <mongocxx/client.hpp>
 #include <mongocxx/instance.hpp>
 
-#include <chrono>
-#include <ctime>
+#include "../include/aho_corasick.hpp"
+
+#include "rapidjson/document.h"
+#include "rapidjson/writer.h"
+#include "rapidjson/stringbuffer.h"
 
 class BddManager
 {
@@ -35,10 +41,13 @@ public:
   size_t	resetPassword(std::string mailUser, std::string newPassword);
   std::string	getTime();
   void		disconnectUser(std::string mailUser, std::string token);
-  size_t	addCarPartInBDD(std::string name, std::string price, std::string photo);
+  size_t	addCarPartInBDD(std::string name, std::string price, std::string photo, std::string description);
   std::string	generateRandomString(size_t size);
+  aho_corasick::trie	generateTree();
+  std::vector<std::string>	parseKeyWordInTree(aho_corasick::trie trie, std::string keyWord);
   std::pair<size_t, std::string>	getInfoUser(std::string userToken, std::string userMail);
-  std::pair<size_t, std::string>	getCarPart(std::string userToken, std::string partName);
+  rapidjson::Document	getFullCarPart(std::string userToken, std::string partName);
+  rapidjson::Document*	getCarPart(std::string partName, std::string partNumber);
 private:
   void		connect();
   
