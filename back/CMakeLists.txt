@@ -42,7 +42,8 @@ set(INC
   include/BddManager.hpp
   include/Server.hpp
   include/TokenManager.hpp
-  include/Emailer.hpp)
+  include/Emailer.hpp
+  include/aho_corasick.hpp)
 
 #SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} $(pkg-config --cflags --libs libmongocxx) -Wl,-rpath,/usr/lib")
 
