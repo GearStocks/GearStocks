@@ -512,30 +512,27 @@ int Server::listParts(const Pistache::Rest::Request& request, Pistache::Http::Re
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
-  //std::cout << "lIST PART" << std::endl;
   document2.AddMember("Success", "list parts", allocator); 
   
   std::vector<std::string>	resultParsing;
   resultParsing = _manager->parseKeyWordInTree(_manager->generateTree(), document["keyWord"].GetString());
-  std::vector<std::string>::iterator it = resultParsing.begin();
-
-  rapidjson::Document* doc3;
-  while (it < resultParsing.end()) {
-    std::cout << "result parsing:" << (*it) << std::endl;
-    ++it;
+  if (resultParsing.empty()) {
+    std::cout << "Aucunes pièces ne correspondent" << std::endl;
+    document2.AddMember("Data", "Part not found", allocator); 
   }
-  doc3 = _manager->getCarPart("he", "1");
-  mergeObjects(document2, *doc3, allocator);
-  /*doc3 = _manager->getCarPart("she", "2");
-  mergeObjects(document2, *doc3, allocator);
-  doc3 = _manager->getCarPart("hers", "3");
-  mergeObjects(document2, *doc3, allocator);
-  doc3 = _manager->getCarPart("his", "4");
-  mergeObjects(document2, *doc3, allocator);*/
+  else {
+    std::vector<std::string>::iterator it = resultParsing.begin();
+    rapidjson::Document* doc3;
+    while (it < resultParsing.end()) {
+      std::cout << "result parsing:" << (*it) << std::endl;
+      doc3 = _manager->getCarPart(*it, "1");
+      mergeObjects(document2, *doc3, allocator);
+      ++it;
+    }
+  }
   
   document2.Accept(writer);
   response.send(Pistache::Http::Code::Ok, strbuf.GetString());
-  //response.send(Pistache::Http::Code::Ok, "merde");
   return 0;
 }
 
