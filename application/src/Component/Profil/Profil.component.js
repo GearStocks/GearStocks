@@ -7,16 +7,14 @@
 
 import React from 'react';
 import { View } from 'react-native';
-import { Text, Button, Icon } from 'react-native-elements';
+import { Text, Button, Icon, Input } from 'react-native-elements';
 
 import styles from './Profil.component.style';
 import { strings } from '../../../config/strings';
-import LoginComponent from '../Connection/Login/Login.component';
-
-import infoUser from '../../services/POST/PostInfoUser'
+import colors from '../../../config/colors';
 import { routes } from '../../../config/routes';
-const axios = require('axios');
 
+const axios = require('axios');
 
 export default class ProfilComponent extends React.Component {
   constructor(props) {
@@ -37,6 +35,7 @@ export default class ProfilComponent extends React.Component {
   }
 
   getInfoUser = function(token, email) {
+    console.log("ICI" + token, email)
     const JSONObj = JSON.stringify({
       userToken: token,
       mail: email
@@ -49,12 +48,12 @@ export default class ProfilComponent extends React.Component {
       }
     })
       .then((res) => {
-        console.log('RESPONSE RECEIVED: ', res.data);
-        this.setState({ email: res.data.email });
-        this.setState({ firstname: res.data.firstName });
-        this.setState({ lastname: res.data.lastName });
-        this.setState({ username: res.data.username });
-        this.setState({ password: res.data.password });
+        console.log('RESPONSE RECEIVED: ', res.data.Data);
+        this.setState({ email: res.data.Data.email });
+        this.setState({ firstname: res.data.Data.firstName });
+        this.setState({ lastname: res.data.Data.lastName });
+        this.setState({ username: res.data.Data.username });
+        this.setState({ password: res.data.Data.password });
       })
       .catch((err) => {
         console.log(err.name, err.message);
@@ -62,6 +61,7 @@ export default class ProfilComponent extends React.Component {
   }
 
   disconnect = function(email, navigation) {
+    console.log(email);
     const JSONObj = JSON.stringify({
       mail: email
     });
@@ -74,7 +74,7 @@ export default class ProfilComponent extends React.Component {
     })
     .then((res) => {
       console.log('RESPONSE RECEIVED: ', res.data);
-      this.props.navigation.replace('LoginComponent')
+      navigation.replace('LoginComponent')
     })
     .catch((err) => {
       console.log(err.name, err.message);
@@ -94,12 +94,12 @@ export default class ProfilComponent extends React.Component {
       }
     })
       .then((res) => {
-        console.log('RESPONSE RECEIVED: ', res.data);
-        this.setState({ email: res.data.email });
-        this.setState({ firstname: res.data.firstName });
-        this.setState({ lastname: res.data.lastName });
-        this.setState({ username: res.data.username });
-        this.setState({ password: res.data.password });
+        console.log('RESPONSE RECEIVED: ', res.Data.email);
+        this.setState({ email: res.data.Data.email });
+        this.setState({ firstname: res.data.Data.firstName });
+        this.setState({ lastname: res.data.Data.lastName });
+        this.setState({ username: res.data.Data.username });
+        this.setState({ password: res.data.Data.password });
       })
       .catch((err) => {
         console.log(err.name, err.message);
@@ -107,7 +107,7 @@ export default class ProfilComponent extends React.Component {
   }
 
   componentDidMount() {
-    this.getInfoUser(this.props.screenProps.token, this.props.screenProps.email);
+    this.getInfoUser(this.props.screenProps.token.Token, this.props.screenProps.email);
   }
 
   render() {

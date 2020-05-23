@@ -5,25 +5,12 @@
  * @copyright GearStocks
  */
 
-import * as Network from 'expo-network';
+import {address} from './address';
 
-const localAddress = 'http://192.168.0.11:8000/';
+//Change address in address.js !
 
-//var localAddress;
-
-/*async function getAddress() {
-  var address = process.env.API_ADDR
-  var port = process.env.API_PORT
-
-  if (port == undefined)
-    port = 8000
-  if (address == undefined || address == "localhost" || address == "127.0.0.1") {
-    address = await Network.getIpAddressAsync()
-  }
-  localAddress = 'http://' + address + ':' + port + '/';
-};*/
-
-//getAddress();
+var port = 8000;
+var localAddress = 'http://' + address + ':' + port + '/';
 
 export const routes = {
   CONNECT: localAddress + 'connect',
