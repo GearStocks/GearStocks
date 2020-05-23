@@ -75,9 +75,8 @@ export class SigninComponent implements OnInit {
           this.dialogRef.close();
           this.router.navigate(['/']);
         },
-        (err) => {
+        () => {
           this.loading = false;
-          this.alertService.error(err);
         });
   }
 

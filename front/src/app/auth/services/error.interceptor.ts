@@ -21,18 +21,11 @@ export class ErrorInterceptor implements HttpInterceptor {
       .pipe(
         retry(1),
         catchError((error: HttpErrorResponse) => {
-          console.log(error);
           let errorMessage = '';
-          if (error.error instanceof ErrorEvent) {
-            // client-side error
-            errorMessage = `Error: ${error.error.message}`;
-          } else {
-            // server-side error
-            errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
-          }
+          errorMessage = `Error: ${error.error.Error}`;
           this.alertService.error(errorMessage);
           return throwError(errorMessage);
         })
-      )
+      );
   }
 }
