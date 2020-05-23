@@ -5,22 +5,25 @@ import { routes } from '../../../config/routes';
 
 const axios = require('axios');
 
-export default class InfoUser extends React.Component {
 
-  infoUser = (JSON, navigate) => {
-    axios.post(routes.INFO_USER, JSON, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
+infoUser = (token, email) => {
+  console.log(token, email);
+  const JSONObj = JSON.stringify({
+    userToken: token,
+    mail: email
+  });
+  axios.post(routes.INFO_USER, JSONObj, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json',
+      'Access-Control-Allow-Origin': '*'
+    }
+  })
+    .then((res) => {
+      console.log('RESPONSE RECEIVED: ', res);
+      return (res);
     })
-      .then((res) => {
-        console.log('RESPONSE RECEIVED: ', res);
-        navigate('AppMenu');
-      })
-      .catch((err) => {
-        console.log(err.name, err.message);
-      });
-  }
+    .catch((err) => {
+      console.log(err.name, err.message);
+    });
 }
