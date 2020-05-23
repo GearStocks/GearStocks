@@ -15,8 +15,10 @@ import SearchComponent from '../Search/Search.component';
 
 export default class AppMenu extends React.Component {
   render() {    
+    console.log(this.props.navigation.state.params)
     if (this.props.navigation.state.params.token)
-      return ( <AppContainer screenProps={this.props.navigation.state.params.token} />);
+      return ( <AppContainer screenProps={{token: this.props.navigation.state.params.token,
+        email: this.props.navigation.state.params.email}} />);
     else
       console.log("No token");
   }

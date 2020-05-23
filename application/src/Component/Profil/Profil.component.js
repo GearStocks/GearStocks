@@ -13,6 +13,11 @@ import styles from './Profil.component.style';
 import { strings } from '../../../config/strings';
 import LoginComponent from '../Connection/Login/Login.component';
 
+import infoUser from '../../services/POST/PostInfoUser'
+import { routes } from '../../../config/routes';
+const axios = require('axios');
+
+
 export default class ProfilComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -31,6 +36,34 @@ export default class ProfilComponent extends React.Component {
     };
   }
 
+  test = function(token, email) {
+    const JSONObj = JSON.stringify({
+      userToken: token,
+      mail: email
+    });
+    axios.post(routes.INFO_USER, JSONObj, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      }
+    })
+      .then((res) => {
+        console.log('RESPONSE RECEIVED: ', res.data);
+        this.setState({ email: res.data.email });
+        this.setState({ firstname: res.data.firstName });
+        this.setState({ lastname: res.data.lastName });
+        this.setState({ username: res.data.username });
+      })
+      .catch((err) => {
+        console.log(err.name, err.message);
+      });
+  }
+
+  componentDidMount() {
+    this.test(this.props.screenProps.token, this.props.screenProps.email);
+  }
+
   handleClick = () => {
     <LoginComponent />;
   }
@@ -38,11 +71,12 @@ export default class ProfilComponent extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text h4>Welcome username</Text>
+        <Text h4>Welcome {this.state.username}</Text>
+        <Text h4>Email : {this.state.email}</Text>
+        <Text h4>Username : {this.state.username}</Text>
+        <Text h4>Firstname : {this.state.firstname}</Text>
+        <Text h4>Lastname : {this.state.lastname}</Text>
         <Text h5>
-          Your mail is : email@email.com
-          Your firstname is : firstname 
-          Your lastname is : lastname
         </Text>
         <Button title={strings.DISCONNECT} buttonStyle={styles.button} type="outline" onPress={() => this.handleClick()} />
       </View>
