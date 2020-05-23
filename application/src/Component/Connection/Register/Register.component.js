@@ -47,7 +47,8 @@ export default class RegisterComponent extends React.Component {
       password: this.state.password,
       username: this.state.username,
       firstName: this.state.firstname,
-      lastName: this.state.lastname
+      lastName: this.state.lastname,
+      birthDay: "03/01/0001"
     });
 
     if (`${username}` === '')
@@ -65,7 +66,7 @@ export default class RegisterComponent extends React.Component {
     if (`${password}` != `${confirmPassword}`)
       this.setState({ errorPassword: errors.ERR_MATCH_PASSWORD });
     else
-      new PostRegister().register(JSONObj, navigate);
+    new PostRegister().register(JSONObj, navigate);
   }
 
   render() {

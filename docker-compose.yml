@@ -49,10 +49,12 @@ services:
     ports:
       - 80:80
       - 443:443
+      - 9000:9000
     volumes:
       - ./front/dist:/home/files
       - ./apache/certificates:/etc/letsencrypt
-      - ./apk:/home/files/apk:ro
+      - ./apk:/home/apk:ro
+      - ./images:/home/images:ro
     logging:
       driver: "json-file"
       options:
@@ -104,6 +106,7 @@ services:
     volumes:
       - ./api_builder/lib:/usr/lib
       - ./api_builder/build:/home/files/build
+      - ./images:/home/images
     stdin_open: false
     tty: false
     restart: "always"
@@ -118,11 +121,6 @@ services:
   ### build the mobile client
   app:
     build: './application'
-    env_file:
-      - ./application/secrets.env
-    environment:
-      - API_PORT=${API_PORT}
-      - API_ADDR=${API_ADDR}
     volumes:
       - ./apk:/home/apk
     stdin_open: false

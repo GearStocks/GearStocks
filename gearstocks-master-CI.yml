@@ -26,7 +26,9 @@ stages:
           set -e
           echo MONGO_INITDB_ROOT_USERNAME=mongoadmin\nMONGO_INITDB_ROOT_PASSWORD=mongoadmin > database/secrets.env
           docker pull gearstocks/api_builder:latest
-          sed -i 's/localhost/gearstock-dev.northeurope.cloudapp.azure.com/g' .env
+          echo "API_ADDR=gearstocks.northeurope.cloudapp.azure.com" > .env
+          echo "API_PORT=8000" >> .env
+          echo "export const address = 'gearstocks.northeurope.cloudapp.azure.com';" > application/config/address.js
           docker-compose up front api_builder app
           echo Front, Back and App successfully build.
         displayName: 'Front, API and App Compilation Check'
@@ -93,6 +95,7 @@ stages:
                   set -e
                   unzip -o $(Build.ArtifactStagingDirectory)/../drop/$(Build.BuildId).zip -d /home/GearStocks/
                   cd /home/GearStocks/
+                  mkdir -p images
                   docker-compose stop || true
                   docker-compose rm --force || true
                   docker-compose up -d --build mongo api apache

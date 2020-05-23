@@ -8,7 +8,7 @@ class TokenManager
 public:
 	TokenManager();
 	~TokenManager();
-	std::string generateToken(void);
+	std::string	generateToken(void);
 private:
 };
 
