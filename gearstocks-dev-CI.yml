@@ -34,6 +34,9 @@ stages:
           echo "API_ADDR=gearstock-dev.northeurope.cloudapp.azure.com" > .env
           echo "API_PORT=8000" >> .env
           echo "export const address = 'gearstock-dev.northeurope.cloudapp.azure.com';" > application/config/address.js
+          sed -i 's/localhost/gearstock-dev.northeurope.cloudapp.azure.com/g' front/src/environments/environment.prod.ts
+          sed -i 's/localhost/gearstock-dev.northeurope.cloudapp.azure.com/g' front/src/environments/environment.mock.ts
+          sed -i 's/localhost/gearstock-dev.northeurope.cloudapp.azure.com/g' front/src/environments/environment.ts
           docker-compose up front api_builder app
           echo Front, Back and App successfully build.
         displayName: 'Front, API and App Compilation Check'
@@ -100,6 +103,7 @@ stages:
                   set -e
                   unzip -o $(Build.ArtifactStagingDirectory)/../drop/$(Build.BuildId).zip -d /home/GearStocks/
                   cd /home/GearStocks/
+                  mkdir -p images
                   docker-compose stop || true
                   docker-compose rm --force || true
                   docker-compose up -d --build mongo api apache

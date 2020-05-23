@@ -1,6 +1,12 @@
 FROM gearstocks/api_builder:latest
 
-RUN ldconfig -v
+RUN apt-get remove curl -y
+
+RUN apt-get install libcurl4-openssl-dev -y
+
+RUN apt-get install cmake -y
+
+RUN apt-get install ca-certificates
 
 CMD cd /home/files && mkdir -p build && cd build && cmake .. && make &&\
   mkdir -p /home/lib/ && mkdir -p /home/lib/x86_64-linux-gnu/ &&\
@@ -8,12 +14,12 @@ CMD cd /home/files && mkdir -p build && cd build && cmake .. && make &&\
   cp --remove-destination /usr/lib/x86_64-linux-gnu/libssl* /home/lib/x86_64-linux-gnu/ &&\
   cp --remove-destination /usr/lib/x86_64-linux-gnu/libsasl* /home/lib/x86_64-linux-gnu/ &&\
   cp --remove-destination /usr/lib/x86_64-linux-gnu/libstdc++* /home/lib/x86_64-linux-gnu/ &&\
-  cp --remove-destination /usr/lib/x86_64-linux-gnu/libcurl* /home/lib/x86_64-linux-gnu/ &&\
   cp --remove-destination /usr/lib/x86_64-linux-gnu/libnghttp2* /home/lib/x86_64-linux-gnu/ &&\
   cp --remove-destination /usr/lib/x86_64-linux-gnu/libidn2* /home/lib/x86_64-linux-gnu/ &&\
   cp --remove-destination /usr/lib/x86_64-linux-gnu/librtmp* /home/lib/x86_64-linux-gnu/ &&\
   cp --remove-destination /usr/lib/x86_64-linux-gnu/libssh* /home/lib/x86_64-linux-gnu/ &&\
   cp --remove-destination /usr/lib/x86_64-linux-gnu/libpsl* /home/lib/x86_64-linux-gnu/ &&\
+  cp --remove-destination /usr/lib/x86_64-linux-gnu/libcurl* /home/lib/x86_64-linux-gnu/ &&\
   cp --remove-destination /usr/lib/x86_64-linux-gnu/libgssapi_krb5* /home/lib/x86_64-linux-gnu/ &&\
   cp --remove-destination /usr/lib/x86_64-linux-gnu/libkrb5.so.3 /home/lib/x86_64-linux-gnu/ &&\
   cp --remove-destination /usr/lib/x86_64-linux-gnu/libk5crypto* /home/lib/x86_64-linux-gnu/ &&\

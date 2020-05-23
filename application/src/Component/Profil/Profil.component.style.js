@@ -16,10 +16,9 @@ export default StyleSheet.create({
   },
   button: {
     height: 50,
-    width: 200,
-    borderRadius: 20,
-    backgroundColor: '#050175',
-    elevation: 10,
-    top: 50
-  }
+    width: 350,
+    borderRadius: 5,
+    top: 130,
+    marginBottom: 20
+},
 });
