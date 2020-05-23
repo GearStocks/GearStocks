@@ -5,11 +5,19 @@
  * @copyright GearStocks
  */
 
-const localAddress = 'http://10.0.2.2:8000/';
+import {address} from './address';
 
-//const prodAddress = ;
+//Change address in address.js !
+
+var port = 8000;
+var localAddress = 'http://' + address + ':' + port + '/';
 
 export const routes = {
   CONNECT: localAddress + 'connect',
-  REGISTER: localAddress + 'register'
+  REGISTER: localAddress + 'register',
+  INFO_USER: localAddress + 'infoUser',
+  DISCONNECT: localAddress + 'disconnect',
+  ADD_CAR_PART: localAddress + 'addCarPart',
+  GET_CAR_PART: localAddress + 'getCarPart',
+  FORGOT_PASSWORD: localAddress + 'forgottenPassword'
 };

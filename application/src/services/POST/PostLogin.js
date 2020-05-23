@@ -20,18 +20,18 @@ export default class PostLogin extends React.Component {
   login = (JSONObj, navigate) => {
     axios.post(routes.CONNECT, JSONObj, {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*'
       }
     })
       .then((res) => {
-        console.log('RESPONSE RECEIVED: ', res);
-        navigate('AppMenu');
+        const json = JSON.parse(JSONObj);
+        console.log('RESPONSE RECEIVED: ', res.data);
+        navigate('AppMenu', { token: res.data, email: json['mail'] });
       })
       .catch((err) => {
-        //Alert.alert(err.name, err.message);
         console.log(err.name, err.message);
-        // DEBUG
-        //console.log('JSON => ', JSON.stringify(err));
       });
   }
 }

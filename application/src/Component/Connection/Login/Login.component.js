@@ -41,11 +41,9 @@ export default class Login extends React.Component {
 
     const JSONObj = JSON.stringify({
       mail: this.state.email,
-      password: this.state.password
+      password: this.state.password,
+      rememberMe: 0
     });
-
-    // REMOVE BEFORE TO BUILD APK
-    navigate('AppMenu');
 
     if (`${email}` === '' && `${password}` === '') {
       this.setState({ errorEmail: errors.ERR_ADDRESS });
@@ -66,8 +64,8 @@ export default class Login extends React.Component {
     else {
       this.setState({ errorEmail: '' });
       this.setState({ errorPassword: '' });
-      new PostLogin().login(JSONObj, navigate);
     }
+    new PostLogin().login(JSONObj, navigate);
   }
 
   render() {
