@@ -11,6 +11,7 @@ import { SearchBar, Icon } from 'react-native-elements';
 import FlatGrid from 'react-native-super-grid';
 
 import { styles } from './Home.component.style';
+import { test } from '../../services/POST/PostLogin';
 
 export default class HomeComponent extends React.Component {
 
@@ -28,6 +29,7 @@ export default class HomeComponent extends React.Component {
 
   render() {
     const { search } = this.state;
+    console.log(this.props.screenProps);
     const items = [
       { name: 'TURQUOISE', code: '#1abc9c', brand: 'Porsche' }, { name: 'EMERALD', code: '#2ecc71', brand: 'Porsche' },
       { name: 'PETER RIVER', code: '#3498db', brand: 'Porsche' }, { name: 'AMETHYST', code: '#9b59b6', brand: 'Porsche' },

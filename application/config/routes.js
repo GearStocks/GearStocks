@@ -7,7 +7,7 @@
 
 import * as Network from 'expo-network';
 
-const localAddress = 'http://192.168.0.27:8000/';
+const localAddress = 'http://192.168.0.11:8000/';
 
 //var localAddress;
 

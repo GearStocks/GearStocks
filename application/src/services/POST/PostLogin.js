@@ -26,11 +26,13 @@ export default class PostLogin extends React.Component {
       }
     })
       .then((res) => {
-        console.log('RESPONSE RECEIVED: ', res);
-        navigate('AppMenu');
+        console.log(JSONObj),
+        console.log('RESPONSE RECEIVED: ', res.data);
+        navigate('AppMenu', { token: res.data });
       })
       .catch((err) => {
         console.log(err.name, err.message);
       });
   }
+
 }

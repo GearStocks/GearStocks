@@ -14,10 +14,11 @@ import ProfilComponent from '../Profil/Profil.component';
 import SearchComponent from '../Search/Search.component';
 
 export default class AppMenu extends React.Component {
-  render() {
-    return (
-      <AppContainer />
-    );
+  render() {    
+    if (this.props.navigation.state.params.token)
+      return ( <AppContainer screenProps={this.props.navigation.state.params.token} />);
+    else
+      console.log("No token");
   }
 }
 
