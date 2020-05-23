@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/bin/node /usr/share/yarn/bin/yarn.js upgrade minimist
+  /usr/bin/node /usr/share/yarn/bin/yarn.js add @react-native-community/datetimepicker@2.1.0
 
 PATH: 
   /home/ixtazia/bin:/usr/local/bin:/home/ixtazia/bin/:/home/ixtazia/bin:/usr/local/bin:/home/ixtazia/bin/:/home/ixtazia/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
@@ -8,7 +8,7 @@ Yarn version:
   1.22.4
 
 Node version: 
-  10.20.1
+  12.16.3
 
 Platform: 
   linux x64
@@ -30,17 +30,20 @@ npm manifest:
       "test": "jest"
     },
     "dependencies": {
+      "@react-native-community/datetimepicker": "^2.4.0",
       "appcenter": "2.1.0",
       "appcenter-analytics": "2.1.0",
       "appcenter-crashes": "2.1.0",
       "axios": "^0.19.1",
       "eslint-utils": "^1.4.1",
       "expo": "^36.0.0",
+      "expo-network": "~2.0.0",
       "handlebars": "^4.3.0",
       "prettier": "^1.18.2",
       "react": "16.9.0",
       "react-dom": "16.9.0",
       "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.1.tar.gz",
+      "react-native-datepicker": "^1.7.2",
       "react-native-elements": "^1.1.0",
       "react-native-gesture-handler": "~1.5.0",
       "react-native-super-grid": "^3.1.1",
@@ -1452,6 +1455,13 @@ Lockfile:
       wcwidth "^1.0.1"
       ws "^1.1.0"
   
+  "@react-native-community/datetimepicker@^2.4.0":
+    version "2.4.0"
+    resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-2.4.0.tgz#6b3cf050f507f9b70d31d5a572e1153bb5bd50c9"
+    integrity sha512-ZXPwNAQt4T66PTL20l2nSEbtsn6vtsvFqdYWBfx8aaNKBoCPDygR6SsYzWcIoexKH5wmX0zctSzIsryl+Gtngg==
+    dependencies:
+      invariant "^2.2.4"
+  
   "@react-navigation/core@~3.4.1":
     version "3.4.2"
     resolved "https://registry.yarnpkg.com/@react-navigation/core/-/core-3.4.2.tgz#bec563e94fde40fbab3730cdc97f22afbb2a1498"
@@ -1660,9 +1670,9 @@ Lockfile:
     integrity sha512-7evsyfH1cLOCdAzZAd43Cic04yKydNx0cF+7tiA19p1XnLLPU4dpCQOqpjqwokFe//vS0QqfqqjCS2JkiIs0cA==
   
   acorn@^5.5.3:
-    version "5.7.3"
-    resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.7.3.tgz#67aa231bf8812974b85235a96771eb6bd07ea279"
-    integrity sha512-T/zvzYRfbVojPWahDsE5evJdHb3oJoQfFbsrKM7w5Zcs++Tr257tia3BmMP8XYVjp1S9RZXQMh7gao96BlqZOw==
+    version "5.7.4"
+    resolved "https://registry.yarnpkg.com/acorn/-/acorn-5.7.4.tgz#3e8d8a9947d0599a1796d10225d7432f4a4acf5e"
+    integrity sha512-1D++VG7BhrtvQpNbBzovKNc1FLGGEE/oGe7b9xJm/RFHMBeUaUGpluV9RLjZa47YFdPcDAenEYuq9pQPcMdLJg==
   
   acorn@^6.0.1:
     version "6.2.1"
@@ -3396,6 +3406,11 @@ Lockfile:
     dependencies:
       invariant "^2.2.4"
   
+  expo-network@~2.0.0:
+    version "2.0.0"
+    resolved "https://registry.yarnpkg.com/expo-network/-/expo-network-2.0.0.tgz#4a6019f613bb3dcbe933973d0bd2fcd4cb07ef7d"
+    integrity sha512-LgWu0CqWzSRYbtIK9egHDGEHG07QaZ51LVMENmIuuZ5w7qJAdrM6MXdOB5nJcfjj1npXxX3TMlR6VoYkUWYU/Q==
+  
   expo-permissions@~8.0.0:
     version "8.0.0"
     resolved "https://registry.yarnpkg.com/expo-permissions/-/expo-permissions-8.0.0.tgz#5a45e8451dd7ff37c9e6ce5e2447818372547813"
@@ -3910,9 +3925,9 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/growly/-/growly-1.3.0.tgz#f10748cbe76af964b7c96c93c6bcc28af120c081"
     integrity sha1-8QdIy+dq+WS3yWyTxrzCivEgwIE=
   
-  "hammerjs@git+https://github.com/naver/hammer.js.git":
+  "hammerjs@https://github.com/naver/hammer.js.git":
     version "2.0.17-snapshot"
-    resolved "git+https://github.com/naver/hammer.js.git#54bc698b25edd6e1b76ca975ebaced5ce0467d51"
+    resolved "https://github.com/naver/hammer.js.git#54bc698b25edd6e1b76ca975ebaced5ce0467d51"
     dependencies:
       "@types/hammerjs" "^2.0.36"
   
@@ -5551,6 +5566,11 @@ Lockfile:
     dependencies:
       minimist "0.0.8"
   
+  moment@^2.22.0:
+    version "2.26.0"
+    resolved "https://registry.yarnpkg.com/moment/-/moment-2.26.0.tgz#5e1f82c6bafca6e83e808b30c8705eed0dcbd39a"
+    integrity sha512-oIixUO+OamkUkwjhAVE18rAMfRJNsNe/Stid/gwHSOfHrOtw9EhAY2AHvdKZ/k/MggcYELFCJz/Sn2pL8b8JMw==
+  
   morgan@^1.9.0:
     version "1.9.1"
     resolved "https://registry.yarnpkg.com/morgan/-/morgan-1.9.1.tgz#0a8d16734a1d9afbc824b99df87e738e58e2da59"
@@ -6429,6 +6449,13 @@ Lockfile:
     version "3.0.4"
     resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
     integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
+  
+  react-native-datepicker@^1.7.2:
+    version "1.7.2"
+    resolved "https://registry.yarnpkg.com/react-native-datepicker/-/react-native-datepicker-1.7.2.tgz#58d0822591a0ac9b32aba082650222a0ee29669d"
+    integrity sha1-WNCCJZGgrJsyq6CCZQIioO4pZp0=
+    dependencies:
+      moment "^2.22.0"
   
   react-native-elements@^1.1.0:
     version "1.1.0"
