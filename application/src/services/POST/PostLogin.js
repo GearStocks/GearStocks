@@ -26,8 +26,9 @@ export default class PostLogin extends React.Component {
       }
     })
       .then((res) => {
-        console.log('RESPONSE RECEIVED: ', res);
-        navigate('AppMenu');
+        const json = JSON.parse(JSONObj);
+        console.log('RESPONSE RECEIVED: ', res.data);
+        navigate('AppMenu', { token: res.data, email: json['mail'] });
       })
       .catch((err) => {
         console.log(err.name, err.message);
