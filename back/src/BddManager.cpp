@@ -125,13 +125,14 @@ size_t  BddManager::updatePasswordUser(std::string mailUser, std::string oldPass
   updateContentInBDD(_userCollection, "password", mailUser, newPass); 
 }
 
-rapidjson::Document*	BddManager::getFullCarPart(std::string userToken, std::string partName)
+rapidjson::Document*	BddManager::getFullCarPart(std::string partName)
 {
   std::string	valueInBDD;  
-  valueInBDD = checkIfExist(_userCollection, "token", userToken);
+  /*valueInBDD = checkIfExist(_userCollection, "token", userToken);
   if (valueInBDD.compare("") == 0) {
     //return (std::make_pair(1, "Invalid token"));
-  }
+    }*/
+  
   valueInBDD = checkIfExist(_carPartCollection, "name", partName);
   if (valueInBDD.compare("") == 0) {
     //return (std::make_pair(1, "Invalid part name"));
@@ -142,9 +143,9 @@ rapidjson::Document*	BddManager::getFullCarPart(std::string userToken, std::stri
 				<< bsoncxx::builder::stream::finalize);
   if(maybe_result) {
     std::string name = bsoncxx::to_json(*maybe_result);
-    std::string	price = name;
     std::string path = name;
     std::string description = name;
+    std::string price = name;
     rapidjson::Document* document2 = new rapidjson::Document();
     document2->SetObject();
     rapidjson::Document::AllocatorType& allocator = document2->GetAllocator();
@@ -152,30 +153,62 @@ rapidjson::Document*	BddManager::getFullCarPart(std::string userToken, std::stri
     rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
     std::cout << name << std::endl;
     name.erase(0, name.find("\"name\" :") + 10);
-    name.erase(name.find("\", \"price\" "));
-    price.erase(0, price.find("\"price\" :") + 11);
-    price.erase(price.find("\", \"photo\" "));
+    name.erase(name.find("\", \"photo\" "));
+    //price.erase(0, price.find("\"price\" :") + 11);
+    //price.erase(price.find("\", \"photo\" "));
     path.erase(0, path.find("\"photo\" :") + 11);
     path.erase(path.find("\", \"descript"));
     description.erase(0, description.find("\"description\" :") + 17);
-    description.erase(description.rfind("\" }"));
+    description.erase(description.find("\", \"parts\""));
+    //description.erase(description.rfind("\" }"));
     rapidjson::Value mdr(rapidjson::kArrayType);
+
+    
+    rapidjson::Value mdr2(rapidjson::kArrayType);
+    while (price.find("month") != std::string::npos) {
+      getAllPrices(&mdr2, &price, allocator);
+    }
+    
     rapidjson::Value test;
     rapidjson::Value s;
     s.SetObject();
     test.SetString(name.c_str(), allocator);
     s.AddMember("name", test, allocator);
-    test.SetString(price.c_str(), allocator);
-    s.AddMember("price", test, allocator);
+    //test.SetString(price.c_str(), allocator);
+    //s.AddMember("price", test, allocator);
     test.SetString(path.c_str(), allocator);
     s.AddMember("photo", test, allocator);
     test.SetString(description.c_str(), allocator);
     s.AddMember("description", test, allocator);
+    s.AddMember("prices", mdr2, allocator);
+
+    
     mdr.PushBack(s, allocator);
     document2->AddMember("data", mdr, allocator);
     return document2;
   }
   //return (std::make_pair(1, "Error encountered"));
+}
+
+void	BddManager::getAllPrices(rapidjson::Value *price, std::string *priceToParse, rapidjson::Document::AllocatorType &allocator)
+{
+  std::string mdr = *priceToParse;
+  std::string mdr2 = *priceToParse;
+  mdr.erase(0, mdr.find("\"month\" :") + 11);
+  mdr.erase(mdr.find("\", \"price\" "));
+  mdr2.erase(0, mdr2.find("\"price\" :") + 11);
+  *priceToParse = mdr2;
+  mdr2.erase(mdr2.find("\" }"));
+  rapidjson::Value localPrice;
+  rapidjson::Value monthFromStr;
+  rapidjson::Value priceFromStr;
+  localPrice.SetObject();
+  monthFromStr.SetString(mdr.c_str(), allocator);
+  priceFromStr.SetString(mdr2.c_str(), allocator);
+  localPrice.AddMember("month", monthFromStr, allocator);
+  localPrice.AddMember("price", priceFromStr, allocator);
+  price->PushBack(localPrice, allocator);
+  return;
 }
 
 rapidjson::Document*	BddManager::getCarPart(std::string partName)

@@ -46,11 +46,11 @@ public:
   aho_corasick::trie	generateTree();
   std::vector<std::string>	parseKeyWordInTree(aho_corasick::trie trie, std::string keyWord);
   rapidjson::Document*	getInfoUser(std::string userToken, std::string userMail);
-  rapidjson::Document*	getFullCarPart(std::string userToken, std::string partName);
+  rapidjson::Document*	getFullCarPart(std::string partName);
   rapidjson::Document*	getCarPart(std::string partName);
 private:
   void		connect();
-  
+  void		getAllPrices(rapidjson::Value *price, std::string *priceToParse, rapidjson::Document::AllocatorType &allocator);
   void		addContentInBDD(auto collection, bsoncxx::builder::stream::document &doc);
   void		printCollection(auto collection);
   void		deleteContentInBDD(auto collection, std::string field, std::string value);
