@@ -64,8 +64,8 @@ export default class Login extends React.Component {
     else {
       this.setState({ errorEmail: '' });
       this.setState({ errorPassword: '' });
+      new PostLogin().login(JSONObj, navigate);
     }
-    new PostLogin().login(JSONObj, navigate);
   }
 
   render() {

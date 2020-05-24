@@ -15,7 +15,6 @@ import LoginComponent from '../Connection/Login/Login.component';
 
 export default class AppMenu extends React.Component {
   render() {
-    console.log(this.props.navigation.state.params)
     if (this.props.navigation.state.params.token)
       return (<AppContainer screenProps={{
         token: this.props.navigation.state.params.token,

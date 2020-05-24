@@ -98,7 +98,6 @@ export default class RegisterComponent extends React.Component {
             onChangeText={(username) => this.setState({ username })}
           />
           <Input
-            autoCapitalize='none'
             label='Firstname'
             labelStyle={{ bottom: 5, left: 10 }}
             containerStyle={{ top: 5 }}
@@ -117,7 +116,6 @@ export default class RegisterComponent extends React.Component {
             onChangeText={(firstname) => this.setState({ firstname })}
           />
           <Input
-            autoCapitalize='none'
             autoCorrect={false}
             label='Lastname'
             containerStyle={{ top: 10 }}
@@ -157,6 +155,7 @@ export default class RegisterComponent extends React.Component {
             onChangeText={(email) => this.setState({ email })}
           />
           <Input
+            autoCapitalize='none'
             ref={(input) => { this.password = input; }}
             onSubmitEditing={() => this.confirmPassword.focus()}
             errorMessage={this.state.errorPassword}
@@ -175,6 +174,7 @@ export default class RegisterComponent extends React.Component {
             onChangeText={(password) => this.setState({ password })}
           />
           <Input
+            autoCapitalize='none'
             ref={(input) => { this.confirmPassword = input; }}
             inputContainerStyle={{
               borderColor: colors.PRIMARY_COLOR, borderTopWidth: 2,
@@ -185,7 +185,7 @@ export default class RegisterComponent extends React.Component {
             errorMessage={this.state.errorConfirmPassword}
             label='Confirm Password'
             labelStyle={{ bottom: 5, left: 10 }}
-            onSubmitEditing={() => this.civility.focus()}
+            onSubmitEditing={() => this.confirmPassword.focus()}
             returnKeyType='next'
             placeholder={strings.CONFIRM_PASSWORD}
             secureTextEntry={true}
