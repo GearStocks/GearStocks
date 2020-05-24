@@ -1,12 +1,13 @@
 /* Angular modules */
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
+import { Router } from '@angular/router';
 
 /* RxJs */
 import { first } from 'rxjs/operators';
 
 /* Services */
-import {SearchService} from '../../services/search.service';
+import { SearchService } from '../../services/search.service';
 
 @Component({
   selector: 'app-search-list',
@@ -18,11 +19,10 @@ export class SearchListComponent implements OnInit, OnDestroy {
   keyword: string;
   onScroll = false;
 
-  constructor(private location: Location, private searchService: SearchService) {}
+  constructor(private location: Location, private searchService: SearchService, private router: Router) {}
 
   ngOnInit() {
     this.data = this.location.getState();
-    console.log(this.data);
     window.addEventListener('scroll', this.scroll, true);
   }
 
@@ -39,7 +39,7 @@ export class SearchListComponent implements OnInit, OnDestroy {
     element.scrollIntoView({behavior: 'smooth'});
   }
 
-  search() {
+  search(): void {
     this.searchService.search(this.keyword)
       .pipe(first())
       .subscribe(
@@ -51,11 +51,23 @@ export class SearchListComponent implements OnInit, OnDestroy {
   }
 
   getUnits(): number {
-    if (this.data.items) {
-      return this.data.items.length;
+    if (this.data.parts) {
+      return this.data.parts.length;
     } else {
       return 0;
     }
+  }
+
+  navigate(item: any): void {
+    this.searchService.getItem(item.name)
+      .pipe(first())
+      .subscribe(
+        (data) => {
+          this.router.navigateByUrl('/item', { state: data });
+        },
+        () => {}
+      );
+
   }
 
 }

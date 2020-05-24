@@ -15,6 +15,7 @@ const httpOptions = {
 export class SearchService {
 
   public searchUrl = environment.searchUrl;
+  public getItemUrl = environment.getItemUrl;
 
   constructor(private http: HttpClient) {}
 
@@ -23,6 +24,13 @@ export class SearchService {
       keyWord: keyword
     };
     return this.http.post<any>(this.searchUrl, body, httpOptions);
+  }
+
+  getItem(name: string) {
+    const body = {
+      partName: name
+    };
+    return this.http.post<any>(this.getItemUrl, body, httpOptions);
   }
 
 }
