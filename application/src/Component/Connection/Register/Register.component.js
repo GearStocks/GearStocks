@@ -50,22 +50,8 @@ export default class RegisterComponent extends React.Component {
       username: this.state.username,
       firstName: this.state.firstname,
       lastName: this.state.lastname,
-      birthDay: this.state.date
+      birthDay: "01/08/1997"
     });
-
-    Alert.alert(
-      "Alert Title",
-      "My Alert Msg",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        { text: "OK", onPress: () => console.log("OK Pressed") }
-      ],
-      { cancelable: false }
-    );
 
     if (`${username}` === '')
       this.setState({ errorUsername: errors.ERR_USERNAME });
