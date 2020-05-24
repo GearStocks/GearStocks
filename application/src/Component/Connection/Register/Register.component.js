@@ -6,8 +6,9 @@
  */
 
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Alert } from 'react-native';
 import { Input, Icon, Button } from 'react-native-elements';
+import DatePicker from '@react-native-community/datetimepicker';
 
 import { strings, errors } from '../../../../config/strings';
 import styles from './Register.component.style';
@@ -33,12 +34,13 @@ export default class RegisterComponent extends React.Component {
       errorLastname: '',
       errorEmail: '',
       errorPassword: '',
-      errorConfirmPassword: ''
+      errorConfirmPassword: '',
+      date:'01-01-2017'
     };
   }
 
   handleClick = (navigate) => {
-    const { email, password, username, firstname, lastname, confirmPassword } = this.state;
+    const { email, password, username, firstname, lastname, confirmPassword, date } = this.state;
     // eslint-disable-next-line no-useless-escape
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
@@ -48,8 +50,22 @@ export default class RegisterComponent extends React.Component {
       username: this.state.username,
       firstName: this.state.firstname,
       lastName: this.state.lastname,
-      birthDay: "03/01/0001"
+      birthDay: this.state.date
     });
+
+    /*Alert.alert(
+      "Alert Title",
+      "My Alert Msg",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => console.log("OK Pressed") }
+      ],
+      { cancelable: false }
+    );*/
 
     if (`${username}` === '')
       this.setState({ errorUsername: errors.ERR_USERNAME });
@@ -153,7 +169,7 @@ export default class RegisterComponent extends React.Component {
           errorStyle={{fontSize: 13}}
           inputContainerStyle={{borderColor: colors.PRIMARY_COLOR, borderTopWidth: 2,
           borderRightWidth: 2, borderLeftWidth: 2, borderBottomWidth: 2}}
-          returnKeyType="next"
+          returnKeyType='next'
           placeholder={strings.PASSWORD}
           secureTextEntry={true}
           leftIcon={<Icon name='lock' size={24} color='black' />}
@@ -169,14 +185,14 @@ export default class RegisterComponent extends React.Component {
           label='Confirm Password'
           labelStyle={{bottom: 5, left: 10}}
           onSubmitEditing={() => this.civility.focus()}
-          returnKeyType="next"
+          returnKeyType='next'
           placeholder={strings.CONFIRM_PASSWORD}
           secureTextEntry={true}
           leftIcon={<Icon name='lock' size={24} color='black' />}
           onChangeText={(confirmPassword) => this.setState({ confirmPassword })}
         />
-        <Button title={strings.REGISTER} buttonStyle={styles.button} type="outline" onPress={() => this.handleClick(navigate)} />
-        <Button title={strings.LOGIN} buttonStyle={styles.button} type="outline" onPress={() => navigate('LoginComponent')} />
+        <Button title={strings.REGISTER} buttonStyle={styles.button} type='outline' onPress={() => this.handleClick(navigate)} />
+        <Button title={strings.LOGIN} buttonStyle={styles.button} type='outline' onPress={() => navigate('LoginComponent')} />
       </View>
     );
   }
