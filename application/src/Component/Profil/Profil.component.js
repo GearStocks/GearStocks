@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { View } from 'react-native';
+import { View, BackHandler } from 'react-native';
 import { Text, Button, Icon, Input } from 'react-native-elements';
 
 import styles from './Profil.component.style';
@@ -49,7 +49,9 @@ export default class ProfilComponent extends React.Component {
     })
       .then((res) => {
         console.log('RESPONSE RECEIVED: ', res.data.Data);
-        this.setState({ email: res.data.Data.email });
+        //const json = JSON.stringify(res.data.Data);
+        console.log("Get Value username " + JSON.stringify(res.data.Data['username']));
+        //this.setState({ email: json.res.data.Data['email'] });
         this.setState({ firstname: res.data.Data.firstName });
         this.setState({ lastname: res.data.Data.lastName });
         this.setState({ username: res.data.Data.username });
@@ -60,7 +62,7 @@ export default class ProfilComponent extends React.Component {
       });
   }
 
-  disconnect = function(email, navigation) {
+  disconnect = function(email) {
     console.log(email);
     const JSONObj = JSON.stringify({
       mail: email
@@ -73,8 +75,7 @@ export default class ProfilComponent extends React.Component {
       }
     })
     .then((res) => {
-      console.log('RESPONSE RECEIVED: ', res.data);
-      navigation.replace('LoginComponent')
+      BackHandler.exitApp();
     })
     .catch((err) => {
       console.log(err.name, err.message);
@@ -94,8 +95,8 @@ export default class ProfilComponent extends React.Component {
       }
     })
       .then((res) => {
-        console.log('RESPONSE RECEIVED: ', res.Data.email);
-        this.setState({ email: res.data.Data.email });
+        console.log('RESPONSE RECEIVED:zob ', res.data.Data);
+        this.setState({ email: json['email'] });
         this.setState({ firstname: res.data.Data.firstName });
         this.setState({ lastname: res.data.Data.lastName });
         this.setState({ username: res.data.Data.username });
@@ -125,7 +126,7 @@ export default class ProfilComponent extends React.Component {
         <Text h4>Password : {this.state.password}</Text>
         <Text h5>
         </Text>
-        <Button title={strings.DISCONNECT} buttonStyle={styles.button} type="outline" onPress={() => this.disconnect(this.state.email, navigate)} />
+        <Button title={strings.DISCONNECT} buttonStyle={styles.button} type="outline" onPress={() => this.disconnect(this.state.email)} />
       </View>
     );
   }
