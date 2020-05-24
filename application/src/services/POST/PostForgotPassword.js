@@ -7,8 +7,8 @@ const axios = require('axios');
 
 export default class ForgotPassword extends React.Component {
 
-  forgotPassword = (JSON, navigate) => {
-    axios.post(routes.ForgotPassword, JSON, {
+  forgotPassword = (JSON) => {
+    axios.post(routes.FORGOT_PASSWORD, JSON, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': 'application/json',
@@ -17,7 +17,14 @@ export default class ForgotPassword extends React.Component {
     })
       .then((res) => {
         console.log('RESPONSE RECEIVED: ', res);
-        navigate('AppMenu');
+        Alert.alert(
+          "Send mail",
+          "Please check your email, you will receive your new password",
+          [
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+          ],
+          { cancelable: false }
+        );
       })
       .catch((err) => {
         console.log(err.name, err.message);
