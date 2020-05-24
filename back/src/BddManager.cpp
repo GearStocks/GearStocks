@@ -178,7 +178,7 @@ rapidjson::Document*	BddManager::getFullCarPart(std::string userToken, std::stri
   //return (std::make_pair(1, "Error encountered"));
 }
 
-rapidjson::Document*	BddManager::getCarPart(std::string partName, std::string partNumber)
+rapidjson::Document*	BddManager::getCarPart(std::string partName)
 {
   std::string	valueInBDD;
   
@@ -222,10 +222,9 @@ rapidjson::Document*	BddManager::getCarPart(std::string partName, std::string pa
     mdr.PushBack(s, allocator);
     
     
-    std::string jpp = "part";
-    std::string ptdr = jpp + partNumber;
+    std::string jpp = "parts";
     rapidjson::Value  lolilol;
-    lolilol.SetString(ptdr.c_str(), allocator);
+    lolilol.SetString(jpp.c_str(), allocator);
     document2->AddMember(lolilol, mdr, allocator);
     document2->Accept(writer);
     return document2;

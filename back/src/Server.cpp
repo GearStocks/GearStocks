@@ -531,7 +531,7 @@ int Server::listParts(const Pistache::Rest::Request& request, Pistache::Http::Re
     int i = 1;
     while (it < resultParsing.end() && i <= 10) {
       //std::cout << "result parsing:" << (*it) << std::endl;
-      doc3 = _manager->getCarPart(*it, std::to_string(i)); //"1"
+      doc3 = _manager->getCarPart(*it);
       mergeObjects(document2, *doc3, allocator);
       ++it;
       ++i;
