@@ -528,11 +528,13 @@ int Server::listParts(const Pistache::Rest::Request& request, Pistache::Http::Re
   else {
     std::vector<std::string>::iterator it = resultParsing.begin();
     rapidjson::Document* doc3;
-    while (it < resultParsing.end()) {
-      std::cout << "result parsing:" << (*it) << std::endl;
-      doc3 = _manager->getCarPart(*it, "1");
+    int i = 1;
+    while (it < resultParsing.end() && i <= 10) {
+      //std::cout << "result parsing:" << (*it) << std::endl;
+      doc3 = _manager->getCarPart(*it, std::to_string(i)); //"1"
       mergeObjects(document2, *doc3, allocator);
       ++it;
+      ++i;
     }
   }
   
