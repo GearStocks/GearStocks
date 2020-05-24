@@ -50,7 +50,7 @@ export default class RegisterComponent extends React.Component {
       username: this.state.username,
       firstName: this.state.firstname,
       lastName: this.state.lastname,
-      birthDay: "01/08/1997"
+      birthDay: "05/09/1997"
     });
 
     if (`${username}` === '')
