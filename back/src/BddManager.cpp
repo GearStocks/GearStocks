@@ -233,9 +233,9 @@ rapidjson::Document*	BddManager::getCarPart(std::string partName)
     rapidjson::StringBuffer strbuf;
     rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
     name.erase(0, name.find("\"name\" :") + 10);
-    name.erase(name.find("\", \"price\" "));
-    price.erase(0, price.find("\"price\" :") + 11);
-    price.erase(price.find("\", \"photo\" "));
+    name.erase(name.find("\", \"photo\" "));
+    price.erase(0, price.rfind("\"price\" :") + 11);
+    price.erase(price.find("\" }"));
     path.erase(0, path.find("\"photo\" :") + 11);
     path.erase(path.find("\", \"descript"));
     std::cout << "name:" << name << std::endl;
@@ -592,7 +592,7 @@ aho_corasick::trie	BddManager::generateTree()
   for (auto&& doc : cursor) {
     std::string name = bsoncxx::to_json(doc);
     name.erase(0, name.find("\"name\" :") + 10);
-    name.erase(name.find("\", \"price\" "));
+    name.erase(name.find("\", \"photo\" "));
     trie.insert(name.c_str());
   }
   return trie;
@@ -613,7 +613,7 @@ std::vector<std::string>	BddManager::parseKeyWordInTree(aho_corasick::trie trie,
   for (auto&& doc : cursor) {
     std::string name = bsoncxx::to_json(doc);
     name.erase(0, name.find("\"name\" :") + 10);
-    name.erase(name.find("\", \"price\" "));
+    name.erase(name.find("\", \"photo\" "));
     // name.substr(keyWord);
     if (name.find(keyWord) != std::string::npos) {
       if (std::find(parsingResult.begin(), parsingResult.end(), name) == parsingResult.end())
