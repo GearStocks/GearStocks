@@ -444,13 +444,13 @@ int Server::getFullCarPart(const Pistache::Rest::Request& request, Pistache::Htt
   response.headers().add<Pistache::Http::Header::AccessControlAllowMethods>("*");
   response.headers().add<Pistache::Http::Header::AccessControlAllowHeaders>("*");
   response.headers().add<Pistache::Http::Header::ContentType>(MIME(Application, Json));
-  if(!document.HasMember("userToken")) {
+  /*if(!document.HasMember("userToken")) {
     std::cout << "Il manque le champ userToken" << std::endl;
     document2.AddMember("error", "Bad JSON. Need a field 'userToken'", allocator); 
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
-  }
+    }*/
   if(!document.HasMember("partName")) {
     std::cout << "Il manque le champ partName" << std::endl;
     document2.AddMember("error", "Bad JSON. Need a field 'partName'", allocator); 
@@ -459,7 +459,7 @@ int Server::getFullCarPart(const Pistache::Rest::Request& request, Pistache::Htt
     return -1;
   }
   rapidjson::Document* doc3;
-  doc3 = _manager->getFullCarPart(document["userToken"].GetString(), document["partName"].GetString());
+  doc3 = _manager->getFullCarPart(document["partName"].GetString());
   document2.AddMember("success", "Get car part succeeded", allocator);
   mergeObjects(document2, *doc3, allocator);
   document2.Accept(writer);
