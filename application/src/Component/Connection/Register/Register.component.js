@@ -53,7 +53,7 @@ export default class RegisterComponent extends React.Component {
       birthDay: this.state.date
     });
 
-    /*Alert.alert(
+    Alert.alert(
       "Alert Title",
       "My Alert Msg",
       [
@@ -65,7 +65,7 @@ export default class RegisterComponent extends React.Component {
         { text: "OK", onPress: () => console.log("OK Pressed") }
       ],
       { cancelable: false }
-    );*/
+    );
 
     if (`${username}` === '')
       this.setState({ errorUsername: errors.ERR_USERNAME });

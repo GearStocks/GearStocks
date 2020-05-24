@@ -6,13 +6,15 @@
  */
 
 import React from 'react';
-import { View, BackHandler } from 'react-native';
+import { View } from 'react-native';
+import { Updates } from 'expo';
 import { Text, Button, Icon, Input } from 'react-native-elements';
 
 import styles from './Profil.component.style';
 import { strings } from '../../../config/strings';
 import colors from '../../../config/colors';
 import { routes } from '../../../config/routes';
+import LoginComponent from '../Connection/Login/Login.component';
 
 const axios = require('axios');
 
@@ -75,7 +77,8 @@ export default class ProfilComponent extends React.Component {
       }
     })
     .then((res) => {
-      BackHandler.exitApp();
+      this.props.screenProps.token = null;
+      Updates.reload();
     })
     .catch((err) => {
       console.log(err.name, err.message);
@@ -108,6 +111,9 @@ export default class ProfilComponent extends React.Component {
   }
 
   componentDidMount() {
+    if (this.props.screenProps.token === null) {
+      <LoginComponent />
+    }
     this.getInfoUser(this.props.screenProps.token.Token, this.props.screenProps.email);
   }
 
