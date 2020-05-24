@@ -9,6 +9,7 @@
 /* eslint-disable no-console */
 
 import React from 'react';
+import { Alert } from 'react-native';
 
 import { routes } from '../../../config/routes';
 
@@ -31,5 +32,14 @@ export default class PostRegister extends React.Component {
       .catch((err) => {
         console.log(err.name, err.message);
       });
+
+      Alert.alert(
+        "Congratulations !",
+        "You are now register in GearStocks, you can now log in.",
+        [
+          { text: "Login", onPress: () => navigate('LoginComponent') }
+        ],
+        { cancelable: false }
+      );
   }
 }

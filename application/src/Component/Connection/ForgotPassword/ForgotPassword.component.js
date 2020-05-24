@@ -11,6 +11,8 @@ import { Input, Button, Text } from 'react-native-elements';
 import styles from './ForgotPassword.component.style';
 import { strings, errors } from '../../../../config/strings';
 
+import ForgotPassword from '../../../services/POST/PostForgotPassword';
+
 export default class ForgotPasswordComponent extends React.Component {
   constructor(props) {
     super(props);
@@ -26,10 +28,17 @@ export default class ForgotPasswordComponent extends React.Component {
     let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     const { email } = this.state;
 
+    const JSONObj = JSON.stringify({
+      mail: this.state.email
+    });
+
     if (`${email}` === '')
       Alert.alert(errors.ERR, errors.ERR_EMAIL);
     else if (reg.test(`${email}`) === false)
       Alert.alert(errors.ERR, errors.ERR_INVALID_EMAIL);
+    else {
+      new ForgotPassword().forgotPassword(JSONObj);
+    }
   }
 
   render() {
