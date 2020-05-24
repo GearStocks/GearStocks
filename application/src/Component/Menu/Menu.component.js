@@ -11,7 +11,7 @@ import { createDrawerNavigator, createAppContainer } from 'react-navigation';
 
 import HomeComponent from '../Home/Home.component';
 import ProfilComponent from '../Profil/Profil.component';
-import SearchComponent from '../Search/Search.component';
+import LoginComponent from '../Connection/Login/Login.component';
 
 export default class AppMenu extends React.Component {
   render() {
@@ -22,7 +22,7 @@ export default class AppMenu extends React.Component {
         email: this.props.navigation.state.params.email
       }} />);
     else
-      console.log("No token");
+      <LoginComponent />
   }
 }
 
@@ -33,14 +33,6 @@ const bottomTabNavigator = createDrawerNavigator(
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => (
           <Icon name="home" size={25} color={tintColor} />
-        )
-      }
-    },
-    Search: {
-      screen: SearchComponent,
-      navigationOptions: {
-        tabBarIcon: ({ tintColor }) => (
-          <Icon name="search" size={25} color={tintColor} />
         )
       }
     },

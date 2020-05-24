@@ -96,6 +96,7 @@ export default class Login extends React.Component {
           ref={(input) => { this.password = input; }}
           inputStyle={styles.input}
           returnKeyType="go"
+          autoCapitalize = 'none'
           errorStyle={{fontSize: 18}}
           containerStyle={{top: 50}}
           label='Password'
