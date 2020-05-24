@@ -1,8 +1,8 @@
-/* Angular Modules */
+/* Angular modules */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { environment } from '../../../../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -11,8 +11,9 @@ const httpOptions = {
   })
 };
 
-@Injectable()
-export class HomeService {
+@Injectable({ providedIn: 'root' })
+export class SearchService {
+
   public searchUrl = environment.searchUrl;
 
   constructor(private http: HttpClient) {}
@@ -23,4 +24,5 @@ export class HomeService {
     };
     return this.http.post<any>(this.searchUrl, body, httpOptions);
   }
+
 }

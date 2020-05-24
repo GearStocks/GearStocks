@@ -43,7 +43,6 @@ export class UserService {
       password: authData.password,
       rememberMe: authData.rememberMe
     };
-    console.log(this.loginUrl);
     return this.http.post<User>(this.loginUrl, body, httpOptions)
       .pipe(map(user => {
           // login successful if there's a jwt token in the response

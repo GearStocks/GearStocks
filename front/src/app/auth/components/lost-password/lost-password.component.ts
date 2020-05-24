@@ -9,7 +9,6 @@ import { first } from 'rxjs/operators';
 /* Services */
 import { UserService } from '../../services/user.service';
 import { LostPasswordFormService } from './services/lost-password-form.service';
-import { AlertService } from '../../../shared/components/gearstocks-alert/services/alert.service';
 
 /* Models */
 import { ErrorMessages } from '../signup/signup-errors';
@@ -28,7 +27,6 @@ export class LostPasswordComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private alertService: AlertService,
     private lostPasswordFormService: LostPasswordFormService,
     private router: Router) {
     if (this.userService.currentUserValue) {

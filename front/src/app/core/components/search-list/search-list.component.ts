@@ -2,6 +2,12 @@
 import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 
+/* RxJs */
+import { first } from 'rxjs/operators';
+
+/* Services */
+import {SearchService} from '../../services/search.service';
+
 @Component({
   selector: 'app-search-list',
   templateUrl: './search-list.component.html',
@@ -12,10 +18,11 @@ export class SearchListComponent implements OnInit, OnDestroy {
   keyword: string;
   onScroll = false;
 
-  constructor(private location: Location) {}
+  constructor(private location: Location, private searchService: SearchService) {}
 
   ngOnInit() {
     this.data = this.location.getState();
+    console.log(this.data);
     window.addEventListener('scroll', this.scroll, true);
   }
 
@@ -33,6 +40,14 @@ export class SearchListComponent implements OnInit, OnDestroy {
   }
 
   search() {
+    this.searchService.search(this.keyword)
+      .pipe(first())
+      .subscribe(
+        (data) => {
+          this.data = data;
+        },
+        () => {}
+      );
   }
 
   getUnits(): number {
