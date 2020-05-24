@@ -21,8 +21,10 @@ export class ErrorInterceptor implements HttpInterceptor {
       .pipe(
         retry(1),
         catchError((error: HttpErrorResponse) => {
-          let errorMessage = '';
-          errorMessage = `Error: ${error.error.Error}`;
+          let errorMessage = 'Erreur: Veuillez réessayer plus tard';
+          if (error.error.error) {
+            errorMessage = `Erreur: ${error.error.error}`;
+          }
           this.alertService.error(errorMessage);
           return throwError(errorMessage);
         })

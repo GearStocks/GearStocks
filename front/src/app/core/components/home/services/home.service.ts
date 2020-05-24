@@ -1,8 +1,15 @@
 /* Angular Modules */
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { environment } from '../../../../../environments/environment';
+
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type':  'application/json',
+    'Access-Control-Allow-Origin': '*',
+  })
+};
 
 @Injectable()
 export class HomeService {
@@ -11,11 +18,9 @@ export class HomeService {
   constructor(private http: HttpClient) {}
 
   search(keyword: string) {
-    const params = new HttpParams().set('keyWord', keyword);
-    const header = new HttpHeaders({
-      'Content-Type':  'application/json',
-      'Access-Control-Allow-Origin': '*',
-    });
-    return this.http.get<any>(this.searchUrl, {headers: header, params: params});
+    const body = {
+      keyWord: keyword
+    };
+    return this.http.post<any>(this.searchUrl, body, httpOptions);
   }
 }

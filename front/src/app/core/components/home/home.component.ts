@@ -35,11 +35,11 @@ export class HomeComponent {
       .pipe(first())
       .subscribe(
         (data) => {
+          console.log(data);
           this.router.navigateByUrl('/search-list', { state: data });
         },
-        (err) => {
-          this.alertService.error(err);
-        });
+        () => {}
+        );
   }
 
   scrollTo(element: HTMLElement): void {

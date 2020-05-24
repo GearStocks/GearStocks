@@ -1,5 +1,3 @@
-import * as process from 'process'
-
 export const environment = {
   production: false,
   loginUrl: 'http://localhost:3000/connect',
@@ -8,6 +6,6 @@ export const environment = {
   updateProfileUrl: 'http://localhost:3000/connect',
   updateEmailUrl: 'http://localhost:3000/user',
   updatePasswordUrl: 'http://localhost:3000/user',
-  searchUrl: 'http://localhost:3000/search',
+  searchUrl: 'http://localhost:3000/listParts',
   getItemUrl: 'http://localhost:3000/item'
 };

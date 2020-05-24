@@ -76,7 +76,7 @@ export class UserService {
   }
 
   resetPassword(email: string) {
-    return this.http.post<any>(this.resetPasswordUrl, { email: email }, httpOptions);
+    return this.http.post<any>(this.resetPasswordUrl, { mail: email }, httpOptions);
   }
 
 }

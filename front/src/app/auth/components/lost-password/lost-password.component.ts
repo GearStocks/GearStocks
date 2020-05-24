@@ -59,9 +59,8 @@ export class LostPasswordComponent implements OnInit {
         () => {
           this.display = true;
         },
-        (err) => {
+        () => {
           this.loading = false;
-          this.alertService.error(err);
         });
   }
 }
