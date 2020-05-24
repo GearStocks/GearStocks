@@ -68,8 +68,6 @@ size_t	BddManager::userConnect(std::string username, std::string password, std::
 {
   std::string	valueInBDD;
   
-  
-  //std::cout << "il est:" << getTime() << std::endl;
   valueInBDD = checkIfExist(_userCollection, "email", username);
   if (valueInBDD != "")
     {
@@ -107,7 +105,6 @@ size_t	BddManager::userRegister(std::vector<std::string> documentContent)
   bsoncxx::builder::stream::document document{};
   std::cout << "MDP avant hashage:" << documentContent[1] << std::endl;
   std::cout << "MDP après hashage:" << cryptPass(documentContent[1]) << std::endl;
-  //document << "username" << documentContent[0] << "email" << documentContent[2] << "password" << cryptPass(documentContent[1]) << "token" << "" << "date" << "" << "firstName" << documentContent[3] << "lastName" << documentContent[4] << "civility" << documentContent[5] << "address" << documentContent[6] << "phone" << documentContent[7] << "birthDay" << documentContent[8];
   document << "username" << documentContent[0] << "email" << documentContent[2] << "password" << cryptPass(documentContent[1]) << "token" << "" << "date" << "" << "firstName" << documentContent[3] << "lastName" << documentContent[4] << "birthDay" << documentContent[5];
   addContentInBDD(_userCollection, document);
   std::cout << "A new user is registered :" << documentContent[0] << std::endl;
@@ -128,7 +125,7 @@ size_t  BddManager::updatePasswordUser(std::string mailUser, std::string oldPass
   updateContentInBDD(_userCollection, "password", mailUser, newPass); 
 }
 
-rapidjson::Document	BddManager::getFullCarPart(std::string userToken, std::string partName)
+rapidjson::Document*	BddManager::getFullCarPart(std::string userToken, std::string partName)
 {
   std::string	valueInBDD;  
   valueInBDD = checkIfExist(_userCollection, "token", userToken);
@@ -148,9 +145,9 @@ rapidjson::Document	BddManager::getFullCarPart(std::string userToken, std::strin
     std::string	price = name;
     std::string path = name;
     std::string description = name;
-    rapidjson::Document document2;
-    document2.SetObject();
-    rapidjson::Document::AllocatorType& allocator = document2.GetAllocator();
+    rapidjson::Document* document2 = new rapidjson::Document();
+    document2->SetObject();
+    rapidjson::Document::AllocatorType& allocator = document2->GetAllocator();
     rapidjson::StringBuffer strbuf;
     rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
     std::cout << name << std::endl;
@@ -175,7 +172,7 @@ rapidjson::Document	BddManager::getFullCarPart(std::string userToken, std::strin
     test.SetString(description.c_str(), allocator);
     s.AddMember("description", test, allocator);
     mdr.PushBack(s, allocator);
-    document2.AddMember("data", mdr, allocator);
+    document2->AddMember("data", mdr, allocator);
     return document2;
   }
   //return (std::make_pair(1, "Error encountered"));
@@ -299,7 +296,7 @@ size_t  BddManager::updateMailUser(std::string oldMail, std::string newMail)
   return 0;
 }
 
-std::pair<size_t, std::string> BddManager::getInfoUser(std::string userToken, std::string userMail)
+rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string userMail)
 {
   /***************
   check userToken
@@ -310,27 +307,63 @@ std::pair<size_t, std::string> BddManager::getInfoUser(std::string userToken, st
   std::cout << "ici aussi on passe:" << valueInBDD << std::endl;
   if (valueInBDD.compare("") == 0) {
     //std::cout << "Invalid token" << std::endl;
-    return (std::make_pair(1, "Invalid token"));
+    //return (std::make_pair(1, "Invalid token"));
   }
   valueInBDD = checkIfExist(_userCollection, "email", userMail);
   if (valueInBDD.compare("") == 0) {
     //"Invalid email" << std::endl;
-    return (std::make_pair(1, "Invalid email"));
+    //return (std::make_pair(1, "Invalid email"));
   }
   bsoncxx::builder::stream::document document{};
   bsoncxx::stdx::optional<bsoncxx::document::value> maybe_result =
     _userCollection.find_one(document << "email" << userMail
 			     << bsoncxx::builder::stream::finalize);
   if(maybe_result) {
-    std::string result;
-    //result = bsoncxx::to_json(*maybe_result) + "\n";
-    //std::cout << bsoncxx::to_json(*maybe_result) << "\n";
-    //std::cout << "IL EXISTE" << std::endl;
-    //return result;
-    return (std::make_pair(0, bsoncxx::to_json(*maybe_result)));
+    std::string userName = bsoncxx::to_json(*maybe_result);
+    rapidjson::Document* document2 = new rapidjson::Document();
+    std::string	token = userName;
+    std::string mail = userName;
+    std::string firstName = userName;
+    std::string lastName = userName;
+    std::string birthDay = userName;
+    document2->SetObject();
+    rapidjson::Document::AllocatorType& allocator = document2->GetAllocator();
+    rapidjson::StringBuffer strbuf;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
+    userName.erase(0, userName.find("\"username\" :") + 14);
+    userName.erase(userName.find("\", \"email\" ")); 
+    token.erase(0, token.find("\"token\" :") + 14);
+    token.erase(token.find("\", \"date\" "));
+    mail.erase(0, mail.find("\"email\" :") + 11);
+    mail.erase(mail.find("\", \"password\""));
+    firstName.erase(0, firstName.find("\"firstName\" :") + 15);
+    firstName.erase(firstName.find("\", \"lastName\""));
+    lastName.erase(0, lastName.find("\"lastName\" :") + 14);
+    lastName.erase(lastName.find("\", \"birthDay\""));
+    birthDay.erase(0, birthDay.find("\"birthDay\" :") + 14);
+    birthDay.erase(birthDay.find("\" }"));
+    rapidjson::Value mdr(rapidjson::kArrayType);
+    rapidjson::Value test;
+    rapidjson::Value s;
+    s.SetObject();
+    test.SetString(userName.c_str(), allocator);
+    s.AddMember("userName", test, allocator);
+    test.SetString(token.c_str(), allocator);
+    s.AddMember("token", test, allocator);
+    test.SetString(mail.c_str(), allocator);
+    s.AddMember("mail", test, allocator);
+    test.SetString(firstName.c_str(), allocator);
+    s.AddMember("firstName", test, allocator);
+    test.SetString(lastName.c_str(), allocator);
+    s.AddMember("lastName", test, allocator);
+    test.SetString(birthDay.c_str(), allocator);
+    s.AddMember("birthDay", test, allocator);
+    mdr.PushBack(s, allocator);
+    document2->AddMember("data", mdr, allocator);
+    return document2;
+    //return (std::make_pair(0, bsoncxx::to_json(*maybe_result)));
   }
-  return (std::make_pair(1, "Error encountered"));
-  
+  //return (std::make_pair(1, "Error encountered"));
 }
 
 size_t	BddManager::addCarPartInBDD(std::string name, std::string price, std::string photo, std::string description)
