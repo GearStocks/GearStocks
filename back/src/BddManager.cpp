@@ -96,7 +96,7 @@ size_t	BddManager::userRegister(std::vector<std::string> documentContent)
       std::cout << "User already exist" << std::endl;
       return 1;
     }
-  valueInBDD = checkIfExist(_userCollection, "mail", documentContent[2]);
+  valueInBDD = checkIfExist(_userCollection, "email", documentContent[2]);
   if (valueInBDD != "")
     {
       std::cout << "Mail already used" << std::endl;
@@ -554,16 +554,18 @@ std::string     BddManager::generateRandomString(size_t size)
 aho_corasick::trie	BddManager::generateTree()
 {
   aho_corasick::trie	trie;
-  
+
+  std::cout << "on commence le tri" << std::endl;
   auto cursor = _carPartCollection.find({});
   for (auto&& doc : cursor) {
     std::string name = bsoncxx::to_json(doc);
     name.erase(0, name.find("\"name\" :") + 10);
     name.erase(name.find("\", \"price\" "));
     trie.insert(name.c_str());
-    //std::cout << name << std::endl;
+    std::cout << name << std::endl;
     //std::cout << bsoncxx::to_json(doc) << std::endl;
   }
+  std::cout << "on fini le trie" << std::endl;
   return trie;
 }
 
@@ -578,6 +580,19 @@ std::vector<std::string>	BddManager::parseKeyWordInTree(aho_corasick::trie trie,
     parsingResult.push_back((*mdr).get_keyword());
     ++mdr;
   }
-  
+  auto cursor = _carPartCollection.find({});
+  for (auto&& doc : cursor) {
+    std::string name = bsoncxx::to_json(doc);
+    name.erase(0, name.find("\"name\" :") + 10);
+    name.erase(name.find("\", \"price\" "));
+    // name.substr(keyWord);
+    if (name.find(keyWord) != std::string::npos) {
+      std::cout << "Nouveau result:" << name << std::endl;
+      if (std::find(parsingResult.begin(), parsingResult.end(), name) == parsingResult.end())
+	{
+	  parsingResult.push_back(name);
+	}
+    }
+  }
   return parsingResult;
 }
