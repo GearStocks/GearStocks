@@ -402,7 +402,7 @@ int Server::addCarPart(const Pistache::Rest::Request& request, Pistache::Http::R
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
-  if(!document.HasMember("price")) {
+  if(!document.HasMember("prices")) {
     std::cout << "Il manque le champ price" << std::endl;
     document2.AddMember("error", "Bad JSON. Need a field 'price'", allocator); 
     document2.Accept(writer);
@@ -423,8 +423,21 @@ int Server::addCarPart(const Pistache::Rest::Request& request, Pistache::Http::R
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
+
+  std::vector<std::string> prices;
+
+  const rapidjson::Value& attributes = document["prices"];
+  for (rapidjson::Value::ConstValueIterator itr = attributes.Begin(); itr != attributes.End(); ++itr) {
+    const rapidjson::Value& attribute = *itr;
+    //assert(attribute.IsObject()); // each attribute is an object
+    for (rapidjson::Value::ConstMemberIterator itr2 = attribute.MemberBegin(); itr2 != attribute.MemberEnd(); ++itr2) {
+      prices.push_back(itr2->value.GetString());
+      //std::cout << itr2->name.GetString() << " : " << itr2->value.GetString() << std::endl;
+    }
+  }
   
-  result = _manager->addCarPartInBDD(document["name"].GetString(), document["price"].GetString(), document["photo"].GetString(), document["description"].GetString());
+  result = _manager->addCarPartInBDD(document["name"].GetString(), prices, document["photo"].GetString(), document["description"].GetString());
+  //std::cout << "EST CE QUE CEST UN ARRAY:" << document["prices"].IsArray() << std::endl;
   document2.AddMember("success", "Car part added", allocator); 
   document2.Accept(writer);
   response.send(Pistache::Http::Code::Ok, strbuf.GetString());

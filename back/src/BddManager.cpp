@@ -398,15 +398,39 @@ rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string 
   //return (std::make_pair(1, "Error encountered"));
 }
 
-size_t	BddManager::addCarPartInBDD(std::string name, std::string price, std::string photo, std::string description)
+size_t	BddManager::addCarPartInBDD(std::string name, std::vector<std::string> prices, std::string photo, std::string description)
 {
   bsoncxx::builder::stream::document document{};
+  bsoncxx::builder::stream::document document2{};
+  auto it = prices.begin();
+  auto it2 = it + 1;
+
   
-  std::cout << "name:" << name << "|price:" << price << "|photo:" << photo << std::endl;
-  document << "name" << name << "price" << price << "photo" << photo << "description" << description;
+  
+  //std::cout << "name:" << name << "|price:" << price << "|photo:" << photo << std::endl;
+  //document << "name" << name << "photo" << photo << "description" << description << "parts" <<bsoncxx::builder::stream::open_array << "hello" << photo << "price" << photo << bsoncxx::builder::stream::close_array;
+  document << "name" << name << "photo" << photo << "description" << description;
+  auto in_array = document << "parts" << bsoncxx::builder::stream::open_array;
+  while (it2 < prices.end()) {
+    in_array = in_array << bsoncxx::builder::stream::open_document << "month" << *it << "price" << *it2 << bsoncxx::builder::stream::close_document;
+    it = it + 2;
+    it2 = it2 + 2;
+  }
+  auto after_array = in_array << bsoncxx::builder::stream::close_array;
+  
+ 
+  
   addContentInBDD(_carPartCollection, document);
   std::cout << "A car part has been registered:" << name << std::endl;
   return 0;
+}
+
+void	BddManager::addAllPrices(bsoncxx::builder::stream::document *document, std::string month, std::string price)
+{
+  bsoncxx::builder::stream::document document2{};
+
+  document2 << "month" << month << "price" << price;
+  *document << "parts" << bsoncxx::builder::stream::open_array << document2 << bsoncxx::builder::stream::close_array;
 }
 
 /*size_t	BddManager::updateMailUser(std::string oldMail, std::string newMail)
