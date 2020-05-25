@@ -284,7 +284,7 @@ size_t  BddManager::updateNameUser(std::string mailUser, std::string oldName, st
   return 0;
 }
 
-size_t  BddManager::updateDateInBDD(std::string mailUser, std::string date)x
+size_t  BddManager::updateDateInBDD(std::string mailUser, std::string date)
 {
   std::string     valueInBDD;
 
