@@ -33,14 +33,15 @@ public:
   ~BddManager();
   size_t	userConnect(std::string username, std::string password, std::string token);	
   size_t	userRegister(std::vector<std::string> documentContent);
-  size_t	updateNameUser(std::string mailUser, std::string oldName, std::string newName);
-  size_t	updatePseudoUser(std::string mailUser, std::string oldPseudo, std::string newPseudo);
-  size_t	updateMailUser(std::string oldMail, std::string newMail);
+  size_t	updateNameUser(std::string token, std::string username, std::string firstname, std::string lastname);
+  size_t	updateMailUser(std::string token, std::string mail);
+  size_t	updatePasswordUser(std::string token, std::string password);
+  
   size_t	updateDateInBDD(std::string mailUser, std::string date);
   size_t	updateTokenInBDD(std::string mailUser, std::string token);
-  size_t	updatePasswordUser(std::string mailUser, std::string oldPass, std::string newPass);
   size_t	resetPassword(std::string mailUser, std::string newPassword);
   std::string	getTime();
+  size_t	checkIfUserIsAuth(std::string userToken, std::string password, std::string username, std::string mail);
   size_t	disconnectUser(std::string mailUser, std::string token);
   size_t	addCarPartInBDD(std::string name, std::vector<std::string> prices, std::string photo, std::string description);
   std::string	generateRandomString(size_t size);
@@ -58,6 +59,9 @@ private:
   void		deleteContentInBDD(auto collection, std::string field, std::string value);
   void		updateContentInBDD(auto collection, std::string field,
 			   std::string oldValue, std::string newValue);
+  void		updateContentInBDDViaToken(auto collection, std::string field,
+			   std::string token, std::string newValue);
+  
   std::string	checkIfExist(auto collection, std::string field, std::string value);
   std::string	cryptPass(std::string nonHashPass);
   mongocxx::instance	_inst{};

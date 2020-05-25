@@ -262,42 +262,71 @@ int Server::UpdateUser(const Pistache::Rest::Request& request, Pistache::Http::R
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
-  if(!document.HasMember("oldUsername")) {
-    std::cout << "Il manque le champ oldUsername" << std::endl;
-    document2.AddMember("error", "Bad JSON. Need a field 'oldUsername'", allocator); 
+  if(!document.HasMember("userName")) {
+    std::cout << "Il manque le champ userName" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'userName'", allocator); 
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
-  if(!document.HasMember("newUsername")) {
-    std::cout << "Il manque le champ newUsername" << std::endl;
-    document2.AddMember("error", "Bad JSON. Need a field 'newUsername'", allocator); 
+  if(!document.HasMember("password")) {
+    std::cout << "Il manque le champ password" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'password'", allocator); 
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
-  if(!document.HasMember("oldPass")) {
-    std::cout << "Il manque le champ oldPass" << std::endl;
-    document2.AddMember("error", "Bad JSON. Need a field 'oldPass'", allocator); 
+  if(!document.HasMember("firstName")) {
+    std::cout << "Il manque le champ firstName" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'firstName'", allocator); 
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
-  if(!document.HasMember("newPass")) {
-    std::cout << "Il manque le champ newPass" << std::endl;
-    document2.AddMember("error", "Bad JSON. Need a field 'newPass'", allocator); 
+  if(!document.HasMember("userToken")) {
+    std::cout << "Il manque le champ userToken" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'userToken'", allocator); 
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
-  if(!document.HasMember("newMail")) {
-    std::cout << "Il manque le champ newMail" << std::endl;
-    document2.AddMember("error", "Bad JSON. Need a field 'newMail'", allocator); 
+  if(!document.HasMember("lastName")) {
+    std::cout << "Il manque le champ lastName" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'lastName'", allocator); 
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
-  errorHandling = _manager->updateNameUser(document["mail"].GetString(), document["oldUsername"].GetString(), document["newUsername"].GetString());
+  errorHandling = _manager->checkIfUserIsAuth(document["userToken"].GetString(), "", document["userName"].GetString(), document["mail"].GetString());
+  if (errorHandling == 1) {
+    document2.AddMember("error", "The password doesn't match", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  if (errorHandling == 2) {
+    document2.AddMember("error", "The tokenUser doesn't match", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  if (errorHandling == 3) {
+    document2.AddMember("error", "The tokenUser doesn't match", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  if (errorHandling == 4) {
+    document2.AddMember("error", "The tokenUser doesn't match", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  errorHandling = _manager->updateNameUser(document["userToken"].GetString(), document["userName"].GetString(), document["firstName"].GetString(), document["lastName"].GetString());
+  errorHandling = _manager->updateMailUser(document["userToken"].GetString(), document["mail"].GetString());
+  errorHandling = _manager->updatePasswordUser(document["userToken"].GetString(), document["password"].GetString());
+  
+  /*errorHandling = _manager->updateNameUser(document["mail"].GetString(), document["oldUsername"].GetString(), document["newUsername"].GetString());
   if (errorHandling == 1) {
     document2.AddMember("error", "Mail doesn't exist", allocator); 
     document2.Accept(writer);
@@ -310,6 +339,7 @@ int Server::UpdateUser(const Pistache::Rest::Request& request, Pistache::Http::R
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
+  
     errorHandling = _manager->updatePasswordUser(document["mail"].GetString(), document["oldPass"].GetString(), document["newPass"].GetString());
   if (errorHandling == 1) {
     document2.AddMember("error", "Mail doesn't exist", allocator); 
@@ -335,7 +365,7 @@ int Server::UpdateUser(const Pistache::Rest::Request& request, Pistache::Http::R
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
-  }
+    }*/
   document2.AddMember("success", "Update done", allocator); 
   document2.Accept(writer);
   response.send(Pistache::Http::Code::Ok, strbuf.GetString());
@@ -496,8 +526,7 @@ int Server::getFullCarPart(const Pistache::Rest::Request& request, Pistache::Htt
   document2.AddMember("success", "Get car part succeeded", allocator);
   mergeObjects(document2, *doc3, allocator);
   document2.Accept(writer);
-  response.send(Pistache::Http::Code::Ok, strbuf.GetString());
-  
+  response.send(Pistache::Http::Code::Ok, strbuf.GetString()); 
   return 0;
 }
 
