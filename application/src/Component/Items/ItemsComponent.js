@@ -6,11 +6,9 @@
  */
 
 import React from 'react';
-import { Text, View, Platform, TouchableHighlight } from 'react-native';
-import { SearchBar, Icon } from 'react-native-elements';
-import FlatGrid from 'react-native-super-grid';
+import { Text, View } from 'react-native';
+import { Icon } from 'react-native-elements';
 
-import { styles } from './Home.component.style';
 
 export default class ItemsComponent extends React.Component {
 

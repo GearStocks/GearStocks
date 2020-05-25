@@ -11,7 +11,6 @@ import { SearchBar, Icon } from 'react-native-elements';
 import FlatGrid from 'react-native-super-grid';
 
 import { styles } from './Home.component.style';
-import { test } from '../../services/POST/PostLogin';
 
 export default class HomeComponent extends React.Component {
 
@@ -23,31 +22,12 @@ export default class HomeComponent extends React.Component {
     };
   }
 
-  componentDidMount() {
-    if (!this.props.screenProps.token) {
-      Alert.alert(
-        "Alert Title",
-        "My Alert Msg",
-        [
-          {
-            text: "Cancel",
-            onPress: () => console.log("Cancel Pressed"),
-            style: "cancel"
-          },
-          { text: "OK", onPress: () => console.log("OK Pressed") }
-        ],
-        { cancelable: false }
-      );
-    }
-  }
-
   updateSearch = (search) => {
     this.setState({ search });
   };
 
   render() {
     const { search } = this.state;
-    console.log("Ceci est le token" + JSON.stringify(this.props.screenProps.token));
     const items = [
       { name: 'TURQUOISE', code: '#1abc9c', brand: 'Porsche' }, { name: 'EMERALD', code: '#2ecc71', brand: 'Porsche' },
       { name: 'PETER RIVER', code: '#3498db', brand: 'Porsche' }, { name: 'AMETHYST', code: '#9b59b6', brand: 'Porsche' },

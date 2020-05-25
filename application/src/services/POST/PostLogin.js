@@ -9,7 +9,6 @@
 /* eslint-disable no-console */
 
 import React from 'react';
-import { Alert } from 'react-native';
 
 import { routes } from '../../../config/routes';
 
