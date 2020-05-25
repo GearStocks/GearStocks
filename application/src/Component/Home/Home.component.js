@@ -7,11 +7,15 @@
 
 import React from 'react';
 import { Text, View, Platform, Alert } from 'react-native';
-import { SearchBar, Icon } from 'react-native-elements';
+import { SearchBar, Icon, Button } from 'react-native-elements';
 import FlatGrid from 'react-native-super-grid';
+import SearchHeader from 'react-native-search-header';
 
 import { styles } from './Home.component.style';
+import { routes } from '../../../config/routes';
 import { test } from '../../services/POST/PostLogin';
+
+const axios = require('axios');
 
 export default class HomeComponent extends React.Component {
 
@@ -19,61 +23,81 @@ export default class HomeComponent extends React.Component {
     super(props);
 
     this.state = {
-      search: ''
+      search: null,
+      response: [],
+      namePart: '',
     };
   }
 
-  componentDidMount() {
-    if (!this.props.screenProps.token) {
-      Alert.alert(
-        "Alert Title",
-        "My Alert Msg",
-        [
-          {
-            text: "Cancel",
-            onPress: () => console.log("Cancel Pressed"),
-            style: "cancel"
-          },
-          { text: "OK", onPress: () => console.log("OK Pressed") }
-        ],
-        { cancelable: false }
-      );
-    }
-  }
-
-  updateSearch = (search) => {
+  updateSearch = search => {
     this.setState({ search });
+    this.launchSearch(search);
+  };
+
+  launchSearch = (search) => {
+    if (search === null) {
+        Alert.alert(
+          "Error",
+          "Please enter an item",
+          [
+            { text: "OK", onPress: () => console.log("OK Pressed") }
+          ],
+          { cancelable: false }
+        );
+    } else {
+    const JSONObj = JSON.stringify({
+      keyWord: search
+    });
+    axios.post(routes.LIST_PARTS, JSONObj, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      }
+    })
+      .then((res) => {
+        let items;
+        this.state.response = [];
+        for (const responseData of res.data.parts) {
+          console.log("input " + search)
+          if (responseData.name ) {
+          items = { name: responseData.name, code: '#1abc9c', price: responseData.price }
+          this.state.response.push(items);
+          }
+        }
+        console.log("ici " + JSON.stringify(this.state.response));
+        this.forceUpdate();
+      })
+      .catch((err) => {
+        console.log(err.name, err.message);
+      });
+    }
   };
 
   render() {
-    const { search } = this.state;
-    console.log("Ceci est le token" + JSON.stringify(this.props.screenProps.token));
-    const items = [
-      { name: 'TURQUOISE', code: '#1abc9c', brand: 'Porsche' }, { name: 'EMERALD', code: '#2ecc71', brand: 'Porsche' },
-      { name: 'PETER RIVER', code: '#3498db', brand: 'Porsche' }, { name: 'AMETHYST', code: '#9b59b6', brand: 'Porsche' },
-      { name: 'WET ASPHALT', code: '#34495e', brand: 'Porsche' }, { name: 'GREEN SEA', code: '#16a085', brand: 'Porsche' },
-      { name: 'NEPHRITIS', code: '#27ae60', brand: 'Porsche' }, { name: 'BELIZE HOLE', code: '#2980b9', brand: 'Porsche' },
-      { name: 'WISTERIA', code: '#8e44ad', brand: 'Porsche' }, { name: 'MIDNIGHT BLUE', code: '#2c3e50', brand: 'Porsche' }
-    ];
+    const { search, response } = this.state;
+
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ fontSize: 30, top: 35 }}>GearStocks</Text>
-          <Icon name='format-align-justify' size={30} color='black'
-            containerStyle={{ right: 170, top: 2 }} onPress={() => { this.props.navigation.openDrawer(); }} />
+        <Icon name='format-align-justify' size={30} color='black'
+          containerStyle={{ right: 170, top: 2 }} onPress={() => { this.props.navigation.openDrawer(); }} />
         <SearchBar
           containerStyle={{
             top: 20, borderColor: '#5dade2', borderTopWidth: 2, borderBottomWidth: 2,
             borderLeftWidth: 2, borderRightWidth: 2
           }}
           lightTheme
+          returnKeyType='none'
           platform={Platform.OS === 'android' ? 'android' : 'ios'}
+          autoCapitalize='none'
           placeholder="What do you want ?"
-          onChangeText={this.updateSearch}
+          onChangeText={(search) => this.updateSearch(search)}
           value={search}
         />
         <FlatGrid
           itemDimension={130}
-          items={items}
+          items={response}
           style={styles.gridView}
           renderItem={({ item, index }) => (
             //<Image source={require('../../../assets/view.png')} />,
