@@ -22,9 +22,9 @@ export class ItemComponent implements OnInit {
   constructor(private location: Location) { }
 
   ngOnInit() {
-    this.itemData = this.location.getState();
+    this.itemData = this.location.getState()[0];
     console.log(this.itemData);
-    this.itemData.chartData.forEach(elem => {
+    this.itemData.prices.forEach(elem => {
       this.chartLabel.push(elem.month);
       this.chartPrice.push(elem.price);
     });
