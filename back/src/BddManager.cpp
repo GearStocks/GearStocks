@@ -344,7 +344,7 @@ rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string 
   if(maybe_result) {
     std::string userName = bsoncxx::to_json(*maybe_result);
     rapidjson::Document* document2 = new rapidjson::Document();
-    std::string	token = userName;
+    //    std::string	token = userName;
     std::string mail = userName;
     std::string firstName = userName;
     std::string lastName = userName;
@@ -355,8 +355,8 @@ rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string 
     rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
     userName.erase(0, userName.find("\"username\" :") + 14);
     userName.erase(userName.find("\", \"email\" ")); 
-    token.erase(0, token.find("\"token\" :") + 14);
-    token.erase(token.find("\", \"date\" "));
+    //token.erase(0, token.find("\"token\" :") + 14);
+    //token.erase(token.find("\", \"date\" "));
     mail.erase(0, mail.find("\"email\" :") + 11);
     mail.erase(mail.find("\", \"password\""));
     firstName.erase(0, firstName.find("\"firstName\" :") + 15);
@@ -371,8 +371,8 @@ rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string 
     s.SetObject();
     test.SetString(userName.c_str(), allocator);
     s.AddMember("userName", test, allocator);
-    test.SetString(token.c_str(), allocator);
-    s.AddMember("token", test, allocator);
+    //test.SetString(token.c_str(), allocator);
+    //s.AddMember("token", test, allocator);
     test.SetString(mail.c_str(), allocator);
     s.AddMember("mail", test, allocator);
     test.SetString(firstName.c_str(), allocator);
@@ -620,17 +620,27 @@ std::vector<std::string>	BddManager::parseKeyWordInTree(aho_corasick::trie trie,
     parsingResult.push_back((*mdr).get_keyword());
     ++mdr;
   }
+  std::stringstream ss(keyWord);
+  std::istream_iterator<std::string> begin(ss);
+  std::istream_iterator<std::string> end;
+  std::vector<std::string> keyWordSplited(begin, end);
+  auto it = keyWordSplited.begin();
   auto cursor = _carPartCollection.find({});
   for (auto&& doc : cursor) {
     std::string name = bsoncxx::to_json(doc);
     name.erase(0, name.find("\"name\" :") + 10);
     name.erase(name.find("\", \"photo\" "));
-    if (name.find(keyWord) != std::string::npos) {
-      if (std::find(parsingResult.begin(), parsingResult.end(), name) == parsingResult.end())
-	{
-	  parsingResult.push_back(name);
-	}
+    while (it < keyWordSplited.end()) {
+      if (name.find(*it) != std::string::npos) {
+	if (std::find(parsingResult.begin(), parsingResult.end(), name) == parsingResult.end())
+          {
+            parsingResult.push_back(name);
+            it = keyWordSplited.end() - 1;
+          }
+      }
+      ++it;
     }
+    it = keyWordSplited.begin();
   }
   return parsingResult;
 }
