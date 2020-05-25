@@ -297,6 +297,26 @@ int Server::UpdateUser(const Pistache::Rest::Request& request, Pistache::Http::R
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
+  errorHandling = _manager->checkIfOldExist(document["oldPass"].GetString(), document["mail"].GetString(), document["oldUsername"].GetString());
+  if (errorHandling == 1) {
+    document2.AddMember("error", "Old password doesn't exist", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  if (errorHandling == 2) {
+    document2.AddMember("error", "Old mail doesn't exist", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  if (errorHandling == 3) {
+    document2.AddMember("error", "Old username doesn't exist", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  
   errorHandling = _manager->updateNameUser(document["mail"].GetString(), document["oldUsername"].GetString(), document["newUsername"].GetString());
   if (errorHandling == 1) {
     document2.AddMember("error", "Mail doesn't exist", allocator); 
@@ -310,6 +330,7 @@ int Server::UpdateUser(const Pistache::Rest::Request& request, Pistache::Http::R
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
+  
     errorHandling = _manager->updatePasswordUser(document["mail"].GetString(), document["oldPass"].GetString(), document["newPass"].GetString());
   if (errorHandling == 1) {
     document2.AddMember("error", "Mail doesn't exist", allocator); 
