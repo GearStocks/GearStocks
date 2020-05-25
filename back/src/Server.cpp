@@ -477,12 +477,13 @@ int Server::getFullCarPart(const Pistache::Rest::Request& request, Pistache::Htt
   document2.SetObject();
   rapidjson::Document::AllocatorType& allocator = document2.GetAllocator();
   rapidjson::StringBuffer strbuf;
-  rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);  
+  rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
   document.Parse(request.body().c_str());
   response.headers().add<Pistache::Http::Header::AccessControlAllowOrigin>("*");
   response.headers().add<Pistache::Http::Header::AccessControlAllowMethods>("*");
   response.headers().add<Pistache::Http::Header::AccessControlAllowHeaders>("*");
   response.headers().add<Pistache::Http::Header::ContentType>(MIME(Application, Json));
+
   if(!document.HasMember("partName")) {
     std::cout << "Il manque le champ partName" << std::endl;
     document2.AddMember("error", "Bad JSON. Need a field 'partName'", allocator); 

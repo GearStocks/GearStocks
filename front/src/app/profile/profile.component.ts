@@ -57,10 +57,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private profileService: ProfileService,
     private profileFormService: ProfileFormService) {
     this.currentUser = this.userService.currentUserValue;
+    console.log(this.currentUser);
   }
 
   ngOnInit() {
-    this.profileForm = this.profileFormService.buildForm(this.currentUser);
+    this.profileForm = this.profileFormService.buildForm(this.currentUser.data[0]);
     this.formCompare = this.profileDataGroup.getRawValue();
     this.profileFormSubscription = this.profileDataGroup.valueChanges.subscribe(val => {
       this.dirty = JSON.stringify(val) !== JSON.stringify(this.formCompare);

@@ -15,7 +15,6 @@ import { AnimationOptions } from 'ngx-lottie';
 
 /* Services */
 import { UserService } from '../../services/user.service';
-import { AlertService } from '../../../shared/components/gearstocks-alert/services/alert.service';
 
 /* Components */
 import { SigninComponent } from '../signin/signin.component';
@@ -44,7 +43,6 @@ export class SignupComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private alertService: AlertService,
     private signupFormService: SignupFormService,
     public dialog: MatDialog,
     private router: Router) {
