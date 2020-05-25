@@ -96,42 +96,40 @@ size_t	BddManager::userRegister(std::vector<std::string> documentContent)
   return 0;
 }
 
-size_t	BddManager::checkIfOldExist(std::string oldPass, std::string mail, std::string oldUsername)
+size_t	BddManager::checkIfUserIsAuth(std::string userToken, std::string password, std::string username, std::string mail)
 {
   std::string	valueInBDD;
 
-  valueInBDD = checkIfExist(_userCollection, "password", cryptPass(oldPass));
+  /*valueInBDD = checkIfExist(_userCollection, "password", cryptPass(password));
   if (valueInBDD.compare("") == 0) {
     std::cout << "Password doesn't exist" << std::endl;
     return 1;
-  }
-  valueInBDD = checkIfExist(_userCollection, "email", mail);
+    }*/
+  valueInBDD = checkIfExist(_userCollection, "token", userToken);
   if (valueInBDD.compare("") == 0) {
-    std::cout << "Mail doesn't exist" << std::endl;
+    std::cout << "UserToken doesn't exist" << std::endl;
     return 2;
   }
-  valueInBDD = checkIfExist(_userCollection, "username", oldUsername);
-  if (valueInBDD.compare("") == 0) {
+  valueInBDD = checkIfExist(_userCollection, "username", username);
+  if (valueInBDD.compare("") != 0) {
     std::cout << "Username doesn't exist" << std::endl;
     return 3;
   }
+  valueInBDD = checkIfExist(_userCollection, "email", mail);
+  if (valueInBDD.compare("") != 0) {
+    std::cout << "Mail already exist" << std::endl;
+    return 4;
+  }
+  return 0;
 }
 
-size_t  BddManager::updatePasswordUser(std::string mailUser, std::string oldPass, std::string newPass)
+size_t  BddManager::updatePasswordUser(std::string token, std::string password)
 {
   std::string     valueInBDD;
-  
-  valueInBDD = checkIfExist(_userCollection, "email", mailUser);
-  if (valueInBDD.compare("") == 0) {
-    std::cout << "Mail doesn't exist" << std::endl;
+
+  if(password.compare("") == 0)
     return 1;
-  }
-  valueInBDD = checkIfExist(_userCollection, "password", cryptPass(oldPass));
-  if (valueInBDD.compare("") == 0) {
-    std::cout << "Old pass doesn't exist" << std::endl;
-    return 2;
-  }
-  updateContentInBDD(_userCollection, "password", mailUser, cryptPass(newPass));
+  updateContentInBDDViaToken(_userCollection, "password", token, cryptPass(password));
   return 0;
 }
 
@@ -266,21 +264,16 @@ rapidjson::Document*	BddManager::getCarPart(std::string partName)
       //return (std::make_pair(1, "Error encountered"));
 }
 
-size_t  BddManager::updateNameUser(std::string mailUser, std::string oldName, std::string newName)
+size_t  BddManager::updateNameUser(std::string token, std::string username, std::string firstname, std::string lastname)
 {
   std::string     valueInBDD;
 
-  valueInBDD = checkIfExist(_userCollection, "email", mailUser);
-  if (valueInBDD.compare("") == 0) {
-    std::cout << "Mail doesn't exist" << std::endl;
-    return 1;
-  }
-  valueInBDD = checkIfExist(_userCollection, "username", oldName);
-  if (valueInBDD.compare("") == 0) {
-    std::cout << "Old name doesn't exist" << std::endl;
-    return 2;
-  }
-  updateContentInBDD(_userCollection, "username", mailUser, newName);
+  if (username.compare("") != 0)
+    updateContentInBDDViaToken(_userCollection, "username", token, username);
+  if (firstname.compare("") != 0)
+    updateContentInBDDViaToken(_userCollection, "firstName", token, firstname);
+  if (lastname.compare("") != 0)
+    updateContentInBDDViaToken(_userCollection, "lastName", token, lastname);
   return 0;
 }
 
@@ -322,21 +315,11 @@ size_t  BddManager::resetPassword(std::string mailUser, std::string newPassword)
   return 0;
 }
 
-size_t  BddManager::updateMailUser(std::string oldMail, std::string newMail)
+size_t  BddManager::updateMailUser(std::string token, std::string mail)
 {
-  std::string     valueInBDD;  
-  //printCollection(_userCollection);
-  valueInBDD = checkIfExist(_userCollection, "email", oldMail);
-  if (valueInBDD.compare("") == 0) {
-    std::cout << "Old mail doesn't exist" << std::endl;
+  if (mail.compare("") == 0)
     return 1;
-  }
-  valueInBDD = checkIfExist(_userCollection, "email", newMail);
-  if (valueInBDD.compare("") != 0) {
-    std::cout << "New mail already exist" << std::endl;
-    return 2;
-  }
-  updateContentInBDD(_userCollection, "email", oldMail, newMail);
+  updateContentInBDDViaToken(_userCollection, "email", token, mail);
   return 0;
 }
 
@@ -507,10 +490,20 @@ void	BddManager::deleteContentInBDD(auto collection, std::string field, std::str
   << bsoncxx::builder::stream::finalize);
   }*/
 
+void    BddManager::updateContentInBDDViaToken(auto collection, std::string field, std::string token, std::string newValue)
+{
+  bsoncxx::builder::stream::document document{};
+  collection.update_one(document << "token" << token <<
+			bsoncxx::builder::stream::finalize,
+			document << "$set" <<
+			bsoncxx::builder::stream::open_document <<
+			field << newValue << bsoncxx::builder::stream::close_document
+			<< bsoncxx::builder::stream::finalize);
+}
+
 void    BddManager::updateContentInBDD(auto collection, std::string field, std::string mail, std::string newValue)
 {
   bsoncxx::builder::stream::document document{};
-  
   collection.update_one(document << "email" << mail <<
 			bsoncxx::builder::stream::finalize,
 			document << "$set" <<
