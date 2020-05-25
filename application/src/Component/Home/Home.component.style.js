@@ -30,5 +30,13 @@ export const styles = StyleSheet.create({
   },
   title: {
     fontSize: 40,
+  },
+  buttonSearch: {
+    marginTop: 40,
+  },
+  button: {
+    height: 50,
+    width: 350,
+    borderRadius: 5,
   }
 });
