@@ -45,6 +45,7 @@ export class ProfileFormService {
         !isNullOrUndefined(user.userName) ? user.userName : '',
         [Validators.required, Validators.minLength(2), Validators.maxLength(50)]
       ],
+      /*
       address: [
         !isNullOrUndefined(user.address) ? user.address : '',
       ],
@@ -54,7 +55,8 @@ export class ProfileFormService {
       phone: [
         !isNullOrUndefined(user.phone) ? user.phone : '',
         [Validators.maxLength(10)]
-      ]
+      ],
+       */
     });
   }
 

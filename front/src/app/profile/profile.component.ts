@@ -57,7 +57,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private profileService: ProfileService,
     private profileFormService: ProfileFormService) {
     this.currentUser = this.userService.currentUserValue;
-    console.log(this.currentUser);
   }
 
   ngOnInit() {
@@ -143,13 +142,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   submitProfileData(): void {
-    this.profileService.updateProfileData(this.profileDataGroup.getRawValue())
-      .pipe(first())
-      .subscribe(
-        (user: User) => {},
-        () => {
-          // error
-        });
+    const updateData = {
+      ...this.profileDataGroup.getRawValue(),
+    };
+    console.log(updateData);
+
   }
 
   submitProfileEmail(): void {

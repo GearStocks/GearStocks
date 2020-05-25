@@ -12,7 +12,6 @@ import { SearchListComponent } from './core/components/search-list/search-list.c
 import { ContactComponent } from './core/components/contact/contact.component';
 import { ItemComponent } from './item/item.component';
 import { SearchPageComponent } from './search-page/search-page.component';
-import { Item2Component } from './item2/item2.component';
 
 /* Services */
 import { AuthGuardService } from './auth/services/auth.guard';
@@ -28,7 +27,6 @@ const routes: Routes = [
   { path: 'item', component: ItemComponent },
 
   { path: 'search', component: SearchPageComponent },
-  { path: 'item2', component: Item2Component },
 
   { path: '**', redirectTo: '' }
 ];
