@@ -64,8 +64,8 @@ export default class Login extends React.Component {
     else {
       this.setState({ errorEmail: '' });
       this.setState({ errorPassword: '' });
+      new PostLogin().login(JSONObj, navigate);
     }
-    new PostLogin().login(JSONObj, navigate);
   }
 
   render() {
@@ -96,6 +96,7 @@ export default class Login extends React.Component {
           ref={(input) => { this.password = input; }}
           inputStyle={styles.input}
           returnKeyType="go"
+          autoCapitalize = 'none'
           errorStyle={{fontSize: 18}}
           containerStyle={{top: 50}}
           label='Password'

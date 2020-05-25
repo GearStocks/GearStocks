@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { Text, View, Platform } from 'react-native';
+import { Text, View, Platform, Alert } from 'react-native';
 import { SearchBar, Icon } from 'react-native-elements';
 import FlatGrid from 'react-native-super-grid';
 
@@ -21,6 +21,24 @@ export default class HomeComponent extends React.Component {
     this.state = {
       search: ''
     };
+  }
+
+  componentDidMount() {
+    if (!this.props.screenProps.token) {
+      Alert.alert(
+        "Alert Title",
+        "My Alert Msg",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ],
+        { cancelable: false }
+      );
+    }
   }
 
   updateSearch = (search) => {
