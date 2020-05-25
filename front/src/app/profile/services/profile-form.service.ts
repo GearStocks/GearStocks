@@ -31,7 +31,7 @@ export class ProfileFormService {
     });
   }
 
-  createProfileDataGroup(user: User): FormGroup {
+  createProfileDataGroup(user: any): FormGroup {
     return this.formBuilder.group({
       firstName: [
         !isNullOrUndefined(user.firstName) ? user.firstName : '',
@@ -58,10 +58,10 @@ export class ProfileFormService {
     });
   }
 
-  createProfileEmailGroup(user: User): FormGroup {
+  createProfileEmailGroup(user: any): FormGroup {
     return this.formBuilder.group({
       email: new FormControl({
-        value: !isNullOrUndefined(user.email) ? user.email : '',
+        value: !isNullOrUndefined(user.mail) ? user.mail : '',
         disabled: true
       }, { validators: [Validators.required, Validators.email]}),
       emailConfirm: [

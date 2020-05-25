@@ -297,6 +297,26 @@ int Server::UpdateUser(const Pistache::Rest::Request& request, Pistache::Http::R
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
+  errorHandling = _manager->checkIfOldExist(document["oldPass"].GetString(), document["mail"].GetString(), document["oldUsername"].GetString());
+  if (errorHandling == 1) {
+    document2.AddMember("error", "Old password doesn't exist", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  if (errorHandling == 2) {
+    document2.AddMember("error", "Old mail doesn't exist", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  if (errorHandling == 3) {
+    document2.AddMember("error", "Old username doesn't exist", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  
   errorHandling = _manager->updateNameUser(document["mail"].GetString(), document["oldUsername"].GetString(), document["newUsername"].GetString());
   if (errorHandling == 1) {
     document2.AddMember("error", "Mail doesn't exist", allocator); 
@@ -310,6 +330,7 @@ int Server::UpdateUser(const Pistache::Rest::Request& request, Pistache::Http::R
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
+  
     errorHandling = _manager->updatePasswordUser(document["mail"].GetString(), document["oldPass"].GetString(), document["newPass"].GetString());
   if (errorHandling == 1) {
     document2.AddMember("error", "Mail doesn't exist", allocator); 
@@ -477,12 +498,13 @@ int Server::getFullCarPart(const Pistache::Rest::Request& request, Pistache::Htt
   document2.SetObject();
   rapidjson::Document::AllocatorType& allocator = document2.GetAllocator();
   rapidjson::StringBuffer strbuf;
-  rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);  
+  rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
   document.Parse(request.body().c_str());
   response.headers().add<Pistache::Http::Header::AccessControlAllowOrigin>("*");
   response.headers().add<Pistache::Http::Header::AccessControlAllowMethods>("*");
   response.headers().add<Pistache::Http::Header::AccessControlAllowHeaders>("*");
   response.headers().add<Pistache::Http::Header::ContentType>(MIME(Application, Json));
+
   if(!document.HasMember("partName")) {
     std::cout << "Il manque le champ partName" << std::endl;
     document2.AddMember("error", "Bad JSON. Need a field 'partName'", allocator); 
@@ -495,8 +517,7 @@ int Server::getFullCarPart(const Pistache::Rest::Request& request, Pistache::Htt
   document2.AddMember("success", "Get car part succeeded", allocator);
   mergeObjects(document2, *doc3, allocator);
   document2.Accept(writer);
-  response.send(Pistache::Http::Code::Ok, strbuf.GetString());
-  
+  response.send(Pistache::Http::Code::Ok, strbuf.GetString()); 
   return 0;
 }
 

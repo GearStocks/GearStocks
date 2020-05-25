@@ -96,6 +96,27 @@ size_t	BddManager::userRegister(std::vector<std::string> documentContent)
   return 0;
 }
 
+size_t	BddManager::checkIfOldExist(std::string oldPass, std::string mail, std::string oldUsername)
+{
+  std::string	valueInBDD;
+
+  valueInBDD = checkIfExist(_userCollection, "password", oldPass);
+  if (valueInBDD.compare("") == 0) {
+    std::cout << "Password doesn't exist" << std::endl;
+    return 1;
+  }
+  valueInBDD = checkIfExist(_userCollection, "email", mail);
+  if (valueInBDD.compare("") == 0) {
+    std::cout << "Mail doesn't exist" << std::endl;
+    return 2;
+  }
+  valueInBDD = checkIfExist(_userCollection, "username", oldUsername);
+  if (valueInBDD.compare("") == 0) {
+    std::cout << "Username doesn't exist" << std::endl;
+    return 3;
+  }
+}
+
 size_t  BddManager::updatePasswordUser(std::string mailUser, std::string oldPass, std::string newPass)
 {
   std::string     valueInBDD;

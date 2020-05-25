@@ -41,6 +41,7 @@ public:
   size_t	updatePasswordUser(std::string mailUser, std::string oldPass, std::string newPass);
   size_t	resetPassword(std::string mailUser, std::string newPassword);
   std::string	getTime();
+  size_t	checkIfOldExist(std::string oldPass, std::string mail, std::string oldUsername);
   size_t	disconnectUser(std::string mailUser, std::string token);
   size_t	addCarPartInBDD(std::string name, std::vector<std::string> prices, std::string photo, std::string description);
   std::string	generateRandomString(size_t size);

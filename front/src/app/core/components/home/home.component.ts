@@ -10,14 +10,13 @@ import { User } from '../../../auth/models/user.model';
 
 /* Services */
 import { UserService } from '../../../auth/services/user.service';
-import { HomeService } from './services/home.service';
-import { AlertService } from '../../../shared/components/gearstocks-alert/services/alert.service';
+import { SearchService } from '../../services/search.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  providers: [HomeService]
+  providers: [SearchService]
 })
 
 export class HomeComponent {
@@ -25,21 +24,19 @@ export class HomeComponent {
   video = 'assets/video/gearstocks.mp4';
   keyword: string;
 
-  constructor(private router: Router, private userService: UserService, private homeService: HomeService,
-              private alertService: AlertService) {
+  constructor(private router: Router, private userService: UserService, private searchService: SearchService) {
     this.userService.currentUser.subscribe(x => this.currentUser = x);
   }
 
   search() {
-    this.homeService.search(this.keyword)
+    this.searchService.search(this.keyword)
       .pipe(first())
       .subscribe(
         (data) => {
           this.router.navigateByUrl('/search-list', { state: data });
         },
-        (err) => {
-          this.alertService.error(err);
-        });
+        () => {}
+        );
   }
 
   scrollTo(element: HTMLElement): void {
