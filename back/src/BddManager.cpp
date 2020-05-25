@@ -100,7 +100,7 @@ size_t	BddManager::checkIfOldExist(std::string oldPass, std::string mail, std::s
 {
   std::string	valueInBDD;
 
-  valueInBDD = checkIfExist(_userCollection, "password", oldPass);
+  valueInBDD = checkIfExist(_userCollection, "password", cryptPass(oldPass));
   if (valueInBDD.compare("") == 0) {
     std::cout << "Password doesn't exist" << std::endl;
     return 1;
@@ -284,7 +284,7 @@ size_t  BddManager::updateNameUser(std::string mailUser, std::string oldName, st
   return 0;
 }
 
-size_t  BddManager::updateDateInBDD(std::string mailUser, std::string date)
+size_t  BddManager::updateDateInBDD(std::string mailUser, std::string date)x
 {
   std::string     valueInBDD;
 
