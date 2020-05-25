@@ -63,7 +63,7 @@ export class SearchListComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe(
         (data) => {
-          this.router.navigateByUrl('/item', { state: data });
+          this.router.navigateByUrl('/item', { state: data.data });
         },
         () => {}
       );
