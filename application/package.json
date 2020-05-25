@@ -27,6 +27,8 @@
     "react-native-datepicker": "^1.7.2",
     "react-native-elements": "^1.1.0",
     "react-native-gesture-handler": "~1.5.0",
+    "react-native-search-bar": "^3.5.1",
+    "react-native-search-header": "^0.3.5",
     "react-native-super-grid": "^3.1.1",
     "react-native-web": "^0.11.7",
     "react-navigation": "^3.11.0"
