@@ -495,8 +495,7 @@ int Server::getFullCarPart(const Pistache::Rest::Request& request, Pistache::Htt
   document2.AddMember("success", "Get car part succeeded", allocator);
   mergeObjects(document2, *doc3, allocator);
   document2.Accept(writer);
-  response.send(Pistache::Http::Code::Ok, strbuf.GetString());
-  
+  response.send(Pistache::Http::Code::Ok, strbuf.GetString()); 
   return 0;
 }
 
