@@ -44,24 +44,8 @@ BddManager::~BddManager()
 
 void	BddManager::connect()
 {
-  std::cout << "Connect" << std::endl;
   _userCollection = _conn["testdb"]["userCollection"];
   _carPartCollection = _conn["testdb"]["carPartCollection"];
-  
-  //bsoncxx::builder::stream::document document{};
-  //auto collection = _conn["testdb"]["testcollection"];
-  //mongocxx::collection collection = _conn["testdb"]["testcollection"];
-  
-  //document << "ceci est un" << "petit test";
-  
-  //std::cout << "BDD avant deletion" << std::endl;
-  //printCollection(_collection);
-  //addContentInBDD(_collection, document);
-  //deleteContentInBDD(_collection, "Ceci est un test", "pour le rdv EIP2");
-  //updateContentInBDD(_collection, "test1", "test2", "mdr");
-  //checkIfExist(_collection, "test1", "mdr");
-  //std::cout << "BDD après deletion" << std::endl;
-  //printCollection(_collection);
 }
 
 size_t	BddManager::userConnect(std::string username, std::string password, std::string token)
@@ -115,24 +99,25 @@ size_t	BddManager::userRegister(std::vector<std::string> documentContent)
 size_t  BddManager::updatePasswordUser(std::string mailUser, std::string oldPass, std::string newPass)
 {
   std::string     valueInBDD;
-  valueInBDD = checkIfExist(_userCollection, "password", oldPass);
-  if (valueInBDD == "") {
-    std::cout << "Old pass doesn't exist" << std::endl;
-    return 0;
+  
+  valueInBDD = checkIfExist(_userCollection, "email", mailUser);
+  if (valueInBDD.compare("") == 0) {
+    std::cout << "Mail doesn't exist" << std::endl;
+    return 1;
   }
-  //checkMail before
-  //valueInBDD = checkIfExist(_collection, "password",  newPass);
-  updateContentInBDD(_userCollection, "password", mailUser, newPass); 
+  valueInBDD = checkIfExist(_userCollection, "password", cryptPass(oldPass));
+  if (valueInBDD.compare("") == 0) {
+    std::cout << "Old pass doesn't exist" << std::endl;
+    return 2;
+  }
+  updateContentInBDD(_userCollection, "password", mailUser, cryptPass(newPass));
+  return 0;
 }
 
 rapidjson::Document*	BddManager::getFullCarPart(std::string partName)
 {
-  std::string	valueInBDD;  
-  /*valueInBDD = checkIfExist(_userCollection, "token", userToken);
-  if (valueInBDD.compare("") == 0) {
-    //return (std::make_pair(1, "Invalid token"));
-    }*/
-  
+  std::string	valueInBDD;
+
   valueInBDD = checkIfExist(_carPartCollection, "name", partName);
   if (valueInBDD.compare("") == 0) {
     //return (std::make_pair(1, "Invalid part name"));
@@ -154,8 +139,6 @@ rapidjson::Document*	BddManager::getFullCarPart(std::string partName)
     std::cout << name << std::endl;
     name.erase(0, name.find("\"name\" :") + 10);
     name.erase(name.find("\", \"photo\" "));
-    //price.erase(0, price.find("\"price\" :") + 11);
-    //price.erase(price.find("\", \"photo\" "));
     path.erase(0, path.find("\"photo\" :") + 11);
     path.erase(path.find("\", \"descript"));
     description.erase(0, description.find("\"description\" :") + 17);
@@ -174,8 +157,6 @@ rapidjson::Document*	BddManager::getFullCarPart(std::string partName)
     s.SetObject();
     test.SetString(name.c_str(), allocator);
     s.AddMember("name", test, allocator);
-    //test.SetString(price.c_str(), allocator);
-    //s.AddMember("price", test, allocator);
     test.SetString(path.c_str(), allocator);
     s.AddMember("photo", test, allocator);
     test.SetString(description.c_str(), allocator);
@@ -244,7 +225,6 @@ rapidjson::Document*	BddManager::getCarPart(std::string partName)
     rapidjson::Value mdr(rapidjson::kArrayType);
     rapidjson::Value test;
     rapidjson::Value s;
-    // const char *ptdr = name.c_str();
     s.SetObject();
     test.SetString(name.c_str(), allocator);
     s.AddMember("name", test, allocator);
@@ -267,15 +247,18 @@ rapidjson::Document*	BddManager::getCarPart(std::string partName)
 
 size_t  BddManager::updateNameUser(std::string mailUser, std::string oldName, std::string newName)
 {
-  std::cout << "OldUsername = " << oldName << std::endl << "NewUsername = " << newName << std::endl;
   std::string     valueInBDD;
+
+  valueInBDD = checkIfExist(_userCollection, "email", mailUser);
+  if (valueInBDD.compare("") == 0) {
+    std::cout << "Mail doesn't exist" << std::endl;
+    return 1;
+  }
   valueInBDD = checkIfExist(_userCollection, "username", oldName);
-  if (valueInBDD == "") {
+  if (valueInBDD.compare("") == 0) {
     std::cout << "Old name doesn't exist" << std::endl;
-    return 0;
-  }  
-  //checkMail before
-  //valueInBDD = checkIfExist(_collection, "password",  newPass);
+    return 2;
+  }
   updateContentInBDD(_userCollection, "username", mailUser, newName);
   return 0;
 }
@@ -283,8 +266,12 @@ size_t  BddManager::updateNameUser(std::string mailUser, std::string oldName, st
 size_t  BddManager::updateDateInBDD(std::string mailUser, std::string date)
 {
   std::string     valueInBDD;
-  //valueInBDD = checkIfExist(_collection, "username", oldName);
-  //checkMail before
+
+  valueInBDD = checkIfExist(_userCollection, "email", mailUser);
+  if (valueInBDD.compare("") == 0) {
+    std::cout << "Mail doesn't exist" << std::endl;
+    return 1;
+  }
   updateContentInBDD(_userCollection, "date", mailUser, date);
   return 0;
 }
@@ -292,8 +279,11 @@ size_t  BddManager::updateDateInBDD(std::string mailUser, std::string date)
 size_t  BddManager::updateTokenInBDD(std::string mailUser, std::string token)
 {
   std::string     valueInBDD;
-  //valueInBDD = checkIfExist(_collection, "username", oldName);
-  //checkMail before
+  valueInBDD = checkIfExist(_userCollection, "email", mailUser);
+  if (valueInBDD.compare("") == 0) {
+    std::cout << "Mail doesn't exist" << std::endl;
+    return 1;
+  }
   updateContentInBDD(_userCollection, "token", mailUser, token);
   return 0;
 }
@@ -301,8 +291,12 @@ size_t  BddManager::updateTokenInBDD(std::string mailUser, std::string token)
 size_t  BddManager::resetPassword(std::string mailUser, std::string newPassword)
 {
   std::string     valueInBDD;
-  //valueInBDD = checkIfExist(_collection, "username", oldName);
-  //checkMail before
+  
+  valueInBDD = checkIfExist(_userCollection, "email", mailUser);
+  if (valueInBDD == "") {
+    std::cout << "The mail doesn't exist" << std::endl;
+    return 1;
+  }
   updateContentInBDD(_userCollection, "password", mailUser, cryptPass(newPassword));
   return 0;
 }
@@ -310,21 +304,18 @@ size_t  BddManager::resetPassword(std::string mailUser, std::string newPassword)
 size_t  BddManager::updateMailUser(std::string oldMail, std::string newMail)
 {
   std::string     valueInBDD;  
-  std::cout << "Before update" << std::endl;
-  printCollection(_userCollection);
+  //printCollection(_userCollection);
   valueInBDD = checkIfExist(_userCollection, "email", oldMail);
-  if (valueInBDD == "") {
+  if (valueInBDD.compare("") == 0) {
     std::cout << "Old mail doesn't exist" << std::endl;
     return 1;
   }
   valueInBDD = checkIfExist(_userCollection, "email", newMail);
-  if (valueInBDD != "") {
+  if (valueInBDD.compare("") != 0) {
     std::cout << "New mail already exist" << std::endl;
     return 2;
   }
   updateContentInBDD(_userCollection, "email", oldMail, newMail);
-  std::cout << "After update" << std::endl;
-  printCollection(_userCollection);
   return 0;
 }
 
@@ -353,7 +344,7 @@ rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string 
   if(maybe_result) {
     std::string userName = bsoncxx::to_json(*maybe_result);
     rapidjson::Document* document2 = new rapidjson::Document();
-    std::string	token = userName;
+    //    std::string	token = userName;
     std::string mail = userName;
     std::string firstName = userName;
     std::string lastName = userName;
@@ -364,8 +355,8 @@ rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string 
     rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
     userName.erase(0, userName.find("\"username\" :") + 14);
     userName.erase(userName.find("\", \"email\" ")); 
-    token.erase(0, token.find("\"token\" :") + 14);
-    token.erase(token.find("\", \"date\" "));
+    //token.erase(0, token.find("\"token\" :") + 14);
+    //token.erase(token.find("\", \"date\" "));
     mail.erase(0, mail.find("\"email\" :") + 11);
     mail.erase(mail.find("\", \"password\""));
     firstName.erase(0, firstName.find("\"firstName\" :") + 15);
@@ -380,8 +371,8 @@ rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string 
     s.SetObject();
     test.SetString(userName.c_str(), allocator);
     s.AddMember("userName", test, allocator);
-    test.SetString(token.c_str(), allocator);
-    s.AddMember("token", test, allocator);
+    //test.SetString(token.c_str(), allocator);
+    //s.AddMember("token", test, allocator);
     test.SetString(mail.c_str(), allocator);
     s.AddMember("mail", test, allocator);
     test.SetString(firstName.c_str(), allocator);
@@ -398,15 +389,33 @@ rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string 
   //return (std::make_pair(1, "Error encountered"));
 }
 
-size_t	BddManager::addCarPartInBDD(std::string name, std::string price, std::string photo, std::string description)
+size_t	BddManager::addCarPartInBDD(std::string name, std::vector<std::string> prices, std::string photo, std::string description)
 {
   bsoncxx::builder::stream::document document{};
-  
-  std::cout << "name:" << name << "|price:" << price << "|photo:" << photo << std::endl;
-  document << "name" << name << "price" << price << "photo" << photo << "description" << description;
+  bsoncxx::builder::stream::document document2{};
+  auto it = prices.begin();
+  auto it2 = it + 1;
+
+  document << "name" << name << "photo" << photo << "description" << description;
+  auto in_array = document << "parts" << bsoncxx::builder::stream::open_array;
+  while (it2 < prices.end()) {
+    in_array = in_array << bsoncxx::builder::stream::open_document << "month" << *it << "price" << *it2 << bsoncxx::builder::stream::close_document;
+    it = it + 2;
+    it2 = it2 + 2;
+  }
+  auto after_array = in_array << bsoncxx::builder::stream::close_array;
+    
   addContentInBDD(_carPartCollection, document);
   std::cout << "A car part has been registered:" << name << std::endl;
   return 0;
+}
+
+void	BddManager::addAllPrices(bsoncxx::builder::stream::document *document, std::string month, std::string price)
+{
+  bsoncxx::builder::stream::document document2{};
+
+  document2 << "month" << month << "price" << price;
+  *document << "parts" << bsoncxx::builder::stream::open_array << document2 << bsoncxx::builder::stream::close_array;
 }
 
 /*size_t	BddManager::updateMailUser(std::string oldMail, std::string newMail)
@@ -431,8 +440,16 @@ size_t	BddManager::addCarPartInBDD(std::string name, std::string price, std::str
   return 0;
   }*/
 
-void	BddManager::disconnectUser(std::string mailUser, std::string token)
+size_t	BddManager::disconnectUser(std::string mailUser, std::string token)
 {
+  std::string     valueInBDD;
+  
+  valueInBDD = checkIfExist(_userCollection, "email", mailUser);
+  if (valueInBDD.compare("") == 0) {
+    std::cout << "Mail doesn't exist" << std::endl;
+    return 1;
+  }
+  //FAIRE LE CHECK TOKEN
   updateTokenInBDD(mailUser, token);
   std::cout << "Disconnect" << std::endl;
 }
@@ -488,11 +505,6 @@ std::string	BddManager::checkIfExist(auto collection, std::string field, std::st
     collection.find_one(document << field << value
 			<< bsoncxx::builder::stream::finalize);
   if(maybe_result) {
-    std::string result;
-    //result = bsoncxx::to_json(*maybe_result) + "\n";
-    //std::cout << bsoncxx::to_json(*maybe_result) << "\n";
-    //std::cout << "IL EXISTE" << std::endl;
-    //return result;
     return (bsoncxx::to_json(*maybe_result));
   }
   return "";
@@ -587,7 +599,6 @@ aho_corasick::trie	BddManager::generateTree()
 {
   aho_corasick::trie	trie;
 
-  std::cout << "on commence le tri" << std::endl;
   auto cursor = _carPartCollection.find({});
   for (auto&& doc : cursor) {
     std::string name = bsoncxx::to_json(doc);
@@ -609,18 +620,27 @@ std::vector<std::string>	BddManager::parseKeyWordInTree(aho_corasick::trie trie,
     parsingResult.push_back((*mdr).get_keyword());
     ++mdr;
   }
+  std::stringstream ss(keyWord);
+  std::istream_iterator<std::string> begin(ss);
+  std::istream_iterator<std::string> end;
+  std::vector<std::string> keyWordSplited(begin, end);
+  auto it = keyWordSplited.begin();
   auto cursor = _carPartCollection.find({});
   for (auto&& doc : cursor) {
     std::string name = bsoncxx::to_json(doc);
     name.erase(0, name.find("\"name\" :") + 10);
     name.erase(name.find("\", \"photo\" "));
-    // name.substr(keyWord);
-    if (name.find(keyWord) != std::string::npos) {
-      if (std::find(parsingResult.begin(), parsingResult.end(), name) == parsingResult.end())
-	{
-	  parsingResult.push_back(name);
-	}
+    while (it < keyWordSplited.end()) {
+      if (name.find(*it) != std::string::npos) {
+	if (std::find(parsingResult.begin(), parsingResult.end(), name) == parsingResult.end())
+          {
+            parsingResult.push_back(name);
+            it = keyWordSplited.end() - 1;
+          }
+      }
+      ++it;
     }
+    it = keyWordSplited.begin();
   }
   return parsingResult;
 }
