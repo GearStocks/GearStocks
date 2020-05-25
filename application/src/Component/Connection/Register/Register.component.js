@@ -13,7 +13,7 @@ import { Input, Icon, Button } from 'react-native-elements';
 import { strings, errors } from '../../../../config/strings';
 import styles from './Register.component.style';
 import colors from '../../../../config/colors';
-import PostRegister from '../../../services/POST/PostRegister';
+import { user } from '../../../services/User';
 
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
@@ -69,7 +69,7 @@ export default class RegisterComponent extends React.Component {
         lastName: this.state.lastname,
         birthDay: "05/09/1997"
       });
-      new PostRegister().register(JSONObj, navigate);
+      user.register(JSONObj, navigate);
     }
   }
 

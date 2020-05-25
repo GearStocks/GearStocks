@@ -16,6 +16,7 @@ export const routes = {
   CONNECT: localAddress + 'connect',
   REGISTER: localAddress + 'register',
   INFO_USER: localAddress + 'infoUser',
+  UPDATE_INFO_USER: localAddress + 'updateInfoUser',
   DISCONNECT: localAddress + 'disconnect',
   ADD_CAR_PART: localAddress + 'addCarPart',
   GET_FULL_CAR_PART: localAddress + 'getFullCarPart',

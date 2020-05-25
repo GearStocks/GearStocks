@@ -12,7 +12,7 @@ import { Button, Input, Icon, Text } from 'react-native-elements';
 import { strings, errors } from '../../../../config/strings';
 import colors from '../../../../config/colors';
 import styles from './Login.component.style';
-import PostLogin from '../../../services/POST/PostLogin';
+import { user } from '../../../services/User'
 
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
@@ -64,12 +64,14 @@ export default class Login extends React.Component {
     else {
       this.setState({ errorEmail: '' });
       this.setState({ errorPassword: '' });
-      new PostLogin().login(JSONObj, navigate);
+      user.connect(JSONObj, navigate);
     }
   }
 
   render() {
     const { navigate } = this.props.navigation;
+    if (user.isConnected())
+      navigate('AppMenu');
     return (
       <View style={styles.container}>
         <Text style={styles.title}>GearStocks</Text>

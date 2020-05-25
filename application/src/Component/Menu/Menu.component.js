@@ -12,16 +12,14 @@ import { createDrawerNavigator, createAppContainer } from 'react-navigation';
 import HomeComponent from '../Home/Home.component';
 import ProfilComponent from '../Profil/Profil.component';
 import LoginComponent from '../Connection/Login/Login.component';
+import { user } from '../../services/User';
 
 export default class AppMenu extends React.Component {
   render() {
-    if (this.props.navigation.state.params.token)
-      return (<AppContainer screenProps={{
-        token: this.props.navigation.state.params.token,
-        email: this.props.navigation.state.params.email
-      }} />);
+    if (user.isConnected())
+      return (<AppContainer />);
     else
-      <LoginComponent />
+      return (<LoginComponent />);
   }
 }
 
