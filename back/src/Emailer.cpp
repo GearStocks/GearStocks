@@ -1,5 +1,6 @@
 #include <curl/curl.h>
 #include <chrono>
+#include <iostream>
 #include <ctime>
 #include <algorithm>
 #include <string.h>
@@ -80,7 +81,11 @@ int Emailer::sendMail(std::string userMail, std::string password, std::string ma
 int	Emailer::buildResetPasswordContentBuffer(std::string userMail, std::string password)
 {
   std::string time = getTime();
-  
+
+  if (_contentBuffer.empty() == 0) {
+    std::cout << "ON CLEAN LE BUFFER" << std::endl;
+    _contentBuffer.clear();
+  }
   time.erase(std::remove(time.begin(), time.end(), ' '), time.end());
   time.erase(std::remove(time.begin(), time.end(), ':'), time.end());
   time.erase(time.length() -1, time.length());
@@ -108,7 +113,11 @@ int	Emailer::buildResetPasswordContentBuffer(std::string userMail, std::string p
 int	Emailer::buildRegisterConfirmationContentBuffer(std::string userMail)
 {
   std::string time = getTime();
-  
+
+  if (_contentBuffer.empty() == 0) {
+    std::cout << "ON CLEAN LE BUFFER" << std::endl;
+    _contentBuffer.clear();
+  }
   time.erase(std::remove(time.begin(), time.end(), ' '), time.end());
   time.erase(std::remove(time.begin(), time.end(), ':'), time.end());
   time.erase(time.length() -1, time.length());

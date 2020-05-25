@@ -12,6 +12,7 @@
 #include <vector>
 #include <chrono>
 #include <ctime>
+#include <utility>
 
 #include <bsoncxx/builder/stream/document.hpp>
 #include <bsoncxx/json.hpp>
@@ -40,17 +41,18 @@ public:
   size_t	updatePasswordUser(std::string mailUser, std::string oldPass, std::string newPass);
   size_t	resetPassword(std::string mailUser, std::string newPassword);
   std::string	getTime();
-  void		disconnectUser(std::string mailUser, std::string token);
-  size_t	addCarPartInBDD(std::string name, std::string price, std::string photo, std::string description);
+  size_t	disconnectUser(std::string mailUser, std::string token);
+  size_t	addCarPartInBDD(std::string name, std::vector<std::string> prices, std::string photo, std::string description);
   std::string	generateRandomString(size_t size);
   aho_corasick::trie	generateTree();
   std::vector<std::string>	parseKeyWordInTree(aho_corasick::trie trie, std::string keyWord);
-  std::pair<size_t, std::string>	getInfoUser(std::string userToken, std::string userMail);
-  rapidjson::Document	getFullCarPart(std::string userToken, std::string partName);
-  rapidjson::Document*	getCarPart(std::string partName, std::string partNumber);
+  rapidjson::Document*	getInfoUser(std::string userToken, std::string userMail);
+  rapidjson::Document*	getFullCarPart(std::string partName);
+  rapidjson::Document*	getCarPart(std::string partName);
 private:
   void		connect();
-  
+  void		getAllPrices(rapidjson::Value *price, std::string *priceToParse, rapidjson::Document::AllocatorType &allocator);
+  void		addAllPrices(bsoncxx::builder::stream::document *document, std::string month, std::string price);
   void		addContentInBDD(auto collection, bsoncxx::builder::stream::document &doc);
   void		printCollection(auto collection);
   void		deleteContentInBDD(auto collection, std::string field, std::string value);
