@@ -18,6 +18,7 @@ export const routes = {
   INFO_USER: localAddress + 'infoUser',
   DISCONNECT: localAddress + 'disconnect',
   ADD_CAR_PART: localAddress + 'addCarPart',
-  GET_CAR_PART: localAddress + 'getCarPart',
-  FORGOT_PASSWORD: localAddress + 'forgottenPassword'
+  GET_FULL_CAR_PART: localAddress + 'getFullCarPart',
+  FORGOT_PASSWORD: localAddress + 'forgottenPassword',
+  LIST_PARTS: localAddress + 'listParts',
 };
