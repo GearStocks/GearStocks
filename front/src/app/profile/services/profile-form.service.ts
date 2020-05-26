@@ -31,7 +31,7 @@ export class ProfileFormService {
     });
   }
 
-  createProfileDataGroup(user: User): FormGroup {
+  createProfileDataGroup(user: any): FormGroup {
     return this.formBuilder.group({
       firstName: [
         !isNullOrUndefined(user.firstName) ? user.firstName : '',
@@ -45,6 +45,7 @@ export class ProfileFormService {
         !isNullOrUndefined(user.userName) ? user.userName : '',
         [Validators.required, Validators.minLength(2), Validators.maxLength(50)]
       ],
+      /*
       address: [
         !isNullOrUndefined(user.address) ? user.address : '',
       ],
@@ -54,14 +55,15 @@ export class ProfileFormService {
       phone: [
         !isNullOrUndefined(user.phone) ? user.phone : '',
         [Validators.maxLength(10)]
-      ]
+      ],
+       */
     });
   }
 
-  createProfileEmailGroup(user: User): FormGroup {
+  createProfileEmailGroup(user: any): FormGroup {
     return this.formBuilder.group({
       email: new FormControl({
-        value: !isNullOrUndefined(user.email) ? user.email : '',
+        value: !isNullOrUndefined(user.mail) ? user.mail : '',
         disabled: true
       }, { validators: [Validators.required, Validators.email]}),
       emailConfirm: [

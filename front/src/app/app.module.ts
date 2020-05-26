@@ -9,7 +9,6 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { ProfileComponent } from './profile/profile.component';
 import { ItemComponent } from './item/item.component';
-import { Item2Component } from './item2/item2.component';
 import { SearchPageComponent } from './search-page/search-page.component';
 
 /* App Modules */
@@ -25,7 +24,6 @@ import { JwtInterceptor } from './auth/services/jwt.interceptor';
   declarations: [
     AppComponent,
     ItemComponent,
-    Item2Component,
     ProfileComponent,
     SearchPageComponent
   ],

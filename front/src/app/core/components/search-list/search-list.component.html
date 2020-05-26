@@ -39,12 +39,13 @@
 
       <div class="row">
 
-        <div  *ngFor="let item of data.items" class="col-lg-4 col-md-6 mb-4">
-          <div routerLink="" class="card h-100">
-            <img class="card-img-top" style="height:200px; width:350px" src="https://medias.mehariclub.com/1200500_index_1.jpg" alt="">
+        <div  *ngFor="let item of data.parts" class="col-lg-4 col-md-6 mb-4">
+          <div (click)="navigate(item)" class="card h-100">
+            <img *ngIf="!item.photo" class="card-img-top" src="../../../../assets/img/NoImageAvailableIcon.png" alt="">
+            <img *ngIf="item.photo" class="card-img-top" [src]="item.photo" alt="">
             <div class="card-body">
               <h4 class="card-title">{{item.name}}</h4>
-              <p class="card-text"> {{item.description}}</p>
+              <p class="card-text">Prix : {{item.price}}</p>
             </div>
           </div>
         </div>

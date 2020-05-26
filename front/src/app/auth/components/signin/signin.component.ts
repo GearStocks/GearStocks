@@ -12,7 +12,6 @@ import { SigninFormService } from './services/signin-form.service';
 
 /* Material Angular */
 import { MatDialogRef } from '@angular/material/dialog';
-import { AlertService } from '../../../shared/components/gearstocks-alert/services/alert.service';
 
 /* Models */
 import { ErrorMessages } from './signin-errors';
@@ -33,7 +32,6 @@ export class SigninComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private alertService: AlertService,
     private signinFormService: SigninFormService,
     public dialogRef: MatDialogRef<SigninComponent>,
     private router: Router,
@@ -75,9 +73,8 @@ export class SigninComponent implements OnInit {
           this.dialogRef.close();
           this.router.navigate(['/']);
         },
-        (err) => {
+        () => {
           this.loading = false;
-          this.alertService.error(err);
         });
   }
 

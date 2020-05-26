@@ -1,9 +1,6 @@
 /* Angular modules */
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-
-/* RxJs Dependencies */
-import { Subscription } from 'rxjs';
+import { Location } from '@angular/common';
 
 /* Charts */
 import { Chart } from 'chart.js';
@@ -17,23 +14,20 @@ import { Item } from './models/item.model';
   styleUrls: ['./item.component.scss']
 })
 export class ItemComponent implements OnInit {
-  itemData: Item;
-  itemSubscription: Subscription;
+  itemData: any;
   chart = [];
   chartLabel = [];
   chartPrice = [];
 
-  constructor(private route: ActivatedRoute) { }
+  constructor(private location: Location) { }
 
   ngOnInit() {
-    this.itemSubscription = this.route.data
-        .subscribe((data: Item) => {
-          this.itemData = data['item'];
-          data['item'].chartData.forEach(elem => {
-            this.chartLabel.push(elem.month);
-            this.chartPrice.push(elem.price);
-          });
-        });
+    this.itemData = this.location.getState()[0];
+    console.log(this.itemData);
+    this.itemData.prices.forEach(elem => {
+      this.chartLabel.push(elem.month);
+      this.chartPrice.push(elem.price);
+    });
     this.createChart();
   }
 

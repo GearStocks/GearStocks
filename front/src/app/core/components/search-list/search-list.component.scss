@@ -69,6 +69,20 @@
 
   &__list {
     padding-top: 3em;
+
+    .card {
+      cursor: pointer;
+
+      &:hover {
+        background: #4183d7;
+        color: white;
+      }
+    }
+
+    img {
+      width: auto;
+      max-height: 200px;
+    }
   }
 
 }

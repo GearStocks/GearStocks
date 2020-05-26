@@ -38,6 +38,7 @@
             [validationError]="profileDataGroup.get('userName').errors"
             [validationErrorMessages]="errorMessages.userName">
           </app-gearstocks-input>
+          <!--
           <app-gearstocks-input
             [group]="profileDataGroup"
             [name]="'address'"
@@ -65,6 +66,7 @@
             [validationError]="profileDataGroup.get('phone').errors"
             [validationErrorMessages]="errorMessages.phone">
           </app-gearstocks-input>
+          -->
           <button class="btn btn-outline-primary" type="submit" [disabled]="!dirty || !profileDataGroup.valid">Valider les modifications</button>
         </form>
       </div>
