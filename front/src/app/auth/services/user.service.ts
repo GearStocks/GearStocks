@@ -27,6 +27,7 @@ export class UserService {
   public loginUrl = environment.loginUrl;
   public registerUrl = environment.registerUrl;
   public resetPasswordUrl = environment.resetPasswordUrl;
+  public getUserUrl = environment.getUserUrl;
 
   constructor(private http: HttpClient, private router: Router) {
     this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
@@ -77,6 +78,20 @@ export class UserService {
 
   resetPassword(email: string) {
     return this.http.post<any>(this.resetPasswordUrl, { mail: email }, httpOptions);
+  }
+
+  updateUser(data: any): Observable<any> {
+    return this.http.post<any>(this.getUserUrl, data, httpOptions)
+      .pipe(map(user => {
+          const newUser = {
+            ...user,
+            token: this.currentUserValue.token
+          };
+          localStorage.setItem('currentUser', JSON.stringify(newUser));
+          this.currentUserSubject.next(newUser);
+          return newUser;
+        })
+      );
   }
 
 }

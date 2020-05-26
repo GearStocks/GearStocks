@@ -5,7 +5,6 @@ export const environment = {
   resetPasswordUrl: 'http://localhost:8000/forgottenPassword',
   searchUrl: 'http://localhost:8000/listParts',
   getItemUrl: 'http://localhost:8000/getFullCarPart',
-  updateProfileUrl: 'http://localhost:8000/user',
-  updateEmailUrl: 'http://localhost:8000/user',
-  updatePasswordUrl: 'http://localhost:8000/user'
+  updateProfileUrl: 'http://localhost:8000/updateInfoUser',
+  getUserUrl: 'http://localhost:8000/infoUser'
 };

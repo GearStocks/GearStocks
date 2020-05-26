@@ -11,6 +11,7 @@ import { first } from 'rxjs/operators';
 import { ProfileFormService } from './services/profile-form.service';
 import { UserService } from '../auth/services/user.service';
 import { ProfileService } from './services/profile.service';
+import { AlertService } from '../shared/components/gearstocks-alert/services/alert.service';
 
 /* Models */
 import { User } from '../auth/models/user.model';
@@ -53,10 +54,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
   constructor(
     private myElement: ElementRef,
+    private alertService: AlertService,
     private userService: UserService,
     private profileService: ProfileService,
     private profileFormService: ProfileFormService) {
-    this.currentUser = this.userService.currentUserValue;
+    this.userService.currentUser.subscribe(x => this.currentUser = x);
   }
 
   ngOnInit() {
@@ -142,11 +144,32 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   submitProfileData(): void {
+    let username = '';
+    if (this.profileDataGroup.get('userName').value !== this.currentUser.data[0].userName) {
+      username = this.profileDataGroup.get('userName').value;
+    }
     const updateData = {
-      ...this.profileDataGroup.getRawValue(),
+      userName: username,
+      firstName: this.profileDataGroup.get('firstName').value,
+      lastName: this.profileDataGroup.get('lastName').value,
+      mail: '',
+      password: '',
+      userToken: this.currentUser.token
     };
-    console.log(updateData);
 
+    this.profileService.updateProfileData(updateData)
+      .pipe(first())
+      .subscribe(
+        () => {
+          this.userService.updateUser({userToken: this.currentUser.token, mail: this.currentUser.data[0].mail})
+            .pipe(first())
+            .subscribe(
+              () => {
+                console.log('hey');
+              },
+              () => {});
+        },
+        () => {});
   }
 
   submitProfileEmail(): void {
@@ -158,18 +181,32 @@ export class ProfileComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.profileService.updateEmail(this.profileEmailGroup.getRawValue())
+    const updateData = {
+      mail: this.profileEmailGroup.get('email').value,
+      firstName: '',
+      lastName: '',
+      userName: '',
+      password: '',
+      userToken: this.currentUser.token
+    };
+
+    this.profileService.updateProfileData(updateData)
       .pipe(first())
       .subscribe(
         () => {
-          this.editEmail = false;
-          this.profileEmailGroup.get('email').disable();
-          this.profileEmailGroup.get('emailConfirm').reset();
-          this.profileEmailGroup.get('password').reset();
+          this.userService.updateUser({userToken: this.currentUser.token, mail: this.currentUser.data[0].mail})
+            .pipe(first())
+            .subscribe(
+              () => {
+                this.editEmail = false;
+                this.profileEmailGroup.get('email').disable();
+                this.profileEmailGroup.get('emailConfirm').reset();
+                this.profileEmailGroup.get('password').reset();
+                console.log('hey');
+              },
+              () => {});
         },
-        () => {
-          // error
-        });
+        () => {});
   }
 
   submitProfilePassword(): void {
@@ -181,18 +218,32 @@ export class ProfileComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.profileService.updatePassword(this.profilePasswordGroup.getRawValue())
+    const updateData = {
+      userToken: this.currentUser.token,
+      mail: '',
+      firstName: '',
+      lastName: '',
+      userName: '',
+      password: this.profilePasswordGroup.get('password').value
+    };
+
+    this.profileService.updateProfileData(updateData)
       .pipe(first())
       .subscribe(
         () => {
-          this.editPass = false;
-          this.profilePasswordGroup.get('password').reset();
-          this.profilePasswordGroup.get('confirmPassword').reset();
-          this.profilePasswordGroup.get('oldPassword').reset();
+          this.userService.updateUser({userToken: this.currentUser.token, mail: this.currentUser.data[0].mail})
+            .pipe(first())
+            .subscribe(
+              () => {
+                this.editPass = false;
+                this.profilePasswordGroup.get('password').reset();
+                this.profilePasswordGroup.get('confirmPassword').reset();
+                this.profilePasswordGroup.get('oldPassword').reset();
+                console.log('hey');
+              },
+              () => {});
         },
-        () => {
-          // error
-        });
+        () => {});
   }
 
 }
