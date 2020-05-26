@@ -105,7 +105,7 @@ export default class HomeComponent extends React.Component {
           onChangeText={(search) => this.updateSearch(search)}
           value={search}
         />
-        <ScrollView style={{ flex: 1, top:'10' }}>
+        <ScrollView style={{ flex: 1 }}>
           <View style={styles.container}>
             {images}
           </View>
