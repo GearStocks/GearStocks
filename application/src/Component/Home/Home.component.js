@@ -78,11 +78,11 @@ export default class HomeComponent extends React.Component {
     for (const item of response) {
       images.push(
         <TouchableOpacity onPress={() => this.onPress(item)} key={item} activeOpacity={0.75}
-        style={{ width: '100%', borderWidth: 1, borderColor: "#20232a", borderRadius: 6 }}>
+        style={{ width: '100%', borderWidth: 2, borderColor: "#5dade2", borderRadius: 6 }}>
           <View style={{ width: '99%', aspectRatio: 1 }} >
+          <Text style={{ fontSize: 30 }}>Name : {item.name}</Text>
+          <Text style={{ fontSize: 30 }}>Price : {item.price}</Text>
             <Image style={{ resizeMode: 'contain', aspectRatio: 1 }} source={{ uri: item.image }} />
-            <Text style={{ fontSize: 30 }}>{item.name}</Text>
-            <Text style={{ fontSize: 30 }}>{item.price}</Text>
           </View>
         </TouchableOpacity>
       );
@@ -94,8 +94,7 @@ export default class HomeComponent extends React.Component {
           containerStyle={{ right: 170, top: 2 }} onPress={() => { this.props.navigation.openDrawer(); }} />
         <SearchBar
           containerStyle={{
-            top: 20, borderColor: '#5dade2', borderTopWidth: 2, borderBottomWidth: 2,
-            borderLeftWidth: 2, borderRightWidth: 2
+            borderColor: '#5dade2', borderWidth: 2
           }}
           lightTheme
           returnKeyType='none'
@@ -106,34 +105,11 @@ export default class HomeComponent extends React.Component {
           value={search}
         />
         <ScrollView style={{ flex: 1 }}>
-          <View style={styles.container}>
+          <View>
             {images}
           </View>
         </ScrollView>
-
-
-        {/*
-          <FlatGrid
-            itemDimension={130}
-            items={response}
-            style={styles.gridView}
-            renderItem={({ item, index }) => (
-              <View style={{flex: 1, flexDirection: 'column', width: '100%', backgroundColor: item.code }}>
-                <Image style={{flex: 1}} source={require('./alpine_a310_filtre_a_air.jpg')}/>
-                <Text style={styles.itemName}>{item.name}</Text>
-                <Text style={styles.itemCode}>{item.brand}</Text>
-              </View>
-            )}
-            />*/}
       </View>
     );
   }
 }
-
-/*
- <View style={{width: '99%', height: undefined, aspectRatio: 1}} >
-            <Image style= {{resizeMode: 'contain', width: undefined, height: undefined, aspectRatio: 1}}
-            source={require('./alpine_a310_filtre_a_air.jpg')}
-              />
-          </View>
-*/
