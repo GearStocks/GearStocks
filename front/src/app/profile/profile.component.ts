@@ -165,7 +165,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
             .pipe(first())
             .subscribe(
               () => {
-                console.log('hey');
+                this.alertService.success('Vos informations personel on bien été modifier');
+                this.dirty = false;
               },
               () => {});
         },
@@ -194,7 +195,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       .pipe(first())
       .subscribe(
         () => {
-          this.userService.updateUser({userToken: this.currentUser.token, mail: this.currentUser.data[0].mail})
+          this.userService.updateUser({userToken: this.currentUser.token, mail: this.profileEmailGroup.get('email').value})
             .pipe(first())
             .subscribe(
               () => {
@@ -202,7 +203,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 this.profileEmailGroup.get('email').disable();
                 this.profileEmailGroup.get('emailConfirm').reset();
                 this.profileEmailGroup.get('password').reset();
-                console.log('hey');
               },
               () => {});
         },
