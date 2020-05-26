@@ -12,11 +12,9 @@ import { SearchBar, Icon } from 'react-native-elements';
 import { styles } from './Home.component.style';
 import { routes } from '../../../config/routes';
 
+import { listParts } from '../../services/Search'
 
 const axios = require('axios');
-
-
-import { listParts } from '../../services/Search'
 
 export default class HomeComponent extends React.Component {
 
