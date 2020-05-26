@@ -67,15 +67,12 @@ export default class ProfilComponent extends React.Component {
 
   updateInfoUser = () => {
     const JSONObj = JSON.stringify({
-      oldUsername: user.username,
-      mail: user.email,
-      oldPass: this.state.password,
-      newPass: (this.state.newPassword != "" ? this.state.newPassword : this.state.password),
-      newMail: (this.state.email != "" ? this.state.email : user.email),
-      newUsername: (this.state.username != "" ? this.state.username : user.name),
-      /*firstName: this.state.firstname,
-      lastName: this.state.lastname,
-      birthDay: this.state.birthday,*/
+      userToken: user.token,
+      mail: (this.state.email != user.email ? this.state.email : ""),
+      userName: (this.state.username != user.username ? this.state.username : ""),
+      password: (this.state.newPassword != this.state.password ? this.state.newPassword : ""),
+      firstName: (this.state.firstname != user.firstname ? this.state.firstname : ""),
+      lastName: (this.state.lastname != user.lastname ? this.state.lastname : ""),
     });
     user.updateUserInfo(JSONObj);
     this.updateState();
