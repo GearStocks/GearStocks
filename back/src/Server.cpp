@@ -311,13 +311,13 @@ int Server::UpdateUser(const Pistache::Rest::Request& request, Pistache::Http::R
     return -1;
   }
   if (errorHandling == 3) {
-    document2.AddMember("error", "The tokenUser doesn't match", allocator); 
+    document2.AddMember("error", "Username already exist", allocator); 
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
   if (errorHandling == 4) {
-    document2.AddMember("error", "The tokenUser doesn't match", allocator); 
+    document2.AddMember("error", "Mail already match", allocator); 
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
