@@ -78,7 +78,7 @@ export default class HomeComponent extends React.Component {
     for (const item of response) {
       images.push(
         <TouchableOpacity onPress={() => this.onPress(item)} key={item} activeOpacity={0.75} style={{ width: '100%', borderWidth: 1, borderColor: "#20232a", borderRadius: 6 }}>
-          <View style={{ width: '99%', aspectRatio: 1 }} >
+          <View style={{ width: '99%', aspectRatio: 1, top: '10' }} >
             <Image style={{ resizeMode: 'contain', aspectRatio: 1 }} source={{ uri: item.image }} />
             <Text style={{ fontSize: 30 }}>{item.name}</Text>
             <Text style={{ fontSize: 30 }}>{item.price}</Text>

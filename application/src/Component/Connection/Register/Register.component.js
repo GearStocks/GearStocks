@@ -77,7 +77,7 @@ export default class RegisterComponent extends React.Component {
     const { navigate } = this.props.navigation;
     return (
       <SafeAreaView style={styles.container}>
-        <ScrollView >
+        <ScrollView>
           <Text style={styles.title}>Register</Text>
           <Input
             autoCapitalize='none'
