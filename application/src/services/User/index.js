@@ -99,8 +99,8 @@ class User {
         });
     }
 
-    forgotPassword(JSONObj) {
-        forgotPassword(JSONObj)
+    forgotPassword(JSONObj, navigate) {
+        forgotPassword(JSONObj, navigate)
         .catch((err) => {
             console.log(err.name, err.message, err.response.data.error);
         });

@@ -1,8 +1,10 @@
+import { Alert } from 'react-native';
+
 import { routes } from '../../../config/routes';
 
 const axios = require('axios');
 
-export default function connect(JSONObj) {
+export default function connect(JSONObj, navigate) {
     return axios.post(routes.FORGOT_PASSWORD, JSONObj, {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -15,7 +17,7 @@ export default function connect(JSONObj) {
             "Send mail",
             "Please check your email, you will receive your new password",
             [
-                { text: "OK", onPress: () => console.log("OK Pressed") }
+                { text: "OK", onPress: () => navigate('LoginComponent') }
             ],
             { cancelable: false }
         );
