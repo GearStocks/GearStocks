@@ -6,44 +6,95 @@
  */
 
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Image, Dimensions } from 'react-native';
 import { Icon } from 'react-native-elements';
+import {
+  LineChart,
+  BarChart,
+  PieChart,
+  ProgressChart,
+  ContributionGraph,
+  StackedBarChart
+} from "react-native-chart-kit";
 
+import { routes } from '../../../config/routes';
+
+const axios = require('axios');
 
 export default class ItemsComponent extends React.Component {
 
-    constructor(props) {
-      super(props);
-  
-      this.state = {
-        search: ''
-      };
-    }
+  constructor(props) {
+    super(props);
 
-    static navigationOptions = {
-      drawerLabel: () => null
-    }
-  
-    updateSearch = (search) => {
-      this.setState({ search });
+    this.state = {
+      name: '',
+      description: ''
     };
-  
-    render() {
-      const { search } = this.state;
-      const items = [
-        { name: 'PNEU', code: '#1abc9c', brand: 'Porsche' }, { name: 'EMERALD', code: '#2ecc71', brand: 'Porsche' },
-        { name: 'PETER RIVER', code: '#3498db', brand: 'Porsche' }, { name: 'AMETHYST', code: '#9b59b6', brand: 'Porsche' },
-        { name: 'WET ASPHALT', code: '#34495e', brand: 'Porsche' }, { name: 'GREEN SEA', code: '#16a085', brand: 'Porsche' },
-        { name: 'NEPHRITIS', code: '#27ae60', brand: 'Porsche' }, { name: 'BELIZE HOLE', code: '#2980b9', brand: 'Porsche' },
-        { name: 'WISTERIA', code: '#8e44ad', brand: 'Porsche' }, { name: 'MIDNIGHT BLUE', code: '#2c3e50', brand: 'Porsche' }
-      ];
-      return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={{ fontSize: 30, top: 35 }}>GearStocks</Text>
-          <Icon name='format-align-justify' size={30} color='black'
-            containerStyle={{ right: 170, top: 2 }} onPress={() => { this.props.navigation.openDrawer(); }} />
-            <Text>{this.props.example}</Text>
-        </View>
-      );
-    }
   }
+
+  static navigationOptions = {
+    drawerLabel: () => null
+  }
+
+  render() {
+    const monthData = [];
+    const priceData= [];
+    const { params } = this.props.navigation.state
+    
+    for (const month of params.resDatas.data[0].prices) {
+      monthData.push(month.month);
+      priceData.push(month.price);
+    }
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={{ fontSize: 30, top: 35 }}>GearStocks</Text>
+        <Icon name='format-align-justify' size={30} color='black'
+          containerStyle={{ right: 170, top: 2 }} onPress={() => { this.props.navigation.openDrawer(); }} />
+        <Text style={{ fontSize: 20, top: 10 }}>Name : {params.itemDatas.name}</Text>
+        <Text style={{ fontSize: 20, top: 10 }}>Description : {params.resDatas.data[0].description}</Text>
+        <View style={{ width: '90%', aspectRatio: 1 }}>
+          <Image style={{ resizeMode: 'contain', aspectRatio: 1 }} source={{ uri: params.itemDatas.image }} />
+        </View>
+        <View>
+          <Text>Stocks</Text>
+          <LineChart
+            data={{
+              labels: monthData,
+              datasets: [
+                {
+                  data: priceData
+                }
+              ]
+            }}
+            width={Dimensions.get("window").width} // from react-native
+            height={200}
+            yAxisLabel=""
+            yAxisSuffix="€"
+            yAxisInterval={1} // optional, defaults to 1
+            chartConfig={{
+              backgroundColor: "#e26a00",
+              backgroundGradientFrom: "#fb8c00",
+              backgroundGradientTo: "#ffa726",
+              decimalPlaces: 2, // optional, defaults to 2dp
+              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+              style: {
+                borderRadius: 16
+              },
+              propsForDots: {
+                r: "6",
+                strokeWidth: "2",
+                stroke: "#ffa726"
+              }
+            }}
+            bezier
+            style={{
+              marginVertical: 8,
+              borderRadius: 16
+            }}
+          />
+        </View>
+      </View>
+    );
+  }
+}

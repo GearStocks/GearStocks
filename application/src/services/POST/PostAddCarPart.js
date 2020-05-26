@@ -15,7 +15,6 @@ export default class AddCarPart extends React.Component {
       }
     })
       .then((res) => {
-        console.log('RESPONSE RECEIVED: ', res);
       })
       .catch((err) => {
         console.log(err.name, err.message);

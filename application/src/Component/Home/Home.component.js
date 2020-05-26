@@ -10,6 +10,11 @@ import { Text, View, Platform, Image, ScrollView, TouchableOpacity } from 'react
 import { SearchBar, Icon } from 'react-native-elements';
 
 import { styles } from './Home.component.style';
+import { routes } from '../../../config/routes';
+
+
+const axios = require('axios');
+
 
 import { listParts } from '../../services/Search'
 
@@ -17,7 +22,7 @@ export default class HomeComponent extends React.Component {
 
   constructor(props) {
     super(props);
-    
+
     this.state = {
       search: null,
       response: [],
@@ -26,10 +31,10 @@ export default class HomeComponent extends React.Component {
   }
 
   updateSearch = search => {
-//    this.setState({ search });
+    //    this.setState({ search });
     this.launchSearch(search);
   };
-  
+
   launchSearch = (search) => {
     const JSONObj = JSON.stringify({
       keyWord: search
@@ -37,9 +42,34 @@ export default class HomeComponent extends React.Component {
     listParts(this, JSONObj);
   };
 
+  getInfoPart(item, navigate) {
+    const JSONObj = JSON.stringify({
+      partName: item.name
+    })
+    axios.post(routes.GET_FULL_CAR_PART, JSONObj, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      }
+    })
+      .then((res) => {
+        navigate(
+          'ItemComponent',
+          {
+            itemDatas: item,
+            resDatas: res.data
+          }
+        )
+      })
+      .catch((err) => {
+        console.log(err.name, err.message);
+      });
+  }
+
   onPress = (item) => {
     const { navigate } = this.props.navigation;
-    navigate('ItemComponent', {item});
+    this.getInfoPart(item, navigate);
   }
 
   render() {
@@ -47,9 +77,9 @@ export default class HomeComponent extends React.Component {
     var images = [];
     for (const item of response) {
       images.push(
-        <TouchableOpacity onPress={() => this.onPress(item)} key={item} activeOpacity={0.75} style={{width: '100%', borderWidth: 1, borderColor: "#20232a", borderRadius: 6}}>
-          <View style={{width: '99%', aspectRatio: 1}} >
-            <Image style= {{resizeMode: 'contain', aspectRatio: 1}} source={{ uri: item.image }} />
+        <TouchableOpacity onPress={() => this.onPress(item)} key={item} activeOpacity={0.75} style={{ width: '100%', borderWidth: 1, borderColor: "#20232a", borderRadius: 6 }}>
+          <View style={{ width: '99%', aspectRatio: 1 }} >
+            <Image style={{ resizeMode: 'contain', aspectRatio: 1 }} source={{ uri: item.image }} />
             <Text style={{ fontSize: 30 }}>{item.name}</Text>
             <Text style={{ fontSize: 30 }}>{item.price}</Text>
           </View>
@@ -57,31 +87,31 @@ export default class HomeComponent extends React.Component {
       );
     }
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={{ fontSize: 30, top: 35 }}>GearStocks</Text>
-          <Icon name='format-align-justify' size={30} color='black'
-            containerStyle={{ right: 170, top: 2 }} onPress={() => { this.props.navigation.openDrawer(); }} />
-          <SearchBar
-            containerStyle={{
-              top: 20, borderColor: '#5dade2', borderTopWidth: 2, borderBottomWidth: 2,
-              borderLeftWidth: 2, borderRightWidth: 2
-            }}
-            lightTheme
-            returnKeyType='none'
-            platform={Platform.OS === 'android' ? 'android' : 'ios'}
-            autoCapitalize='none'
-            placeholder="What do you want ?"
-            onChangeText={(search) => this.updateSearch(search)}
-            value={search}
-          />
-          <ScrollView style={{ flex: 1 }}>
-            <View style={styles.container}>
-              {images}
-            </View>
-          </ScrollView>
-         
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={{ fontSize: 30, top: 35 }}>GearStocks</Text>
+        <Icon name='format-align-justify' size={30} color='black'
+          containerStyle={{ right: 170, top: 2 }} onPress={() => { this.props.navigation.openDrawer(); }} />
+        <SearchBar
+          containerStyle={{
+            top: 20, borderColor: '#5dade2', borderTopWidth: 2, borderBottomWidth: 2,
+            borderLeftWidth: 2, borderRightWidth: 2
+          }}
+          lightTheme
+          returnKeyType='none'
+          platform={Platform.OS === 'android' ? 'android' : 'ios'}
+          autoCapitalize='none'
+          placeholder="What do you want ?"
+          onChangeText={(search) => this.updateSearch(search)}
+          value={search}
+        />
+        <ScrollView style={{ flex: 1 }}>
+          <View style={styles.container}>
+            {images}
+          </View>
+        </ScrollView>
 
-          {/*
+
+        {/*
           <FlatGrid
             itemDimension={130}
             items={response}
@@ -94,7 +124,7 @@ export default class HomeComponent extends React.Component {
               </View>
             )}
             />*/}
-        </View>
+      </View>
     );
   }
 }
