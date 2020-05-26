@@ -6,9 +6,8 @@
  */
 
 import React from 'react';
-import { Text, View, Platform, Image, FlatList } from 'react-native';
-import { SearchBar, Icon, Card } from 'react-native-elements';
-import FlatGrid from 'react-native-super-grid';
+import { Text, View, Platform, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { SearchBar, Icon } from 'react-native-elements';
 
 import { styles } from './Home.component.style';
 
@@ -38,9 +37,25 @@ export default class HomeComponent extends React.Component {
     listParts(this, JSONObj);
   };
 
+  onPress = (item) => {
+    const { navigate } = this.props.navigation;
+    navigate('ItemComponent', {item});
+  }
+
   render() {
     const { search, response } = this.state;
-    console.log(response);
+    var images = [];
+    for (const item of response) {
+      images.push(
+        <TouchableOpacity onPress={() => this.onPress(item)} key={item} activeOpacity={0.75} style={{width: '100%', borderWidth: 1, borderColor: "#20232a", borderRadius: 6}}>
+          <View style={{width: '99%', aspectRatio: 1}} >
+            <Image style= {{resizeMode: 'contain', aspectRatio: 1}} source={{ uri: item.image }} />
+            <Text style={{ fontSize: 30 }}>{item.name}</Text>
+            <Text style={{ fontSize: 30 }}>{item.price}</Text>
+          </View>
+        </TouchableOpacity>
+      );
+    }
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text style={{ fontSize: 30, top: 35 }}>GearStocks</Text>
@@ -59,31 +74,13 @@ export default class HomeComponent extends React.Component {
             onChangeText={(search) => this.updateSearch(search)}
             value={search}
           />
-          <Card containerStyle={{padding: 0}}>
-            {
-              response.map((r, i) => {
-                return (
-                  <View key={i} style={{width: '100%'}}>
-                    <Image
-                      resizeMode="cover"
-                      source={{ uri: r.photo }}
-                    />
-                    <Text style={styles.name}>{u.name}</Text>
-                  </View>
-                );
-              })
-            }
-          </Card>
+          <ScrollView style={{ flex: 1 }}>
+            <View style={styles.container}>
+              {images}
+            </View>
+          </ScrollView>
+         
 
-          <FlatList style={{flex: 1, flexDirection: 'column', width: '100%'}}
-            data={response}
-            renderItem={({ item, index }) => (
-                <View id={index} style={{width: '100%'}}>
-                  <Image style={{flex: 1}} source={require('./alpine_a310_filtre_a_air.jpg')}/>
-                </View>
-            )}
-            keyExtractor={(item, index) => index + ""}
-          />
           {/*
           <FlatGrid
             itemDimension={130}
@@ -101,3 +98,11 @@ export default class HomeComponent extends React.Component {
     );
   }
 }
+
+/*
+ <View style={{width: '99%', height: undefined, aspectRatio: 1}} >
+            <Image style= {{resizeMode: 'contain', width: undefined, height: undefined, aspectRatio: 1}}
+            source={require('./alpine_a310_filtre_a_air.jpg')}
+              />
+          </View>
+*/

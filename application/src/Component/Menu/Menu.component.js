@@ -12,6 +12,7 @@ import { createDrawerNavigator, createAppContainer } from 'react-navigation';
 import HomeComponent from '../Home/Home.component';
 import ProfilComponent from '../Profil/Profil.component';
 import LoginComponent from '../Connection/Login/Login.component';
+import ItemComponent from '../Items/ItemsComponent';
 import { user } from '../../services/User';
 
 export default class AppMenu extends React.Component {
@@ -32,6 +33,9 @@ const bottomTabNavigator = createDrawerNavigator(
           <Icon name="home" size={25} color={tintColor} />
         )
       }
+    },
+    ItemComponent: {
+      screen: ItemComponent
     },
     Profil: {
       screen: ProfilComponent,

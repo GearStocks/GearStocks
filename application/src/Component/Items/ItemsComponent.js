@@ -19,6 +19,10 @@ export default class ItemsComponent extends React.Component {
         search: ''
       };
     }
+
+    static navigationOptions = {
+      drawerLabel: () => null
+    }
   
     updateSearch = (search) => {
       this.setState({ search });
