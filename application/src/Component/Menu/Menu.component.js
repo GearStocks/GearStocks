@@ -12,16 +12,15 @@ import { createDrawerNavigator, createAppContainer } from 'react-navigation';
 import HomeComponent from '../Home/Home.component';
 import ProfilComponent from '../Profil/Profil.component';
 import LoginComponent from '../Connection/Login/Login.component';
+import ItemComponent from '../Items/ItemsComponent';
+import { user } from '../../services/User';
 
 export default class AppMenu extends React.Component {
   render() {
-    if (this.props.navigation.state.params.token)
-      return (<AppContainer screenProps={{
-        token: this.props.navigation.state.params.token,
-        email: this.props.navigation.state.params.email
-      }} />);
+    if (user.isConnected())
+      return (<AppContainer />);
     else
-      <LoginComponent />
+      return (<LoginComponent />);
   }
 }
 
@@ -34,6 +33,9 @@ const bottomTabNavigator = createDrawerNavigator(
           <Icon name="home" size={25} color={tintColor} />
         )
       }
+    },
+    ItemComponent: {
+      screen: ItemComponent
     },
     Profil: {
       screen: ProfilComponent,

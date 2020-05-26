@@ -6379,6 +6379,13 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
+react-native-animatable@^1.3.2:
+  version "1.3.3"
+  resolved "https://registry.yarnpkg.com/react-native-animatable/-/react-native-animatable-1.3.3.tgz#a13a4af8258e3bb14d0a9d839917e9bb9274ec8a"
+  integrity sha512-2ckIxZQAsvWn25Ho+DK3d1mXIgj7tITkrS4pYDvx96WyOttSvzzFeQnM2od0+FUMzILbdHDsDEqZvnz1DYNQ1w==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-native-datepicker@^1.7.2:
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/react-native-datepicker/-/react-native-datepicker-1.7.2.tgz#58d0822591a0ac9b32aba082650222a0ee29669d"
@@ -6431,6 +6438,21 @@ react-native-safe-area-view@^0.14.1:
   integrity sha512-tOxHGQUN83MTmQB4ghoQkibqOdGiX4JQEmeyEv96MKWO/x8T2PJv84ECUos9hD3blPRQwVwSpAid1PPPhrVEaw==
   dependencies:
     debounce "^1.2.0"
+
+react-native-search-bar@^3.5.1:
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/react-native-search-bar/-/react-native-search-bar-3.5.1.tgz#b05e12ecbe747e0fa43d19084b06db006f7b8097"
+  integrity sha512-L+y2gQZstApb2DavE8se6Mzj3CgxZiHxM0DezAdT4kb6+kV4+WeTN8jPxvrP6zgwbGcjuYKaHrASKnBmhuWmhA==
+  dependencies:
+    prop-types "^15.5.10"
+
+react-native-search-header@^0.3.5:
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/react-native-search-header/-/react-native-search-header-0.3.5.tgz#7720beeef391df9073ddc7d6c385f75439b450b5"
+  integrity sha512-gh4Z10aVVmANsz4UOMTLoZsHo7C6jcMLlP72acuaNr9oGnwpsNUbTqybvddlOWFhv93ywv1eA5nGhcwP+rSr/A==
+  dependencies:
+    react-native-animatable "^1.3.2"
+    semver "^6.3.0"
 
 react-native-status-bar-height@^2.2.0:
   version "2.3.1"

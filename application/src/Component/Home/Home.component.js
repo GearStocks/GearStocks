@@ -6,84 +6,103 @@
  */
 
 import React from 'react';
-import { Text, View, Platform, Alert } from 'react-native';
+import { Text, View, Platform, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { SearchBar, Icon } from 'react-native-elements';
-import FlatGrid from 'react-native-super-grid';
 
 import { styles } from './Home.component.style';
-import { test } from '../../services/POST/PostLogin';
+
+import { listParts } from '../../services/Search'
 
 export default class HomeComponent extends React.Component {
 
   constructor(props) {
     super(props);
-
+    
     this.state = {
-      search: ''
+      search: null,
+      response: [],
+      namePart: '',
     };
   }
 
-  componentDidMount() {
-    if (!this.props.screenProps.token) {
-      Alert.alert(
-        "Alert Title",
-        "My Alert Msg",
-        [
-          {
-            text: "Cancel",
-            onPress: () => console.log("Cancel Pressed"),
-            style: "cancel"
-          },
-          { text: "OK", onPress: () => console.log("OK Pressed") }
-        ],
-        { cancelable: false }
-      );
-    }
-  }
-
-  updateSearch = (search) => {
-    this.setState({ search });
+  updateSearch = search => {
+//    this.setState({ search });
+    this.launchSearch(search);
+  };
+  
+  launchSearch = (search) => {
+    const JSONObj = JSON.stringify({
+      keyWord: search
+    });
+    listParts(this, JSONObj);
   };
 
+  onPress = (item) => {
+    const { navigate } = this.props.navigation;
+    navigate('ItemComponent', {item});
+  }
+
   render() {
-    const { search } = this.state;
-    console.log("Ceci est le token" + JSON.stringify(this.props.screenProps.token));
-    const items = [
-      { name: 'TURQUOISE', code: '#1abc9c', brand: 'Porsche' }, { name: 'EMERALD', code: '#2ecc71', brand: 'Porsche' },
-      { name: 'PETER RIVER', code: '#3498db', brand: 'Porsche' }, { name: 'AMETHYST', code: '#9b59b6', brand: 'Porsche' },
-      { name: 'WET ASPHALT', code: '#34495e', brand: 'Porsche' }, { name: 'GREEN SEA', code: '#16a085', brand: 'Porsche' },
-      { name: 'NEPHRITIS', code: '#27ae60', brand: 'Porsche' }, { name: 'BELIZE HOLE', code: '#2980b9', brand: 'Porsche' },
-      { name: 'WISTERIA', code: '#8e44ad', brand: 'Porsche' }, { name: 'MIDNIGHT BLUE', code: '#2c3e50', brand: 'Porsche' }
-    ];
+    const { search, response } = this.state;
+    var images = [];
+    for (const item of response) {
+      images.push(
+        <TouchableOpacity onPress={() => this.onPress(item)} key={item} activeOpacity={0.75} style={{width: '100%', borderWidth: 1, borderColor: "#20232a", borderRadius: 6}}>
+          <View style={{width: '99%', aspectRatio: 1}} >
+            <Image style= {{resizeMode: 'contain', aspectRatio: 1}} source={{ uri: item.image }} />
+            <Text style={{ fontSize: 30 }}>{item.name}</Text>
+            <Text style={{ fontSize: 30 }}>{item.price}</Text>
+          </View>
+        </TouchableOpacity>
+      );
+    }
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ fontSize: 30, top: 35 }}>GearStocks</Text>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ fontSize: 30, top: 35 }}>GearStocks</Text>
           <Icon name='format-align-justify' size={30} color='black'
             containerStyle={{ right: 170, top: 2 }} onPress={() => { this.props.navigation.openDrawer(); }} />
-        <SearchBar
-          containerStyle={{
-            top: 20, borderColor: '#5dade2', borderTopWidth: 2, borderBottomWidth: 2,
-            borderLeftWidth: 2, borderRightWidth: 2
-          }}
-          lightTheme
-          platform={Platform.OS === 'android' ? 'android' : 'ios'}
-          placeholder="What do you want ?"
-          onChangeText={this.updateSearch}
-          value={search}
-        />
-        <FlatGrid
-          itemDimension={130}
-          items={items}
-          style={styles.gridView}
-          renderItem={({ item, index }) => (
-            //<Image source={require('../../../assets/view.png')} />,
-            <View style={[styles.itemContainer, { backgroundColor: item.code }]}>
-              <Text style={styles.itemName}>{item.name}</Text>
-              <Text style={styles.itemCode}>{item.brand}</Text>
+          <SearchBar
+            containerStyle={{
+              top: 20, borderColor: '#5dade2', borderTopWidth: 2, borderBottomWidth: 2,
+              borderLeftWidth: 2, borderRightWidth: 2
+            }}
+            lightTheme
+            returnKeyType='none'
+            platform={Platform.OS === 'android' ? 'android' : 'ios'}
+            autoCapitalize='none'
+            placeholder="What do you want ?"
+            onChangeText={(search) => this.updateSearch(search)}
+            value={search}
+          />
+          <ScrollView style={{ flex: 1 }}>
+            <View style={styles.container}>
+              {images}
             </View>
-          )}
-        />
-      </View>
+          </ScrollView>
+         
+
+          {/*
+          <FlatGrid
+            itemDimension={130}
+            items={response}
+            style={styles.gridView}
+            renderItem={({ item, index }) => (
+              <View style={{flex: 1, flexDirection: 'column', width: '100%', backgroundColor: item.code }}>
+                <Image style={{flex: 1}} source={require('./alpine_a310_filtre_a_air.jpg')}/>
+                <Text style={styles.itemName}>{item.name}</Text>
+                <Text style={styles.itemCode}>{item.brand}</Text>
+              </View>
+            )}
+            />*/}
+        </View>
     );
   }
 }
+
+/*
+ <View style={{width: '99%', height: undefined, aspectRatio: 1}} >
+            <Image style= {{resizeMode: 'contain', width: undefined, height: undefined, aspectRatio: 1}}
+            source={require('./alpine_a310_filtre_a_air.jpg')}
+              />
+          </View>
+*/
