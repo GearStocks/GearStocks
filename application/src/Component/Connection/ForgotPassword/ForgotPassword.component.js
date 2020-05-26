@@ -11,7 +11,7 @@ import { Input, Button, Text } from 'react-native-elements';
 import styles from './ForgotPassword.component.style';
 import { strings, errors } from '../../../../config/strings';
 
-import ForgotPassword from '../../../services/POST/PostForgotPassword';
+import { user } from '../../../services/User'
 
 export default class ForgotPasswordComponent extends React.Component {
   constructor(props) {
@@ -37,7 +37,8 @@ export default class ForgotPasswordComponent extends React.Component {
     else if (reg.test(`${email}`) === false)
       Alert.alert(errors.ERR, errors.ERR_INVALID_EMAIL);
     else {
-      new ForgotPassword().forgotPassword(JSONObj);
+      const { navigate } = this.props.navigation;
+      user.forgotPassword(JSONObj, navigate);
     }
   }
 

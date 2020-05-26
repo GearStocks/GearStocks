@@ -14,8 +14,15 @@ import ForgotPasswordComponent from './Component/Connection/ForgotPassword/Forgo
 
 import AppMenu from './Component/Menu/Menu.component';
 
+import { user, instanciateUser } from './services/User';
+
 export default class App extends React.Component {
   render() {
+
+    if (!user || user == undefined || user == null) {
+      instanciateUser();
+    }
+
     return (
       <AppContainer />
     );

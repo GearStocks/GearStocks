@@ -112,7 +112,7 @@ size_t	BddManager::checkIfUserIsAuth(std::string userToken, std::string password
   }
   valueInBDD = checkIfExist(_userCollection, "username", username);
   if (valueInBDD.compare("") != 0) {
-    std::cout << "Username doesn't exist" << std::endl;
+    std::cout << "Username already exist" << std::endl;
     return 3;
   }
   valueInBDD = checkIfExist(_userCollection, "email", mail);
