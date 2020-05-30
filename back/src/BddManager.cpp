@@ -238,9 +238,9 @@ rapidjson::Document*	BddManager::getCarPart(std::string partName)
     price.erase(price.find("\" }"));
     path.erase(0, path.find("\"photo\" :") + 11);
     path.erase(path.find("\", \"descript"));
-    std::cout << "name:" << name << std::endl;
+    /*std::cout << "name:" << name << std::endl;
     std::cout << "price:" << price << std::endl;
-    std::cout << "path:" << path << std::endl;
+    std::cout << "path:" << path << std::endl;*/
     rapidjson::Value mdr(rapidjson::kArrayType);
     rapidjson::Value test;
     rapidjson::Value s;
@@ -590,7 +590,6 @@ std::string     BddManager::generateRandomString(size_t size)
   CryptoPP::HexEncoder hex(new CryptoPP::StringSink(random));
   hex.Put(iv, iv.size());
   hex.MessageEnd();
-  
   if (random.size() > size) {
     random.erase(size, random.size());
   }
@@ -602,6 +601,7 @@ aho_corasick::trie	BddManager::generateTree()
 {
   aho_corasick::trie	trie;
 
+  trie.case_insensitive();
   auto cursor = _carPartCollection.find({});
   for (auto&& doc : cursor) {
     std::string name = bsoncxx::to_json(doc);
@@ -615,6 +615,7 @@ aho_corasick::trie	BddManager::generateTree()
 std::vector<std::string>	BddManager::parseKeyWordInTree(aho_corasick::trie trie, std::string keyWord)
 {
   std::vector<std::string>	parsingResult;
+  std::transform(keyWord.begin(), keyWord.end(), keyWord.begin(), ::tolower);
   auto	result = trie.parse_text(keyWord.c_str());
   auto mdr = result.begin();
 
@@ -633,8 +634,10 @@ std::vector<std::string>	BddManager::parseKeyWordInTree(aho_corasick::trie trie,
     std::string name = bsoncxx::to_json(doc);
     name.erase(0, name.find("\"name\" :") + 10);
     name.erase(name.find("\", \"photo\" "));
+    std::string nameInLower = name;
+    std::transform(nameInLower.begin(), nameInLower.end(), nameInLower.begin(), ::tolower);
     while (it < keyWordSplited.end()) {
-      if (name.find(*it) != std::string::npos) {
+      if (nameInLower.find(*it) != std::string::npos) {
 	if (std::find(parsingResult.begin(), parsingResult.end(), name) == parsingResult.end())
           {
             parsingResult.push_back(name);
