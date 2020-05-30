@@ -111,7 +111,6 @@ int Server::PostConnect(const Pistache::Rest::Request& request, Pistache::Http::
     std::cout << "Il manque le champ rememberMe" << std::endl;
     document2.AddMember("error", "Bad JSON. Need a field 'rememberMe'", allocator); 
     document2.Accept(writer);
-    
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }  
@@ -126,11 +125,17 @@ int Server::PostConnect(const Pistache::Rest::Request& request, Pistache::Http::
 
     rapidjson::Document* doc3;
     doc3 = _manager->getInfoUser(token, document["email"].GetString());
-    mergeObjects(document2, *doc3, allocator);
-    
-    document2.Accept(writer);
-    
-    response.send(Pistache::Http::Code::Ok, strbuf.GetString());
+    if (doc3 == NULL) {
+      document2.AddMember("error", "Error with the mail or the token", allocator); 
+      document2.Accept(writer);
+      response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+      return -1;
+    }
+    else {
+      mergeObjects(document2, *doc3, allocator);
+      document2.Accept(writer);
+      response.send(Pistache::Http::Code::Ok, strbuf.GetString());
+    }
   }
   else if (i == 1) {
     document2.AddMember("error", "Bad Password", allocator); 
@@ -435,10 +440,18 @@ int Server::infoUser(const Pistache::Rest::Request& request, Pistache::Http::Res
   }
   rapidjson::Document* doc3;
   doc3 = _manager->getInfoUser(document["userToken"].GetString(), document["email"].GetString());
-  document2.AddMember("success", "Info user succeeded", allocator);
-  mergeObjects(document2, *doc3, allocator);
-  document2.Accept(writer);
-  response.send(Pistache::Http::Code::Ok, strbuf.GetString());
+  if (doc3 == NULL) {
+    document2.AddMember("error", "Error with the email or the token", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  else {
+    document2.AddMember("success", "Info user succeeded", allocator);
+    mergeObjects(document2, *doc3, allocator);
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Ok, strbuf.GetString());
+  }
   
   return 0;
 }
