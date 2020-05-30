@@ -93,9 +93,9 @@ int Server::PostConnect(const Pistache::Rest::Request& request, Pistache::Http::
   response.headers().add<Pistache::Http::Header::AccessControlAllowHeaders>("*");
   response.headers().add<Pistache::Http::Header::ContentType>(MIME(Application, Json));
   
-  if(!document.HasMember("mail")) {
-    std::cout << "il manque le champ mail" << std::endl;
-    document2.AddMember("error", "Bad JSON. Need a field 'mail'", allocator); 
+  if(!document.HasMember("email")) {
+    std::cout << "il manque le champ email" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'email'", allocator); 
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
@@ -115,17 +115,17 @@ int Server::PostConnect(const Pistache::Rest::Request& request, Pistache::Http::
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }  
-  i = _manager->userConnect(document["mail"].GetString(), document["password"].GetString(), token);
+  i = _manager->userConnect(document["email"].GetString(), document["password"].GetString(), token);
   if (i == 0) {
     std::cout << token << std::endl;
-    _manager->updateDateInBDD(document["mail"].GetString(), _manager->getTime());
-    _manager->updateTokenInBDD(document["mail"].GetString(), token);
+    _manager->updateDateInBDD(document["email"].GetString(), _manager->getTime());
+    _manager->updateTokenInBDD(document["email"].GetString(), token);
     rapidjson::Value s;
     s = rapidjson::StringRef(token.c_str());
     document2.AddMember("token", s, allocator);
 
     rapidjson::Document* doc3;
-    doc3 = _manager->getInfoUser(token, document["mail"].GetString());
+    doc3 = _manager->getInfoUser(token, document["email"].GetString());
     mergeObjects(document2, *doc3, allocator);
     
     document2.Accept(writer);
@@ -178,9 +178,9 @@ int Server::PostRegister(const Pistache::Rest::Request& request, Pistache::Http:
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
-  if(!document.HasMember("mail")) {
-    std::cout << "Il manque le champ mail" << std::endl;
-    document2.AddMember("error", "Bad JSON. Need a field 'mail'", allocator); 
+  if(!document.HasMember("email")) {
+    std::cout << "Il manque le champ email" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'email'", allocator); 
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
@@ -209,7 +209,7 @@ int Server::PostRegister(const Pistache::Rest::Request& request, Pistache::Http:
   
   documentContent.push_back(document["username"].GetString());
   documentContent.push_back(document["password"].GetString());
-  documentContent.push_back(document["mail"].GetString());
+  documentContent.push_back(document["email"].GetString());
   documentContent.push_back(document["firstName"].GetString());
   documentContent.push_back(document["lastName"].GetString());
   documentContent.push_back(document["birthDay"].GetString());
@@ -218,7 +218,7 @@ int Server::PostRegister(const Pistache::Rest::Request& request, Pistache::Http:
   if (i == 0) {
     document2.AddMember("success", "Register succeeded", allocator); 
     document2.Accept(writer);
-    _emailer->sendMailDependingOnType(document["mail"].GetString(), "", "registerConfirmation");
+    _emailer->sendMailDependingOnType(document["email"].GetString(), "", "registerConfirmation");
     response.send(Pistache::Http::Code::Ok, strbuf.GetString());
   }
   else if (i == 1) {
@@ -255,16 +255,16 @@ int Server::UpdateUser(const Pistache::Rest::Request& request, Pistache::Http::R
   response.headers().add<Pistache::Http::Header::AccessControlAllowMethods>("*");
   response.headers().add<Pistache::Http::Header::AccessControlAllowHeaders>("*");
   response.headers().add<Pistache::Http::Header::ContentType>(MIME(Application, Json));
-  if(!document.HasMember("mail")) {
-    std::cout << "Il manque le champ mail" << std::endl;
-    document2.AddMember("error", "Bad JSON. Need a field 'mail'", allocator); 
+  if(!document.HasMember("email")) {
+    std::cout << "Il manque le champ email" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'email'", allocator); 
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
-  if(!document.HasMember("userName")) {
-    std::cout << "Il manque le champ userName" << std::endl;
-    document2.AddMember("error", "Bad JSON. Need a field 'userName'", allocator); 
+  if(!document.HasMember("username")) {
+    std::cout << "Il manque le champ username" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'username'", allocator); 
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
@@ -297,7 +297,7 @@ int Server::UpdateUser(const Pistache::Rest::Request& request, Pistache::Http::R
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
-  errorHandling = _manager->checkIfUserIsAuth(document["userToken"].GetString(), "", document["userName"].GetString(), document["mail"].GetString());
+  errorHandling = _manager->checkIfUserIsAuth(document["userToken"].GetString(), "", document["username"].GetString(), document["email"].GetString());
   if (errorHandling == 1) {
     document2.AddMember("error", "The password doesn't match", allocator); 
     document2.Accept(writer);
@@ -322,8 +322,8 @@ int Server::UpdateUser(const Pistache::Rest::Request& request, Pistache::Http::R
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
-  errorHandling = _manager->updateNameUser(document["userToken"].GetString(), document["userName"].GetString(), document["firstName"].GetString(), document["lastName"].GetString());
-  errorHandling = _manager->updateMailUser(document["userToken"].GetString(), document["mail"].GetString());
+  errorHandling = _manager->updateNameUser(document["userToken"].GetString(), document["username"].GetString(), document["firstName"].GetString(), document["lastName"].GetString());
+  errorHandling = _manager->updateMailUser(document["userToken"].GetString(), document["email"].GetString());
   errorHandling = _manager->updatePasswordUser(document["userToken"].GetString(), document["password"].GetString());
   
   /*errorHandling = _manager->updateNameUser(document["mail"].GetString(), document["oldUsername"].GetString(), document["newUsername"].GetString());
@@ -386,14 +386,14 @@ int Server::disconnect(const Pistache::Rest::Request& request, Pistache::Http::R
   response.headers().add<Pistache::Http::Header::AccessControlAllowMethods>("*");
   response.headers().add<Pistache::Http::Header::AccessControlAllowHeaders>("*");
   response.headers().add<Pistache::Http::Header::ContentType>(MIME(Application, Json));
-  if(!document.HasMember("mail")) {
-    std::cout << "Il manque le champ mail" << std::endl;
-    document2.AddMember("error", "Bad JSON. Need a field 'mail'", allocator); 
+  if(!document.HasMember("email")) {
+    std::cout << "Il manque le champ email" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'email'", allocator); 
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
-  errorHandling = _manager->disconnectUser(document["mail"].GetString(), "");
+  errorHandling = _manager->disconnectUser(document["email"].GetString(), "");
   if (errorHandling == 1) {
     document2.AddMember("error", "Mail doesn't exist", allocator); 
     document2.Accept(writer);
@@ -426,15 +426,15 @@ int Server::infoUser(const Pistache::Rest::Request& request, Pistache::Http::Res
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
-  if(!document.HasMember("mail")) {
-    std::cout << "Il manque le champ mail" << std::endl;
-    document2.AddMember("error", "Bad JSON. Need a field 'mail'", allocator); 
+  if(!document.HasMember("email")) {
+    std::cout << "Il manque le champ email" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'email'", allocator); 
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
   rapidjson::Document* doc3;
-  doc3 = _manager->getInfoUser(document["userToken"].GetString(), document["mail"].GetString());
+  doc3 = _manager->getInfoUser(document["userToken"].GetString(), document["email"].GetString());
   document2.AddMember("success", "Info user succeeded", allocator);
   mergeObjects(document2, *doc3, allocator);
   document2.Accept(writer);
@@ -543,21 +543,21 @@ int Server::forgottenPassword(const Pistache::Rest::Request& request, Pistache::
   response.headers().add<Pistache::Http::Header::AccessControlAllowMethods>("*");
   response.headers().add<Pistache::Http::Header::AccessControlAllowHeaders>("*");
   response.headers().add<Pistache::Http::Header::ContentType>(MIME(Application, Json));
-  if(!document.HasMember("mail")) {
-    std::cout << "Il manque le champ mail" << std::endl;
-    document2.AddMember("error", "Bad JSON. Need a field 'mail'", allocator); 
+  if(!document.HasMember("email")) {
+    std::cout << "Il manque le champ email" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'email'", allocator); 
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
   std::string randomPassword = _manager->generateRandomString(12);
-  if(_manager->resetPassword(document["mail"].GetString(), randomPassword) == 1) {
+  if(_manager->resetPassword(document["email"].GetString(), randomPassword) == 1) {
     document2.AddMember("error", "This email is not used by any user", allocator); 
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
-  _emailer->sendMailDependingOnType(document["mail"].GetString(), randomPassword, "passwordReset");
+  _emailer->sendMailDependingOnType(document["email"].GetString(), randomPassword, "passwordReset");
   document2.AddMember("success", "Password reset and mail sent", allocator); 
   document2.Accept(writer);
   response.send(Pistache::Http::Code::Ok, strbuf.GetString());
