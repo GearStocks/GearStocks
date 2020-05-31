@@ -162,32 +162,23 @@ rapidjson::Document*	BddManager::getFullCarPart(std::string partName)
     path.erase(path.find("\", \"descript"));
     description.erase(0, description.find("\"description\" :") + 17);
     description.erase(description.find("\", \"parts\""));
-    //description.erase(description.rfind("\" }"));
-    rapidjson::Value mdr(rapidjson::kArrayType);
-
-    
+        
     rapidjson::Value mdr2(rapidjson::kArrayType);
     while (price.find("month") != std::string::npos) {
       getAllPrices(&mdr2, &price, allocator);
     }
-    
     rapidjson::Value test;
-    rapidjson::Value s;
-    s.SetObject();
     test.SetString(name.c_str(), allocator);
-    s.AddMember("name", test, allocator);
+    document2->AddMember("name", test, allocator);
     test.SetString(path.c_str(), allocator);
-    s.AddMember("photo", test, allocator);
+    document2->AddMember("photo", test, allocator);
     test.SetString(description.c_str(), allocator);
-    s.AddMember("description", test, allocator);
-    s.AddMember("prices", mdr2, allocator);
+    document2->AddMember("description", test, allocator);
+    document2->AddMember("prices", mdr2, allocator);
 
-    
-    mdr.PushBack(s, allocator);
-    document2->AddMember("data", mdr, allocator);
     return document2;
   }
-  //return (std::make_pair(1, "Error encountered"));
+  return NULL;
 }
 
 void	BddManager::getAllPrices(rapidjson::Value *price, std::string *priceToParse, rapidjson::Document::AllocatorType &allocator)
@@ -361,22 +352,22 @@ rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string 
     lastName.erase(lastName.find("\", \"birthDay\""));
     birthDay.erase(0, birthDay.find("\"birthDay\" :") + 14);
     birthDay.erase(birthDay.find("\" }"));
-    rapidjson::Value mdr(rapidjson::kArrayType);
+    //rapidjson::Value mdr(rapidjson::kArrayType);
     rapidjson::Value test;
     rapidjson::Value s;
     s.SetObject();
     test.SetString(userName.c_str(), allocator);
-    s.AddMember("username", test, allocator);
+    document2->AddMember("username", test, allocator);
     test.SetString(mail.c_str(), allocator);
-    s.AddMember("email", test, allocator);
+    document2->AddMember("email", test, allocator);
     test.SetString(firstName.c_str(), allocator);
-    s.AddMember("firstName", test, allocator);
+    document2->AddMember("firstName", test, allocator);
     test.SetString(lastName.c_str(), allocator);
-    s.AddMember("lastName", test, allocator);
+    document2->AddMember("lastName", test, allocator);
     test.SetString(birthDay.c_str(), allocator);
-    s.AddMember("birthDay", test, allocator);
-    mdr.PushBack(s, allocator);
-    document2->AddMember("data", mdr, allocator);
+    document2->AddMember("birthDay", test, allocator);
+    //mdr.PushBack(s, allocator);
+    //document2->AddMember("data", mdr, allocator);
     return document2;
   }
   return NULL;
