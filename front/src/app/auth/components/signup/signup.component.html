@@ -69,12 +69,12 @@
             <div class="input__container">
               <app-gearstocks-input
                 [group]="signForm"
-                [name]="'userName'"
+                [name]="'username'"
                 [placeholder]="'Pseudo'"
                 [type]="'texte'"
                 [required]="true"
-                [validationError]="f.userName.errors"
-                [validationErrorMessages]="errorMessages.userName">
+                [validationError]="f.username.errors"
+                [validationErrorMessages]="errorMessages.username">
               </app-gearstocks-input>
             </div>
           </div>
@@ -146,7 +146,7 @@
 
         <div class="form__row">
           <div class="component component--primary form__button">
-            <button [disabled]="loading" class="loginButton btn btn-outline-primary" type="submit">Inscription</button>
+            <button [disabled]="this.signForm.invalid" class="loginButton btn btn-outline-primary" type="submit">Inscription</button>
           </div>
         </div>
 

@@ -12,7 +12,7 @@ export class Details {
 export class Item {
     id: number;
     name: string;
-    chartData: ChartTab[];
-    details: Details;
+    prices: ChartTab[];
+    photo: string;
     description: string;
 }

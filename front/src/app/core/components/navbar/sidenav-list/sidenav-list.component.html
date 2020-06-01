@@ -2,16 +2,16 @@
   <a mat-list-item routerLink="" (click)="onSidenavClose()" id="home">
     <mat-icon>home</mat-icon> <span class="nav-caption">Accueil</span>
   </a>
-  <a *ngIf="!currentUser" mat-list-item (click)="login()" id="login">
+  <a *ngIf="!isAuthenticated" mat-list-item (click)="login()" id="login">
     <mat-icon>person</mat-icon><span class="nav-caption">Se connecter</span>
   </a>
-  <a *ngIf="currentUser" mat-list-item routerLink="/profile" (click)="onSidenavClose()">
+  <a *ngIf="isAuthenticated" mat-list-item routerLink="/profile" (click)="onSidenavClose()">
     <mat-icon>assignment_ind</mat-icon> <span class="nav-caption">Profile</span>
   </a>
   <a mat-list-item routerLink="/contact" (click)="onSidenavClose()" id="contact">
     <mat-icon>phone</mat-icon> <span class="nav-caption">Contact</span>
   </a>
-  <a *ngIf="currentUser" mat-list-item (click)="logout()" id="logout">
+  <a *ngIf="isAuthenticated" mat-list-item (click)="logout()" id="logout">
     <mat-icon>account_balance</mat-icon><span class="nav-caption">Se déconnecter</span>
   </a>
   <mat-list-item [matMenuTriggerFor]="menu">

@@ -5,19 +5,19 @@
     </button>
   </div>
   <div class="navbar__brand">
-    <a routerLink="" [class.navbar__brand__align]="!currentUser">
+    <a routerLink="" [class.navbar__brand__align]="!isAuthenticated">
       <img src="../../../../assets/img/logo.png" alt="Gearstocks"/>
     </a>
   </div>
   <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
     <ul fxLayout fxLayoutGap="15px">
-      <li *ngIf="currentUser">
+      <li *ngIf="isAuthenticated">
         <a routerLink="/profile">Profile</a>
       </li>
-      <li *ngIf="currentUser">
-        <a (click)="userService.logout()" id="logout">Se déconnecter</a>
+      <li *ngIf="isAuthenticated">
+        <a (click)="logout()" id="logout">Se déconnecter</a>
       </li>
-      <li *ngIf="!currentUser">
+      <li *ngIf="!isAuthenticated">
         <a class="navbar__iconAbove" (click)="open()" id="login">
           <mat-icon>person</mat-icon>
           <p>Se connecter</p>

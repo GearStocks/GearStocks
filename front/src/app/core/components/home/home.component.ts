@@ -1,16 +1,8 @@
 /* Angular Modules */
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-
-/* RxJs */
-import { first } from 'rxjs/operators';
-
-/* Models */
-import { User } from '../../../auth/models/user.model';
 
 /* Services */
-import { UserService } from '../../../auth/services/user.service';
-import { SearchService } from '../../services/search.service';
+import { SearchService } from '../../../search-list/services/search.service';
 
 @Component({
   selector: 'app-home',
@@ -20,23 +12,21 @@ import { SearchService } from '../../services/search.service';
 })
 
 export class HomeComponent {
-  currentUser: User;
   video = 'assets/video/gearstocks.mp4';
   keyword: string;
 
-  constructor(private router: Router, private userService: UserService, private searchService: SearchService) {
-    this.userService.currentUser.subscribe(x => this.currentUser = x);
-  }
+  constructor(private searchService: SearchService) {}
 
-  search() {
-    this.searchService.search(this.keyword)
-      .pipe(first())
+  search(): void {
+    this.searchService.search(this.keyword);
+      /*.pipe(first())
       .subscribe(
         (data) => {
           this.router.navigateByUrl('/search-list', { state: data });
         },
         () => {}
         );
+        */
   }
 
   scrollTo(element: HTMLElement): void {

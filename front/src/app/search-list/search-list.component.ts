@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { first } from 'rxjs/operators';
 
 /* Services */
-import { SearchService } from '../../services/search.service';
+import { SearchService } from './services/search.service';
 
 @Component({
   selector: 'app-search-list',

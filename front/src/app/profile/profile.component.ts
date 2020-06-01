@@ -58,18 +58,21 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private profileService: ProfileService,
     private profileFormService: ProfileFormService) {
-    this.userService.currentUser.subscribe(x => this.currentUser = x);
   }
 
   ngOnInit() {
+    /*
     this.profileForm = this.profileFormService.buildForm(this.currentUser.data[0]);
     this.formCompare = this.profileDataGroup.getRawValue();
     this.profileFormSubscription = this.profileDataGroup.valueChanges.subscribe(val => {
       this.dirty = JSON.stringify(val) !== JSON.stringify(this.formCompare);
     });
+
+     */
   }
 
   ngOnDestroy(): void {
+    /*
     if (!isNullOrUndefined(this.profileFormSubscription)) {
       this.profileFormSubscription.unsubscribe();
     }
@@ -79,8 +82,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
     if (!isNullOrUndefined(this.emailFormSubscription)) {
       this.emailFormSubscription.unsubscribe();
     }
+
+     */
   }
 
+  /*
   get profileDataGroup() {
     return this.profileForm.get('profileDataGroup') as FormGroup;
   }
@@ -203,6 +209,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 this.profileEmailGroup.get('email').disable();
                 this.profileEmailGroup.get('emailConfirm').reset();
                 this.profileEmailGroup.get('password').reset();
+                this.alertService.success('Votre email à bien été modifier');
               },
               () => {});
         },
@@ -239,11 +246,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 this.profilePasswordGroup.get('password').reset();
                 this.profilePasswordGroup.get('confirmPassword').reset();
                 this.profilePasswordGroup.get('oldPassword').reset();
-                console.log('hey');
+                this.alertService.success('Votre mot de passe à bien été modifier');
               },
               () => {});
         },
         () => {});
   }
 
+   */
 }

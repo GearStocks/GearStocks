@@ -5,24 +5,38 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
-/* Components */
-import { AppComponent } from './app.component';
-import { ProfileComponent } from './profile/profile.component';
-import { ItemComponent } from './item/item.component';
-import { SearchPageComponent } from './search-page/search-page.component';
-
 /* App Modules */
 import { CoreModule } from './core/core.module';
 import { AuthModule } from './auth/auth.module';
 import { SharedModule } from './shared/shared.module';
 
+/* NgRx */
+import { StoreModule } from '@ngrx/store';
+import { metaReducers, ROOT_REDUCERS } from './store/reducers';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
+import { AppEffects } from './store/effects/app.effects';
+import { AuthEffects } from './store/effects/auth.effects';
+
+
 /* Services */
 import { ErrorInterceptor } from './auth/services/error.interceptor';
 import { JwtInterceptor } from './auth/services/jwt.interceptor';
 
+/* Components */
+import { AppComponent } from './app.component';
+import { ProfileComponent } from './profile/profile.component';
+import { ItemComponent } from './item/item.component';
+import { SearchPageComponent } from './search-page/search-page.component';
+import { SearchListComponent } from './search-list/search-list.component';
+
+/* Environment */
+import { environment } from '../environments/environment';
+
 @NgModule({
   declarations: [
     AppComponent,
+    SearchListComponent,
     ItemComponent,
     ProfileComponent,
     SearchPageComponent
@@ -33,7 +47,16 @@ import { JwtInterceptor } from './auth/services/jwt.interceptor';
     AppRoutingModule,
     AuthModule,
     CoreModule,
-    SharedModule
+    SharedModule,
+    StoreModule.forRoot(ROOT_REDUCERS, {
+      metaReducers,
+      runtimeChecks: {
+        strictStateImmutability: true,
+        strictActionImmutability: true,
+      }
+    }),
+    !environment.production ? StoreDevtoolsModule.instrument() : [],
+    EffectsModule.forRoot([AppEffects, AuthEffects])
   ],
   providers: [
     {
