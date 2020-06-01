@@ -1,5 +1,5 @@
 <mat-form-field [formGroup]="group">
-  <input matInput [type]="type" [placeholder]="placeholder" [formControlName]="name" [required]="required"/>
+  <input matInput [type]="type" [placeholder]="placeholder" [formControlName]="name" [required]="required" [max]="today" min="1900-01-01"/>
   <mat-error *ngIf="validationError?.required">{{validationErrorMessages.required}}</mat-error>
   <mat-error *ngIf="!validationError?.required">{{validationErrorMessages.pattern}}</mat-error>
 </mat-form-field>

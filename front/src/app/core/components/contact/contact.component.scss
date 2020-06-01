@@ -227,6 +227,10 @@ mat-progress-bar {
         border: none;
         background-color: transparent;
       }
+
+      .active:hover {
+        border: none;
+      }
     }
   }
 

@@ -63,7 +63,7 @@ export class SignupComponent implements OnInit {
   onSubmit(): void {
     if (this.signForm.invalid) {
       this.captchaError = true;
-      Object.keys(this.signForm.controls).forEach((field => {
+      Object.keys(this.f).forEach((field => {
         const control = this.signForm.get(field);
         control.markAsTouched({onlySelf: true});
       }));

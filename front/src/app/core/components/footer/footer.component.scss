@@ -1,8 +1,4 @@
 .footer {
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
-  height: 300px;
   color: #9b9b9b;
   font-size: 12px;
   padding: 1em;
@@ -10,6 +6,7 @@
   &__col {
     float: left;
     line-height: 25px;
+    margin-bottom: 1em;
     width: 50%;
 
     &-title {
@@ -29,15 +26,14 @@
 
 .footer-copyright {
   border-top: 1px solid #272727;
-  clear: both;
   color: #9b9b9b;
-  display: block;
-  float: left;
+  display: flex;
+  justify-content: center;
   font-size: 12px;
-  line-height: 25px;
-  margin-top: 45px;
-  padding-top: 43px;
+  align-items: center;
   width: 100%;
+  height: 5em;
+  text-align: center;
 }
 
 @media screen and (min-width: 480px) {
