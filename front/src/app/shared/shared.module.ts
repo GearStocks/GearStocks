@@ -20,6 +20,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 /* LottieAnimation */
 import { LottieModule } from 'ngx-lottie';
@@ -61,6 +62,7 @@ export function playerFactory() {
     MatSelectModule,
     MatFormFieldModule,
     MatProgressBarModule,
+    MatGridListModule,
     LottieModule.forRoot({ player: playerFactory })
   ],
   exports: [
@@ -84,6 +86,7 @@ export function playerFactory() {
     MatSelectModule,
     MatFormFieldModule,
     MatProgressBarModule,
+    MatGridListModule,
     LottieModule,
     GearstocksInputComponent,
     GearstocksSelectComponent,

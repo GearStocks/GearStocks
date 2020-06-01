@@ -23,11 +23,11 @@ import { ContactComponent } from './components/contact/contact.component';
     SidenavListComponent,
     ContactComponent
   ],
-  imports: [
-    CommonModule,
-    SharedModule,
-    FontAwesomeModule
-  ],
+    imports: [
+        CommonModule,
+        SharedModule,
+        FontAwesomeModule
+    ],
     exports: [
         FooterComponent,
         NavbarComponent,
