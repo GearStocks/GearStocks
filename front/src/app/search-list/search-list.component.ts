@@ -1,73 +1,44 @@
 /* Angular modules */
-import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
 
-/* RxJs */
-import { first } from 'rxjs/operators';
+/* NgRx */
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../store/reducers';
+import { selectSearchList } from '../store/reducers/core.reducer';
+import { getItem, search } from '../store/actions/core.actions';
 
-/* Services */
-import { SearchService } from './services/search.service';
+/* Models */
+import { Item, Items } from './models/items.model';
 
 @Component({
   selector: 'app-search-list',
   templateUrl: './search-list.component.html',
   styleUrls: ['./search-list.component.scss']
 })
-export class SearchListComponent implements OnInit, OnDestroy {
-  data = null;
+export class SearchListComponent  {
+  data: Items;
   keyword: string;
-  onScroll = false;
 
-  constructor(private location: Location, private searchService: SearchService, private router: Router) {}
-
-  ngOnInit() {
-    this.data = this.location.getState();
-    window.addEventListener('scroll', this.scroll, true);
-  }
-
-  ngOnDestroy() {
-    window.removeEventListener('scroll', this.scroll, true);
-  }
-
-  scroll = (event: any): void => {
-    const number = event.srcElement.scrollTop;
-    this.onScroll = number > 30;
-  }
-
-  scrollTo(element: HTMLElement): void {
-    element.scrollIntoView({behavior: 'smooth'});
+  constructor(private store: Store<AppState>) {
+    this.store.pipe(select(selectSearchList)).subscribe(x => this.data = x);
   }
 
   search(): void {
-    this.searchService.search(this.keyword)
-      .pipe(first())
-      .subscribe(
-        (data) => {
-          this.data = data;
-        },
-        () => {}
-      );
+    if (this.keyword) {
+      this.store.dispatch(search({keyword: this.keyword}));
+    }
   }
 
   getUnits(): number {
-    if (this.data.parts) {
+    if (this.data && this.data.parts) {
       return this.data.parts.length;
     } else {
       return 0;
     }
   }
 
-  navigate(item: any): void {
-    this.searchService.getItem(item.name)
-      .pipe(first())
-      .subscribe(
-        (data) => {
-          this.router.navigateByUrl('/item', { state: data.data });
-        },
-        () => {}
-      );
-
+  navigate(item: Item): void {
+    this.store.dispatch(getItem({name: item.name}));
   }
 
 }

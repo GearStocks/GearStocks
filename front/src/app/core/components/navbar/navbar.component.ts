@@ -4,7 +4,8 @@ import { Component, EventEmitter, Output } from '@angular/core';
 /* NgRx */
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/reducers';
-import {selectAuthState, selectAuthUser} from '../../../store/reducers/auth.reducer';
+import { selectAuthState, selectAuthUser } from '../../../store/reducers/auth.reducer';
+import { logout } from '../../../store/actions/auth.actions';
 
 /* Material Angular */
 import { MatDialog } from '@angular/material/dialog';
@@ -17,7 +18,6 @@ import { SigninComponent } from '../../../auth/components/signin/signin.componen
 
 /* Models */
 import { User } from '../../../auth/models/user.model';
-import {logout} from '../../../store/actions/auth.actions';
 
 @Component({
   selector: 'app-navbar',

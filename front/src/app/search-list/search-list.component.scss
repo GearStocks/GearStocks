@@ -1,36 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
-#icone {
-  height: 50px;
-  width: 50px;
-  z-index: 1000;
-  position: fixed;
-  bottom: 31px;
-  right: 25px;
-  background-color: white;
-  border-radius: 25%;
-  cursor: pointer;
-
-  /* SVG ROCKET CSS*/
-  #cRetour {
-    height: 50px;
-    width: 50px;
-    position: fixed;
-    transition: all 0.5s;
-
-    &.cInvisible {
-      bottom: -35px;
-      opacity: 0;
-      transition: all ease-in 0.5s;
-    }
-
-    &.cVisible {
-      bottom: 30px !important;
-      opacity: 1 !important;
-    }
-  }
-}
-
 .search {
   background-color: powderblue;
   min-height: 100vh;

@@ -2,9 +2,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
+/* RxJs */
+import { Observable } from 'rxjs';
+
+/* Models */
+import { Items } from '../models/items.model';
+import { Item } from '../components/item/models/item.model';
+
 /* Environment */
 import { environment } from '../../../environments/environment';
-import { Observable } from 'rxjs';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -20,14 +26,14 @@ export class SearchService {
 
   constructor(private http: HttpClient) {}
 
-  search(keyword: string): Observable<any> {
+  search(keyword: string): Observable<Items> {
     const body = {
       keyWord: keyword
     };
     return this.http.post<any>(this.searchUrl, body, httpOptions);
   }
 
-  getItem(name: string): Observable<any> {
+  getItem(name: string): Observable<Item> {
     const body = {
       partName: name
     };

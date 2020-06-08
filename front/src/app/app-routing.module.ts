@@ -13,7 +13,7 @@ import { LostPasswordComponent } from './auth/components/lost-password/lost-pass
 import { ProfileComponent } from './profile/profile.component';
 import { SearchListComponent } from './search-list/search-list.component';
 import { ContactComponent } from './core/components/contact/contact.component';
-import { ItemComponent } from './item/item.component';
+import { ItemComponent } from './search-list/components/item/item.component';
 import { SearchPageComponent } from './search-page/search-page.component';
 // tslint:disable-next-line:max-line-length
 import { LostPasswordConfirmationComponent } from './auth/components/lost-password/lost-password-confirmation/lost-password-confirmation.component';
