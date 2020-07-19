@@ -603,22 +603,38 @@ aho_corasick::trie	BddManager::generateTree()
   return trie;
 }
 
-std::vector<std::string>	BddManager::parseKeyWordInTree(aho_corasick::trie trie, std::string keyWord)
+std::vector<std::pair<std::string, size_t>>	BddManager::parseKeyWordInTree(aho_corasick::trie trie, std::string keyWord)
 {
-  std::vector<std::string>	parsingResult;
+  //std::vector<std::string>	parsingResult;
+  std::vector<std::pair<std::string, size_t>>	parsingResult;
   std::transform(keyWord.begin(), keyWord.end(), keyWord.begin(), ::tolower);
   auto	result = trie.parse_text(keyWord.c_str());
   auto mdr = result.begin();
 
+  
+  std::pair<std::string, size_t> resultPair;
   while (mdr != result.end()) {
     //std::cout << (*mdr).get_keyword() << " a la place " << (*mdr).get_index() << std::endl;
-    parsingResult.push_back((*mdr).get_keyword());
+    resultPair = std::make_pair((*mdr).get_keyword(), 1);
+    //parsingResult.push_back((*mdr).get_keyword());
+    parsingResult.push_back(resultPair);
     ++mdr;
   }
+
+  
+
+
+  
   std::stringstream ss(keyWord);
   std::istream_iterator<std::string> begin(ss);
   std::istream_iterator<std::string> end;
   std::vector<std::string> keyWordSplited(begin, end);
+
+
+  /*for (std::vector<std::string>::iterator ez = keyWordSplited.begin() ; ez != keyWordSplited.end(); ++ez)
+    std::cout << "LOL:" << *ez << std::endl;*/
+
+  
   auto it = keyWordSplited.begin();
   auto cursor = _carPartCollection.find({});
   for (auto&& doc : cursor) {
@@ -629,15 +645,48 @@ std::vector<std::string>	BddManager::parseKeyWordInTree(aho_corasick::trie trie,
     std::transform(nameInLower.begin(), nameInLower.end(), nameInLower.begin(), ::tolower);
     while (it < keyWordSplited.end()) {
       if (nameInLower.find(*it) != std::string::npos) {
-	if (std::find(parsingResult.begin(), parsingResult.end(), name) == parsingResult.end())
-          {
-            parsingResult.push_back(name);
-            it = keyWordSplited.end() - 1;
-          }
+	auto itez = std::find_if( parsingResult.begin(), parsingResult.end(), [&name](const std::pair<std::string, int>& element){ return element.first == name;} );
+	
+	if (itez == parsingResult.end())
+	  {
+	    resultPair = std::make_pair(name, 1);
+	    
+	    parsingResult.push_back(resultPair);
+	    std::cout << "VOICI LE NAME:" << name << std::endl;
+	    //it = keyWordSplited.end() - 1;
+	    std::cout << "VOICI LE SPLIT:" << *it << std::endl;
+	  }
+	else {
+	  //std::cout << "1" << std::endl;
+	  std::pair<std::string, int> new_pair = *itez;
+	  //std::cout << "AVANT:" << (*itez).second << std::endl;
+	  ++new_pair.second;
+	  *itez = new_pair;
+	  //std::cout << "APRES:" << (*itez).second << std::endl;
+	  //std::cout << "VOICI LE NAME:" << name << std::endl;
+	  //std::cout << "VOICI LE SPLIT:" << *it << std::endl;
+	  //std::cout << "2" << std::endl;
+	}
+	
       }
+      
       ++it;
+      
     }
     it = keyWordSplited.begin();
   }
+  std::sort(parsingResult.begin(), parsingResult.end(), [](auto &left, auto &right) {
+      return left.second > right.second;
+    });
   return parsingResult;
 }
+  
+/*if (std::find(parsingResult.begin(), parsingResult.end(), name) == parsingResult.end())
+	//{
+	    resultPair = std::make_pair(name, 1);
+	    //parsingResult.push_back(name);
+	    parsingResult.push_back(resultPair);
+	    std::cout << "VOICI LE NAME:" << name << std::endl;
+	    it = keyWordSplited.end() - 1;
+	    std::cout << "VOICI LE SPLIT:" << *it << std::endl;*/	    
+	//int eztest = 1;
