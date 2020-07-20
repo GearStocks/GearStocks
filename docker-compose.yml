@@ -29,15 +29,15 @@ services:
         max-file: "10"
 
   #Create and renew certificates for SSL purposes
-  #certbot:
-  #  build: ./certbot
-  #  volumes:
-  #    - ./apache/certificates:/etc/letsencrypt
-  #  logging:
-  #    driver: "json-file"
-  #    options:
-  #      max-size: "200k"
-  #      max-file: "10"
+  certbot:
+    build: ./certbot
+    volumes:
+      - ./apache/certificates:/etc/letsencrypt
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
 
   #Serve the website, so need both HTTP and HTTPS ports (HSTS).
   apache:
