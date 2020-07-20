@@ -74,6 +74,12 @@ stages:
           cp -R apk drop/
           echo Application OK
         displayName: Prepare Android App for Archive
+      - script: |
+          set -e
+          mkdir -p drop/certbot
+          cp -R certbot/Dockerfile drop/certbot/
+          echo certbot OK
+        displayName: Prepare certbot for Archive
       - script: echo Archive OK
         displayName: Archive Files
       - task: ArchiveFiles@2
