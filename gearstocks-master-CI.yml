@@ -64,7 +64,7 @@ stages:
           set -e
           mkdir -p drop/front
           cp -R front/dist drop/front/
-          rm apache/certificates/httpd-ssl-dev.conf
+          rm apache/conf/httpd-ssl-dev.conf
           cp -R apache drop/
           echo Front OK
         displayName: Prepare Front for Archive
