@@ -9,8 +9,7 @@ import {address} from './address';
 
 //Change address in address.js !
 
-var port = 8000;
-var localAddress = 'http://' + address + ':' + port + '/';
+var localAddress = 'http://' + address + '/';
 
 export const routes = {
   CONNECT: localAddress + 'connect',
