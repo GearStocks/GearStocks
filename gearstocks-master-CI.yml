@@ -28,11 +28,14 @@ stages:
           docker pull gearstocks/api_builder:latest
           echo "API_ADDR=api.gearstocks.store" > .env
           echo "API_PORT=80" >> .env
+          sed '/- 80:80/d' docker-compose.yml
           echo "export const address = 'api.gearstocks.store';" > application/config/address.js
           sed -i 's/localhost:8000/api.gearstocks.store/g' front/src/environments/environment.prod.ts
           sed -i 's/localhost:8000/api.gearstocks.store/g' front/src/environments/environment.mock.ts
           sed -i 's/localhost:8000/api.gearstocks.store/g' front/src/environments/environment.ts
-          echo " -d images.gearstocks.store -d api.gearstocks.store -d gearstocks.store; chmod -R 755 /etc/letsencrypt" >> certbot/Dockerfile
+          echo " -w /home/files/images -d images.gearstocks.store" >> certbot/Dockerfile
+          echo " -w /home/files/api -d api.gearstocks.store" >> certbot/Dockerfile
+          echo " -w /home/files/clientWeb -d gearstocks.store; chmod -R 755 /etc/letsencrypt" >> certbot/Dockerfile
           docker-compose up front api_builder app
           echo Front, Back and App successfully build.
         displayName: 'Front, API and App Compilation Check'
@@ -61,6 +64,7 @@ stages:
           set -e
           mkdir -p drop/front
           cp -R front/dist drop/front/
+          rm apache/conf/httpd-ssl-dev.conf
           cp -R apache drop/
           echo Front OK
         displayName: Prepare Front for Archive
