@@ -10,16 +10,7 @@ import { Text, View, Image, Dimensions } from 'react-native';
 import { Icon } from 'react-native-elements';
 import {
   LineChart,
-  BarChart,
-  PieChart,
-  ProgressChart,
-  ContributionGraph,
-  StackedBarChart
 } from "react-native-chart-kit";
-
-import { routes } from '../../../config/routes';
-
-const axios = require('axios');
 
 export default class ItemsComponent extends React.Component {
 

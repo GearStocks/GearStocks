@@ -12,7 +12,8 @@ import { createDrawerNavigator, createAppContainer } from 'react-navigation';
 import HomeComponent from '../Home/Home.component';
 import ProfilComponent from '../Profil/Profil.component';
 import LoginComponent from '../Connection/Login/Login.component';
-import ItemComponent from '../Items/ItemsComponent';
+import ItemComponent from '../Items/Items.component';
+import FavorisComponent from '../Favoris/Favoris.component';
 import { user } from '../../services/User';
 
 export default class AppMenu extends React.Component {
@@ -44,7 +45,15 @@ const bottomTabNavigator = createDrawerNavigator(
           <Icon name="person" size={25} color={tintColor} />
         )
       }
-    }
+    },
+    /*Favoris: {
+      screen: FavorisComponent,
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => (
+          <Icon name="person" size={25} color={tintColor} />
+        )
+      }
+    }*/
   },
   {
     initialRouteName: 'Home'
