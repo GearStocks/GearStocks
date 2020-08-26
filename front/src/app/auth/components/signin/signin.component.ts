@@ -3,18 +3,21 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-/* RxJs Dependencies */
-import { first } from 'rxjs/internal/operators/first';
-
-/* Services */
-import { UserService } from '../../services/user.service';
-import { SigninFormService } from './services/signin-form.service';
+/* NgRx */
+import {select, Store} from '@ngrx/store';
+import { AppState } from '../../../store/reducers';
+import { login } from '../../../store/actions/auth.actions';
+import {selectAuthState, selectAuthUser} from '../../../store/reducers/auth.reducer';
 
 /* Material Angular */
 import { MatDialogRef } from '@angular/material/dialog';
 
+/* Services */
+import { SigninFormService } from './services/signin-form.service';
+
 /* Models */
 import { ErrorMessages } from './signin-errors';
+import { AuthData } from '../../models/auth-data.model';
 
 @Component({
   selector: 'app-signin',
@@ -24,26 +27,21 @@ import { ErrorMessages } from './signin-errors';
   encapsulation: ViewEncapsulation.None
 })
 export class SigninComponent implements OnInit {
+  isAuthenticated: boolean;
   signForm: FormGroup;
-  returnUrl: string;
-  loading = false;
   checkBox = false;
   errorMessages = ErrorMessages;
 
-  constructor(
-    private userService: UserService,
-    private signinFormService: SigninFormService,
-    public dialogRef: MatDialogRef<SigninComponent>,
-    private router: Router,
-    private route: ActivatedRoute) {
-    if (this.userService.currentUserValue) {
+  constructor(private store: Store<AppState>, private signinFormService: SigninFormService,
+    public dialogRef: MatDialogRef<SigninComponent>, private router: Router, private route: ActivatedRoute) {
+    this.store.pipe(select(selectAuthState)).subscribe(x => this.isAuthenticated = x);
+    if (this.isAuthenticated) {
       this.router.navigate(['/']);
     }
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.signForm = this.signinFormService.buildForm();
-    this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
   }
 
   get f() { return this.signForm.controls; }
@@ -61,21 +59,11 @@ export class SigninComponent implements OnInit {
       return;
     }
 
-    this.loading = true;
-    const authData = {
+    const authData = <AuthData>{
       ...this.signForm.getRawValue(),
       rememberMe: this.checkBox
     };
-    this.userService.login(authData)
-      .pipe(first())
-      .subscribe(
-        () => {
-          this.dialogRef.close();
-          this.router.navigate(['/']);
-        },
-        () => {
-          this.loading = false;
-        });
+    this.store.dispatch(login({authData: authData}));
   }
 
   register(): void {

@@ -8,7 +8,7 @@ export const ErrorMessages = {
   birthDay: {
     required: 'Champ requis*',
   },
-  userName: {
+  username: {
     required: 'Champ requis*',
     pattern: 'Votre pseudo doit contenir entre 2 et 50 caractères*'
   },

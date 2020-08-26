@@ -18,7 +18,7 @@ export class GearstocksAlertComponent implements OnInit, OnDestroy {
 
   constructor(private alertService: AlertService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.subscription = this.alertService.getAlert()
       .subscribe(message => {
         switch (message && message.type) {
@@ -34,11 +34,11 @@ export class GearstocksAlertComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
 
-  close() {
+  close(): void {
     this.alertService.clear();
   }
 }

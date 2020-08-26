@@ -1,12 +1,15 @@
-<div class="container">
+<div class="container" #target>
 
-    <div class="item__title">
+  <div class="item__title">
+      <button (click)="back()" mat-icon-button aria-label="Page précédente" class="item__back">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
         <h1> {{itemData.name}} </h1>
     </div>
 
     <div class="row">
         <div class="col-md-4 item__desc">
-          <img *ngIf="!itemData.photo" class="img-fluid" src="../../assets/img/NoImageAvailableIcon.png" alt="">
+          <img *ngIf="!itemData.photo" class="img-fluid" src="../../../../assets/img/NoImageAvailableIcon.png" alt="">
           <img *ngIf="itemData.photo" class="img-fluid" [src]="itemData.photo" alt="">
           <!--
             <h3>Details du produit</h3>

@@ -5,29 +5,35 @@
     </button>
   </div>
   <div class="navbar__brand">
-    <a routerLink="" [class.navbar__brand__align]="!currentUser">
+    <a routerLink="">
       <img src="../../../../assets/img/logo.png" alt="Gearstocks"/>
     </a>
   </div>
   <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
-    <ul fxLayout fxLayoutGap="15px">
-      <li *ngIf="currentUser">
-        <a routerLink="/profile">Profile</a>
+    <ul fxLayout fxLayoutGap="15px" class="navbar__elem">
+      <li *ngIf="isAuthenticated">
+        <mat-list-item [matMenuTriggerFor]="menu">
+        <a class="navbar__iconAbove">
+          <mat-icon>person</mat-icon>
+          <p>{{currentUser.firstName}}</p>
+        </a>
+        </mat-list-item>
+        <mat-menu #menu="matMenu">
+          <button class="navbar__elem__button" mat-menu-item routerLink="/profile">Profile</button>
+          <button class="navbar__elem__button" mat-menu-item (click)="logout()">Se déconnecter</button>
+        </mat-menu>
       </li>
-      <li *ngIf="currentUser">
-        <a (click)="userService.logout()" id="logout">Se déconnecter</a>
-      </li>
-      <li *ngIf="!currentUser">
+      <li *ngIf="!isAuthenticated">
         <a class="navbar__iconAbove" (click)="open()" id="login">
           <mat-icon>person</mat-icon>
           <p>Se connecter</p>
         </a>
       </li>
       <li>
-        <a class="navbar__iconAbove" routerLink="/contact">Contact</a>
-      </li>
-      <li>
-        <a class="navbar__iconAbove" href="gearstocks.apk" download>Télécharger l'application</a>
+        <a  class="navbar__iconAbove" routerLink="/contact">
+          <mat-icon>phone</mat-icon>
+          <p>Contact</p>
+        </a>
       </li>
     </ul>
   </div>
