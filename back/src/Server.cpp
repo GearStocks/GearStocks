@@ -599,23 +599,23 @@ int Server::listParts(const Pistache::Rest::Request& request, Pistache::Http::Re
   }
   document2.AddMember("success", "list parts", allocator); 
   
-  std::vector<std::string>	resultParsing;
+  std::vector<std::pair<std::string, size_t>>	resultParsing;
   resultParsing = _manager->parseKeyWordInTree(_manager->generateTree(), document["keyWord"].GetString());
   if (resultParsing.empty()) {
     std::cout << "Aucunes pièces ne correspondent" << std::endl;
     document2.AddMember("data", "Part not found", allocator); 
   }
   else {
-    std::vector<std::string>::iterator it = resultParsing.begin();
+    std::vector<std::pair<std::string, size_t>>::iterator it = resultParsing.begin();
     rapidjson::Document* doc3;
     int i = 1;
     while (it < resultParsing.end() && i <= 10) {
-      doc3 = _manager->getCarPart(*it);
+      doc3 = _manager->getCarPart((*it).first);
       mergeObjects(document2, *doc3, allocator);
       ++it;
       ++i;
     }
-  }
+    }
   document2.Accept(writer);
   response.send(Pistache::Http::Code::Ok, strbuf.GetString());
   return 0;
