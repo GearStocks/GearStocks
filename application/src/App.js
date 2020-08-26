@@ -22,7 +22,7 @@ export default class App extends React.Component {
     if (!user || user == undefined || user == null) {
       instanciateUser();
     }
-
+    console.disableYellowBox = true;
     return (
       <AppContainer />
     );

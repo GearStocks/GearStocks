@@ -21,4 +21,5 @@ export const routes = {
   GET_FULL_CAR_PART: localAddress + 'getFullCarPart',
   FORGOT_PASSWORD: localAddress + 'forgottenPassword',
   LIST_PARTS: localAddress + 'listParts',
+  GET_FULL_CAR_PART: localAddress + 'getFullCarPart'
 };
