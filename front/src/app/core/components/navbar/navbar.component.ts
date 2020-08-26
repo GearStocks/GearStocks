@@ -1,6 +1,12 @@
 /* Angular Modules */
 import { Component, EventEmitter, Output } from '@angular/core';
 
+/* NgRx */
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../../store/reducers';
+import { selectAuthState, selectAuthUser } from '../../../store/reducers/auth.reducer';
+import { logout } from '../../../store/actions/auth.actions';
+
 /* Material Angular */
 import { MatDialog } from '@angular/material/dialog';
 
@@ -21,10 +27,12 @@ import { User } from '../../../auth/models/user.model';
 
 export class NavbarComponent {
   @Output() public sidenavToggle = new EventEmitter();
+  isAuthenticated: boolean;
   currentUser: User;
 
-  constructor(private userService: UserService, public dialog: MatDialog) {
-    this.userService.currentUser.subscribe(x => this.currentUser = x);
+  constructor(private store: Store<AppState>, public userService: UserService, public dialog: MatDialog) {
+    this.store.pipe(select(selectAuthState)).subscribe(x => this.isAuthenticated = x);
+    this.store.pipe(select(selectAuthUser)).subscribe(x => this.currentUser = x);
   }
 
   onToggleSidenav(): void {
@@ -34,4 +42,9 @@ export class NavbarComponent {
   open(): void {
     this.dialog.open(SigninComponent);
   }
+
+  logout(): void {
+    this.store.dispatch(logout({email: this.currentUser.email}));
+  }
+
 }

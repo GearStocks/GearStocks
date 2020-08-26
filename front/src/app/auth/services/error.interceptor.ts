@@ -8,13 +8,12 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
 /* Services */
-import { UserService } from './user.service';
 import { AlertService } from '../../shared/components/gearstocks-alert/services/alert.service';
 
 @Injectable({ providedIn: 'root' })
 export class ErrorInterceptor implements HttpInterceptor {
 
-  constructor(private userService: UserService, private router: Router, private alertService: AlertService) { }
+  constructor(private router: Router, private alertService: AlertService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request)

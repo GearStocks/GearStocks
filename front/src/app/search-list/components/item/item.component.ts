@@ -2,6 +2,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 
+/* NgRx */
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../../store/reducers';
+import { selectItem } from '../../../store/reducers/core.reducer';
+
 /* Charts */
 import { Chart } from 'chart.js';
 
@@ -14,16 +19,16 @@ import { Item } from './models/item.model';
   styleUrls: ['./item.component.scss']
 })
 export class ItemComponent implements OnInit {
-  itemData: any;
+  itemData: Item;
   chart = [];
   chartLabel = [];
   chartPrice = [];
 
-  constructor(private location: Location) { }
+  constructor(private store: Store<AppState>, private location: Location) {
+    this.store.pipe(select(selectItem)).subscribe(x => this.itemData = x);
+  }
 
-  ngOnInit() {
-    this.itemData = this.location.getState()[0];
-    console.log(this.itemData);
+  ngOnInit(): void {
     this.itemData.prices.forEach(elem => {
       this.chartLabel.push(elem.month);
       this.chartPrice.push(elem.price);
@@ -66,5 +71,9 @@ export class ItemComponent implements OnInit {
         }
       }
     });
+  }
+
+  back(): void {
+    this.location.back();
   }
 }

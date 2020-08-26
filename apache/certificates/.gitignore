@@ -5,3 +5,4 @@ renewal
 renewal-hooks
 .updated-options-ssl-apache-conf-digest.txt
 cli.ini
+options-ssl-apache.conf

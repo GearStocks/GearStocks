@@ -97,36 +97,13 @@ To change the admin's password of the MongoDB database, you'll have to change th
 
 To change the admin's username of the MongoDB database, you'll have to change the ```MONGO_INITDB_ROOT_USERNAME``` value in ```database/secrets.env```. If this file doesn't exit, create it.
 
-//this part has to be updated to fit with mongo documentation !
-
-Then you'll have to execute the following command:
-
-```bash
-docker-compose exec MongoDB /bin/bash
-MongoDB -p
-```
-
-Then enter the old password and, replacing ```NEW_PASSWORD``` by the new password, execute:
-
-```sql
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'NEW_PASSWORD'; ALTER USER 'root'@'172.19.%' IDENTIFIED BY 'NEW_PASSWORD';
-```
-
-Then, press ```Ctrl+C``` follow by ```Ctrl+D``` to quit, and execute:
-
-```bash
-docker-compose stop api && docker-compose up -d api
-```
-
-//The previous part has to be updated to fit with mongo documentation !
-
 #### 7. Pipelines and pull requests
 
 Gearstock's project's deployment's automation is taking place in two environments: ```Dev``` and ```Prod```, each hosted on an Azure VM.
 
 ##### 1. The Dev environment
 
-The ```Dev``` environment's behavior is to test together all the resources from the diferents branches to handle and correct (on those branches and NOT on dev branch) bugs and defects before uploading the resources to the ```Prod``` environment.
+The ```Dev``` environment's purpose is to test together all the resources from the diferents branches to handle and correct (on those branches and NOT on dev branch) bugs and defects before uploading the resources to the ```Prod``` environment.
 
 When a ```pull request``` is made to the ```dev branch```, a ```pipeline``` is triggered. This ```pipeline``` will run tests on a separated environment, where the acceptance of the ```pull request``` is simulated.
 
@@ -134,7 +111,7 @@ If all the tests succeed, the ```pull request``` is accepted and the resulted re
 
 ##### 2. The Prod environment
 
-The ```Prod``` environment's behavior is to provide the Gearstock's project to the final users.
+The ```Prod``` environment's purpose is to provide the Gearstock's project to the final users.
 
 When a ```pull request``` is made from the ```dev branch``` to the ```master branch```, a ```pipeline``` is triggered. This ```pipeline``` will run tests on a separated environment, where the acceptance of the ```pull request``` is simulated.
 

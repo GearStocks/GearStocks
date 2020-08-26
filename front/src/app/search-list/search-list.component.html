@@ -1,0 +1,40 @@
+<section #target>
+
+  <section class="search">
+
+    <app-gearstocks-back-to-top [element]="target"></app-gearstocks-back-to-top>
+
+    <div class="search__bar">
+      <div class="container input-group mb-3 input-group-lg">
+        <div class="input-group-prepend">
+          <button type="submit" class="input-group-text delete-css-button" (click)="search()">
+            <i class="material-icons"> search </i>
+          </button>
+        </div>
+        <input type="text" [(ngModel)]="keyword" (keyup.enter)="search()" name="keyword" class="form-control" placeholder='Que recherchez-vous ?'>
+      </div>
+      <button type="submit" class="input-group-text search__bar__button" (click)="search()">Rechercher ({{this.getUnits()}} résultats)</button>
+    </div>
+
+    <div class="container search__list">
+
+      <div class="row" *ngIf="data">
+
+        <div  *ngFor="let item of data.parts" class="col-lg-4 col-md-6 mb-4">
+          <div (click)="navigate(item)" class="card h-100">
+            <img *ngIf="!item.photo" class="card-img-top" src="../../assets/img/NoImageAvailableIcon.png" alt="">
+            <img *ngIf="item.photo" class="card-img-top" [src]="item.photo" alt="">
+            <div class="card-body">
+              <h4 class="card-title">{{item.name}}</h4>
+              <p class="card-text">Prix : {{item.price}}</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</section>

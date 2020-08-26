@@ -3,9 +3,8 @@
   position: fixed;
   top: 0;
   z-index: 100;
+
   a {
-    padding-top: 10px;
-    padding-right: 10px;
     text-decoration: none;
     color: white;
     text-align: center;
@@ -28,25 +27,22 @@
   }
 
   &__brand {
-    a {
-      padding: 0;
-    }
 
     img {
       width: 60px;
-    }
-
-    &__align {
-      img {
-        vertical-align: baseline;
-      }
+      vertical-align: baseline;
     }
   }
 
-  &__navigation-items {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+  &__elem {
+    a {
+      margin-top: 7px;
+      margin-right: 10px;
+    }
+
+    &__button {
+      outline: none !important;
+    }
   }
 
   &__iconAbove {
@@ -57,7 +53,7 @@
       margin-right: auto;
     }
     p {
-      margin-top: -9px;
+      margin-top: -5px;
     }
   }
 }
@@ -66,14 +62,7 @@
   .navbar {
     &__brand {
       img {
-        width: 60px;
         vertical-align: middle;
-      }
-
-      &__align {
-        img {
-          vertical-align: middle;
-        }
       }
     }
   }

@@ -3,26 +3,27 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
+/* NgRx */
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../../store/reducers';
+import { register } from '../../../store/actions/auth.actions';
+import { selectAuthState } from '../../../store/reducers/auth.reducer';
+
 /* Material Angular */
 import { MatDialog } from '@angular/material/dialog';
 
-/* RxJs dependencies */
-import { first } from 'rxjs/operators';
-
 /* Lottie Animation */
-import { AnimationItem } from 'lottie-web';
 import { AnimationOptions } from 'ngx-lottie';
 
 /* Services */
-import { UserService } from '../../services/user.service';
+import { SignupFormService } from './services/signup-form.service';
 
 /* Components */
 import { SigninComponent } from '../signin/signin.component';
-import { SignupFormService } from './services/signup-form.service';
 
 /* Models */
-import { AuthData } from '../../models/auth-data.model';
 import { ErrorMessages } from './signup-errors';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-signup',
@@ -31,9 +32,8 @@ import { ErrorMessages } from './signup-errors';
   providers: [SignupFormService]
 })
 export class SignupComponent implements OnInit {
+  isAuthenticated: boolean;
   signForm: FormGroup;
-  loading = false;
-  submitted = false;
   captchaError: boolean;
   errorMessages = ErrorMessages;
   options: AnimationOptions = {
@@ -41,17 +41,15 @@ export class SignupComponent implements OnInit {
   };
   captchaSiteKey = '6LczU6MUAAAAAGaba5u9Qt_Peq3_mKk6bKnZ72Ju';
 
-  constructor(
-    private userService: UserService,
-    private signupFormService: SignupFormService,
-    public dialog: MatDialog,
-    private router: Router) {
-    if (this.userService.currentUserValue) {
+  constructor(private store: Store<AppState>, private signupFormService: SignupFormService,
+    public dialog: MatDialog, private router: Router) {
+    this.store.pipe(select(selectAuthState)).subscribe(x => this.isAuthenticated = x);
+    if (this.isAuthenticated) {
       this.router.navigate(['/']);
     }
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.signForm = this.signupFormService.buildForm();
     this.signForm.get('confirmPassword').valueChanges.subscribe(val => {
       if (SignupFormService.checkPasswords(this.signForm)) {
@@ -62,34 +60,18 @@ export class SignupComponent implements OnInit {
 
   get f() { return this.signForm.controls; }
 
-  animationCreated(animationItem: AnimationItem): void {
-    console.log(animationItem);
-  }
-
   onSubmit(): void {
-    this.submitted = true;
-
     if (this.signForm.invalid) {
       this.captchaError = true;
-      Object.keys(this.signForm.controls).forEach((field => {
+      Object.keys(this.f).forEach((field => {
         const control = this.signForm.get(field);
         control.markAsTouched({onlySelf: true});
       }));
       return;
     }
 
-    this.loading = true;
-    const authData = <AuthData>this.signForm.getRawValue();
-    this.userService.register(authData)
-      .pipe(first())
-      .subscribe(
-        () => {
-          this.router.navigate(['/confirmation']);
-        },
-        () => {
-          this.loading = false;
-        });
-    this.captchaError = false;
+    const authData = <User>this.signForm.getRawValue();
+    this.store.dispatch(register({authData: authData}));
   }
 
   login(): void {

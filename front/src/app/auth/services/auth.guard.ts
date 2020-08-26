@@ -2,23 +2,28 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 
+/* NgRx */
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../store/reducers';
+import { selectAuthState } from '../../store/reducers/auth.reducer';
+
+
 /* Material Angular */
 import { MatDialog } from '@angular/material/dialog';
-
-/* Services */
-import { UserService } from './user.service';
 
 /* Components */
 import { SigninComponent } from '../components/signin/signin.component';
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
+  isAuthenticated: boolean;
 
-  constructor(private userService: UserService, private router: Router, public dialog: MatDialog) {}
+  constructor(private store: Store<AppState>, private router: Router, public dialog: MatDialog) {
+    this.store.pipe(select(selectAuthState)).subscribe(x => this.isAuthenticated = x);
+  }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const currentUser = this.userService.currentUserValue;
-    if (currentUser) {
+    if (this.isAuthenticated) {
       return true;
     }
     this.router.navigate(['/']);

@@ -8,8 +8,8 @@
 
 std::vector<std::string> Emailer::_contentBuffer;
 
-#define FROM    "raphigothique@gmail.com"
-#define CC      "raphigothique@gmail.com"
+#define FROM    "gearstocks@gmail.com"
+#define CC      "gearstocks@gmail.com"
 
 struct upload_status {
   int lines_read;
@@ -51,8 +51,8 @@ int Emailer::sendMail(std::string userMail, std::string password, std::string ma
   upload_ctx.lines_read = 0;
   curl = curl_easy_init();
   if(curl) {
-    curl_easy_setopt(curl, CURLOPT_USERNAME, "raphigothique@gmail.com");
-    curl_easy_setopt(curl, CURLOPT_PASSWORD, "nzzokyofhsfqhioh");
+    curl_easy_setopt(curl, CURLOPT_USERNAME, "gearstocks@gmail.com");
+    curl_easy_setopt(curl, CURLOPT_PASSWORD, "piabeyoyxoyukozo");
     curl_easy_setopt(curl, CURLOPT_URL, "smtps://smtp.gmail.com:465");
 #ifdef SKIP_PEER_VERIFICATION
     curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0L);
@@ -92,7 +92,7 @@ int	Emailer::buildResetPasswordContentBuffer(std::string userMail, std::string p
   std::string ID = "Message-ID: <" + time + "@gearstocks.com>\r\n";
   _contentBuffer.push_back("Date: Mon, 08 Mar 2020 11:54:29 +1100\r\n");
   _contentBuffer.push_back("To : " + userMail + "\r\n");
-  _contentBuffer.push_back("From: raphigothique@gmail.com (GearStocks)\r\n");
+  _contentBuffer.push_back("From: gearstocks@gmail.com (GearStocks)\r\n");
   _contentBuffer.push_back("Cc: \r\n");
   _contentBuffer.push_back(ID);
   _contentBuffer.push_back("Subject: Password reset\r\n");
@@ -124,7 +124,7 @@ int	Emailer::buildRegisterConfirmationContentBuffer(std::string userMail)
   std::string ID = "Message-ID: <" + time + "@gearstocks.com>\r\n";
   _contentBuffer.push_back("Date: Mon, 08 Mar 2020 11:54:29 +1100\r\n");
   _contentBuffer.push_back("To : " + userMail + "\r\n");
-  _contentBuffer.push_back("From: raphigothique@gmail.com (GearStocks)\r\n");
+  _contentBuffer.push_back("From: gearstocks@gmail.com (GearStocks)\r\n");
   _contentBuffer.push_back("Cc: \r\n");
   _contentBuffer.push_back(ID);
   _contentBuffer.push_back("Subject: Confirmation d'inscription\r\n");

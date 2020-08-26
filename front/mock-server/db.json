@@ -1,24 +1,27 @@
 {
   "connect": {
-    "firstName": "François",
-    "lastName": "MILHET",
-    "userName": "SkuSku97180",
-    "email": "francois97180@hotmail.fr",
-    "password": "password",
-    "token": "12345",
-    "address": "",
-    "city": "",
-    "phone": ""
+    "token": "E6AA8B3D48117DD302181DE627AD1FA1AE6C34AD",
+    "username": "new2",
+    "email": "raphael.sebaon@epitech.eu",
+    "firstName": "new3",
+    "lastName": "new4",
+    "birthDay": "5"
+  },
+  "disconnect": {
+    "mail": "francois97180@hotmail.fr"
   },
   "register": {
-    "firstName": "francois",
-    "lastName": "milhet",
-    "username": "Skullz971",
-    "mail": "francois97180@hotmail.fr",
-    "password": "test123456"
+    "firstName": "François",
+    "lastName": "MILHET",
+    "birthDay": "2020-05-05",
+    "username": "skullz971",
+    "email": "francoismilhet@hotmail.fr",
+    "password": "test12345",
+    "confirmPassword": "test12345",
+    "recaptcha": ""
   },
   "resetPassword": {
-    "email": "f@f"
+    "mail": "francoismilhet@hotmail.fr"
   },
   "user": {
     "showPassword": "azerty",
