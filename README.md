@@ -97,29 +97,6 @@ To change the admin's password of the MongoDB database, you'll have to change th
 
 To change the admin's username of the MongoDB database, you'll have to change the ```MONGO_INITDB_ROOT_USERNAME``` value in ```database/secrets.env```. If this file doesn't exit, create it.
 
-//this part has to be updated to fit with mongo documentation !
-
-Then you'll have to execute the following command:
-
-```bash
-docker-compose exec MongoDB /bin/bash
-MongoDB -p
-```
-
-Then enter the old password and, replacing ```NEW_PASSWORD``` by the new password, execute:
-
-```sql
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'NEW_PASSWORD'; ALTER USER 'root'@'172.19.%' IDENTIFIED BY 'NEW_PASSWORD';
-```
-
-Then, press ```Ctrl+C``` follow by ```Ctrl+D``` to quit, and execute:
-
-```bash
-docker-compose stop api && docker-compose up -d api
-```
-
-//The previous part has to be updated to fit with mongo documentation !
-
 #### 7. Pipelines and pull requests
 
 Gearstock's project's deployment's automation is taking place in two environments: ```Dev``` and ```Prod```, each hosted on an Azure VM.
