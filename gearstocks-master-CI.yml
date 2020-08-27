@@ -33,7 +33,7 @@ stages:
           sed -i 's/http:\/\/localhost:8000/https:\/\/api.gearstocks.store/g' front/src/environments/environment.prod.ts
           sed -i 's/http:\/\/localhost:8000/https:\/\/api.gearstocks.store/g' front/src/environments/environment.mock.ts
           sed -i 's/http:\/\/localhost:8000/https:\/\/api.gearstocks.store/g' front/src/environments/environment.ts
-          echo " -d images.gearstocks.store -d api.gearstocks.store -d gearstocks.store; chmod -R 755 /etc/letsencrypt" >> certbot/Dockerfile
+          echo " -d gearstocks.store -d api.gearstocks.store -d images.gearstocks.store; chmod -R 755 /etc/letsencrypt" >> certbot/Dockerfile
           docker-compose up front api_builder app
           echo Front, Back and App successfully build.
         displayName: 'Front, API and App Compilation Check'
