@@ -20,6 +20,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 /* LottieAnimation */
 import { LottieModule } from 'ngx-lottie';
@@ -33,13 +34,20 @@ import { GearstocksInputComponent } from './components/gearstocks-input/gearstoc
 import { GearstocksSelectComponent } from './components/gearstocks-select/gearstocks-select.component';
 import { GearstocksAlertComponent } from './components/gearstocks-alert/gearstocks-alert.component';
 import { GearstocksTextareaComponent } from './components/gearstocks-textarea/gearstocks-textarea.component';
+import { GearstocksBackToTopComponent } from './components/gearstocks-back-to-top/gearstocks-back-to-top.component';
 
 export function playerFactory() {
   return player;
 }
 
 @NgModule({
-  declarations: [GearstocksInputComponent, GearstocksSelectComponent, GearstocksAlertComponent, GearstocksTextareaComponent],
+  declarations: [
+    GearstocksInputComponent,
+    GearstocksSelectComponent,
+    GearstocksAlertComponent,
+    GearstocksTextareaComponent,
+    GearstocksBackToTopComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -61,6 +69,7 @@ export function playerFactory() {
     MatSelectModule,
     MatFormFieldModule,
     MatProgressBarModule,
+    MatGridListModule,
     LottieModule.forRoot({ player: playerFactory })
   ],
   exports: [
@@ -84,11 +93,13 @@ export function playerFactory() {
     MatSelectModule,
     MatFormFieldModule,
     MatProgressBarModule,
+    MatGridListModule,
     LottieModule,
     GearstocksInputComponent,
     GearstocksSelectComponent,
     GearstocksAlertComponent,
-    GearstocksTextareaComponent
+    GearstocksTextareaComponent,
+    GearstocksBackToTopComponent
   ]
 })
 export class SharedModule { }

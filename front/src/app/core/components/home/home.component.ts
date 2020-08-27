@@ -1,42 +1,27 @@
 /* Angular Modules */
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 
-/* RxJs */
-import { first } from 'rxjs/operators';
-
-/* Models */
-import { User } from '../../../auth/models/user.model';
-
-/* Services */
-import { UserService } from '../../../auth/services/user.service';
-import { SearchService } from '../../services/search.service';
+/* NgRx */
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../store/reducers';
+import { search } from '../../../store/actions/core.actions';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
-  providers: [SearchService]
+  styleUrls: ['./home.component.scss']
 })
 
 export class HomeComponent {
-  currentUser: User;
   video = 'assets/video/gearstocks.mp4';
   keyword: string;
 
-  constructor(private router: Router, private userService: UserService, private searchService: SearchService) {
-    this.userService.currentUser.subscribe(x => this.currentUser = x);
-  }
+  constructor(private store: Store<AppState>) {}
 
-  search() {
-    this.searchService.search(this.keyword)
-      .pipe(first())
-      .subscribe(
-        (data) => {
-          this.router.navigateByUrl('/search-list', { state: data });
-        },
-        () => {}
-        );
+  search(): void {
+    if (this.keyword) {
+      this.store.dispatch(search({keyword: this.keyword}));
+    }
   }
 
   scrollTo(element: HTMLElement): void {

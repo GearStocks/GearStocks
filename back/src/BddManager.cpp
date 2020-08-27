@@ -162,32 +162,23 @@ rapidjson::Document*	BddManager::getFullCarPart(std::string partName)
     path.erase(path.find("\", \"descript"));
     description.erase(0, description.find("\"description\" :") + 17);
     description.erase(description.find("\", \"parts\""));
-    //description.erase(description.rfind("\" }"));
-    rapidjson::Value mdr(rapidjson::kArrayType);
-
-    
+        
     rapidjson::Value mdr2(rapidjson::kArrayType);
     while (price.find("month") != std::string::npos) {
       getAllPrices(&mdr2, &price, allocator);
     }
-    
     rapidjson::Value test;
-    rapidjson::Value s;
-    s.SetObject();
     test.SetString(name.c_str(), allocator);
-    s.AddMember("name", test, allocator);
+    document2->AddMember("name", test, allocator);
     test.SetString(path.c_str(), allocator);
-    s.AddMember("photo", test, allocator);
+    document2->AddMember("photo", test, allocator);
     test.SetString(description.c_str(), allocator);
-    s.AddMember("description", test, allocator);
-    s.AddMember("prices", mdr2, allocator);
+    document2->AddMember("description", test, allocator);
+    document2->AddMember("prices", mdr2, allocator);
 
-    
-    mdr.PushBack(s, allocator);
-    document2->AddMember("data", mdr, allocator);
     return document2;
   }
-  //return (std::make_pair(1, "Error encountered"));
+  return NULL;
 }
 
 void	BddManager::getAllPrices(rapidjson::Value *price, std::string *priceToParse, rapidjson::Document::AllocatorType &allocator)
@@ -238,9 +229,9 @@ rapidjson::Document*	BddManager::getCarPart(std::string partName)
     price.erase(price.find("\" }"));
     path.erase(0, path.find("\"photo\" :") + 11);
     path.erase(path.find("\", \"descript"));
-    std::cout << "name:" << name << std::endl;
+    /*std::cout << "name:" << name << std::endl;
     std::cout << "price:" << price << std::endl;
-    std::cout << "path:" << path << std::endl;
+    std::cout << "path:" << path << std::endl;*/
     rapidjson::Value mdr(rapidjson::kArrayType);
     rapidjson::Value test;
     rapidjson::Value s;
@@ -325,21 +316,16 @@ size_t  BddManager::updateMailUser(std::string token, std::string mail)
 
 rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string userMail)
 {
-  /***************
-  check userToken
-  ***************/
   std::string	valueInBDD;
-  std::cout << "on passe ici:" << userToken << std::endl;
   valueInBDD = checkIfExist(_userCollection, "token", userToken);
-  std::cout << "ici aussi on passe:" << valueInBDD << std::endl;
   if (valueInBDD.compare("") == 0) {
-    //std::cout << "Invalid token" << std::endl;
-    //return (std::make_pair(1, "Invalid token"));
+    std::cout << "Invalid token" << std::endl;
+    return (NULL);
   }
   valueInBDD = checkIfExist(_userCollection, "email", userMail);
   if (valueInBDD.compare("") == 0) {
-    //"Invalid email" << std::endl;
-    //return (std::make_pair(1, "Invalid email"));
+    std::cout << "Invalid email" << std::endl;
+    return NULL;
   }
   bsoncxx::builder::stream::document document{};
   bsoncxx::stdx::optional<bsoncxx::document::value> maybe_result =
@@ -348,7 +334,6 @@ rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string 
   if(maybe_result) {
     std::string userName = bsoncxx::to_json(*maybe_result);
     rapidjson::Document* document2 = new rapidjson::Document();
-    //    std::string	token = userName;
     std::string mail = userName;
     std::string firstName = userName;
     std::string lastName = userName;
@@ -359,8 +344,6 @@ rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string 
     rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
     userName.erase(0, userName.find("\"username\" :") + 14);
     userName.erase(userName.find("\", \"email\" ")); 
-    //token.erase(0, token.find("\"token\" :") + 14);
-    //token.erase(token.find("\", \"date\" "));
     mail.erase(0, mail.find("\"email\" :") + 11);
     mail.erase(mail.find("\", \"password\""));
     firstName.erase(0, firstName.find("\"firstName\" :") + 15);
@@ -369,28 +352,25 @@ rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string 
     lastName.erase(lastName.find("\", \"birthDay\""));
     birthDay.erase(0, birthDay.find("\"birthDay\" :") + 14);
     birthDay.erase(birthDay.find("\" }"));
-    rapidjson::Value mdr(rapidjson::kArrayType);
+    //rapidjson::Value mdr(rapidjson::kArrayType);
     rapidjson::Value test;
     rapidjson::Value s;
     s.SetObject();
     test.SetString(userName.c_str(), allocator);
-    s.AddMember("userName", test, allocator);
-    //test.SetString(token.c_str(), allocator);
-    //s.AddMember("token", test, allocator);
+    document2->AddMember("username", test, allocator);
     test.SetString(mail.c_str(), allocator);
-    s.AddMember("mail", test, allocator);
+    document2->AddMember("email", test, allocator);
     test.SetString(firstName.c_str(), allocator);
-    s.AddMember("firstName", test, allocator);
+    document2->AddMember("firstName", test, allocator);
     test.SetString(lastName.c_str(), allocator);
-    s.AddMember("lastName", test, allocator);
+    document2->AddMember("lastName", test, allocator);
     test.SetString(birthDay.c_str(), allocator);
-    s.AddMember("birthDay", test, allocator);
-    mdr.PushBack(s, allocator);
-    document2->AddMember("data", mdr, allocator);
+    document2->AddMember("birthDay", test, allocator);
+    //mdr.PushBack(s, allocator);
+    //document2->AddMember("data", mdr, allocator);
     return document2;
-    //return (std::make_pair(0, bsoncxx::to_json(*maybe_result)));
   }
-  //return (std::make_pair(1, "Error encountered"));
+  return NULL;
 }
 
 size_t	BddManager::addCarPartInBDD(std::string name, std::vector<std::string> prices, std::string photo, std::string description)
@@ -601,7 +581,6 @@ std::string     BddManager::generateRandomString(size_t size)
   CryptoPP::HexEncoder hex(new CryptoPP::StringSink(random));
   hex.Put(iv, iv.size());
   hex.MessageEnd();
-  
   if (random.size() > size) {
     random.erase(size, random.size());
   }
@@ -613,6 +592,7 @@ aho_corasick::trie	BddManager::generateTree()
 {
   aho_corasick::trie	trie;
 
+  trie.case_insensitive();
   auto cursor = _carPartCollection.find({});
   for (auto&& doc : cursor) {
     std::string name = bsoncxx::to_json(doc);
@@ -623,38 +603,90 @@ aho_corasick::trie	BddManager::generateTree()
   return trie;
 }
 
-std::vector<std::string>	BddManager::parseKeyWordInTree(aho_corasick::trie trie, std::string keyWord)
+std::vector<std::pair<std::string, size_t>>	BddManager::parseKeyWordInTree(aho_corasick::trie trie, std::string keyWord)
 {
-  std::vector<std::string>	parsingResult;
+  //std::vector<std::string>	parsingResult;
+  std::vector<std::pair<std::string, size_t>>	parsingResult;
+  std::transform(keyWord.begin(), keyWord.end(), keyWord.begin(), ::tolower);
   auto	result = trie.parse_text(keyWord.c_str());
   auto mdr = result.begin();
 
+  
+  std::pair<std::string, size_t> resultPair;
   while (mdr != result.end()) {
     //std::cout << (*mdr).get_keyword() << " a la place " << (*mdr).get_index() << std::endl;
-    parsingResult.push_back((*mdr).get_keyword());
+    resultPair = std::make_pair((*mdr).get_keyword(), 1);
+    //parsingResult.push_back((*mdr).get_keyword());
+    parsingResult.push_back(resultPair);
     ++mdr;
   }
+
+  
+
+
+  
   std::stringstream ss(keyWord);
   std::istream_iterator<std::string> begin(ss);
   std::istream_iterator<std::string> end;
   std::vector<std::string> keyWordSplited(begin, end);
+
+
+  /*for (std::vector<std::string>::iterator ez = keyWordSplited.begin() ; ez != keyWordSplited.end(); ++ez)
+    std::cout << "LOL:" << *ez << std::endl;*/
+
+  
   auto it = keyWordSplited.begin();
   auto cursor = _carPartCollection.find({});
   for (auto&& doc : cursor) {
     std::string name = bsoncxx::to_json(doc);
     name.erase(0, name.find("\"name\" :") + 10);
     name.erase(name.find("\", \"photo\" "));
+    std::string nameInLower = name;
+    std::transform(nameInLower.begin(), nameInLower.end(), nameInLower.begin(), ::tolower);
     while (it < keyWordSplited.end()) {
-      if (name.find(*it) != std::string::npos) {
-	if (std::find(parsingResult.begin(), parsingResult.end(), name) == parsingResult.end())
-          {
-            parsingResult.push_back(name);
-            it = keyWordSplited.end() - 1;
-          }
+      if (nameInLower.find(*it) != std::string::npos) {
+	auto itez = std::find_if( parsingResult.begin(), parsingResult.end(), [&name](const std::pair<std::string, int>& element){ return element.first == name;} );
+	
+	if (itez == parsingResult.end())
+	  {
+	    resultPair = std::make_pair(name, 1);
+	    
+	    parsingResult.push_back(resultPair);
+	    std::cout << "VOICI LE NAME:" << name << std::endl;
+	    //it = keyWordSplited.end() - 1;
+	    std::cout << "VOICI LE SPLIT:" << *it << std::endl;
+	  }
+	else {
+	  //std::cout << "1" << std::endl;
+	  std::pair<std::string, int> new_pair = *itez;
+	  //std::cout << "AVANT:" << (*itez).second << std::endl;
+	  ++new_pair.second;
+	  *itez = new_pair;
+	  //std::cout << "APRES:" << (*itez).second << std::endl;
+	  //std::cout << "VOICI LE NAME:" << name << std::endl;
+	  //std::cout << "VOICI LE SPLIT:" << *it << std::endl;
+	  //std::cout << "2" << std::endl;
+	}
+	
       }
+      
       ++it;
+      
     }
     it = keyWordSplited.begin();
   }
+  std::sort(parsingResult.begin(), parsingResult.end(), [](auto &left, auto &right) {
+      return left.second > right.second;
+    });
   return parsingResult;
 }
+  
+/*if (std::find(parsingResult.begin(), parsingResult.end(), name) == parsingResult.end())
+	//{
+	    resultPair = std::make_pair(name, 1);
+	    //parsingResult.push_back(name);
+	    parsingResult.push_back(resultPair);
+	    std::cout << "VOICI LE NAME:" << name << std::endl;
+	    it = keyWordSplited.end() - 1;
+	    std::cout << "VOICI LE SPLIT:" << *it << std::endl;*/	    
+	//int eztest = 1;

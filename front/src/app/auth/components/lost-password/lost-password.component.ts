@@ -3,11 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
-/* RxJs */
-import { first } from 'rxjs/operators';
+/* NgRx */
+import { select, Store } from '@ngrx/store';
+import { selectAuthState } from '../../../store/reducers/auth.reducer';
+import { AppState } from '../../../store/reducers';
+import { resetPassword } from '../../../store/actions/auth.actions';
 
 /* Services */
-import { UserService } from '../../services/user.service';
 import { LostPasswordFormService } from './services/lost-password-form.service';
 
 /* Models */
@@ -20,21 +22,22 @@ import { ErrorMessages } from '../signup/signup-errors';
   providers: [LostPasswordFormService]
 })
 export class LostPasswordComponent implements OnInit {
+  isAuthenticated: boolean;
   lostPasswordForm: FormGroup;
-  loading = false;
   display = null;
   errorMessages = ErrorMessages;
 
   constructor(
-    private userService: UserService,
+    private store: Store<AppState>,
     private lostPasswordFormService: LostPasswordFormService,
     private router: Router) {
-    if (this.userService.currentUserValue) {
+    this.store.pipe(select(selectAuthState)).subscribe(x => this.isAuthenticated = x);
+    if (this.isAuthenticated) {
       this.router.navigate(['/']);
     }
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.lostPasswordForm = this.lostPasswordFormService.buildForm();
   }
 
@@ -49,16 +52,7 @@ export class LostPasswordComponent implements OnInit {
       return;
     }
 
-    this.loading = true;
     const email = this.lostPasswordForm.get('email').value;
-    this.userService.resetPassword(email)
-      .pipe(first())
-      .subscribe(
-        () => {
-          this.display = true;
-        },
-        () => {
-          this.loading = false;
-        });
+    this.store.dispatch(resetPassword({email: email}));
   }
 }

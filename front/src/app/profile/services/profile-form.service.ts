@@ -1,6 +1,6 @@
 /* Angular Modules */
 import { Injectable } from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { isNullOrUndefined } from 'util';
 
 /* Models */
@@ -31,7 +31,7 @@ export class ProfileFormService {
     });
   }
 
-  createProfileDataGroup(user: any): FormGroup {
+  createProfileDataGroup(user: User): FormGroup {
     return this.formBuilder.group({
       firstName: [
         !isNullOrUndefined(user.firstName) ? user.firstName : '',
@@ -41,8 +41,8 @@ export class ProfileFormService {
         !isNullOrUndefined(user.lastName) ? user.lastName : '',
         [Validators.required]
       ],
-      userName: [
-        !isNullOrUndefined(user.userName) ? user.userName : '',
+      username: [
+        !isNullOrUndefined(user.username) ? user.username : '',
         [Validators.required, Validators.minLength(2), Validators.maxLength(50)]
       ],
       /*
@@ -60,10 +60,10 @@ export class ProfileFormService {
     });
   }
 
-  createProfileEmailGroup(user: any): FormGroup {
+  createProfileEmailGroup(user: User): FormGroup {
     return this.formBuilder.group({
       email: new FormControl({
-        value: !isNullOrUndefined(user.mail) ? user.mail : '',
+        value: !isNullOrUndefined(user.email) ? user.email : '',
         disabled: true
       }, { validators: [Validators.required, Validators.email]}),
       emailConfirm: [

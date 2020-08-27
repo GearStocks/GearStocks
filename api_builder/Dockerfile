@@ -4,8 +4,6 @@ RUN apt-get remove curl -y
 
 RUN apt-get install libcurl4-openssl-dev -y
 
-RUN apt-get install cmake -y
-
 RUN apt-get install ca-certificates
 
 CMD cd /home/files && mkdir -p build && cd build && cmake .. && make &&\

@@ -18,7 +18,7 @@ export class GearstocksSelectComponent implements OnChanges {
 
   constructor() { }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes.validationError) {
       this.validationError = changes.validationError.currentValue;
     }

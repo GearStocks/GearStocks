@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+.search {
+  background-color: powderblue;
+  min-height: 100vh;
+  padding-top: 2em;
+  padding-bottom: 2em;
+
+  &__bar {
+    padding-top: 5rem;
+    padding-bottom: 1.2em;
+    text-align: center;
+    color: white;
+    background-color: white;
+    -webkit-box-shadow: 0 8px 8px -10px black;
+    -moz-box-shadow: 0 8px 8px -10px black;
+    box-shadow: 0 8px 8px -10px black;
+
+    input {
+      border-left: none;
+      padding-left: 0;
+    }
+
+    button, input {
+      margin-bottom: 1em;
+    }
+
+    &__button {
+      background-color: #4183d7;
+      color: white;
+      cursor: pointer;
+      margin: 0 auto;
+      position: absolute;
+      right: 0;
+      left: 0;
+    }
+  }
+
+  &__list {
+    padding-top: 3em;
+
+    .card {
+      cursor: pointer;
+
+      &:hover {
+        background: #4183d7;
+        color: white;
+      }
+    }
+
+    img {
+      width: auto;
+      max-height: 200px;
+    }
+  }
+
+}
+
+.delete-css-button {
+  border-right: none;
+  background-color: white;
+}

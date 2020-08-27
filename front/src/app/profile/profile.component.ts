@@ -16,6 +16,9 @@ import { AlertService } from '../shared/components/gearstocks-alert/services/ale
 /* Models */
 import { User } from '../auth/models/user.model';
 import { ErrorMessages } from './profile-errors';
+import {select, Store} from '@ngrx/store';
+import {AppState} from '../store/reducers';
+import {selectAuthState, selectAuthUser} from '../store/reducers/auth.reducer';
 
 @Component({
   selector: 'app-profile',
@@ -24,6 +27,7 @@ import { ErrorMessages } from './profile-errors';
   providers: [ProfileFormService, ProfileService]
 })
 export class ProfileComponent implements OnInit, OnDestroy {
+  isAuthenticated: boolean;
   currentUser: User;
   profileForm: FormGroup;
   profileFormSubscription: Subscription;
@@ -53,16 +57,18 @@ export class ProfileComponent implements OnInit, OnDestroy {
   ];
 
   constructor(
+    private store: Store<AppState>,
     private myElement: ElementRef,
     private alertService: AlertService,
     private userService: UserService,
     private profileService: ProfileService,
     private profileFormService: ProfileFormService) {
-    this.userService.currentUser.subscribe(x => this.currentUser = x);
+    this.store.pipe(select(selectAuthState)).subscribe(x => this.isAuthenticated = x);
+    this.store.pipe(select(selectAuthUser)).subscribe(x => this.currentUser = x);
   }
 
   ngOnInit() {
-    this.profileForm = this.profileFormService.buildForm(this.currentUser.data[0]);
+    this.profileForm = this.profileFormService.buildForm(this.currentUser);
     this.formCompare = this.profileDataGroup.getRawValue();
     this.profileFormSubscription = this.profileDataGroup.valueChanges.subscribe(val => {
       this.dirty = JSON.stringify(val) !== JSON.stringify(this.formCompare);
@@ -99,11 +105,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       return el;
     });
     const target = this.myElement.nativeElement.querySelector(element.target);
-    const y = target.getBoundingClientRect().top;
-    document.querySelector('mat-sidenav-content').scrollTo({
-      top: y,
-      behavior: 'smooth',
-    });
+    target.scrollIntoView({ behavior: 'smooth' });
     element.active = !element.active;
   }
 
@@ -143,16 +145,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.profilePasswordGroup.get('oldPassword').reset();
   }
 
+  submitProfileData(): void {}
+  submitProfileEmail(): void {}
+  submitProfilePassword(): void {}
+
+/*
   submitProfileData(): void {
-    let username = '';
-    if (this.profileDataGroup.get('userName').value !== this.currentUser.data[0].userName) {
-      username = this.profileDataGroup.get('userName').value;
-    }
     const updateData = {
-      userName: username,
+      username: this.profileDataGroup.get('userName').value,
       firstName: this.profileDataGroup.get('firstName').value,
       lastName: this.profileDataGroup.get('lastName').value,
-      mail: '',
+      email: '',
       password: '',
       userToken: this.currentUser.token
     };
@@ -203,6 +206,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 this.profileEmailGroup.get('email').disable();
                 this.profileEmailGroup.get('emailConfirm').reset();
                 this.profileEmailGroup.get('password').reset();
+                this.alertService.success('Votre email à bien été modifier');
               },
               () => {});
         },
@@ -239,11 +243,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
                 this.profilePasswordGroup.get('password').reset();
                 this.profilePasswordGroup.get('confirmPassword').reset();
                 this.profilePasswordGroup.get('oldPassword').reset();
-                console.log('hey');
+                this.alertService.success('Votre mot de passe à bien été modifier');
               },
               () => {});
         },
         () => {});
   }
 
+   */
 }

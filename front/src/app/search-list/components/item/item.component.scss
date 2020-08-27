@@ -1,0 +1,37 @@
+.container {
+  min-height: 100vh;
+}
+
+.item {
+  &__title {
+    display: inline-flex;
+    margin-top: 100px;
+  }
+
+  &__back {
+    color: black;
+    margin-right: 2em;
+
+    &:focus {
+      outline: none !important;
+    }
+  }
+
+  &__desc {
+    padding: 0 3em 1em;
+    display: block;
+
+    img {
+      padding-top: 2em;
+    }
+
+    h3, h4 {
+      padding-top: 1.5em;
+    }
+  }
+}
+
+.material-icons {
+  font-size: 34px !important;
+}
+
