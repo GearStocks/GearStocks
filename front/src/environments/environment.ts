@@ -4,6 +4,7 @@ export const environment = {
   logoutUrl: 'http://localhost:8000/disconnect',
   registerUrl: 'http://localhost:8000/register',
   resetPasswordUrl: 'http://localhost:8000/forgottenPassword',
+  contactUrl: 'http://localhost:8000/contact',
   searchUrl: 'http://localhost:8000/listParts',
   getItemUrl: 'http://localhost:8000/getFullCarPart',
   updateProfileUrl: 'http://localhost:8000/updateInfoUser',

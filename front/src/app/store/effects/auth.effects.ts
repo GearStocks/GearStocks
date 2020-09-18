@@ -15,7 +15,9 @@ import {
   register,
   registerSuccess,
   resetPassword,
-  resetPasswordSuccess
+  resetPasswordSuccess,
+  updateUserData,
+  updateUserDataSuccess
 } from '../actions/auth.actions';
 
 /* RxJs */
@@ -23,6 +25,7 @@ import { map, switchMap, tap } from 'rxjs/operators';
 
 /* Services */
 import { UserService } from '../../auth/services/user.service';
+import { AlertService } from '../../shared/components/gearstocks-alert/services/alert.service';
 
 @Injectable()
 export class AuthEffects {
@@ -38,9 +41,7 @@ export class AuthEffects {
   loginSuccess$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loginSuccess),
-      tap((user) => {
-        localStorage.setItem('currentUser', JSON.stringify(user.user));
-        localStorage.setItem('token', user.user.token);
+      tap(() => {
         this.dialog.closeAll();
         this.router.navigate(['/']);
       }),
@@ -104,9 +105,27 @@ export class AuthEffects {
     { dispatch: false }
   );
 
+  updateUserData$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(updateUserData),
+      switchMap(action => this.userService.updateUser(action.updateData)),
+      map((user) => updateUserDataSuccess({user: user}))
+    )
+  );
+
+  updateUserDataSuccess$ = createEffect(() =>
+      this.actions$.pipe(
+        ofType(updateUserDataSuccess),
+        tap(() => {
+          this.alertService.success('Vos informations personel on bien été modifier');
+        }),
+      ),
+    { dispatch: false }
+  );
+
   constructor(private actions$: Actions, private userService: UserService,
-              private router: Router,
-              private dialog: MatDialog
+              private router: Router, private dialog: MatDialog,
+              private alertService: AlertService
   ) {}
 
 }

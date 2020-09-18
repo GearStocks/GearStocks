@@ -7,7 +7,6 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/reducers';
 import { selectAuthState } from '../../store/reducers/auth.reducer';
 
-
 /* Material Angular */
 import { MatDialog } from '@angular/material/dialog';
 

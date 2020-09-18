@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 /* NgRx */
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import {
+  contact,
+  contactSuccess,
   getItem,
   getItemSuccess,
   search,
@@ -16,6 +18,7 @@ import { map, switchMap, tap } from 'rxjs/operators';
 
 /* Services */
 import { SearchService } from '../../search-list/services/search.service';
+import { ContactService } from '../../core/components/contact/services/contact.service';
 
 @Injectable()
 export class CoreEffects {
@@ -56,8 +59,16 @@ export class CoreEffects {
     { dispatch: false }
   );
 
+  contact$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(contact),
+      switchMap(action => this.contactService.contact(action.data)),
+      map(data => contactSuccess())
+    )
+  );
+
   constructor(private actions$: Actions, private searchService: SearchService,
-              private router: Router
+              private contactService: ContactService, private router: Router
   ) {}
 
 }

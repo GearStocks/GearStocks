@@ -18,7 +18,10 @@ import { User } from '../auth/models/user.model';
 import { ErrorMessages } from './profile-errors';
 import {select, Store} from '@ngrx/store';
 import {AppState} from '../store/reducers';
-import {selectAuthState, selectAuthUser} from '../store/reducers/auth.reducer';
+import {selectAuthState, selectAuthToken, selectAuthUser} from '../store/reducers/auth.reducer';
+import {updateUserData, updateUserDataSuccess} from '../store/actions/auth.actions';
+import {Actions, ofType} from '@ngrx/effects';
+import {contactSuccess} from '../store/actions/core.actions';
 
 @Component({
   selector: 'app-profile',
@@ -27,8 +30,8 @@ import {selectAuthState, selectAuthUser} from '../store/reducers/auth.reducer';
   providers: [ProfileFormService, ProfileService]
 })
 export class ProfileComponent implements OnInit, OnDestroy {
-  isAuthenticated: boolean;
   currentUser: User;
+  userToken: string;
   profileForm: FormGroup;
   profileFormSubscription: Subscription;
   emailFormSubscription: Subscription;
@@ -62,9 +65,10 @@ export class ProfileComponent implements OnInit, OnDestroy {
     private alertService: AlertService,
     private userService: UserService,
     private profileService: ProfileService,
-    private profileFormService: ProfileFormService) {
-    this.store.pipe(select(selectAuthState)).subscribe(x => this.isAuthenticated = x);
+    private profileFormService: ProfileFormService,
+    private _actions$: Actions) {
     this.store.pipe(select(selectAuthUser)).subscribe(x => this.currentUser = x);
+    this.store.pipe(select(selectAuthToken)).subscribe(x => this.userToken = x);
   }
 
   ngOnInit() {
@@ -144,31 +148,19 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.profilePasswordGroup.get('password').reset();
     this.profilePasswordGroup.get('oldPassword').reset();
   }
-/*
+
   submitProfileData(): void {
     const updateData = {
-      username: this.profileDataGroup.get('userName').value,
+      username: this.profileDataGroup.get('username').value,
       firstName: this.profileDataGroup.get('firstName').value,
       lastName: this.profileDataGroup.get('lastName').value,
-      email: '',
-      password: '',
-      userToken: this.currentUser.token
+      token: this.userToken
     };
 
-    this.profileService.updateProfileData(updateData)
-      .pipe(first())
-      .subscribe(
-        () => {
-          this.userService.updateUser({userToken: this.currentUser.token, mail: this.currentUser.data[0].mail})
-            .pipe(first())
-            .subscribe(
-              () => {
-                this.alertService.success('Vos informations personel on bien été modifier');
-                this.dirty = false;
-              },
-              () => {});
-        },
-        () => {});
+    this.store.dispatch(updateUserData({updateData: updateData}));
+    this._actions$.pipe(ofType(updateUserDataSuccess)).subscribe(() => {
+      this.dirty = false;
+    });
   }
 
   submitProfileEmail(): void {
@@ -182,30 +174,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     const updateData = {
       mail: this.profileEmailGroup.get('email').value,
-      firstName: '',
-      lastName: '',
-      userName: '',
-      password: '',
-      userToken: this.currentUser.token
+      token: this.userToken
     };
 
-    this.profileService.updateProfileData(updateData)
-      .pipe(first())
-      .subscribe(
-        () => {
-          this.userService.updateUser({userToken: this.currentUser.token, mail: this.profileEmailGroup.get('email').value})
-            .pipe(first())
-            .subscribe(
-              () => {
-                this.editEmail = false;
-                this.profileEmailGroup.get('email').disable();
-                this.profileEmailGroup.get('emailConfirm').reset();
-                this.profileEmailGroup.get('password').reset();
-                this.alertService.success('Votre email à bien été modifier');
-              },
-              () => {});
-        },
-        () => {});
+    this.store.dispatch(updateUserData({updateData: updateData}));
+    this._actions$.pipe(ofType(updateUserDataSuccess)).subscribe(() => {
+      this.editEmail = false;
+      this.profileEmailGroup.get('email').disable();
+      this.profileEmailGroup.get('emailConfirm').reset();
+      this.profileEmailGroup.get('password').reset();
+    });
   }
 
   submitProfilePassword(): void {
@@ -218,32 +196,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     const updateData = {
-      userToken: this.currentUser.token,
-      mail: '',
-      firstName: '',
-      lastName: '',
-      userName: '',
-      password: this.profilePasswordGroup.get('password').value
+      token: this.currentUser.token,
+      password: this.profilePasswordGroup.get('password').value,
     };
 
-    this.profileService.updateProfileData(updateData)
-      .pipe(first())
-      .subscribe(
-        () => {
-          this.userService.updateUser({userToken: this.currentUser.token, mail: this.currentUser.data[0].mail})
-            .pipe(first())
-            .subscribe(
-              () => {
-                this.editPass = false;
-                this.profilePasswordGroup.get('password').reset();
-                this.profilePasswordGroup.get('confirmPassword').reset();
-                this.profilePasswordGroup.get('oldPassword').reset();
-                this.alertService.success('Votre mot de passe à bien été modifier');
-              },
-              () => {});
-        },
-        () => {});
+    this.store.dispatch(updateUserData({updateData: updateData}));
+    this._actions$.pipe(ofType(updateUserDataSuccess)).subscribe(() => {
+      this.editPass = false;
+      this.profilePasswordGroup.get('password').reset();
+      this.profilePasswordGroup.get('confirmPassword').reset();
+      this.profilePasswordGroup.get('oldPassword').reset();
+    });
   }
 
-   */
 }
