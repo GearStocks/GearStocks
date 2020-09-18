@@ -15,6 +15,7 @@ import { SearchListComponent } from './search-list/search-list.component';
 import { ContactComponent } from './core/components/contact/contact.component';
 import { ItemComponent } from './search-list/components/item/item.component';
 import { SearchPageComponent } from './search-page/search-page.component';
+import { DescriptionComponent } from './core/components/description/description.component';
 // tslint:disable-next-line:max-line-length
 import { LostPasswordConfirmationComponent } from './auth/components/lost-password/lost-password-confirmation/lost-password-confirmation.component';
 
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path: 'search-list', component: SearchListComponent },
   { path: 'contact', component: ContactComponent },
   { path: 'item', component: ItemComponent },
+  { path: 'description', component: DescriptionComponent },
 
   { path: 'search', component: SearchPageComponent },
 

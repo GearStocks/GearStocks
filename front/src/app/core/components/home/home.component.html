@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
 <!-- Header content -->
 <div class="homeHeader">
   <div class="homeHeader__search">
@@ -13,8 +15,9 @@
   <a (click)="scrollTo(target)" class="ca3-scroll-down-link ca3-scroll-down-arrow" data-ca3_iconfont="ETmodules" data-ca3_icon=""></a>
 </div>
 
-<!-- slide content -->
+<!-- Video content -->
 <div #target class="homeSlide">
+
   <div class="homeSlide__content">
     <p>GearStocks, la passion sans erreurs</p>
     <div class="wrapper">
@@ -32,11 +35,86 @@
       </div>
     </div>
   </div>
+
   <div class="container">
-    <video controls>
+    <video controls poster="../../../../assets/img/Video.jpg">
       <source [src]="video" type="video/mp4">
       Your browser does not support HTML5 video.
     </video>
-    <h4 class="desc">Vous êtes collectionneur de voiture ? Vous voulez simplement retaper une vieille voiture ? Très bien ! Mais comment faites-vous pour évaluer le prix de la pièce qu’il vous manque ? Faites-vous confiance à votre garagiste ? Demandez vous à un ami qui s’y connait un peu ou l’évaluez vous vous-même ? Avec GearStocks, vous pouvez consulter le cours d’une pièce en spécifiant sa référence ou tout simplement en recherchant par marque ou par type de pièce.</h4>
   </div>
+
+  <div class="homeSlide__description">
+    <div class="row">
+
+      <div class="col-lg-6 col-md-6 col-sm-6">
+          <h1>LE CONCEPT</h1>
+          <h6>Vous êtes collectionneur de voiture ? Vous voulez simplement retaper une vieille voiture ?<br> Très bien ! Mais comment faites-vous pour évaluer le prix de la pièce qu’il vous manque ?<br> Faites-vous confiance à votre garagiste ?<br> Demandez vous à un ami qui s’y connait un peu ou l’évaluez vous vous-même ?<br> Avec GearStocks, vous pouvez consulter le cours d’une pièce en spécifiant sa référence ou tout simplement en recherchant par marque ou par type de pièce.</h6>
+      </div>
+
+      <div class="col-lg-6 col-md-6 col-sm-6">
+          <h1>POURQUOI LES AUTOMOBILISTES CHOISISSENT GEARSTOCKS</h1>
+          <ul>
+            <li>Un large choix de pièces auto d'occasion !</li>
+            <li>Une recherche simple et rapide, accessible à tous</li>
+            <li>Un réel gain de temps</li>
+            <li>Un système unique de bourse de pièces auto</li>
+            <li>Des annonces contrôlées par GearStocks</li>
+          </ul>
+        </div>
+
+    </div>
+
+  </div>
+
 </div>
+
+<!-- Social Media content -->
+<div class="socialMedia">
+
+  <h1>Retrouvez nous sur les reseaux sociaux</h1>
+
+  <ul>
+    <li>
+      <a target="_blank" href="https://www.facebook.com/GearStocks-1641424586156809/">
+        <i class="fab fa-facebook-f icon"></i>    </a>
+    </li>
+    <li>
+      <a target="_blank" href="https://www.linkedin.com/in/francois-milhet-713b4513a/"><i class="fab fa-linkedin-in icon"></i></a>
+    </li>
+    <li>
+      <a target="_blank" href="https://www.instagram.com/filoou/"><i class="fab fa-instagram icon"></i></a>
+    </li>
+
+    <li>
+      <a target="_blank" href="https://github.com/GearStocks"><i class="fab fa-github icon"></i></a></li>
+  </ul>
+
+</div>
+
+<mat-carousel
+  timings="250ms ease-in"
+  [autoplay]="false"
+  interval="5000"
+  color="accent"
+  proportion="25"
+  slides="3"
+  [loop]="true"
+  [hideArrows]="false"
+  [hideIndicators]="true"
+  [useKeyboard]="true"
+  [useMouseWheel]="false"
+  orientation="ltr">
+
+  <mat-carousel-slide [image]="'../../../../assets/img/carousel.jpg'">
+    <img src="assets/img/logo.png">
+    <h1>GEARSTOCKS comment ca marche ?</h1>
+  </mat-carousel-slide>
+  <mat-carousel-slide [image]="'../../../../assets/img/carousel.jpg'">
+    ...
+  </mat-carousel-slide>
+  <mat-carousel-slide [image]="'../../../../assets/img/carousel.jpg'">
+    ...
+  </mat-carousel-slide>
+
+</mat-carousel>
+

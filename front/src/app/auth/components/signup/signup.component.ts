@@ -41,8 +41,12 @@ export class SignupComponent implements OnInit {
   };
   captchaSiteKey = '6LczU6MUAAAAAGaba5u9Qt_Peq3_mKk6bKnZ72Ju';
 
-  constructor(private store: Store<AppState>, private signupFormService: SignupFormService,
-    public dialog: MatDialog, private router: Router) {
+  constructor(
+    private store: Store<AppState>,
+    private signupFormService: SignupFormService,
+    public dialog: MatDialog,
+    private router: Router
+  ) {
     this.store.pipe(select(selectAuthState)).subscribe(x => this.isAuthenticated = x);
     if (this.isAuthenticated) {
       this.router.navigate(['/']);

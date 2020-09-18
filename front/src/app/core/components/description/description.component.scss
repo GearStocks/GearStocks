@@ -1,0 +1,50 @@
+.description {
+  background-color: #f0f0f0;
+  min-height: 100vh;
+
+  &__content {
+    padding-left: 8em;
+    padding-right: 8em;
+    padding-top: 8em;
+
+    &__title {
+      text-align: left;
+      font-weight: 600;
+      color: black;
+      margin-bottom: 3em;
+
+      h2 {
+        color: midnightblue;
+        font-size: 1.5em;
+        margin-top: 2em;
+        border-bottom: solid 2px #e5e5e5;
+        margin-bottom: 0.6em;
+      }
+
+      h3 {
+        color: #333333;
+        font-size: 1.2em;
+        font-weight: 300;
+      }
+    }
+
+  }
+
+  &__background-layer {
+    background: rgba(255, 255, 255, 1);
+    padding: 1em;
+
+    h1 {
+      font-size: 1.3em;
+      font-weight: 600;
+      color: black;
+      padding-top: 1em;
+      padding-bottom: 0.6em;
+    }
+
+    h2 {
+      color: #333333;
+      font-size: 16px;
+    }
+  }
+}

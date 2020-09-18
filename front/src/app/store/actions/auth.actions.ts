@@ -17,9 +17,7 @@ export const loginSuccess = createAction(
 
 export const logout = createAction(
   '[Auth] Logout',
-  props<{
-    email: string;
-  }>()
+  props<{ email: string }>()
 );
 
 export const logoutSuccess = createAction(
@@ -42,4 +40,14 @@ export const resetPassword = createAction(
 
 export const resetPasswordSuccess = createAction(
   '[Auth] Reset Password Success'
+);
+
+export const updateUserData = createAction(
+  '[App] Update user data',
+  props<{ updateData: User }>()
+);
+
+export const updateUserDataSuccess = createAction(
+  '[App] Update user data Success',
+  props<{ user: User }>()
 );

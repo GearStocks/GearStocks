@@ -8,7 +8,9 @@ import {
   register,
   registerSuccess,
   resetPassword,
-  resetPasswordSuccess
+  resetPasswordSuccess,
+  updateUserData,
+  updateUserDataSuccess
 } from '../actions/auth.actions';
 
 /* Models */
@@ -30,23 +32,11 @@ export const initialState: AuthState = {
 
 export const authReducer = createReducer(
   initialState,
-  on(login, state => ({
-    ...state
-  })),
   on(loginSuccess, (state, action) => ({
     ...state,
     user: action.user,
     token: action.user.token,
     isAuthenticated: true
-  })),
-  on(register, state => ({
-    ...state,
-  })),
-  on(registerSuccess, state => ({
-    ...state,
-  })),
-  on(logout, state => ({
-    ...state,
   })),
   on(logoutSuccess, state => ({
     ...state,
@@ -54,12 +44,13 @@ export const authReducer = createReducer(
     token: null,
     isAuthenticated: false
   })),
-  on(resetPassword, state => ({
-    ...state,
+  on(updateUserData, state => ({
+    ...state
   })),
-  on(resetPasswordSuccess, state => ({
+  on(updateUserDataSuccess, (state, action) => ({
     ...state,
-  }))
+    user: action.user,
+  })),
 );
 
 export const selectAuthFeature = createFeatureSelector<AuthState>(
