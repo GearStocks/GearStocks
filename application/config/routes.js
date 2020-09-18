@@ -9,8 +9,7 @@ import {address} from './address';
 
 //Change address in address.js !
 
-var port = 8000;
-var localAddress = 'http://' + address + ':' + port + '/';
+var localAddress = 'http://' + address + '/';
 
 export const routes = {
   CONNECT: localAddress + 'connect',
@@ -22,4 +21,5 @@ export const routes = {
   GET_FULL_CAR_PART: localAddress + 'getFullCarPart',
   FORGOT_PASSWORD: localAddress + 'forgottenPassword',
   LIST_PARTS: localAddress + 'listParts',
+  GET_FULL_CAR_PART: localAddress + 'getFullCarPart'
 };

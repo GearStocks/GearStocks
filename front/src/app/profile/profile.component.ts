@@ -148,7 +148,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.profilePasswordGroup.get('password').reset();
     this.profilePasswordGroup.get('oldPassword').reset();
   }
-
+  
   submitProfileData(): void {
     const updateData = {
       username: this.profileDataGroup.get('username').value,

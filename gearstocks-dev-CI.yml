@@ -31,12 +31,13 @@ stages:
           set -e
           echo MONGO_INITDB_ROOT_USERNAME=mongoadmin\nMONGO_INITDB_ROOT_PASSWORD=mongoadmin > database/secrets.env
           docker pull gearstocks/api_builder:latest
-          echo "API_ADDR=gearstock-dev.northeurope.cloudapp.azure.com" > .env
+          echo "API_ADDR=dev.gearstocks.store" > .env
           echo "API_PORT=8000" >> .env
-          echo "export const address = 'gearstock-dev.northeurope.cloudapp.azure.com';" > application/config/address.js
-          sed -i 's/localhost/gearstock-dev.northeurope.cloudapp.azure.com/g' front/src/environments/environment.prod.ts
-          sed -i 's/localhost/gearstock-dev.northeurope.cloudapp.azure.com/g' front/src/environments/environment.mock.ts
-          sed -i 's/localhost/gearstock-dev.northeurope.cloudapp.azure.com/g' front/src/environments/environment.ts
+          echo "export const address = 'dev.gearstocks.store:8000';" > application/config/address.js
+          sed -i 's/http:\/\/localhost/https:\/\/dev.gearstocks.store/g' front/src/environments/environment.prod.ts
+          sed -i 's/http:\/\/localhost/https:\/\/dev.gearstocks.store/g' front/src/environments/environment.mock.ts
+          sed -i 's/http:\/\/localhost/https:\/\/dev.gearstocks.store/g' front/src/environments/environment.ts
+          echo " -d dev.gearstocks.store; chmod -R 755 /etc/letsencrypt" >> certbot/Dockerfile
           docker-compose up front api_builder app
           echo Front, Back and App successfully build.
         displayName: 'Front, API and App Compilation Check'
@@ -65,6 +66,7 @@ stages:
           set -e
           mkdir -p drop/front
           cp -R front/dist drop/front/
+          mv apache/conf/httpd-ssl-dev.conf apache/conf/httpd-ssl.conf
           cp -R apache drop/
           echo Front OK
         displayName: Prepare Front for Archive
@@ -73,6 +75,12 @@ stages:
           cp -R apk drop/
           echo Application OK
         displayName: Prepare Android App for Archive
+      - script: |
+          set -e
+          mkdir -p drop/certbot
+          cp -R certbot/Dockerfile drop/certbot/
+          echo certbot OK
+        displayName: Prepare certbot for Archive
       - script: echo Archive OK
         displayName: Archive Files
       - task: ArchiveFiles@2
