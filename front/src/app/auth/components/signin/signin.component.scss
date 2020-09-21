@@ -16,6 +16,13 @@ header.cover-photo {
     }
 }
 
+.cover-title {
+  text-align: center;
+  line-height: 170px;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: black;
+}
+
 .box {
     border-bottom: 1px solid #e1e1e1;
 }

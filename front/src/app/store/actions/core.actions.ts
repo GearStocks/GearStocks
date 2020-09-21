@@ -24,3 +24,12 @@ export const getItemSuccess = createAction(
   '[App] Get Item Success',
   props<{ item: Item }>()
 );
+
+export const contact = createAction(
+  '[App] Contact',
+  props<{ data: any }>()
+);
+
+export const contactSuccess = createAction(
+  '[App] Contact Success'
+);

@@ -14,7 +14,7 @@ export class ContactFormService {
         object: ([null, [Validators.required]]),
         content: ([null, [Validators.required]]),
         name: (['', [Validators.required, Validators.minLength(2)]]),
-        email: (['', [Validators.required, Validators.email]]),
+        email: (['', [Validators.required, Validators.pattern(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)]]),
       }
     );
   }

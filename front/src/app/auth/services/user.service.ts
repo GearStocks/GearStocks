@@ -25,7 +25,7 @@ export class UserService {
   public logoutUrl = environment.logoutUrl;
   public registerUrl = environment.registerUrl;
   public resetPasswordUrl = environment.resetPasswordUrl;
-  public getUserUrl = environment.getUserUrl;
+  public updateProfileUrl = environment.updateProfileUrl;
 
   constructor(private http: HttpClient) {}
 
@@ -45,20 +45,7 @@ export class UserService {
     return this.http.post<any>(this.resetPasswordUrl, { email: email }, httpOptions);
   }
 
-  updateUser(data: User): void {
-    /*return this.http.post<any>(this.getUserUrl, data, httpOptions)
-      .pipe(map(user => {
-          const newUser = {
-            ...user,
-            token: this.currentUserValue.token
-          };
-          localStorage.setItem('currentUser', JSON.stringify(newUser));
-          this.currentUserSubject.next(newUser);
-          return newUser;
-        })
-      );
-
-     */
+  updateUser(data: User): Observable<User> {
+    return this.http.patch<User>(this.updateProfileUrl, data, httpOptions);
   }
-
 }

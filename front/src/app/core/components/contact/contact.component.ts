@@ -2,6 +2,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
+/* NgRx */
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../store/reducers';
+import { contact, contactSuccess } from '../../../store/actions/core.actions';
+import { Actions, ofType } from '@ngrx/effects';
+
 /* Services */
 import { ContactFormService } from './services/contact-form.service';
 
@@ -11,7 +17,6 @@ import { faLaptop } from '@fortawesome/free-solid-svg-icons';
 import { faComment } from '@fortawesome/free-solid-svg-icons';
 
 /* Lottie Animation */
-import { AnimationItem } from 'lottie-web';
 import { AnimationOptions } from 'ngx-lottie';
 
 import { ErrorMessages } from './contact-errors';
@@ -47,7 +52,7 @@ export class ContactComponent implements OnInit {
   value = 20;
   showError = false;
 
-  constructor(private contactFormService: ContactFormService) { }
+  constructor(private store: Store<AppState>, private _actions$: Actions, private contactFormService: ContactFormService) { }
 
   ngOnInit(): void {
     this.contactForm = this.contactFormService.buildForm();
@@ -85,13 +90,14 @@ export class ContactComponent implements OnInit {
       return;
     }
 
-    this.value = 101;
-
-    const authData = {
+    const data = {
       ...this.contactForm.getRawValue(),
     };
 
-
+    this.store.dispatch(contact({data: data}));
+    this._actions$.pipe(ofType(contactSuccess)).subscribe((data: any) => {
+      this.value = 101;
+    });
   }
 
 }

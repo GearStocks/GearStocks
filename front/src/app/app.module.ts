@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MatCarouselModule } from '@ngmodule/material-carousel';
 
 /* App Modules */
 import { CoreModule } from './core/core.module';
@@ -18,7 +19,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { AppEffects } from './store/effects/app.effects';
 import { AuthEffects } from './store/effects/auth.effects';
 import { CoreEffects } from './store/effects/core.effects';
-
 
 /* Services */
 import { ErrorInterceptor } from './auth/services/error.interceptor';
@@ -49,6 +49,7 @@ import { environment } from '../environments/environment';
     AuthModule,
     CoreModule,
     SharedModule,
+    MatCarouselModule.forRoot(),
     StoreModule.forRoot(ROOT_REDUCERS, {
       metaReducers,
       runtimeChecks: {

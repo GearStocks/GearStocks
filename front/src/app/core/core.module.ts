@@ -1,6 +1,7 @@
 /* Angular Modules */
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatCarouselModule } from '@ngmodule/material-carousel';
 
 /* App Modules */
 import { SharedModule } from '../shared/shared.module';
@@ -14,6 +15,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { HomeComponent } from './components/home/home.component';
 import { SidenavListComponent } from './components/navbar/sidenav-list/sidenav-list.component';
 import { ContactComponent } from './components/contact/contact.component';
+import { DescriptionComponent } from './components/description/description.component';
 
 @NgModule({
   declarations: [
@@ -21,12 +23,14 @@ import { ContactComponent } from './components/contact/contact.component';
     NavbarComponent,
     HomeComponent,
     SidenavListComponent,
-    ContactComponent
+    ContactComponent,
+    DescriptionComponent
   ],
     imports: [
         CommonModule,
         SharedModule,
-        FontAwesomeModule
+        FontAwesomeModule,
+        MatCarouselModule
     ],
     exports: [
         FooterComponent,

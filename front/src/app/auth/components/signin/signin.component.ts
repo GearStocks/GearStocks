@@ -1,13 +1,14 @@
 /* Angular Modules */
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 /* NgRx */
 import {select, Store} from '@ngrx/store';
 import { AppState } from '../../../store/reducers';
-import { login } from '../../../store/actions/auth.actions';
-import {selectAuthState, selectAuthUser} from '../../../store/reducers/auth.reducer';
+import { login, loginSuccess } from '../../../store/actions/auth.actions';
+import { selectAuthState } from '../../../store/reducers/auth.reducer';
+import { Actions, ofType } from '@ngrx/effects';
 
 /* Material Angular */
 import { MatDialogRef } from '@angular/material/dialog';
@@ -33,7 +34,7 @@ export class SigninComponent implements OnInit {
   errorMessages = ErrorMessages;
 
   constructor(private store: Store<AppState>, private signinFormService: SigninFormService,
-    public dialogRef: MatDialogRef<SigninComponent>, private router: Router, private route: ActivatedRoute) {
+    public dialogRef: MatDialogRef<SigninComponent>, private router: Router, private _actions$: Actions) {
     this.store.pipe(select(selectAuthState)).subscribe(x => this.isAuthenticated = x);
     if (this.isAuthenticated) {
       this.router.navigate(['/']);
@@ -61,9 +62,14 @@ export class SigninComponent implements OnInit {
 
     const authData = <AuthData>{
       ...this.signForm.getRawValue(),
-      rememberMe: this.checkBox
     };
     this.store.dispatch(login({authData: authData}));
+    this._actions$.pipe(ofType(loginSuccess)).subscribe((data: any) => {
+      if (this.checkBox) {
+        localStorage.setItem('currentUser', JSON.stringify(data.user));
+        localStorage.setItem('token', data.user.token);
+      }
+    });
   }
 
   register(): void {
