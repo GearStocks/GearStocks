@@ -62,6 +62,7 @@ export class SigninComponent implements OnInit {
 
     const authData = <AuthData>{
       ...this.signForm.getRawValue(),
+      rememberMe: null
     };
     this.store.dispatch(login({authData: authData}));
     this._actions$.pipe(ofType(loginSuccess)).subscribe((data: any) => {
