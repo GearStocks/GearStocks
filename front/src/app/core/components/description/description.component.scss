@@ -28,6 +28,27 @@
       }
     }
 
+    &__desc {
+      text-align: left;
+      font-weight: 600;
+      color: black;
+      padding-bottom: 3em;
+
+      h2 {
+        color: midnightblue;
+        font-size: 1.5em;
+        margin-top: 2em;
+        border-bottom: solid 2px #e5e5e5;
+        margin-bottom: 0.6em;
+      }
+
+      h3 {
+        color: #333333;
+        font-size: 1.2em;
+        font-weight: 300;
+      }
+    }
+
   }
 
   &__background-layer {

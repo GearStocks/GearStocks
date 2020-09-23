@@ -96,7 +96,7 @@
   [autoplay]="false"
   interval="5000"
   color="accent"
-  proportion="25"
+  proportion="30"
   slides="3"
   [loop]="true"
   [hideArrows]="false"
@@ -106,14 +106,28 @@
   orientation="ltr">
 
   <mat-carousel-slide [image]="'../../../../assets/img/carousel.jpg'">
-    <img src="assets/img/logo.png">
-    <h1>GEARSTOCKS comment ca marche ?</h1>
+    <div class="carousel-content">
+      <img src="assets/img/logo.png">
+      <h1>GEARSTOCKS comment ca marche ?</h1>
+      <h3>Vous cherchez une pièce auto/moto d’occasion ?</h3>
+      <h2>Trouvez-là sur la première plateforme 100% auto/moto entre particuliers et professionnels !</h2>
+      <h3>GEARSTOCKS est un site crée et conçu pour nous, passionées</h3>
+    </div>
   </mat-carousel-slide>
   <mat-carousel-slide [image]="'../../../../assets/img/carousel.jpg'">
-    ...
+    <div class="carousel-content">
+      <img src="assets/img/turbo.png">
+      <h1>Trouver une pièce</h1>
+      <h3>Utiliser notre système de recherche, pour trouver votre pièce et obtenir son juste prix !</h3>
+    </div>
   </mat-carousel-slide>
   <mat-carousel-slide [image]="'../../../../assets/img/carousel.jpg'">
-    ...
+    <div class="carousel-content">
+      <img src="assets/img/problem.png">
+      <h1>Un problème ?</h1>
+      <h3>Vous ne trouvez pas votre pièce ? Ou rencontrez un problème sur notre plateforme ?</h3>
+      <button class="carousel-content__btn" routerLink="/contact">Contactez-nous</button>
+    </div>
   </mat-carousel-slide>
 
 </mat-carousel>
