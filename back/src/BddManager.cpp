@@ -822,7 +822,83 @@ std::vector<std::pair<std::string, size_t>>	BddManager::parseKeyWordInTree(aho_c
     });
   return parsingResult;
 }
+
+std::vector<std::pair<std::string, size_t>> BddManager::parseKeyWordInTreeByCategory(aho_corasick::trie trie, std::string keyWordCategory)                                                        
+{
+  std::vector<std::pair<std::string, size_t>>	parsingResult;
+  std::transform(keyWordCategory.begin(), keyWordCategory.end(), keyWordCategory.begin(), ::tolower);
+  auto result = trie.parse_text(keyWordCategory.c_str());
+  auto cursorKeyWord = result.begin();
+
+  std::pair<std::string, size_t> resultPair;
+
+  while (cursorKeyWord != result.end()) {
+    resultPair = std::make_pair((*cursorKeyWord).get_keyword(), 1);
+    parsingResult.push_back(resultPair);
+    ++cursorKeyWord;
+  }
+
+  std::stringstream ss(keyWordCategory);
+  std::istream_iterator<std::string> begin(ss);
+  std::istream_iterator<std::string> end;
+  std::vector<std::string> keyWordSplited(begin, end);
   
+  auto it = keyWordSplited.begin();
+  auto cursorCollection = _carPartCollection.find({});
+
+  for (auto&& doc : cursorCollection) {
+
+    std::string partName = bsoncxx::to_json(doc);
+    std::string categoryName = bsoncxx::to_json(doc);
+
+    partName.erase(0, partName.find("\"name\" : ") + 10);
+    partName.erase(partName.find("\", \"photo\" "));
+    categoryName.erase(0, categoryName.find("\"category\" :") + 14);
+    categoryName.erase(categoryName.find("\", \"parts\" "));
+
+    std::string CategoryNameInLower = categoryName;
+    std::string partNameInLower = partName;
+    std::transform(CategoryNameInLower.begin(), CategoryNameInLower.end(), CategoryNameInLower.begin(), ::tolower);
+
+    while (it < keyWordSplited.end()) {
+      if (CategoryNameInLower.find(*it) != std::string::npos) {
+	      auto itez = std::find_if(parsingResult.begin(), parsingResult.end(), [&categoryName](const std::pair<std::string, int>& element){ return element.first == categoryName;});
+	      if (itez == parsingResult.end()) {
+          resultPair = std::make_pair(partName, 1);
+	        parsingResult.push_back(resultPair);
+          std::cout << "VOICI LE NAME" << partName << std::endl;
+	        std::cout << "VOICI LA CATEGORIE:" << categoryName << std::endl;
+	        std::cout << "VOICI LE SPLIT:" << *it << std::endl;
+	      } else {
+	        std::pair<std::string, int> new_pair = *itez;
+	        ++new_pair.second;
+	        *itez = new_pair;
+      	}
+      }
+      ++it;
+    }
+    it = keyWordSplited.begin();
+  }
+  std::sort(parsingResult.begin(), parsingResult.end(), [](auto &left, auto &right) {
+      return left.second > right.second;
+    });
+  return parsingResult;
+}
+
+std::vector<std::string>  BddManager::parseCategoryNames()
+{
+  std::vector<std::string>  categoryList;
+  auto cursorCollection = _carPartCollection.find({});
+  for (auto&& doc : cursorCollection) {
+    std::string categoryName = bsoncxx::to_json(doc);
+    categoryName.erase(0, categoryName.find("\"category\" :") + 14);
+    categoryName.erase(categoryName.find("\", \"parts\" "));
+    if (std::find(categoryList.begin(), categoryList.end(), categoryName) == categoryList.end())
+      categoryList.push_back(categoryName);
+  }  
+  return categoryList;
+}
+
 /*if (std::find(parsingResult.begin(), parsingResult.end(), name) == parsingResult.end())
 	//{
 	    resultPair = std::make_pair(name, 1);

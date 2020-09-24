@@ -49,6 +49,8 @@ public:
   std::string	generateRandomString(size_t size);
   aho_corasick::trie	generateTree();
   std::vector<std::pair<std::string, size_t>>	parseKeyWordInTree(aho_corasick::trie trie, std::string keyWord);
+  std::vector<std::pair<std::string, size_t>> parseKeyWordInTreeByCategory(aho_corasick::trie trie, std::string keyWordCategory);
+  std::vector<std::string>  parseCategoryNames();
   rapidjson::Document*	getInfoUser(std::string userToken, std::string userMail);
   rapidjson::Document*	getFullCarPart(std::string partName);
   rapidjson::Document*	getCarPart(std::string partName);
