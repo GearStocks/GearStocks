@@ -36,17 +36,18 @@ public:
   size_t	updateNameUser(std::string token, std::string username, std::string firstname, std::string lastname);
   size_t	updateMailUser(std::string token, std::string mail);
   size_t	updatePasswordUser(std::string token, std::string password);
-  
   size_t	updateDateInBDD(std::string mailUser, std::string date);
   size_t	updateTokenInBDD(std::string mailUser, std::string token);
   size_t	resetPassword(std::string mailUser, std::string newPassword);
   std::string	getTime();
   size_t	checkIfUserIsAuth(std::string userToken, std::string password, std::string username, std::string mail);
   size_t	disconnectUser(std::string mailUser, std::string token);
-  size_t	addCarPartInBDD(std::string name, std::vector<std::string> prices, std::string photo, std::string description);
+  size_t	addCarPartInBDD(std::string name, std::vector<std::string> prices, std::string photo, std::string description, std::string category);
   std::string	generateRandomString(size_t size);
   aho_corasick::trie	generateTree();
   std::vector<std::pair<std::string, size_t>>	parseKeyWordInTree(aho_corasick::trie trie, std::string keyWord);
+  std::vector<std::pair<std::string, size_t>> parseKeyWordInTreeByCategory(aho_corasick::trie trie, std::string keyWordCategory);                                                       
+  std::vector<std::string>  parseCategoryNames();
   rapidjson::Document*	getInfoUser(std::string userToken, std::string userMail);
   rapidjson::Document*	getFullCarPart(std::string partName);
   rapidjson::Document*	getCarPart(std::string partName);

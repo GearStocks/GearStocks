@@ -35,7 +35,7 @@ size_t Emailer::payload_source(void *ptr, size_t size, size_t nmemb, void *userp
   return 0;
 }
 
-int Emailer::sendMail(std::string userMail, std::string password, std::string mailType)
+int Emailer::sendMail(std::string userMail, std::string password, std::string mailType, std::string object, std::string content, std::string name)
 {
   CURL *curl;
   CURLcode res = CURLE_OK;
@@ -44,6 +44,9 @@ int Emailer::sendMail(std::string userMail, std::string password, std::string ma
   
   if (mailType.compare("passwordReset") == 0) {
     buildResetPasswordContentBuffer(userMail, password);
+  }
+  else if (mailType.compare("contact") == 0) {
+    buildContactContentBuffer(userMail, object, content, name);
   }
   else
     buildRegisterConfirmationContentBuffer(userMail);
@@ -139,6 +142,41 @@ int	Emailer::buildRegisterConfirmationContentBuffer(std::string userMail)
   _contentBuffer.push_back("");
 }
 
+int	Emailer::buildContactContentBuffer(std::string userMail, std::string object, std::string content, std::string name)
+{
+  std::string time = getTime();
+
+  if (_contentBuffer.empty() == 0) {
+    std::cout << "ON CLEAN LE BUFFER" << std::endl;
+    _contentBuffer.clear();
+  }
+  time.erase(std::remove(time.begin(), time.end(), ' '), time.end());
+  time.erase(std::remove(time.begin(), time.end(), ':'), time.end());
+  time.erase(time.length() -1, time.length());
+  std::string ID = "Message-ID: <" + time + "@gearstocks.com>\r\n";
+  _contentBuffer.push_back("Date: Mon, 08 Mar 2020 11:54:29 +1100\r\n");
+  _contentBuffer.push_back("To : gearstocks@gmail.com (GearStocks)\r\n");
+  _contentBuffer.push_back("From: gearstocks@gmail.com (GearStocks)\r\n");
+  _contentBuffer.push_back("Cc: \r\n");
+  _contentBuffer.push_back(ID);
+  _contentBuffer.push_back("Subject: " + object + "\r\n");
+  _contentBuffer.push_back("\r\n");
+  _contentBuffer.push_back("Bonjour,\r\n");
+  _contentBuffer.push_back("\r\n");
+  _contentBuffer.push_back("L'utilisateur " + name +  " vous a envoyé un message et requiert votre aide.\r\n");
+  _contentBuffer.push_back("\r\n");
+  _contentBuffer.push_back("Vous pouvez le contacter à l'aide de cette adresse mail: " + userMail + "\r\n"); 
+  _contentBuffer.push_back("\r\n");
+  _contentBuffer.push_back("Son message est le suivant :\r\n");
+  _contentBuffer.push_back("\r\n");
+  _contentBuffer.push_back(content + "\r\n");
+  _contentBuffer.push_back("\r\n");
+  _contentBuffer.push_back("Cordialement,\r\n");
+  _contentBuffer.push_back("\r\n");
+  _contentBuffer.push_back("GearStocks\r\n");
+  _contentBuffer.push_back("");
+}
+
 std::string     Emailer::getTime()
 {
   auto end = std::chrono::system_clock::now();
@@ -147,9 +185,9 @@ std::string     Emailer::getTime()
   return std::ctime(&end_time);
 }
 
-int	Emailer::sendMailDependingOnType(std::string userMail, std::string password, std::string mailType)
+int	Emailer::sendMailDependingOnType(std::string userMail, std::string password, std::string mailType, std::string object, std::string content, std::string name)
 {
-  sendMail(userMail, password, mailType);
+  sendMail(userMail, password, mailType, object, content, name);
   return 0;
 }
 

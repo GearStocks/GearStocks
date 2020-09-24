@@ -373,14 +373,14 @@ rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string 
   return NULL;
 }
 
-size_t	BddManager::addCarPartInBDD(std::string name, std::vector<std::string> prices, std::string photo, std::string description)
+size_t	BddManager::addCarPartInBDD(std::string name, std::vector<std::string> prices, std::string photo, std::string description, std::string category)
 {
   bsoncxx::builder::stream::document document{};
   bsoncxx::builder::stream::document document2{};
   auto it = prices.begin();
   auto it2 = it + 1;
 
-  document << "name" << name << "photo" << photo << "description" << description;
+  document << "name" << name << "photo" << photo << "description" << description << "category" << category;
   auto in_array = document << "parts" << bsoncxx::builder::stream::open_array;
   while (it2 < prices.end()) {
     in_array = in_array << bsoncxx::builder::stream::open_document << "month" << *it << "price" << *it2 << bsoncxx::builder::stream::close_document;
@@ -609,31 +609,24 @@ std::vector<std::pair<std::string, size_t>>	BddManager::parseKeyWordInTree(aho_c
   std::vector<std::pair<std::string, size_t>>	parsingResult;
   std::transform(keyWord.begin(), keyWord.end(), keyWord.begin(), ::tolower);
   auto	result = trie.parse_text(keyWord.c_str());
-  auto mdr = result.begin();
-
+  auto resultIt = result.begin();
   
   std::pair<std::string, size_t> resultPair;
-  while (mdr != result.end()) {
-    //std::cout << (*mdr).get_keyword() << " a la place " << (*mdr).get_index() << std::endl;
-    resultPair = std::make_pair((*mdr).get_keyword(), 1);
-    //parsingResult.push_back((*mdr).get_keyword());
+  while (resultIt != result.end()) {
+    //std::cout << (*resultIt).get_keyword() << " a la place " << (*resultIt).get_index() << std::endl;
+    resultPair = std::make_pair((*resultIt).get_keyword(), 1);
+    //parsingResult.push_back((*resultIt).get_keyword());
     parsingResult.push_back(resultPair);
-    ++mdr;
+    ++resultIt;
   }
-
-  
-
-
   
   std::stringstream ss(keyWord);
   std::istream_iterator<std::string> begin(ss);
   std::istream_iterator<std::string> end;
   std::vector<std::string> keyWordSplited(begin, end);
 
-
   /*for (std::vector<std::string>::iterator ez = keyWordSplited.begin() ; ez != keyWordSplited.end(); ++ez)
     std::cout << "LOL:" << *ez << std::endl;*/
-
   
   auto it = keyWordSplited.begin();
   auto cursor = _carPartCollection.find({});
@@ -666,12 +659,9 @@ std::vector<std::pair<std::string, size_t>>	BddManager::parseKeyWordInTree(aho_c
 	  //std::cout << "VOICI LE NAME:" << name << std::endl;
 	  //std::cout << "VOICI LE SPLIT:" << *it << std::endl;
 	  //std::cout << "2" << std::endl;
-	}
-	
-      }
-      
+	}	
+      }   
       ++it;
-      
     }
     it = keyWordSplited.begin();
   }
@@ -690,3 +680,80 @@ std::vector<std::pair<std::string, size_t>>	BddManager::parseKeyWordInTree(aho_c
 	    it = keyWordSplited.end() - 1;
 	    std::cout << "VOICI LE SPLIT:" << *it << std::endl;*/	    
 	//int eztest = 1;
+
+
+std::vector<std::pair<std::string, size_t>> BddManager::parseKeyWordInTreeByCategory(aho_corasick::trie trie, std::string keyWordCategory)                                                        
+{
+  std::vector<std::pair<std::string, size_t>>	parsingResult;
+  std::transform(keyWordCategory.begin(), keyWordCategory.end(), keyWordCategory.begin(), ::tolower);
+  auto result = trie.parse_text(keyWordCategory.c_str());
+  auto cursorKeyWord = result.begin();
+
+  std::pair<std::string, size_t> resultPair;
+
+  while (cursorKeyWord != result.end()) {
+    resultPair = std::make_pair((*cursorKeyWord).get_keyword(), 1);
+    parsingResult.push_back(resultPair);
+    ++cursorKeyWord;
+  }
+
+  std::stringstream ss(keyWordCategory);
+  std::istream_iterator<std::string> begin(ss);
+  std::istream_iterator<std::string> end;
+  std::vector<std::string> keyWordSplited(begin, end);
+  
+  auto it = keyWordSplited.begin();
+  auto cursorCollection = _carPartCollection.find({});
+
+  for (auto&& doc : cursorCollection) {
+
+    std::string partName = bsoncxx::to_json(doc);
+    std::string categoryName = bsoncxx::to_json(doc);
+
+    partName.erase(0, partName.find("\"name\" : ") + 10);
+    partName.erase(partName.find("\", \"photo\" "));
+    categoryName.erase(0, categoryName.find("\"category\" :") + 14);
+    categoryName.erase(categoryName.find("\", \"parts\" "));
+
+    std::string CategoryNameInLower = categoryName;
+    std::string partNameInLower = partName;
+    std::transform(CategoryNameInLower.begin(), CategoryNameInLower.end(), CategoryNameInLower.begin(), ::tolower);
+
+    while (it < keyWordSplited.end()) {
+      if (CategoryNameInLower.find(*it) != std::string::npos) {
+	      auto itez = std::find_if(parsingResult.begin(), parsingResult.end(), [&categoryName](const std::pair<std::string, int>& element){ return element.first == categoryName;});
+	      if (itez == parsingResult.end()) {
+          resultPair = std::make_pair(partName, 1);
+	        parsingResult.push_back(resultPair);
+          std::cout << "VOICI LE NAME" << partName << std::endl;
+	        std::cout << "VOICI LA CATEGORIE:" << categoryName << std::endl;
+	        std::cout << "VOICI LE SPLIT:" << *it << std::endl;
+	      } else {
+	        std::pair<std::string, int> new_pair = *itez;
+	        ++new_pair.second;
+	        *itez = new_pair;
+      	}
+      }
+      ++it;
+    }
+    it = keyWordSplited.begin();
+  }
+  std::sort(parsingResult.begin(), parsingResult.end(), [](auto &left, auto &right) {
+      return left.second > right.second;
+    });
+  return parsingResult;
+}
+
+std::vector<std::string>  BddManager::parseCategoryNames()
+{
+  std::vector<std::string>  categoryList;
+  auto cursorCollection = _carPartCollection.find({});
+  for (auto&& doc : cursorCollection) {
+    std::string categoryName = bsoncxx::to_json(doc);
+    categoryName.erase(0, categoryName.find("\"category\" :") + 14);
+    categoryName.erase(categoryName.find("\", \"parts\" "));
+    if (std::find(categoryList.begin(), categoryList.end(), categoryName) == categoryList.end())
+      categoryList.push_back(categoryName);
+  }  
+  return categoryList;
+}
