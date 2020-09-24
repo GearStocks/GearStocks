@@ -43,6 +43,10 @@ void Server::setupRoutes() {
   Pistache::Rest::Routes::Options(router, "/disconnect", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
   Pistache::Rest::Routes::Post(router, "/infoUser", Pistache::Rest::Routes::bind(&Server::infoUser, this));
   Pistache::Rest::Routes::Options(router, "/infoUser", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
+  Pistache::Rest::Routes::Post(router, "/addBookmark", Pistache::Rest::Routes::bind(&Server::addBookmark, this));
+  Pistache::Rest::Routes::Options(router, "/addBookmark", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
+  Pistache::Rest::Routes::Post(router, "/delBookmark", Pistache::Rest::Routes::bind(&Server::delBookmark, this));
+  Pistache::Rest::Routes::Options(router, "/delBookmark", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
   Pistache::Rest::Routes::Post(router, "/addCarPart", Pistache::Rest::Routes::bind(&Server::addCarPart, this));
   Pistache::Rest::Routes::Post(router, "/getFullCarPart", Pistache::Rest::Routes::bind(&Server::getFullCarPart, this));
   Pistache::Rest::Routes::Options(router, "/getFullCarPart", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
@@ -50,12 +54,7 @@ void Server::setupRoutes() {
   Pistache::Rest::Routes::Options(router, "/forgottenPassword", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
   Pistache::Rest::Routes::Post(router, "/listParts", Pistache::Rest::Routes::bind(&Server::listParts, this));
   Pistache::Rest::Routes::Options(router, "/listParts", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
-  Pistache::Rest::Routes::Post(router, "/listPartsByCategory", Pistache::Rest::Routes::bind(&Server::listPartsByCategory, this));
-  Pistache::Rest::Routes::Options(router, "/listPartsByCategory", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
-  Pistache::Rest::Routes::Post(router, "/getNonEmptyCategoryNames", Pistache::Rest::Routes::bind(&Server::getNonEmptyCategoryNames, this));
-  Pistache::Rest::Routes::Options(router, "/getNonEmptyCategoryNames", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
-  Pistache::Rest::Routes::Post(router, "/contact", Pistache::Rest::Routes::bind(&Server::sendContact, this));
-  Pistache::Rest::Routes::Options(router, "/contact", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
+  
 }
 
 int Server::Hello(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){
@@ -69,9 +68,9 @@ int Server::Hello(const Pistache::Rest::Request& request, Pistache::Http::Respon
   document2.AddMember("success", "Hello World. The API is online. Port:8000", allocator); 
   document2.Accept(writer);  
   response.send(Pistache::Http::Code::Ok, strbuf.GetString());
-  
 }
 
+//Route Options générique
 int Server::OptionsConnect(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response) {
   response.headers().add<Pistache::Http::Header::AccessControlAllowOrigin>("*");
   response.headers().add<Pistache::Http::Header::AccessControlAllowMethods>("*");
@@ -80,6 +79,7 @@ int Server::OptionsConnect(const Pistache::Rest::Request& request, Pistache::Htt
   response.send(Pistache::Http::Code::Ok, "");
 }
 
+//Route permettant la connection d'un utilisateur
 int Server::PostConnect(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response) {
   rapidjson::Document document;
   TokenManager	tokenManager;
@@ -159,6 +159,7 @@ int Server::PostConnect(const Pistache::Rest::Request& request, Pistache::Http::
   }
 }
 
+//Route permettant l'inscription d'un utilisateur sur le site
 int Server::PostRegister(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){
   std::vector<std::string> documentContent;
   rapidjson::Document document;
@@ -228,7 +229,7 @@ int Server::PostRegister(const Pistache::Rest::Request& request, Pistache::Http:
   if (i == 0) {
     document2.AddMember("success", "Register succeeded", allocator); 
     document2.Accept(writer);
-    _emailer->sendMailDependingOnType(document["email"].GetString(), "", "registerConfirmation", "", "", "");
+    _emailer->sendMailDependingOnType(document["email"].GetString(), "", "registerConfirmation");
     response.send(Pistache::Http::Code::Ok, strbuf.GetString());
   }
   else if (i == 1) {
@@ -249,6 +250,7 @@ int Server::PostRegister(const Pistache::Rest::Request& request, Pistache::Http:
   return 0;
 }
 
+//Route permettant la mise à jour des informations utilisateurs
 int Server::UpdateUser(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){
   rapidjson::Document document;
   rapidjson::Document document2;
@@ -382,6 +384,7 @@ int Server::UpdateUser(const Pistache::Rest::Request& request, Pistache::Http::R
   return 0;
 }
 
+//Route permettant à un utilisateur de se déconnecter du site
 int Server::disconnect(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){ 
   rapidjson::Document document;
   rapidjson::Document document2;
@@ -416,6 +419,7 @@ int Server::disconnect(const Pistache::Rest::Request& request, Pistache::Http::R
   return 0;
 }
 
+//Route retournant les informations utilisateur
 int Server::infoUser(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){ 
   rapidjson::Document document;
   rapidjson::Document document2;
@@ -461,6 +465,102 @@ int Server::infoUser(const Pistache::Rest::Request& request, Pistache::Http::Res
   return 0;
 }
 
+//Route pour supprimer un favoris
+int Server::delBookmark(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){
+  rapidjson::Document document;
+  rapidjson::Document document2;
+  document2.SetObject();
+  rapidjson::Document::AllocatorType& allocator = document2.GetAllocator();
+  rapidjson::StringBuffer strbuf;
+  rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
+
+  document.Parse(request.body().c_str());
+  response.headers().add<Pistache::Http::Header::AccessControlAllowOrigin>("*");
+  response.headers().add<Pistache::Http::Header::AccessControlAllowMethods>("*");
+  response.headers().add<Pistache::Http::Header::AccessControlAllowHeaders>("*");
+  response.headers().add<Pistache::Http::Header::ContentType>(MIME(Application, Json));
+
+  if(!document.HasMember("userToken")) {
+    std::cout << "Il manque le champ userToken" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'userToken'", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  else if(!document.HasMember("partName")) {
+    std::cout << "Il manque le champ partName" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'partName'", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  else {
+    if (_manager->delBookmark(document["userToken"].GetString(), document["partName"].GetString()) == 1) {
+      std::cout << "User Token introuvable" << std::endl;
+      document2.AddMember("error", "Invalid User Token", allocator); 
+      document2.Accept(writer);
+      response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+      return -1;
+    }
+  std::cout << "Bookmark deleted" << std::endl;
+  document2.AddMember("success", "Bookmark deleted", allocator); 
+  document2.Accept(writer);
+  response.send(Pistache::Http::Code::Ok, strbuf.GetString());
+  }
+  return 0;
+}
+
+//Route pour ajout de favoris par l'utilisateur
+int Server::addBookmark(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){
+  rapidjson::Document document;
+  rapidjson::Document document2;
+  document2.SetObject();
+  rapidjson::Document::AllocatorType& allocator = document2.GetAllocator();
+  rapidjson::StringBuffer strbuf;
+  rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
+
+  document.Parse(request.body().c_str());
+  response.headers().add<Pistache::Http::Header::AccessControlAllowOrigin>("*");
+  response.headers().add<Pistache::Http::Header::AccessControlAllowMethods>("*");
+  response.headers().add<Pistache::Http::Header::AccessControlAllowHeaders>("*");
+  response.headers().add<Pistache::Http::Header::ContentType>(MIME(Application, Json));
+
+  if(!document.HasMember("userToken")) {
+    std::cout << "Il manque le champ userToken" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'userToken'", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  else if(!document.HasMember("partName")) {
+    std::cout << "Il manque le champ partName" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'partName'", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  else {
+    if (_manager->addBookmark(document["userToken"].GetString(), document["partName"].GetString()) == 1) {
+      std::cout << "User Token introuvable" << std::endl;
+      document2.AddMember("error", "Invalid User Token", allocator); 
+      document2.Accept(writer);
+      response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+      return -1;
+    }
+    else
+    {
+      std::cout << "Bookmark successfuly added" << std::endl;
+      document2.AddMember("success", "Bookmark successfully added", allocator); 
+      document2.Accept(writer);
+      //response.send(Pistache::Http::Code::Ok, strbuf.GetString());
+      response.send(Pistache::Http::Code::Ok, "");
+    }
+    return 0;
+  }
+  return 0;
+}
+
+//Route pour ajouter d'une pièce automobile dans la BDD utiliser par le Scrapper
 int Server::addCarPart(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){
   rapidjson::Document	document;
   size_t		result;
@@ -500,13 +600,6 @@ int Server::addCarPart(const Pistache::Rest::Request& request, Pistache::Http::R
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
-  if(!document.HasMember("category")) {
-    std::cout << "Il me manque le champ category" << std::endl;
-    document2.AddMember("error", "Bad JSON. Need a field 'category'", allocator);
-    document2.Accept(writer);
-    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
-    return -1;
-  }
 
   std::vector<std::string> prices;
 
@@ -518,13 +611,14 @@ int Server::addCarPart(const Pistache::Rest::Request& request, Pistache::Http::R
     }
   }
   
-  result = _manager->addCarPartInBDD(document["name"].GetString(), prices, document["photo"].GetString(), document["description"].GetString(), document["category"].GetString());
+  result = _manager->addCarPartInBDD(document["name"].GetString(), prices, document["photo"].GetString(), document["description"].GetString());
   document2.AddMember("success", "Car part added", allocator); 
   document2.Accept(writer);
   response.send(Pistache::Http::Code::Ok, strbuf.GetString());
   return 0;
 }
 
+//Route renvoie les informations d'une piéce à partire de son nom
 int Server::getFullCarPart(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){ 
   rapidjson::Document document;
   
@@ -555,6 +649,7 @@ int Server::getFullCarPart(const Pistache::Rest::Request& request, Pistache::Htt
   return 0;
 }
 
+//Route pour la procédure de récupération de mot de passe (mot de passe oublié, envoie d'un email)
 int Server::forgottenPassword(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){ 
   rapidjson::Document document;
   rapidjson::Document document2;
@@ -582,13 +677,14 @@ int Server::forgottenPassword(const Pistache::Rest::Request& request, Pistache::
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
-  _emailer->sendMailDependingOnType(document["email"].GetString(), randomPassword, "passwordReset", "", "", "");
+  _emailer->sendMailDependingOnType(document["email"].GetString(), randomPassword, "passwordReset");
   document2.AddMember("success", "Password reset and mail sent", allocator); 
   document2.Accept(writer);
   response.send(Pistache::Http::Code::Ok, strbuf.GetString());
   return 0;
 }
 
+//Route renvoie une liste de pièce détaché à partire d'un mot clés
 int Server::listParts(const Pistache::Rest::Request& request, Pistache::Http::ResponseWriter response){
   rapidjson::Document document;
   rapidjson::Document document2;
@@ -610,6 +706,7 @@ int Server::listParts(const Pistache::Rest::Request& request, Pistache::Http::Re
     return -1;
   }
   document2.AddMember("success", "list parts", allocator); 
+  
   std::vector<std::pair<std::string, size_t>>	resultParsing;
   resultParsing = _manager->parseKeyWordInTree(_manager->generateTree(), document["keyWord"].GetString());
   if (resultParsing.empty()) {
@@ -626,166 +723,13 @@ int Server::listParts(const Pistache::Rest::Request& request, Pistache::Http::Re
       ++it;
       ++i;
     }
-  }
+    }
   document2.Accept(writer);
   response.send(Pistache::Http::Code::Ok, strbuf.GetString());
   return 0;
 }
 
-int Server::listPartsByCategory(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response)
-{
-  rapidjson::Document documentRequest;
-  rapidjson::Document documentResponse;
-  documentResponse.SetObject();
-  rapidjson::Document::AllocatorType& allocator = documentResponse.GetAllocator();
-  rapidjson::StringBuffer strbuf;
-  rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
-
-  documentRequest.Parse(request.body().c_str());
-  response.headers().add<Pistache::Http::Header::AccessControlAllowOrigin>("*");
-  response.headers().add<Pistache::Http::Header::AccessControlAllowMethods>("*");
-  response.headers().add<Pistache::Http::Header::AccessControlAllowHeaders>("*");
-  response.headers().add<Pistache::Http::Header::ContentType>(MIME(Application, Json));
-  if (!documentRequest.HasMember("userToken")) {
-    std::cout << "Il manque le champ userToken" << std::endl;
-    documentResponse.AddMember("error", "Bad JSON. Need a field 'userToken'", allocator);
-    documentResponse.Accept(writer);
-    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
-    return -1;
-  }
-  if (!documentRequest.HasMember("category")) {
-    std::cout << "Il manque le champ category" << std::endl;
-    documentResponse.AddMember("error", "Bad JSON. Need a field 'category'", allocator);
-    documentResponse.Accept(writer);
-    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
-    return -1;
-  }
-  if (!documentRequest.HasMember("pageNb")) {
-    std::cout << "Il manque le champ pageNb" << std::endl;
-    documentResponse.AddMember("error", "Bad JSON. Need a field 'pageNb'", allocator);
-    documentResponse.Accept(writer);
-    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
-    return -1;
-  }
-  documentResponse.AddMember("success", "list parts", allocator);
-
-  std::vector<std::pair<std::string, size_t>> resultParsing;
-  resultParsing = _manager->parseKeyWordInTreeByCategory(_manager->generateTree(), documentRequest["category"].GetString());
-  if (resultParsing.empty()) {
-    std::cout << "Aucune pièces dans cette categorie." << std::endl;
-    documentResponse.AddMember("data", "Part not found", allocator);
-  }
-  else {
-    std::vector<std::pair<std::string, size_t>>::iterator it = resultParsing.begin();
-    rapidjson::Document *documentIt;
-    int i = 1;
-    while (it < resultParsing.end() && i <= 10) {
-      documentIt = _manager->getCarPart((*it).first);
-      mergeObjects(documentResponse, *documentIt, allocator);
-      ++it;
-      ++i;
-    }
-  }
-  documentResponse.Accept(writer);
-  response.send(Pistache::Http::Code::Ok, strbuf.GetString());
-  return 0;
-}
-
-int Server::getNonEmptyCategoryNames(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response)
-{
-  rapidjson::Document documentRequest;
-  rapidjson::Document documentResponse;
-  documentResponse.SetObject();
-  rapidjson::Document::AllocatorType &allocatorResponse = documentResponse.GetAllocator();
-  rapidjson::StringBuffer strbuf;
-  rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
-
-  documentRequest.Parse(request.body().c_str());
-  response.headers().add<Pistache::Http::Header::AccessControlAllowOrigin>("*");
-  response.headers().add<Pistache::Http::Header::AccessControlAllowMethods>("*");
-  response.headers().add<Pistache::Http::Header::AccessControlAllowHeaders>("*");
-  response.headers().add<Pistache::Http::Header::ContentType>(MIME(Application, Json));
-
-  documentResponse.AddMember("success", "list parts", allocatorResponse);
-
-  std::vector<std::string>  resultListCategories;
-  resultListCategories = _manager->parseCategoryNames();
-  if (resultListCategories.empty()) {
-    std::cout << "Aucune categorie n'est définie." << std::endl;
-    documentResponse.AddMember("data", "Part not found", allocatorResponse);
-  } else {
-    std::string arrayName = "categories";
-    rapidjson::Value arrayNameJson;
-    rapidjson::Value tmpArray(rapidjson::kArrayType);
-    rapidjson::Value tmpList;
-    tmpList.SetObject();
-    for (int i = 0 ; i < resultListCategories.size() ; ++i) {
-      std::string tmpCatName = resultListCategories.at(i);
-      rapidjson::Value tmpJsonCatName;
-      tmpJsonCatName.SetString(tmpCatName.c_str(), allocatorResponse);
-      tmpList.AddMember("name", tmpJsonCatName, allocatorResponse);
-    }
-    tmpArray.PushBack(tmpList, allocatorResponse);
-    arrayNameJson.SetString(arrayName.c_str(), allocatorResponse);
-    documentResponse.AddMember(arrayNameJson, tmpArray, allocatorResponse);
-  }
-  documentResponse.Accept(writer);
-  response.send(Pistache::Http::Code::Ok, strbuf.GetString());
-  return 0;
-}
-
-
-int Server::sendContact(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response)
-{
-  rapidjson::Document documentRequest;
-  rapidjson::Document documentResponse;
-  documentResponse.SetObject();
-  rapidjson::Document::AllocatorType& allocator = documentResponse.GetAllocator();
-  rapidjson::StringBuffer strbuf;
-  rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
-
-  documentRequest.Parse(request.body().c_str());
-  response.headers().add<Pistache::Http::Header::AccessControlAllowOrigin>("*");
-  response.headers().add<Pistache::Http::Header::AccessControlAllowMethods>("*");
-  response.headers().add<Pistache::Http::Header::AccessControlAllowHeaders>("*");
-  response.headers().add<Pistache::Http::Header::ContentType>(MIME(Application, Json));
-  if (!documentRequest.HasMember("object")) {
-    std::cout << "Il manque le champ userToken" << std::endl;
-    documentResponse.AddMember("error", "Bad JSON. Need a field 'object'", allocator);
-    documentResponse.Accept(writer);
-    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
-    return -1;
-  }
-  if (!documentRequest.HasMember("content")) {
-    std::cout << "Il manque le champ userToken" << std::endl;
-    documentResponse.AddMember("error", "Bad JSON. Need a field 'content'", allocator);
-    documentResponse.Accept(writer);
-    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
-    return -1;
-  }
-  if (!documentRequest.HasMember("name")) {
-    std::cout << "Il manque le champ userToken" << std::endl;
-    documentResponse.AddMember("error", "Bad JSON. Need a field 'name'", allocator);
-    documentResponse.Accept(writer);
-    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
-    return -1;
-  }
-  if (!documentRequest.HasMember("mail")) {
-    std::cout << "Il manque le champ userToken" << std::endl;
-    documentResponse.AddMember("error", "Bad JSON. Need a field 'mail'", allocator);
-    documentResponse.Accept(writer);
-    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
-    return -1;
-  }
-  _emailer->sendMailDependingOnType(documentRequest["mail"].GetString(), "", "contact", 
-            documentRequest["object"].GetString(), documentRequest["content"].GetString(), documentRequest["name"].GetString());
-
-  documentResponse.AddMember("success", "Contact mail sent", allocator); 
-  documentResponse.Accept(writer);
-  response.send(Pistache::Http::Code::Ok, strbuf.GetString());
-  return 0;
-}
-
+// ??
 void Server::mergeObjects(rapidjson::Value &dstObject, rapidjson::Value &srcObject, rapidjson::Document::AllocatorType &allocator)
 {
     for (auto srcIt = srcObject.MemberBegin(); srcIt != srcObject.MemberEnd(); ++srcIt)
