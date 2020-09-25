@@ -77,13 +77,13 @@ export default class RegisterComponent extends React.Component {
     const { navigate } = this.props.navigation;
     return (
       <SafeAreaView style={styles.container}>
-        <ScrollView>
           <Text style={styles.title}>Register</Text>
+          <ScrollView style={{top: "5%"}}>
           <Input
             autoCapitalize='none'
             autoCorrect={false}
             label='Username'
-            labelStyle={{ bottom: 5, left: 10 }}
+            labelStyle={{ bottom: 5 }}
             returnKeyType='next'
             errorMessage={this.state.errorUsername}
             errorStyle={{ fontSize: 13 }}
@@ -184,7 +184,7 @@ export default class RegisterComponent extends React.Component {
             containerStyle={{ top: 25 }}
             errorMessage={this.state.errorConfirmPassword}
             label='Confirm Password'
-            labelStyle={{ bottom: 5, left: 10 }}
+            labelStyle={{ bottom: 5 }}
             onSubmitEditing={() => this.confirmPassword.focus()}
             returnKeyType='next'
             placeholder={strings.CONFIRM_PASSWORD}

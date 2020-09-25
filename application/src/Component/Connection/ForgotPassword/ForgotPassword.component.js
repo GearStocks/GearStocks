@@ -45,7 +45,9 @@ export default class ForgotPasswordComponent extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text h3>Enter your email</Text>
+        <View style={{bottom: '30%'}}>
+        <Text h4>Enter your email</Text>
+        </View>
         <Input
           autoCapitalize='none'
           autoCorrect={false}
