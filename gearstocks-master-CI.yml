@@ -108,6 +108,6 @@ stages:
                   unzip -o $(Build.ArtifactStagingDirectory)/../drop/$(Build.BuildId).zip -d /home/GearStocks/
                   cd /home/GearStocks/
                   mkdir -p images
-                  docker-compose stop || true
-                  docker-compose rm --force || true
+                  docker-compose stop
+                  docker-compose rm --force
                   docker-compose up -d --build mongo api apache
