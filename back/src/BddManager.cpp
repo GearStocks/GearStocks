@@ -11,6 +11,7 @@
 
 #include <bsoncxx/builder/stream/document.hpp>
 #include <bsoncxx/json.hpp>
+#include <bsoncxx/types.hpp>
 
 #include <mongocxx/client.hpp>
 #include <mongocxx/instance.hpp>
@@ -70,6 +71,44 @@ size_t	BddManager::userConnect(std::string username, std::string password, std::
   return 2;
 }
 
+/*
+BACK-UP Version
+size_t	BddManager::userRegister(std::vector<std::string> documentContent)
+{
+  std::string	valueInBDD;
+  
+  valueInBDD = checkIfExist(_userCollection, "username", documentContent[0]);
+  if (valueInBDD != "")
+    {
+      std::cout << "User already exist" << std::endl;
+      return 1;
+    }
+  valueInBDD = checkIfExist(_userCollection, "email", documentContent[2]);
+  if (valueInBDD != "")
+    {
+      std::cout << "Mail already used" << std::endl;
+      return 2;
+    }
+  //std::vector<std::string> bookmarks = {};
+  bsoncxx::builder::stream::document document{};
+  std::cout << "MDP avant hashage:" << documentContent[1] << std::endl;
+  std::cout << "MDP après hashage:" << cryptPass(documentContent[1]) << std::endl;
+  document << "username" << documentContent[0] 
+  << "email" << documentContent[2] 
+  << "password" << cryptPass(documentContent[1]) 
+  << "token" << "" 
+  << "date" << "" 
+  << "firstName" << documentContent[3] 
+  << "lastName" << documentContent[4] 
+  << "birthDay" << documentContent[5] 
+  << "bookmarks" <<  bsoncxx::builder::stream::open_array << "essaie" << bsoncxx::builder::stream::close_array;
+  addContentInBDD(_userCollection, document);
+  std::cout << "A new user is registered :" << documentContent[0] << std::endl;
+  
+  return 0; bsoncxx::builder::stream::open_array
+}
+*/
+
 size_t	BddManager::userRegister(std::vector<std::string> documentContent)
 {
   std::string	valueInBDD;
@@ -89,7 +128,15 @@ size_t	BddManager::userRegister(std::vector<std::string> documentContent)
   bsoncxx::builder::stream::document document{};
   std::cout << "MDP avant hashage:" << documentContent[1] << std::endl;
   std::cout << "MDP après hashage:" << cryptPass(documentContent[1]) << std::endl;
-  document << "username" << documentContent[0] << "email" << documentContent[2] << "password" << cryptPass(documentContent[1]) << "token" << "" << "date" << "" << "firstName" << documentContent[3] << "lastName" << documentContent[4] << "birthDay" << documentContent[5];
+  document << "username" << documentContent[0] 
+  << "email" << documentContent[2] 
+  << "password" << cryptPass(documentContent[1]) 
+  << "token" << "" 
+  << "date" << "" 
+  << "firstName" << documentContent[3] 
+  << "lastName" << documentContent[4] 
+  << "birthDay" << documentContent[5] 
+  << "bookmarks" <<  bsoncxx::builder::stream::open_array << bsoncxx::builder::stream::close_array;
   addContentInBDD(_userCollection, document);
   std::cout << "A new user is registered :" << documentContent[0] << std::endl;
   
@@ -268,6 +315,72 @@ size_t  BddManager::updateNameUser(std::string token, std::string username, std:
   return 0;
 }
 
+//Suppression des favs
+size_t BddManager::delBookmark(std::string userToken, std::string partName) {
+  rapidjson::Document json1;
+  std::string valueInBDD;
+  valueInBDD = checkIfExist(_userCollection, "token", userToken);
+  if (valueInBDD.compare("") == 0) {
+    std::cout << "Invalid token" << std::endl;
+    return 1;
+  }
+  bsoncxx::builder::stream::document document{};
+  bsoncxx::builder::stream::document document2{};
+  bsoncxx::stdx::optional<bsoncxx::document::value> maybe_result = _userCollection.find_one(document << "token" << userToken << bsoncxx::builder::stream::finalize);
+  if (maybe_result) {
+    std::string doc = bsoncxx::to_json(maybe_result->view());
+    json1.Parse(doc.c_str());
+    assert(json1["bookmarks"].IsArray());
+    auto arr_builder = bsoncxx::builder::basic::array{};
+    for (auto& i : json1["bookmarks"].GetArray()) {
+      if (i.GetString() != partName )
+        arr_builder.append(i.GetString());
+      }
+    //arr_builder.append(partName);
+    _userCollection.update_one(document << "token" << userToken << bsoncxx::builder::stream::finalize,
+                        document << "$set" << bsoncxx::builder::stream::open_document <<
+                        "bookmarks" << arr_builder <<
+                        bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::finalize);
+  }
+  return 0;
+}
+
+//ajout favs
+size_t BddManager::addBookmark(std::string userToken, std::string partName) {
+  rapidjson::Document	json1;
+  std::string	valueInBDD;
+  valueInBDD = checkIfExist(_userCollection, "token", userToken);
+  if (valueInBDD.compare("") == 0) {
+    std::cout << "Invalid token" << std::endl;
+    return 1;
+  }
+  bsoncxx::builder::stream::document document{};
+  bsoncxx::builder::stream::document document2{};
+  bsoncxx::stdx::optional<bsoncxx::document::value> maybe_result = _userCollection.find_one(document << "token" << userToken << bsoncxx::builder::stream::finalize);
+  if (maybe_result) {
+      std::string doc = bsoncxx::to_json(maybe_result->view());
+      json1.Parse(doc.c_str());
+      assert(json1["bookmarks"].IsArray());
+      auto arr_builder = bsoncxx::builder::basic::array{};
+      for (auto& i : json1["bookmarks"].GetArray()) {
+        arr_builder.append(i.GetString());
+      }
+      arr_builder.append(partName);
+      _userCollection.update_one(document << "token" << userToken << bsoncxx::builder::stream::finalize,
+                        document << "$set" << bsoncxx::builder::stream::open_document <<
+                        "bookmarks" << arr_builder <<
+                        bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::finalize);
+  }
+  return 0;
+}
+
+/*
+//InDev: Verifie si la piece est déjà un bookmark pour l'utilisateur
+size_t BddManager::isBookmark(std::string token, std::partName) {
+  return 0
+}
+*/
+
 size_t  BddManager::updateDateInBDD(std::string mailUser, std::string date)
 {
   std::string     valueInBDD;
@@ -314,6 +427,8 @@ size_t  BddManager::updateMailUser(std::string token, std::string mail)
   return 0;
 }
 
+
+//Indev: Ajout des bookmarks
 rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string userMail)
 {
   std::string	valueInBDD;
@@ -373,6 +488,31 @@ rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string 
   return NULL;
 }
 
+//
+/*
+size_t	BddManager::addBookmark(std::string name, std::vector<std::string> prices)
+{
+  bsoncxx::builder::stream::document document{};
+  bsoncxx::builder::stream::document document2{};
+  auto it = prices.begin();
+  auto it2 = it + 1;
+
+  document << "name" << name << "photo" << photo << "description" << description;
+  auto in_array = document << "parts" << bsoncxx::builder::stream::open_array;
+  while (it2 < prices.end()) {
+    in_array = in_array << bsoncxx::builder::stream::open_document << "month" << *it << "price" << *it2 << bsoncxx::builder::stream::close_document;
+    it = it + 2;
+    it2 = it2 + 2;
+  }
+  auto after_array = in_array << bsoncxx::builder::stream::close_array;
+    
+  addContentInBDD(_carPartCollection, document);
+  std::cout << "A car part has been registered:" << name << std::endl;
+  return 0;
+}
+*/
+
+//Ajout des prix en BDD
 size_t	BddManager::addCarPartInBDD(std::string name, std::vector<std::string> prices, std::string photo, std::string description)
 {
   bsoncxx::builder::stream::document document{};
@@ -492,6 +632,8 @@ void    BddManager::updateContentInBDD(auto collection, std::string field, std::
 			<< bsoncxx::builder::stream::finalize);
 }
 
+
+//???
 std::string	BddManager::checkIfExist(auto collection, std::string field, std::string value)
 {
   bsoncxx::builder::stream::document document{};
@@ -680,7 +822,83 @@ std::vector<std::pair<std::string, size_t>>	BddManager::parseKeyWordInTree(aho_c
     });
   return parsingResult;
 }
+
+std::vector<std::pair<std::string, size_t>> BddManager::parseKeyWordInTreeByCategory(aho_corasick::trie trie, std::string keyWordCategory)                                                        
+{
+  std::vector<std::pair<std::string, size_t>>	parsingResult;
+  std::transform(keyWordCategory.begin(), keyWordCategory.end(), keyWordCategory.begin(), ::tolower);
+  auto result = trie.parse_text(keyWordCategory.c_str());
+  auto cursorKeyWord = result.begin();
+
+  std::pair<std::string, size_t> resultPair;
+
+  while (cursorKeyWord != result.end()) {
+    resultPair = std::make_pair((*cursorKeyWord).get_keyword(), 1);
+    parsingResult.push_back(resultPair);
+    ++cursorKeyWord;
+  }
+
+  std::stringstream ss(keyWordCategory);
+  std::istream_iterator<std::string> begin(ss);
+  std::istream_iterator<std::string> end;
+  std::vector<std::string> keyWordSplited(begin, end);
   
+  auto it = keyWordSplited.begin();
+  auto cursorCollection = _carPartCollection.find({});
+
+  for (auto&& doc : cursorCollection) {
+
+    std::string partName = bsoncxx::to_json(doc);
+    std::string categoryName = bsoncxx::to_json(doc);
+
+    partName.erase(0, partName.find("\"name\" : ") + 10);
+    partName.erase(partName.find("\", \"photo\" "));
+    categoryName.erase(0, categoryName.find("\"category\" :") + 14);
+    categoryName.erase(categoryName.find("\", \"parts\" "));
+
+    std::string CategoryNameInLower = categoryName;
+    std::string partNameInLower = partName;
+    std::transform(CategoryNameInLower.begin(), CategoryNameInLower.end(), CategoryNameInLower.begin(), ::tolower);
+
+    while (it < keyWordSplited.end()) {
+      if (CategoryNameInLower.find(*it) != std::string::npos) {
+	      auto itez = std::find_if(parsingResult.begin(), parsingResult.end(), [&categoryName](const std::pair<std::string, int>& element){ return element.first == categoryName;});
+	      if (itez == parsingResult.end()) {
+          resultPair = std::make_pair(partName, 1);
+	        parsingResult.push_back(resultPair);
+          std::cout << "VOICI LE NAME" << partName << std::endl;
+	        std::cout << "VOICI LA CATEGORIE:" << categoryName << std::endl;
+	        std::cout << "VOICI LE SPLIT:" << *it << std::endl;
+	      } else {
+	        std::pair<std::string, int> new_pair = *itez;
+	        ++new_pair.second;
+	        *itez = new_pair;
+      	}
+      }
+      ++it;
+    }
+    it = keyWordSplited.begin();
+  }
+  std::sort(parsingResult.begin(), parsingResult.end(), [](auto &left, auto &right) {
+      return left.second > right.second;
+    });
+  return parsingResult;
+}
+
+std::vector<std::string>  BddManager::parseCategoryNames()
+{
+  std::vector<std::string>  categoryList;
+  auto cursorCollection = _carPartCollection.find({});
+  for (auto&& doc : cursorCollection) {
+    std::string categoryName = bsoncxx::to_json(doc);
+    categoryName.erase(0, categoryName.find("\"category\" :") + 14);
+    categoryName.erase(categoryName.find("\", \"parts\" "));
+    if (std::find(categoryList.begin(), categoryList.end(), categoryName) == categoryList.end())
+      categoryList.push_back(categoryName);
+  }  
+  return categoryList;
+}
+
 /*if (std::find(parsingResult.begin(), parsingResult.end(), name) == parsingResult.end())
 	//{
 	    resultPair = std::make_pair(name, 1);
