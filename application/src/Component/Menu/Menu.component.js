@@ -18,10 +18,10 @@ import { user } from '../../services/User';
 
 export default class AppMenu extends React.Component {
   render() {
-    if (user.isConnected())
+    //if (user.isConnected())
       return (<AppContainer />);
-    else
-      return (<LoginComponent />);
+    /*else
+      return (<LoginComponent />);*/
   }
 }
 
@@ -46,14 +46,14 @@ const bottomTabNavigator = createDrawerNavigator(
         )
       }
     },
-    /*Favoris: {
+    Favoris: {
       screen: FavorisComponent,
       navigationOptions: {
         tabBarIcon: ({ tintColor }) => (
           <Icon name="person" size={25} color={tintColor} />
         )
       }
-    }*/
+    }
   },
   {
     initialRouteName: 'Home'

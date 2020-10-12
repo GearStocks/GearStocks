@@ -21,17 +21,16 @@ export default StyleSheet.create({
   title: {
     fontWeight: 'bold',
     fontSize: 30,
+    padding: 30
   },
   button: {
     height: 50,
-    width: 350,
     borderRadius: 5,
     marginBottom: 10,
     top: 40
   },
   button2: {
     top: 100,
-    height: 50,
     width: 350,
     borderRadius: 5,
     marginBottom: 10
