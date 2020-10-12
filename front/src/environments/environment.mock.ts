@@ -10,5 +10,6 @@ export const environment = {
   updateProfileUrl: 'http://localhost:3000/connect',
   updateEmailUrl: 'http://localhost:3000/user',
   updatePasswordUrl: 'http://localhost:3000/user',
-  getUserUrl: 'http://localhost:3000/infoUser'
+  getUserUrl: 'http://localhost:3000/infoUser',
+  categoriesUrl: 'http://localhost:3000/getNonEmptyCategoryNames'
 };
