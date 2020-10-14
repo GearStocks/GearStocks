@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 /* Services */
 import { AuthGuardService } from './auth/services/auth.guard';
+import { CategoriesResolver } from './resolvers/categories.resolver';
 
 /* Components */
 import { HomeComponent } from './core/components/home/home.component';
@@ -26,7 +27,7 @@ const routes: Routes = [
   { path: 'lost-password', component: LostPasswordComponent },
   { path: 'lost-password-confirmation', component: LostPasswordConfirmationComponent },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
-  { path: 'search-list', component: SearchListComponent },
+  { path: 'search-list', component: SearchListComponent, resolve: { categories: CategoriesResolver } },
   { path: 'contact', component: ContactComponent },
   { path: 'item', component: ItemComponent },
   { path: 'description', component: DescriptionComponent },
@@ -40,7 +41,8 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
   providers: [
-    AuthGuardService
+    AuthGuardService,
+    CategoriesResolver
   ]
 })
 
