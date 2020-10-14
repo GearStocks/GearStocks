@@ -428,7 +428,8 @@ size_t  BddManager::updateMailUser(std::string token, std::string mail)
 }
 
 
-//Indev: Ajout des bookmarks
+//Old version for Back-up
+/*
 rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string userMail)
 {
   std::string	valueInBDD;
@@ -484,6 +485,75 @@ rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string 
     //mdr.PushBack(s, allocator);
     //document2->AddMember("data", mdr, allocator);
     return document2;
+  }
+  return NULL;
+}
+*/
+//Retourne Nouvelle méthode d'extractions de donnée (renvoie les Bookmarks)
+rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string userMail)
+{
+  std::string	valueInBDD;
+  valueInBDD = checkIfExist(_userCollection, "token", userToken);
+  if (valueInBDD.compare("") == 0) {
+    std::cout << "Invalid token" << std::endl;
+    return (NULL);
+  }
+  valueInBDD = checkIfExist(_userCollection, "email", userMail);
+  if (valueInBDD.compare("") == 0) {
+    std::cout << "Invalid email" << std::endl;
+    return NULL;
+  }
+  bsoncxx::builder::stream::document document{};
+  bsoncxx::stdx::optional<bsoncxx::document::value> maybe_result =
+    _userCollection.find_one(document << "email" << userMail
+			     << bsoncxx::builder::stream::finalize);
+  if(maybe_result) {
+    rapidjson::Document* json1 = new rapidjson::Document();
+    std::string userName = bsoncxx::to_json(*maybe_result);
+    
+    std::cout << "Réponse BDD: " << userName << std::endl;
+    json1->Parse(userName.c_str());
+
+    
+    /*
+    rapidjson::Document* document2 = new rapidjson::Document();
+    std::string mail = userName;
+    std::string firstName = userName;
+    std::string lastName = userName;
+    std::string birthDay = userName;
+    document2->SetObject();
+    rapidjson::Document::AllocatorType& allocator = document2->GetAllocator();
+    rapidjson::StringBuffer strbuf;
+    rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
+    userName.erase(0, userName.find("\"username\" :") + 14);
+    userName.erase(userName.find("\", \"email\" ")); 
+    mail.erase(0, mail.find("\"email\" :") + 11);
+    mail.erase(mail.find("\", \"password\""));
+    firstName.erase(0, firstName.find("\"firstName\" :") + 15);
+    firstName.erase(firstName.find("\", \"lastName\""));
+    lastName.erase(0, lastName.find("\"lastName\" :") + 14);
+    lastName.erase(lastName.find("\", \"birthDay\""));
+    birthDay.erase(0, birthDay.find("\"birthDay\" :") + 14);
+    birthDay.erase(birthDay.find("\" }"));
+    //rapidjson::Value mdr(rapidjson::kArrayType);
+    rapidjson::Value test;
+    rapidjson::Value s;
+    s.SetObject();
+    test.SetString(userName.c_str(), allocator);
+    document2->AddMember("username", test, allocator);
+    test.SetString(mail.c_str(), allocator);
+    document2->AddMember("email", test, allocator);
+    test.SetString(firstName.c_str(), allocator);
+    document2->AddMember("firstName", test, allocator);
+    test.SetString(lastName.c_str(), allocator);
+    document2->AddMember("lastName", test, allocator);
+    test.SetString(birthDay.c_str(), allocator);
+    document2->AddMember("birthDay", test, allocator);
+    //mdr.PushBack(s, allocator);
+    //document2->AddMember("data", mdr, allocator);
+    //return document2;
+    */
+    return json1;
   }
   return NULL;
 }
