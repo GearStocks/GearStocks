@@ -9,7 +9,7 @@ import {
   contactSuccess,
   getItem,
   getItemSuccess,
-  search,
+  search, searchByCategory,
   searchSuccess
 } from '../actions/core.actions';
 
@@ -27,6 +27,14 @@ export class CoreEffects {
     this.actions$.pipe(
       ofType(search),
       switchMap(action => this.searchService.search(action.keyword)),
+      map(list => searchSuccess({list: list}))
+    )
+  );
+
+  searchByCategory$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(searchByCategory),
+      switchMap(action => this.searchService.searchByCategory(action.category)),
       map(list => searchSuccess({list: list}))
     )
   );
