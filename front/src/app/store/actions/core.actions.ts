@@ -10,6 +10,11 @@ export const search = createAction(
   props<{ keyword: string }>()
 );
 
+export const searchByCategory = createAction(
+  '[App] Search by category',
+  props<{ category: string }>()
+);
+
 export const searchSuccess = createAction(
   '[App] Search Success',
   props<{ list: Items }>()

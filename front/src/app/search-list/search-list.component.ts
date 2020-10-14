@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store/reducers';
 import { selectSearchList } from '../store/reducers/core.reducer';
-import { getItem, search } from '../store/actions/core.actions';
+import {getItem, search, searchByCategory} from '../store/actions/core.actions';
 
 /* Models */
 import { Item, Items } from './models/items.model';
@@ -32,6 +32,10 @@ export class SearchListComponent implements OnInit {
 
   search(): void {
     if (this.keyword) {
+      if (this.selectedCategorie) {
+        this.store.dispatch(searchByCategory({category: this.selectedCategorie}));
+        return;
+      }
       this.store.dispatch(search({keyword: this.keyword}));
     }
   }
