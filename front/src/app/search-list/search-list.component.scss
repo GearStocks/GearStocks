@@ -23,6 +23,9 @@
 
     button, input {
       margin-bottom: 1em;
+      -moz-box-sizing: content-box; /* or `border-box` */
+      -webkit-box-sizing: content-box;
+      box-sizing: content-box;
     }
 
     &__button {

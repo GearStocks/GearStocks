@@ -20,13 +20,14 @@ export class SearchListComponent implements OnInit {
   data: Items;
   keyword: string;
   categories: any;
+  selectedCategorie: string;
 
   constructor(private route: ActivatedRoute, private store: Store<AppState>) {
     this.store.pipe(select(selectSearchList)).subscribe(x => this.data = x);
   }
 
   ngOnInit() {
-    this.route.data.subscribe((data: { categories }) => this.categories = data.categories);
+    this.route.data.subscribe((data: { categories }) => this.categories = data.categories.categories);
   }
 
   search(): void {
