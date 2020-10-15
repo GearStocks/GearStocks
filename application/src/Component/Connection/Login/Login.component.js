@@ -40,7 +40,7 @@ export default class Login extends React.Component {
     const { email, password } = this.state;
 
     const JSONObj = JSON.stringify({
-      mail: this.state.email,
+      email: this.state.email,
       password: this.state.password,
       rememberMe: 0
     });
