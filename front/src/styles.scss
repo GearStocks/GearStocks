@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto:300');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Slab:300');
 
 @font-face {
   font-family: marcelle;
@@ -6,10 +6,10 @@
 }
 
 html, body {
+  font-family: 'Roboto Slab', serif;
   height: 100%;
   padding: 0 !important;
   margin: 0;
-  font-family: 'marcelle', sans-serif;
   line-height: 1.42857143 !important;
 }
 
