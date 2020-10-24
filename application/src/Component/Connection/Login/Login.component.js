@@ -42,7 +42,7 @@ export default class Login extends React.Component {
     const JSONObj = JSON.stringify({
       email: this.state.email,
       password: this.state.password,
-      rememberMe: 0
+      rememberMe: true
     });
 
     if (`${email}` === '' && `${password}` === '') {
@@ -81,7 +81,7 @@ export default class Login extends React.Component {
           autoCorrect={false}
           keyboardType='email-address'
           label='Email'
-          labelStyle={{bottom: 10, left: 10}}
+          labelStyle={{bottom: 10}}
           returnKeyType='next'
           errorStyle={{fontSize: 18}}
           inputContainerStyle={{borderColor: colors.PRIMARY_COLOR, borderTopWidth: 2,
