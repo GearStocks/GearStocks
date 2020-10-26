@@ -363,7 +363,7 @@ size_t BddManager::addBookmark(std::string userToken, std::string partName) {
       assert(json1["bookmarks"].IsArray());
       auto arr_builder = bsoncxx::builder::basic::array{};
       for (auto& i : json1["bookmarks"].GetArray()) {
-        arr_builder.append(i.GetString());
+        auto arr_builder = bsoncxx::builder::basic::array{};
       }
       arr_builder.append(partName);
       _userCollection.update_one(document << "token" << userToken << bsoncxx::builder::stream::finalize,
@@ -489,6 +489,7 @@ rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string 
   return NULL;
 }
 */
+
 //Retourne Nouvelle méthode d'extractions de donnée (renvoie les Bookmarks)
 rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string userMail)
 {
@@ -513,46 +514,6 @@ rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string 
     
     std::cout << "Réponse BDD: " << userName << std::endl;
     json1->Parse(userName.c_str());
-
-    
-    /*
-    rapidjson::Document* document2 = new rapidjson::Document();
-    std::string mail = userName;
-    std::string firstName = userName;
-    std::string lastName = userName;
-    std::string birthDay = userName;
-    document2->SetObject();
-    rapidjson::Document::AllocatorType& allocator = document2->GetAllocator();
-    rapidjson::StringBuffer strbuf;
-    rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
-    userName.erase(0, userName.find("\"username\" :") + 14);
-    userName.erase(userName.find("\", \"email\" ")); 
-    mail.erase(0, mail.find("\"email\" :") + 11);
-    mail.erase(mail.find("\", \"password\""));
-    firstName.erase(0, firstName.find("\"firstName\" :") + 15);
-    firstName.erase(firstName.find("\", \"lastName\""));
-    lastName.erase(0, lastName.find("\"lastName\" :") + 14);
-    lastName.erase(lastName.find("\", \"birthDay\""));
-    birthDay.erase(0, birthDay.find("\"birthDay\" :") + 14);
-    birthDay.erase(birthDay.find("\" }"));
-    //rapidjson::Value mdr(rapidjson::kArrayType);
-    rapidjson::Value test;
-    rapidjson::Value s;
-    s.SetObject();
-    test.SetString(userName.c_str(), allocator);
-    document2->AddMember("username", test, allocator);
-    test.SetString(mail.c_str(), allocator);
-    document2->AddMember("email", test, allocator);
-    test.SetString(firstName.c_str(), allocator);
-    document2->AddMember("firstName", test, allocator);
-    test.SetString(lastName.c_str(), allocator);
-    document2->AddMember("lastName", test, allocator);
-    test.SetString(birthDay.c_str(), allocator);
-    document2->AddMember("birthDay", test, allocator);
-    //mdr.PushBack(s, allocator);
-    //document2->AddMember("data", mdr, allocator);
-    //return document2;
-    */
     return json1;
   }
   return NULL;
@@ -582,25 +543,46 @@ size_t	BddManager::addBookmark(std::string name, std::vector<std::string> prices
 }
 */
 
-//Ajout des prix en BDD
-size_t	BddManager::addCarPartInBDD(std::string name, std::vector<std::string> prices, std::string photo, std::string description)
+//Il faut ajouter le mois dans les paramétres envoyés à la fonction
+size_t BddManager::addCarPartInBDD(std::string name, std::string month, std::string prices, std::string photo, std::string description)
 {
   bsoncxx::builder::stream::document document{};
-  bsoncxx::builder::stream::document document2{};
-  auto it = prices.begin();
-  auto it2 = it + 1;
-
-  document << "name" << name << "photo" << photo << "description" << description;
-  auto in_array = document << "parts" << bsoncxx::builder::stream::open_array;
-  while (it2 < prices.end()) {
-    in_array = in_array << bsoncxx::builder::stream::open_document << "month" << *it << "price" << *it2 << bsoncxx::builder::stream::close_document;
-    it = it + 2;
-    it2 = it2 + 2;
-  }
-  auto after_array = in_array << bsoncxx::builder::stream::close_array;
+  rapidjson::Document	json1;
+  bsoncxx::stdx::optional<bsoncxx::document::value> maybe_result = _carPartCollection.find_one(document << "name" << name << bsoncxx::builder::stream::finalize);
+  if (maybe_result) {
     
-  addContentInBDD(_carPartCollection, document);
-  std::cout << "A car part has been registered:" << name << std::endl;
+    std::string doc = bsoncxx::to_json(maybe_result->view());
+    json1.Parse(doc.c_str());
+    auto arr_builder = bsoncxx::builder::basic::array{};
+    const rapidjson::Value& attributes = json1["prices"];
+    
+    for (rapidjson::Value::ConstValueIterator itr = attributes.Begin(); itr != attributes.End(); ++itr) {
+      const rapidjson::Value& attribute = *itr;
+      bsoncxx::builder::stream::document in_array{};
+      for (rapidjson::Value::ConstMemberIterator itr2 = attribute.MemberBegin(); itr2 != attribute.MemberEnd(); ++itr2) {
+        if (itr2 == attribute.MemberBegin()) {
+          in_array << "month" << itr2->value.GetString();
+        } else {
+          //std::cout << "price : " << itr2->value.GetString() << std::endl;
+          in_array << "price" << itr2->value.GetString();
+        }
+      }
+      arr_builder.append(in_array);
+    }
+    bsoncxx::builder::stream::document new_value{};
+    new_value << "month" << month << "price" << prices;
+    
+    arr_builder.append(new_value);
+     _carPartCollection.update_one(document << "name" << name << bsoncxx::builder::stream::finalize,
+                        document << "$set" << bsoncxx::builder::stream::open_document <<
+                        "prices" << arr_builder <<
+                        bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::finalize);
+    std::cout << "Update Piece: " << name << std::endl;
+  } else {
+    document << "name" << name <<"prices" << bsoncxx::builder::stream::open_array << bsoncxx::builder::stream::open_document << "month" << "Jan(Test)" << "price" << prices << bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::close_array << "description" << description;
+    addContentInBDD(_carPartCollection, document);
+    std::cout << "A car part has been registered:" << name << std::endl;
+  }
   return 0;
 }
 

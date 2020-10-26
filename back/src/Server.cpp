@@ -583,9 +583,9 @@ int Server::addCarPart(const Pistache::Rest::Request& request, Pistache::Http::R
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
-  }
+  } //prices => price
   if(!document.HasMember("prices")) {
-    std::cout << "Il manque le champ price" << std::endl;
+    std::cout << "Il manque le champ prices" << std::endl;
     document2.AddMember("error", "Bad JSON. Need a field 'price'", allocator); 
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
@@ -605,9 +605,16 @@ int Server::addCarPart(const Pistache::Rest::Request& request, Pistache::Http::R
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
+  if(!document.HasMember("month")) {
+    std::cout << "Il manque le champ month" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'month'", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
 
-  std::vector<std::string> prices;
-
+//std::vector<std::string> prices;
+/*
   const rapidjson::Value& attributes = document["prices"];
   for (rapidjson::Value::ConstValueIterator itr = attributes.Begin(); itr != attributes.End(); ++itr) {
     const rapidjson::Value& attribute = *itr;
@@ -615,11 +622,12 @@ int Server::addCarPart(const Pistache::Rest::Request& request, Pistache::Http::R
       prices.push_back(itr2->value.GetString());
     }
   }
-  
-  result = _manager->addCarPartInBDD(document["name"].GetString(), prices, document["photo"].GetString(), document["description"].GetString());
+  */
+  result = _manager->addCarPartInBDD(document["name"].GetString(), document["month"].GetString(), document["prices"].GetString(), document["photo"].GetString(), document["description"].GetString());
   document2.AddMember("success", "Car part added", allocator); 
   document2.Accept(writer);
   response.send(Pistache::Http::Code::Ok, strbuf.GetString());
+  //response.send(Pistache::Http::Code::Ok, "Test");
   return 0;
 }
 
