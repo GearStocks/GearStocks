@@ -214,6 +214,22 @@ rapidjson::Document*	BddManager::getFullCarPart(std::string partName)
     while (price.find("month") != std::string::npos) {
       getAllPrices(&mdr2, &price, allocator);
     }
+
+    rapidjson::Value referrals(rapidjson::kArrayType);
+    rapidjson::Document* documentReferrals = new rapidjson::Document();
+    std::vector<std::pair<std::string, size_t>>   resultParsing;
+    resultParsing = parseKeyWordInTree(generateTree(), name);
+    if (((*(resultParsing.begin())).first).compare(name) == 0)
+      resultParsing.erase(resultParsing.begin());
+    std::vector<std::pair<std::string, size_t>>::iterator it = resultParsing.begin();
+    int nbMaxReferrals = 1;
+    while (it < resultParsing.end() && nbMaxReferrals <= 8) {
+      documentReferrals = getCarPart((*it).first, std::vector<std::string>());
+      getReferrals(&referrals, documentReferrals, allocator);
+      ++nbMaxReferrals;
+      ++it;
+    }   
+    
     rapidjson::Value test;
     test.SetString(name.c_str(), allocator);
     document2->AddMember("name", test, allocator);
@@ -222,10 +238,30 @@ rapidjson::Document*	BddManager::getFullCarPart(std::string partName)
     test.SetString(description.c_str(), allocator);
     document2->AddMember("description", test, allocator);
     document2->AddMember("prices", mdr2, allocator);
-
+    document2->AddMember("referrals", referrals, allocator);
     return document2;
   }
   return NULL;
+}
+
+void    BddManager::getReferrals(rapidjson::Value *referrals, rapidjson::Document *document, rapidjson::Document::AllocatorType &allocator)
+{
+  rapidjson::Value part;
+  part.SetObject();
+  for (auto const& in : (*document)["parts"].GetArray()) {
+    const char* name = in["name"].GetString();
+    const char* price = in["price"].GetString();
+    const char* photo = in["photo"].GetString();
+    
+    rapidjson::Value x(rapidjson::StringRef(name));
+    part.AddMember("name", x, allocator);
+    x = rapidjson::StringRef(price);
+    part.AddMember("price", x, allocator);
+    x = rapidjson::StringRef(photo);
+    part.AddMember("photo", x, allocator);
+  }
+  referrals->PushBack(part, allocator);
+  return;
 }
 
 void	BddManager::getAllPrices(rapidjson::Value *price, std::string *priceToParse, rapidjson::Document::AllocatorType &allocator)
@@ -249,7 +285,7 @@ void	BddManager::getAllPrices(rapidjson::Value *price, std::string *priceToParse
   return;
 }
 
-rapidjson::Document*	BddManager::getCarPart(std::string partName)
+rapidjson::Document*	BddManager::getCarPart(std::string partName, std::vector<std::string> filters)
 {
   std::string	valueInBDD;
   
@@ -276,6 +312,11 @@ rapidjson::Document*	BddManager::getCarPart(std::string partName)
     price.erase(price.find("\" }"));
     path.erase(0, path.find("\"photo\" :") + 11);
     path.erase(path.find("\", \"descript"));
+
+    //
+    // FONCTION QUI CHECK LES FILTRES
+    //
+    
     /*std::cout << "name:" << name << std::endl;
     std::cout << "price:" << price << std::endl;
     std::cout << "path:" << path << std::endl;*/
@@ -799,7 +840,6 @@ aho_corasick::trie	BddManager::generateTree()
 
 std::vector<std::pair<std::string, size_t>>	BddManager::parseKeyWordInTree(aho_corasick::trie trie, std::string keyWord)
 {
-  //std::vector<std::string>	parsingResult;
   std::vector<std::pair<std::string, size_t>>	parsingResult;
   std::transform(keyWord.begin(), keyWord.end(), keyWord.begin(), ::tolower);
   auto	result = trie.parse_text(keyWord.c_str());
@@ -846,9 +886,9 @@ std::vector<std::pair<std::string, size_t>>	BddManager::parseKeyWordInTree(aho_c
 	    resultPair = std::make_pair(name, 1);
 	    
 	    parsingResult.push_back(resultPair);
-	    std::cout << "VOICI LE NAME:" << name << std::endl;
+	    //std::cout << "VOICI LE NAME:" << name << std::endl;
 	    //it = keyWordSplited.end() - 1;
-	    std::cout << "VOICI LE SPLIT:" << *it << std::endl;
+	    //std::cout << "VOICI LE SPLIT:" << *it << std::endl;
 	  }
 	else {
 	  //std::cout << "1" << std::endl;

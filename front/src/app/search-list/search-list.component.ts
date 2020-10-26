@@ -1,11 +1,12 @@
 /* Angular modules */
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 /* NgRx */
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../store/reducers';
 import { selectSearchList } from '../store/reducers/core.reducer';
-import { getItem, search } from '../store/actions/core.actions';
+import {getItem, search, searchByCategory} from '../store/actions/core.actions';
 
 /* Models */
 import { Item, Items } from './models/items.model';
@@ -15,16 +16,26 @@ import { Item, Items } from './models/items.model';
   templateUrl: './search-list.component.html',
   styleUrls: ['./search-list.component.scss']
 })
-export class SearchListComponent  {
+export class SearchListComponent implements OnInit {
   data: Items;
   keyword: string;
+  categories: any;
+  selectedCategorie: string;
 
-  constructor(private store: Store<AppState>) {
+  constructor(private route: ActivatedRoute, private store: Store<AppState>) {
     this.store.pipe(select(selectSearchList)).subscribe(x => this.data = x);
+  }
+
+  ngOnInit() {
+    this.route.data.subscribe((data: { categories }) => this.categories = data.categories.categories);
   }
 
   search(): void {
     if (this.keyword) {
+      if (this.selectedCategorie) {
+        this.store.dispatch(searchByCategory({category: this.selectedCategorie}));
+        return;
+      }
       this.store.dispatch(search({keyword: this.keyword}));
     }
   }

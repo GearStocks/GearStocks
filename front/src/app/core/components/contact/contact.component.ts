@@ -91,7 +91,10 @@ export class ContactComponent implements OnInit {
     }
 
     const data = {
-      ...this.contactForm.getRawValue(),
+      object: this.f.object.value,
+      content: this.f.content.value,
+      name: this.f.name.value,
+      mail: this.f.email.value
     };
 
     this.store.dispatch(contact({data: data}));

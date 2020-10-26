@@ -54,9 +54,10 @@ public:
   std::vector<std::string>  parseCategoryNames();
   rapidjson::Document*	getInfoUser(std::string userToken, std::string userMail);
   rapidjson::Document*	getFullCarPart(std::string partName);
-  rapidjson::Document*	getCarPart(std::string partName);
+  rapidjson::Document*	getCarPart(std::string partName, std::vector<std::string> filters);
 private:
   void		connect();
+  void          getReferrals(rapidjson::Value *referrals, rapidjson::Document *document, rapidjson::Document::AllocatorType &allocator);
   void		getAllPrices(rapidjson::Value *price, std::string *priceToParse, rapidjson::Document::AllocatorType &allocator);
   void		addAllPrices(bsoncxx::builder::stream::document *document, std::string month, std::string price);
   void		addContentInBDD(auto collection, bsoncxx::builder::stream::document &doc);
