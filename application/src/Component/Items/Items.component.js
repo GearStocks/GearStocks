@@ -11,6 +11,11 @@ import { Icon } from 'react-native-elements';
 import {
   LineChart,
 } from "react-native-chart-kit";
+import { user } from '../../services/User'
+import { Alert } from 'react-native';
+import { routes } from '../../../config/routes';
+const axios = require('axios');
+
 
 export default class ItemsComponent extends React.Component {
 
@@ -26,6 +31,37 @@ export default class ItemsComponent extends React.Component {
   static navigationOptions = {
     drawerLabel: () => null
   }
+
+  addBookmark = (partName) => {
+    const JSONObj = JSON.stringify({
+      userToken: user.token,
+      partName: partName
+    });
+    Alert.alert(
+      "Cette piece est desormais dans vos favoris",
+      "Pour la consulter, rendez-vous dans l'onglet favoris",
+      [
+        { text: "OK", onPress: () => null }
+      ],
+      { cancelable: false }
+    );
+
+    axios.post(routes.ADD_BOOKMARK, JSONObj, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      }
+    })
+      .then((res) => {
+        const json = JSON.parse(JSONObj);
+        console.log('RESPONSE RECEIVED: ', res.data);
+        //navigate('AppMenu', { token: res.data.token, email: json['mail'] });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   render() {
     const monthData = [];
@@ -43,6 +79,8 @@ export default class ItemsComponent extends React.Component {
           <Text style={{ fontSize: 30 }}>GearStocks</Text>
           <Icon name='format-align-justify' size={30} color='black'
             containerStyle={{ right: 170, bottom: 35 }} onPress={() => { this.props.navigation.openDrawer(); }} />
+          <Icon name='star' size={30} color='black'
+            containerStyle={{ left: '60%', top: 0, position: 'absolute' }} onPress={() => { this.addBookmark(params.params.itemDatas.name) }} />
         </View>
         <View style={{ flex: 1 }}>
           <Text style={{ fontSize: 20 }}>Name : {params.params.itemDatas.name}</Text>
