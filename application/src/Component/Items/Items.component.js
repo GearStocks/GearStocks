@@ -30,12 +30,13 @@ export default class ItemsComponent extends React.Component {
   render() {
     const monthData = [];
     const priceData = [];
-    const { params } = this.props.navigation.state
+    const params = this.props.navigation.state
 
-    for (const month of params.resDatas.data[0].prices) {
+    for (const month of params.params.resDatas.prices) {
       monthData.push(month.month);
       priceData.push(month.price);
     }
+
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <View style={{ top: '5%', flex: 1 }}>
@@ -44,11 +45,11 @@ export default class ItemsComponent extends React.Component {
             containerStyle={{ right: 170, bottom: 35 }} onPress={() => { this.props.navigation.openDrawer(); }} />
         </View>
         <View style={{ flex: 1 }}>
-          <Text style={{ fontSize: 20 }}>Name : {params.itemDatas.name}</Text>
-          <Text style={{ fontSize: 20 }}>Description : {params.resDatas.data[0].description}</Text>
+          <Text style={{ fontSize: 20 }}>Name : {params.params.itemDatas.name}</Text>
+          <Text style={{ fontSize: 20 }}>Description : {params.params.resDatas.description}</Text>
         </View>
         <View style={{ width: '90%', aspectRatio: 1 }}>
-          <Image style={{ resizeMode: 'contain', aspectRatio: 1, bottom: '20%' }} source={{ uri: params.itemDatas.image }} />
+          <Image style={{ resizeMode: 'contain', aspectRatio: 1, bottom: '20%' }} source={{ uri: params.params.itemDatas.photo }} />
         </View>
         <View style={{ bottom: '10%' }}>
           <Text>Stocks</Text>
