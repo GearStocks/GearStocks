@@ -117,6 +117,7 @@ export default class Login extends React.Component {
           onChangeText={(password) => this.setState({ password })}
         />
         <Button title={strings.FORGOT_PASSWORD} buttonStyle={styles.forgetPassword} type="clear" onPress={() => navigate('ForgotPasswordComponent')} />
+        <Button title={'Continue without Log In'} buttonStyle={styles.button} type="outline" onPress={() => navigate('AppMenu')} />
         <Button title={strings.LOGIN} buttonStyle={styles.button} type="outline" onPress={() => this.checkError(navigate)} />
         <Button title={strings.REGISTER} buttonStyle={styles.button} type="outline" onPress={() => navigate('RegisterComponent')} />
       </View>
