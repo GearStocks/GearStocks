@@ -1,0 +1,77 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+pr:
+  - dev
+  include:
+    - front/*
+
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+#steps:
+#- script: echo Hello, world!
+#  displayName: 'Run a one-line script'
+
+#- script: |
+#    echo Add other tasks to build, test, and deploy your project.
+#    echo See https://aka.ms/yaml
+#  displayName: 'Run a multi-line script'
+
+stages:
+  - stage: Build
+    displayName: Build stage
+    jobs:
+    - job: BuildFront
+      displayName: 'Build Front'
+      steps:
+      - script: |
+          set -e
+          echo "API_ADDR=dev.gearstocks.store" > .env
+          echo "API_PORT=8000" >> .env
+          sed -i '/- 80:80/d' docker-compose.yml
+          sed -i 's/http:\/\/localhost/https:\/\/dev.gearstocks.store/g' front/src/environments/environment.prod.ts
+          sed -i 's/http:\/\/localhost/https:\/\/dev.gearstocks.store/g' front/src/environments/environment.mock.ts
+          sed -i 's/http:\/\/localhost/https:\/\/dev.gearstocks.store/g' front/src/environments/environment.ts
+          docker-compose up front
+          echo Front successfully build.
+        displayName: 'Front Compilation Check'
+      - script: |
+          set -e
+          mkdir -p drop/front
+          cp -R front/dist drop/front/
+          echo Front OK
+        displayName: Prepare Front for Archive
+      - script: echo Archive OK
+        displayName: Archive Files
+      - task: ArchiveFiles@2
+        displayName: 'Archive Front files'
+        inputs:
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/drop'
+          includeRootFolder: false
+          archiveType: zip
+          archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+          replaceExistingArchive: true
+      - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        artifact: drop
+  - stage: Deploy
+    displayName: Deploy
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - deployment: GearStockDev
+        displayName: 'Deploy Front Dev'
+        environment:
+          name: 'Gearstocks Dev'
+          resourceType: VirtualMachine
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              - script: |
+                  set -e
+                  unzip -o $(Build.ArtifactStagingDirectory)/../drop/$(Build.BuildId).zip -d /home/GearStocks/

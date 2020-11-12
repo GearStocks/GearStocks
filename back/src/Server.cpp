@@ -342,47 +342,6 @@ int Server::UpdateUser(const Pistache::Rest::Request& request, Pistache::Http::R
   errorHandling = _manager->updateNameUser(document["userToken"].GetString(), document["username"].GetString(), document["firstName"].GetString(), document["lastName"].GetString());
   errorHandling = _manager->updateMailUser(document["userToken"].GetString(), document["email"].GetString());
   errorHandling = _manager->updatePasswordUser(document["userToken"].GetString(), document["password"].GetString());
-  
-  /*errorHandling = _manager->updateNameUser(document["mail"].GetString(), document["oldUsername"].GetString(), document["newUsername"].GetString());
-  if (errorHandling == 1) {
-    document2.AddMember("error", "Mail doesn't exist", allocator); 
-    document2.Accept(writer);
-    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
-    return -1;
-  }
-  if (errorHandling == 2) {
-    document2.AddMember("error", "Old username doesn't exist", allocator); 
-    document2.Accept(writer);
-    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
-    return -1;
-  }
-  
-    errorHandling = _manager->updatePasswordUser(document["mail"].GetString(), document["oldPass"].GetString(), document["newPass"].GetString());
-  if (errorHandling == 1) {
-    document2.AddMember("error", "Mail doesn't exist", allocator); 
-    document2.Accept(writer);
-    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
-    return -1;
-  }
-  if (errorHandling == 2) {
-    document2.AddMember("error", "Old password doesn't exist", allocator); 
-    document2.Accept(writer);
-    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
-    return -1;
-  }
-  errorHandling = _manager->updateMailUser(document["mail"].GetString(), document["newMail"].GetString());
-  if (errorHandling == 1) {
-    document2.AddMember("error", "Mail doesn't exist", allocator); 
-    document2.Accept(writer);
-    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
-    return -1;
-  }
-  if (errorHandling == 2) {
-    document2.AddMember("error", "New mail already exist", allocator); 
-    document2.Accept(writer);
-    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
-    return -1;
-    }*/
   document2.AddMember("success", "Update done", allocator); 
   document2.Accept(writer);
   response.send(Pistache::Http::Code::Ok, strbuf.GetString());
@@ -583,9 +542,9 @@ int Server::addCarPart(const Pistache::Rest::Request& request, Pistache::Http::R
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
-  }
+  } //prices => price
   if(!document.HasMember("prices")) {
-    std::cout << "Il manque le champ price" << std::endl;
+    std::cout << "Il manque le champ prices" << std::endl;
     document2.AddMember("error", "Bad JSON. Need a field 'price'", allocator); 
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
@@ -605,9 +564,16 @@ int Server::addCarPart(const Pistache::Rest::Request& request, Pistache::Http::R
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
+  if(!document.HasMember("month")) {
+    std::cout << "Il manque le champ month" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'month'", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
 
-  std::vector<std::string> prices;
-
+//std::vector<std::string> prices;
+/*
   const rapidjson::Value& attributes = document["prices"];
   for (rapidjson::Value::ConstValueIterator itr = attributes.Begin(); itr != attributes.End(); ++itr) {
     const rapidjson::Value& attribute = *itr;
@@ -615,11 +581,12 @@ int Server::addCarPart(const Pistache::Rest::Request& request, Pistache::Http::R
       prices.push_back(itr2->value.GetString());
     }
   }
-  
-  result = _manager->addCarPartInBDD(document["name"].GetString(), prices, document["photo"].GetString(), document["description"].GetString());
+  */
+  result = _manager->addCarPartInBDD(document["name"].GetString(), document["month"].GetString(), document["prices"].GetString(), document["photo"].GetString(), document["description"].GetString());
   document2.AddMember("success", "Car part added", allocator); 
   document2.Accept(writer);
   response.send(Pistache::Http::Code::Ok, strbuf.GetString());
+  //response.send(Pistache::Http::Code::Ok, "Test");
   return 0;
 }
 
@@ -710,7 +677,23 @@ int Server::listParts(const Pistache::Rest::Request& request, Pistache::Http::Re
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
-  document2.AddMember("success", "list parts", allocator); 
+  if(!document.HasMember("filters")) {
+    std::cout << "Il manque le champ filters" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'filters'", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  document2.AddMember("success", "list parts", allocator);
+  
+  std::vector<std::string> filters;
+  //const rapidjson::Value& attributes = document["filters"];
+  //for (rapidjson::Value::ConstValueIterator itr = attributes.Begin(); itr != attributes.End(); ++itr) {
+    //std::cout << *itr << std::endl;
+    //const rapidjson::Value& attribute = *itr;
+    //std::cout << itr->GetString() << std::endl;
+  //}
+
   
   std::vector<std::pair<std::string, size_t>>	resultParsing;
   resultParsing = _manager->parseKeyWordInTree(_manager->generateTree(), document["keyWord"].GetString());
@@ -723,7 +706,7 @@ int Server::listParts(const Pistache::Rest::Request& request, Pistache::Http::Re
     rapidjson::Document* doc3;
     int i = 1;
     while (it < resultParsing.end() && i <= 10) {
-      doc3 = _manager->getCarPart((*it).first);
+      doc3 = _manager->getCarPart((*it).first, filters);
       mergeObjects(document2, *doc3, allocator);
       ++it;
       ++i;
@@ -782,7 +765,7 @@ int Server::listPartsByCategory(const Pistache::Rest::Request &request, Pistache
     rapidjson::Document *documentIt;
     int i = 1;
     while (it < resultParsing.end() && i <= 10) {
-      documentIt = _manager->getCarPart((*it).first);
+      documentIt = _manager->getCarPart((*it).first, std::vector<std::string>());
       mergeObjects(documentResponse, *documentIt, allocator);
       ++it;
       ++i;

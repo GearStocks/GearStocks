@@ -214,6 +214,22 @@ rapidjson::Document*	BddManager::getFullCarPart(std::string partName)
     while (price.find("month") != std::string::npos) {
       getAllPrices(&mdr2, &price, allocator);
     }
+
+    rapidjson::Value referrals(rapidjson::kArrayType);
+    rapidjson::Document* documentReferrals = new rapidjson::Document();
+    std::vector<std::pair<std::string, size_t>>   resultParsing;
+    resultParsing = parseKeyWordInTree(generateTree(), name);
+    if (((*(resultParsing.begin())).first).compare(name) == 0)
+      resultParsing.erase(resultParsing.begin());
+    std::vector<std::pair<std::string, size_t>>::iterator it = resultParsing.begin();
+    int nbMaxReferrals = 1;
+    while (it < resultParsing.end() && nbMaxReferrals <= 8) {
+      documentReferrals = getCarPart((*it).first, std::vector<std::string>());
+      getReferrals(&referrals, documentReferrals, allocator);
+      ++nbMaxReferrals;
+      ++it;
+    }   
+    
     rapidjson::Value test;
     test.SetString(name.c_str(), allocator);
     document2->AddMember("name", test, allocator);
@@ -222,10 +238,30 @@ rapidjson::Document*	BddManager::getFullCarPart(std::string partName)
     test.SetString(description.c_str(), allocator);
     document2->AddMember("description", test, allocator);
     document2->AddMember("prices", mdr2, allocator);
-
+    document2->AddMember("referrals", referrals, allocator);
     return document2;
   }
   return NULL;
+}
+
+void    BddManager::getReferrals(rapidjson::Value *referrals, rapidjson::Document *document, rapidjson::Document::AllocatorType &allocator)
+{
+  rapidjson::Value part;
+  part.SetObject();
+  for (auto const& in : (*document)["parts"].GetArray()) {
+    const char* name = in["name"].GetString();
+    const char* price = in["price"].GetString();
+    const char* photo = in["photo"].GetString();
+    
+    rapidjson::Value x(rapidjson::StringRef(name));
+    part.AddMember("name", x, allocator);
+    x = rapidjson::StringRef(price);
+    part.AddMember("price", x, allocator);
+    x = rapidjson::StringRef(photo);
+    part.AddMember("photo", x, allocator);
+  }
+  referrals->PushBack(part, allocator);
+  return;
 }
 
 void	BddManager::getAllPrices(rapidjson::Value *price, std::string *priceToParse, rapidjson::Document::AllocatorType &allocator)
@@ -249,7 +285,7 @@ void	BddManager::getAllPrices(rapidjson::Value *price, std::string *priceToParse
   return;
 }
 
-rapidjson::Document*	BddManager::getCarPart(std::string partName)
+rapidjson::Document*	BddManager::getCarPart(std::string partName, std::vector<std::string> filters)
 {
   std::string	valueInBDD;
   
@@ -276,6 +312,11 @@ rapidjson::Document*	BddManager::getCarPart(std::string partName)
     price.erase(price.find("\" }"));
     path.erase(0, path.find("\"photo\" :") + 11);
     path.erase(path.find("\", \"descript"));
+
+    //
+    // FONCTION QUI CHECK LES FILTRES
+    //
+    
     /*std::cout << "name:" << name << std::endl;
     std::cout << "price:" << price << std::endl;
     std::cout << "path:" << path << std::endl;*/
@@ -363,7 +404,7 @@ size_t BddManager::addBookmark(std::string userToken, std::string partName) {
       assert(json1["bookmarks"].IsArray());
       auto arr_builder = bsoncxx::builder::basic::array{};
       for (auto& i : json1["bookmarks"].GetArray()) {
-        arr_builder.append(i.GetString());
+        auto arr_builder = bsoncxx::builder::basic::array{};
       }
       arr_builder.append(partName);
       _userCollection.update_one(document << "token" << userToken << bsoncxx::builder::stream::finalize,
@@ -428,7 +469,8 @@ size_t  BddManager::updateMailUser(std::string token, std::string mail)
 }
 
 
-//Indev: Ajout des bookmarks
+//Old version for Back-up
+/*
 rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string userMail)
 {
   std::string	valueInBDD;
@@ -487,6 +529,36 @@ rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string 
   }
   return NULL;
 }
+*/
+
+//Retourne Nouvelle méthode d'extractions de donnée (renvoie les Bookmarks)
+rapidjson::Document*	BddManager::getInfoUser(std::string userToken, std::string userMail)
+{
+  std::string	valueInBDD;
+  valueInBDD = checkIfExist(_userCollection, "token", userToken);
+  if (valueInBDD.compare("") == 0) {
+    std::cout << "Invalid token" << std::endl;
+    return (NULL);
+  }
+  valueInBDD = checkIfExist(_userCollection, "email", userMail);
+  if (valueInBDD.compare("") == 0) {
+    std::cout << "Invalid email" << std::endl;
+    return NULL;
+  }
+  bsoncxx::builder::stream::document document{};
+  bsoncxx::stdx::optional<bsoncxx::document::value> maybe_result =
+    _userCollection.find_one(document << "email" << userMail
+			     << bsoncxx::builder::stream::finalize);
+  if(maybe_result) {
+    rapidjson::Document* json1 = new rapidjson::Document();
+    std::string userName = bsoncxx::to_json(*maybe_result);
+    
+    std::cout << "Réponse BDD: " << userName << std::endl;
+    json1->Parse(userName.c_str());
+    return json1;
+  }
+  return NULL;
+}
 
 //
 /*
@@ -512,25 +584,46 @@ size_t	BddManager::addBookmark(std::string name, std::vector<std::string> prices
 }
 */
 
-//Ajout des prix en BDD
-size_t	BddManager::addCarPartInBDD(std::string name, std::vector<std::string> prices, std::string photo, std::string description)
+//Il faut ajouter le mois dans les paramétres envoyés à la fonction
+size_t BddManager::addCarPartInBDD(std::string name, std::string month, std::string prices, std::string photo, std::string description)
 {
   bsoncxx::builder::stream::document document{};
-  bsoncxx::builder::stream::document document2{};
-  auto it = prices.begin();
-  auto it2 = it + 1;
-
-  document << "name" << name << "photo" << photo << "description" << description;
-  auto in_array = document << "parts" << bsoncxx::builder::stream::open_array;
-  while (it2 < prices.end()) {
-    in_array = in_array << bsoncxx::builder::stream::open_document << "month" << *it << "price" << *it2 << bsoncxx::builder::stream::close_document;
-    it = it + 2;
-    it2 = it2 + 2;
-  }
-  auto after_array = in_array << bsoncxx::builder::stream::close_array;
+  rapidjson::Document	json1;
+  bsoncxx::stdx::optional<bsoncxx::document::value> maybe_result = _carPartCollection.find_one(document << "name" << name << bsoncxx::builder::stream::finalize);
+  if (maybe_result) {
     
-  addContentInBDD(_carPartCollection, document);
-  std::cout << "A car part has been registered:" << name << std::endl;
+    std::string doc = bsoncxx::to_json(maybe_result->view());
+    json1.Parse(doc.c_str());
+    auto arr_builder = bsoncxx::builder::basic::array{};
+    const rapidjson::Value& attributes = json1["prices"];
+    
+    for (rapidjson::Value::ConstValueIterator itr = attributes.Begin(); itr != attributes.End(); ++itr) {
+      const rapidjson::Value& attribute = *itr;
+      bsoncxx::builder::stream::document in_array{};
+      for (rapidjson::Value::ConstMemberIterator itr2 = attribute.MemberBegin(); itr2 != attribute.MemberEnd(); ++itr2) {
+        if (itr2 == attribute.MemberBegin()) {
+          in_array << "month" << itr2->value.GetString();
+        } else {
+          //std::cout << "price : " << itr2->value.GetString() << std::endl;
+          in_array << "price" << itr2->value.GetString();
+        }
+      }
+      arr_builder.append(in_array);
+    }
+    bsoncxx::builder::stream::document new_value{};
+    new_value << "month" << month << "price" << prices;
+    
+    arr_builder.append(new_value);
+     _carPartCollection.update_one(document << "name" << name << bsoncxx::builder::stream::finalize,
+                        document << "$set" << bsoncxx::builder::stream::open_document <<
+                        "prices" << arr_builder <<
+                        bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::finalize);
+    std::cout << "Update Piece: " << name << std::endl;
+  } else {
+    document << "name" << name <<"prices" << bsoncxx::builder::stream::open_array << bsoncxx::builder::stream::open_document << "month" << "Jan(Test)" << "price" << prices << bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::close_array << "description" << description;
+    addContentInBDD(_carPartCollection, document);
+    std::cout << "A car part has been registered:" << name << std::endl;
+  }
   return 0;
 }
 
@@ -747,7 +840,6 @@ aho_corasick::trie	BddManager::generateTree()
 
 std::vector<std::pair<std::string, size_t>>	BddManager::parseKeyWordInTree(aho_corasick::trie trie, std::string keyWord)
 {
-  //std::vector<std::string>	parsingResult;
   std::vector<std::pair<std::string, size_t>>	parsingResult;
   std::transform(keyWord.begin(), keyWord.end(), keyWord.begin(), ::tolower);
   auto	result = trie.parse_text(keyWord.c_str());
@@ -794,9 +886,9 @@ std::vector<std::pair<std::string, size_t>>	BddManager::parseKeyWordInTree(aho_c
 	    resultPair = std::make_pair(name, 1);
 	    
 	    parsingResult.push_back(resultPair);
-	    std::cout << "VOICI LE NAME:" << name << std::endl;
+	    //std::cout << "VOICI LE NAME:" << name << std::endl;
 	    //it = keyWordSplited.end() - 1;
-	    std::cout << "VOICI LE SPLIT:" << *it << std::endl;
+	    //std::cout << "VOICI LE SPLIT:" << *it << std::endl;
 	  }
 	else {
 	  //std::cout << "1" << std::endl;

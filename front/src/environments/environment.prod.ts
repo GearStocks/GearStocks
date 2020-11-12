@@ -9,5 +9,6 @@ export const environment = {
   searchUrl: 'http://localhost:8000/listParts',
   getItemUrl: 'http://localhost:8000/getFullCarPart',
   getUserUrl: 'http://localhost:8000/infoUser',
-  categoriesUrl: 'http://localhost:8000/getNonEmptyCategoryNames'
+  categoriesUrl: 'http://localhost:8000/getNonEmptyCategoryNames',
+  searchByCategoryUrl: 'http://localhost:8000/listPartsByCategory'
 };
