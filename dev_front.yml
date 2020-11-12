@@ -4,9 +4,12 @@
 # https://aka.ms/yaml
 
 pr:
-  - dev
-  include:
-    - front/*
+  branches:
+    include:
+      - dev
+  paths:
+    include:
+      - front/*
 
 trigger: none
 
