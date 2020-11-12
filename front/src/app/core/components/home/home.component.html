@@ -3,6 +3,7 @@
 <!-- Header content -->
 <div class="homeHeader">
   <div class="homeHeader__search">
+    <h1>Gearstocks</h1>
     <form class="container input-group mb-3 input-group-lg">
       <div class="input-group-prepend">
         <button type="submit" class="input-group-text" (click)="search()">
@@ -22,15 +23,15 @@
     <p>GearStocks, la passion sans erreurs</p>
     <div class="wrapper">
       <div class="block-resp">
-        <img width="100px" src="../../../../assets/img/courbe-logo.png" class="img-fluid" alt="Responsive image">
-        <h4>Référentiel financier sur un grand nombre de pièces détachés.</h4>
+        <img width="130px" src="../../../../assets/img/courbe-logo.png" class="img-fluid" alt="Responsive image">
+        <h4>Référentiel financier sur un grand nombre de pièces détachées.</h4>
       </div>
       <div class="block-resp">
-        <img width="100px" src="../../../../assets/img/shop.png" class="img-fluid" alt="Responsive image">
-        <h4>Marketplace de pièces détachés d'ocasion entre particuliers.</h4>
+        <img width="130px" src="../../../../assets/img/shop-logo.png" class="img-fluid" alt="Responsive image">
+        <h4>Marketplace de pièces détachées d'ocasion entre particuliers.</h4>
       </div>
       <div class="block-resp">
-        <img width="200px" src="../../../../assets/img/auto-moto-Logo-RED.png" class="img-fluid" alt="Responsive image">
+        <img width="130px" src="../../../../assets/img/auto-moto-Logo.png" class="img-fluid" alt="Responsive image">
         <h4>Un grand nombre de pièces auto et moto de collections.</h4>
       </div>
     </div>
@@ -47,12 +48,12 @@
     <div class="row">
 
       <div class="col-lg-6 col-md-6 col-sm-6">
-          <h1>LE CONCEPT</h1>
+          <h1>Le concept</h1>
           <h6>Vous êtes collectionneur de voiture ? Vous voulez simplement retaper une vieille voiture ?<br> Très bien ! Mais comment faites-vous pour évaluer le prix de la pièce qu’il vous manque ?<br> Faites-vous confiance à votre garagiste ?<br> Demandez vous à un ami qui s’y connait un peu ou l’évaluez vous vous-même ?<br> Avec GearStocks, vous pouvez consulter le cours d’une pièce en spécifiant sa référence ou tout simplement en recherchant par marque ou par type de pièce.</h6>
       </div>
 
       <div class="col-lg-6 col-md-6 col-sm-6">
-          <h1>POURQUOI LES AUTOMOBILISTES CHOISISSENT GEARSTOCKS</h1>
+          <h1>Pourquoi les automobilistes choisissent Gearstocks</h1>
           <ul>
             <li>Un large choix de pièces auto d'occasion !</li>
             <li>Une recherche simple et rapide, accessible à tous</li>
@@ -91,44 +92,16 @@
 
 </div>
 
-<mat-carousel
-  timings="250ms ease-in"
-  [autoplay]="false"
-  interval="5000"
-  color="accent"
-  proportion="30"
-  slides="3"
-  [loop]="true"
-  [hideArrows]="false"
-  [hideIndicators]="true"
-  [useKeyboard]="true"
-  [useMouseWheel]="false"
-  orientation="ltr">
+<!-- Comment ca marche ? -->
+<div class="how">
 
-  <mat-carousel-slide [image]="'../../../../assets/img/carousel.jpg'">
-    <div class="carousel-content">
-      <img src="assets/img/logo.png">
-      <h1>GEARSTOCKS comment ca marche ?</h1>
-      <h3>Vous cherchez une pièce auto/moto d’occasion ?</h3>
-      <h2>Trouvez-là sur la première plateforme 100% auto/moto entre particuliers et professionnels !</h2>
-      <h3>GEARSTOCKS est un site crée et conçu pour nous, passionées</h3>
-    </div>
-  </mat-carousel-slide>
-  <mat-carousel-slide [image]="'../../../../assets/img/carousel.jpg'">
-    <div class="carousel-content">
-      <img src="assets/img/turbo.png">
-      <h1>Trouver une pièce</h1>
-      <h3>Utiliser notre système de recherche, pour trouver votre pièce et obtenir son juste prix !</h3>
-    </div>
-  </mat-carousel-slide>
-  <mat-carousel-slide [image]="'../../../../assets/img/carousel.jpg'">
-    <div class="carousel-content">
-      <img src="assets/img/problem.png">
-      <h1>Un problème ?</h1>
-      <h3>Vous ne trouvez pas votre pièce ? Ou rencontrez un problème sur notre plateforme ?</h3>
-      <button class="carousel-content__btn" routerLink="/contact">Contactez-nous</button>
-    </div>
-  </mat-carousel-slide>
+  <div class="how__content">
+    <img src="assets/img/logo.png">
+    <h1>Comment ca marche ?</h1>
+    <h3>Vous cherchez une pièce auto/moto d’occasion ?</h3>
+    <h2>Trouvez-là sur la première plateforme 100% auto/moto entre particuliers et professionnels !</h2>
+    <h3>GEARSTOCKS est un site crée et conçu pour nous, passionées</h3>
+  </div>
 
-</mat-carousel>
+</div>
 
