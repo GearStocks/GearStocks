@@ -62,7 +62,7 @@ export default class RegisterComponent extends React.Component {
       this.state.password && this.state.username &&
       this.state.firstname && this.state.lastname) {
       const JSONObj = JSON.stringify({
-        mail: this.state.email,
+        email: this.state.email,
         password: this.state.password,
         username: this.state.username,
         firstName: this.state.firstname,
@@ -76,20 +76,20 @@ export default class RegisterComponent extends React.Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
-      <SafeAreaView style={styles.container}>
-          <Text style={styles.title}>Register</Text>
-          <ScrollView style={{top: "5%"}}>
+      <View style={styles.container}>
+        <View style={{ bottom: '5%' }}>
+          <Text style={{ fontSize: 30 }}>
+            Register
+        </Text>
+        </View>
+        <View style={{ width: '100%' }}>
           <Input
             autoCapitalize='none'
             autoCorrect={false}
-            label='Username'
-            labelStyle={{ bottom: 5 }}
             returnKeyType='next'
             errorMessage={this.state.errorUsername}
-            errorStyle={{ fontSize: 13 }}
             inputContainerStyle={{
-              borderColor: colors.PRIMARY_COLOR, borderTopWidth: 2,
-              borderRightWidth: 2, borderLeftWidth: 2, borderBottomWidth: 2
+              borderColor: colors.PRIMARY_COLOR, borderWidth: 2
             }}
             onSubmitEditing={() => this.firstname.focus()}
             ref={(input) => { this.username = input; }}
@@ -98,16 +98,12 @@ export default class RegisterComponent extends React.Component {
             onChangeText={(username) => this.setState({ username })}
           />
           <Input
-            label='Firstname'
-            labelStyle={{ bottom: 5, left: 10 }}
             containerStyle={{ top: 5 }}
             autoCorrect={false}
             returnKeyType='next'
             errorMessage={this.state.errorFirstname}
-            errorStyle={{ fontSize: 13 }}
             inputContainerStyle={{
-              borderColor: colors.PRIMARY_COLOR, borderTopWidth: 2,
-              borderRightWidth: 2, borderLeftWidth: 2, borderBottomWidth: 2
+              borderColor: colors.PRIMARY_COLOR, borderWidth: 2
             }}
             ref={(input) => { this.firstname = input; }}
             onSubmitEditing={() => this.lastname.focus()}
@@ -117,15 +113,11 @@ export default class RegisterComponent extends React.Component {
           />
           <Input
             autoCorrect={false}
-            label='Lastname'
             containerStyle={{ top: 10 }}
-            labelStyle={{ bottom: 5, left: 10 }}
             returnKeyType='next'
             errorMessage={this.state.errorLastname}
-            errorStyle={{ fontSize: 13 }}
             inputContainerStyle={{
-              borderColor: colors.PRIMARY_COLOR, borderTopWidth: 2,
-              borderRightWidth: 2, borderLeftWidth: 2, borderBottomWidth: 2
+              borderColor: colors.PRIMARY_COLOR, borderWidth: 2
             }}
             onSubmitEditing={() => this.email.focus()}
             leftIcon={<Icon name='contacts' size={24} color='black' />}
@@ -139,13 +131,9 @@ export default class RegisterComponent extends React.Component {
             keyboardType='email-address'
             errorMessage={this.state.errorEmail}
             containerStyle={{ top: 15 }}
-            errorStyle={{ fontSize: 13 }}
-            label='Email'
-            labelStyle={{ bottom: 5, left: 10 }}
             returnKeyType='next'
             inputContainerStyle={{
-              borderColor: colors.PRIMARY_COLOR, borderTopWidth: 2,
-              borderRightWidth: 2, borderLeftWidth: 2, borderBottomWidth: 2
+              borderColor: colors.PRIMARY_COLOR, borderWidth: 2
             }}
             ref={(input) => { this.email = input; }}
             onSubmitEditing={() => this.password.focus()}
@@ -160,12 +148,8 @@ export default class RegisterComponent extends React.Component {
             onSubmitEditing={() => this.confirmPassword.focus()}
             errorMessage={this.state.errorPassword}
             containerStyle={{ top: 20 }}
-            label='Password'
-            labelStyle={{ bottom: 5, left: 10 }}
-            errorStyle={{ fontSize: 13 }}
             inputContainerStyle={{
-              borderColor: colors.PRIMARY_COLOR, borderTopWidth: 2,
-              borderRightWidth: 2, borderLeftWidth: 2, borderBottomWidth: 2
+              borderColor: colors.PRIMARY_COLOR, borderWidth: 2
             }}
             returnKeyType='next'
             placeholder={strings.PASSWORD}
@@ -177,14 +161,10 @@ export default class RegisterComponent extends React.Component {
             autoCapitalize='none'
             ref={(input) => { this.confirmPassword = input; }}
             inputContainerStyle={{
-              borderColor: colors.PRIMARY_COLOR, borderTopWidth: 2,
-              borderRightWidth: 2, borderLeftWidth: 2, borderBottomWidth: 2
+              borderColor: colors.PRIMARY_COLOR, borderWidth: 2
             }}
-            errorStyle={{ fontSize: 13 }}
             containerStyle={{ top: 25 }}
             errorMessage={this.state.errorConfirmPassword}
-            label='Confirm Password'
-            labelStyle={{ bottom: 5 }}
             onSubmitEditing={() => this.confirmPassword.focus()}
             returnKeyType='next'
             placeholder={strings.CONFIRM_PASSWORD}
@@ -192,10 +172,10 @@ export default class RegisterComponent extends React.Component {
             leftIcon={<Icon name='lock' size={24} color='black' />}
             onChangeText={(confirmPassword) => this.setState({ confirmPassword })}
           />
-          <Button title={strings.REGISTER} buttonStyle={styles.button} type='outline' onPress={() => this.handleClick(navigate)} />
-          <Button title={strings.LOGIN} buttonStyle={styles.button2} type='outline' onPress={() => navigate('LoginComponent')} />
-        </ScrollView>
-      </SafeAreaView>
+          <Button title={strings.REGISTER} buttonStyle={{ top: '10%' }} type='outline' onPress={() => this.handleClick(navigate)} />
+          <Button title={strings.LOGIN} buttonStyle={{ top: '15%' }} type='outline' onPress={() => navigate('LoginComponent')} />
+        </View>
+      </View>
     );
   }
 }
