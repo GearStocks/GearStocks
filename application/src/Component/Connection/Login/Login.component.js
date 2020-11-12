@@ -40,9 +40,9 @@ export default class Login extends React.Component {
     const { email, password } = this.state;
 
     const JSONObj = JSON.stringify({
-      mail: this.state.email,
+      email: this.state.email,
       password: this.state.password,
-      rememberMe: 0
+      rememberMe: true
     });
 
     if (`${email}` === '' && `${password}` === '') {
@@ -81,7 +81,7 @@ export default class Login extends React.Component {
           autoCorrect={false}
           keyboardType='email-address'
           label='Email'
-          labelStyle={{bottom: 10, left: 10}}
+          labelStyle={{bottom: 10}}
           returnKeyType='next'
           errorStyle={{fontSize: 18}}
           inputContainerStyle={{borderColor: colors.PRIMARY_COLOR, borderTopWidth: 2,
@@ -117,6 +117,7 @@ export default class Login extends React.Component {
           onChangeText={(password) => this.setState({ password })}
         />
         <Button title={strings.FORGOT_PASSWORD} buttonStyle={styles.forgetPassword} type="clear" onPress={() => navigate('ForgotPasswordComponent')} />
+        <Button title={'Continue without Log In'} buttonStyle={styles.button} type="outline" onPress={() => navigate('AppMenu')} />
         <Button title={strings.LOGIN} buttonStyle={styles.button} type="outline" onPress={() => this.checkError(navigate)} />
         <Button title={strings.REGISTER} buttonStyle={styles.button} type="outline" onPress={() => navigate('RegisterComponent')} />
       </View>

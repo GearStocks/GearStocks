@@ -83,19 +83,17 @@ export default class ProfilComponent extends React.Component {
       <LoginComponent />
     }
     return (
-      <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-        <ScrollView>
-          <Text style={{ fontSize: 30, top: 35, textAlign: 'center' }}>GearStocks</Text>
-
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+        <View style={{flexDirection: 'row', flex: 1, top: '15%'}}>
+          <Text style={{ fontSize: 24 }}>GearStocks</Text>
           <Icon name='format-align-justify' size={30} color='black'
-            containerStyle={{ right: 170, top: 2 }} onPress={() => { this.props.navigation.openDrawer(); }} />
-          <View style={{ top: 30, padding: 30 }}>
+            containerStyle={{ right: '50%' }} onPress={() => { this.props.navigation.openDrawer(); }} />
+        </View>
+          <View style={{width: '100%', flex: 1, bottom: '30%'}}>
             <Input
               defaultValue={user.username}
               autoCapitalize='none'
               autoCorrect={false}
-              label='Username'
-              labelStyle={{ bottom: 5, left: 10 }}
               returnKeyType='next'
               errorMessage={this.state.errorUsername}
               errorStyle={{ fontSize: 13 }}
@@ -113,10 +111,9 @@ export default class ProfilComponent extends React.Component {
               defaultValue={user.email}
               autoCapitalize='none'
               autoCorrect={false}
-              label='Email'
-              labelStyle={{ bottom: 5, left: 10 }}
               returnKeyType='next'
               errorMessage={this.state.errorEmail}
+              containerStyle={{ top: 5 }}
               errorStyle={{ fontSize: 13 }}
               inputContainerStyle={{
                 borderColor: colors.PRIMARY_COLOR, borderTopWidth: 2,
@@ -132,9 +129,8 @@ export default class ProfilComponent extends React.Component {
               defaultValue={user.firstname}
               autoCapitalize='none'
               autoCorrect={false}
-              label='Firstname'
-              labelStyle={{ bottom: 5, left: 10 }}
               returnKeyType='next'
+              containerStyle={{ top: 10 }}
               errorMessage={this.state.errorFirstname}
               errorStyle={{ fontSize: 13 }}
               inputContainerStyle={{
@@ -151,10 +147,9 @@ export default class ProfilComponent extends React.Component {
               defaultValue={user.lastname}
               autoCapitalize='none'
               autoCorrect={false}
-              label='Lastname'
-              labelStyle={{ bottom: 5, left: 10 }}
               returnKeyType='next'
               errorMessage={this.state.errorLastname}
+              containerStyle={{ top: 15 }}
               errorStyle={{ fontSize: 13 }}
               inputContainerStyle={{
                 borderColor: colors.PRIMARY_COLOR, borderTopWidth: 2,
@@ -170,11 +165,10 @@ export default class ProfilComponent extends React.Component {
             <Input
               autoCapitalize='none'
               autoCorrect={false}
-              label='Password'
-              labelStyle={{ bottom: 5, left: 10 }}
               returnKeyType='next'
               errorMessage={this.state.errorPassword}
               errorStyle={{ fontSize: 13 }}
+              containerStyle={{ top: 20 }}
               inputContainerStyle={{
                 borderColor: colors.PRIMARY_COLOR, borderTopWidth: 2,
                 borderRightWidth: 2, borderLeftWidth: 2, borderBottomWidth: 2
@@ -188,9 +182,8 @@ export default class ProfilComponent extends React.Component {
             <Input
               autoCapitalize='none'
               autoCorrect={false}
-              label='New Password'
-              labelStyle={{ bottom: 5, left: 10 }}
               returnKeyType='next'
+              containerStyle={{ top: 25 }}
               errorMessage={this.state.errorNewPassword}
               errorStyle={{ fontSize: 13 }}
               inputContainerStyle={{
@@ -206,9 +199,8 @@ export default class ProfilComponent extends React.Component {
             <Input
               autoCapitalize='none'
               autoCorrect={false}
-              label='Confirm Password'
-              labelStyle={{ bottom: 5, left: 10 }}
               returnKeyType='next'
+              containerStyle={{ top: 30 }}
               errorMessage={this.state.errorConfirmPassword}
               errorStyle={{ fontSize: 13 }}
               inputContainerStyle={{
@@ -222,11 +214,10 @@ export default class ProfilComponent extends React.Component {
               onChangeText={(confirmPassword = this.state.confirmPassword) => this.setState({ confirmPassword })}
             />
 
-            <Button title="Update informations" buttonStyle={styles.button} type="outline" onPress={() => this.checkError()} />
-            <Button title={strings.DISCONNECT} buttonStyle={styles.button} type="outline" onPress={() => user.disconnect()} />
+            <Button title="Update informations" buttonStyle={{ width: '100%', top: '10%' }} type="outline" onPress={() => this.checkError()} />
+            <Button title={strings.DISCONNECT} buttonStyle={{width: '100%', top: '12%'}} type="outline" onPress={() => user.disconnect()} />
           </View>
-        </ScrollView>
-      </SafeAreaView>
+      </View>
     );
   }
 }

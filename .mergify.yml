@@ -1,8 +1,36 @@
 pull_request_rules:
-  - name: Automatic merge Dev on Azure validation
+  - name: Automatic merge Dev on Azure validation - apache
     conditions:
       - base=dev
-      - "status-success=gearstocks-dev-CI"
+      - "status-success=dev_apache"
+    actions:
+      merge:
+        method: merge
+  - name: Automatic merge Dev on Azure validation - app
+    conditions:
+      - base=dev
+      - "status-success=dev_app"
+    actions:
+      merge:
+        method: merge
+  - name: Automatic merge Dev on Azure validation - back
+    conditions:
+      - base=dev
+      - "status-success=dev_back"
+    actions:
+      merge:
+        method: merge
+  - name: Automatic merge Dev on Azure validation - docker
+    conditions:
+      - base=dev
+      - "status-success=dev_docker"
+    actions:
+      merge:
+        method: merge
+  - name: Automatic merge Dev on Azure validation - front
+    conditions:
+      - base=dev
+      - "status-success=dev_front"
     actions:
       merge:
         method: merge
