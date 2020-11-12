@@ -69,7 +69,7 @@ stages:
       - deployment: GearStock
         displayName: 'Deploy Apache Dev'
         environment:
-          name: 'Gearstocks'
+          name: 'Gearstocks Dev'
           resourceType: VirtualMachine
         strategy:
           runOnce:
