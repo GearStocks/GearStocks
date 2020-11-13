@@ -3,10 +3,14 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
+
 pr:
-  - dev
-  include:
-    - application/*
+  branches:
+    include:
+      - dev
+  paths:
+    include:
+      - application/*
 
 trigger: none
 
@@ -31,6 +35,7 @@ stages:
       steps:
       - script: |
           set -e
+          echo MONGO_INITDB_ROOT_USERNAME=mongoadmin\nMONGO_INITDB_ROOT_PASSWORD=mongoadmin > database/secrets.env
           echo "API_ADDR=dev.gearstocks.store" > .env
           echo "API_PORT=8000" >> .env
           sed -i '/- 80:80/d' docker-compose.yml

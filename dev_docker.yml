@@ -4,10 +4,13 @@
 # https://aka.ms/yaml
 
 pr:
-  - dev
-  include:
-    - docker-compose.yml
-    - dev_config.yml
+  branches:
+    include:
+      - dev
+  paths:
+    include:
+      - docker-compose.yml
+      - dev_config.yml
 
 trigger: none
 
