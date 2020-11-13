@@ -1,78 +1,83 @@
+
 pr:
-  - dev
-  include:
-    - back/*
-    - dev_back.yml
+  branches:
+    include:
+      - dev
+  paths:
+    include:
+      - back/*
+      - dev_back.yml
   
-  trigger: none
-  
-  pool:
-    vmImage: 'ubuntu-latest'
-  
-  #steps:
-  #- script: echo Hello, world!
-  #  displayName: 'Run a one-line script'
-  
-  #- script: |
-  #    echo Add other tasks to build, test, and deploy your project.
-  #    echo See https://aka.ms/yaml
-  #  displayName: 'Run a multi-line script'
-  
-  stages:
-    - stage: Build
-      displayName: Build stage
-      jobs:
-      - job: Build Api
-        displayName: 'Build API'
-        steps:
-        - script: |
-            set -e
-            docker pull gearstocks/api_builder:latest
-            echo "API_ADDR=api.gearstocks.store" > .env
-            echo "API_PORT=80" >> .env
-            sed -i '/- 80:80/d' docker-compose.yml
-            docker-compose up api_builder
-            echo Back successfully build.
-          displayName: 'API Compilation Check'
-        - script: |
-            set -e
-            mkdir -p drop/api_builder/build drop/back
-            cp -R api_builder/build/App drop/api_builder/build/
-            cp -R api_builder/lib drop/api_builder/
-            cp -R back/Dockerfile drop/back
-            echo API OK
-          displayName: Prepare API for Archive
-        - script: echo Archive OK
-          displayName: Archive Files
-        - task: ArchiveFiles@2
-          displayName: 'Archive API files'
-          inputs:
-            rootFolderOrFile: '$(System.DefaultWorkingDirectory)/drop'
-            includeRootFolder: false
-            archiveType: zip
-            archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-            replaceExistingArchive: true
-        - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-          artifact: drop
-    - stage: Deploy
-      displayName: Deploy
-      dependsOn: Build
-      condition: succeeded()
-      jobs:
-        - deployment: GearStock
-          displayName: 'Deploy Back Dev'
-          environment:
-            name: 'Gearstocks'
-            resourceType: VirtualMachine
-          strategy:
-            runOnce:
-              deploy:
-                steps:
-                - script: |
-                    set -e
-                    unzip -o $(Build.ArtifactStagingDirectory)/../drop/$(Build.BuildId).zip -d /home/GearStocks/
-                    cd /home/GearStocks/
-                    mkdir -p images
-                    docker-compose stop api
-                    docker-compose rm --force api
-                    docker-compose up -d --build api
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+#steps:
+#- script: echo Hello, world!
+#  displayName: 'Run a one-line script'
+
+#- script: |
+#    echo Add other tasks to build, test, and deploy your project.
+#    echo See https://aka.ms/yaml
+#  displayName: 'Run a multi-line script'
+
+stages:
+  - stage: Build
+    displayName: Build stage
+    jobs:
+    - job: BuildApi
+      displayName: 'Build API'
+      steps:
+      - script: |
+          set -e
+          echo MONGO_INITDB_ROOT_USERNAME=mongoadmin\nMONGO_INITDB_ROOT_PASSWORD=mongoadmin > database/secrets.env
+          docker pull gearstocks/api_builder:latest
+          echo "API_ADDR=api.gearstocks.store" > .env
+          echo "API_PORT=80" >> .env
+          sed -i '/- 80:80/d' docker-compose.yml
+          docker-compose up api_builder
+          echo Back successfully build.
+        displayName: 'API Compilation Check'
+      - script: |
+          set -e
+          mkdir -p drop/api_builder/build drop/back
+          cp -R api_builder/build/App drop/api_builder/build/
+          cp -R api_builder/lib drop/api_builder/
+          cp -R back/Dockerfile drop/back
+          echo API OK
+        displayName: Prepare API for Archive
+      - script: echo Archive OK
+        displayName: Archive Files
+      - task: ArchiveFiles@2
+        displayName: 'Archive API files'
+        inputs:
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/drop'
+          includeRootFolder: false
+          archiveType: zip
+          archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+          replaceExistingArchive: true
+      - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        artifact: drop
+  - stage: Deploy
+    displayName: Deploy
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - deployment: GearStock
+        displayName: 'Deploy Back Dev'
+        environment:
+          name: 'Gearstocks Dev'
+          resourceType: VirtualMachine
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              - script: |
+                  set -e
+                  unzip -o $(Build.ArtifactStagingDirectory)/../drop/$(Build.BuildId).zip -d /home/GearStocks/
+                  cd /home/GearStocks/
+                  mkdir -p images
+                  docker-compose stop api
+                  docker-compose rm --force api
+                  docker-compose up -d --build api
