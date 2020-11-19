@@ -45,7 +45,8 @@ public:
   std::string	getTime();
   size_t	checkIfUserIsAuth(std::string userToken, std::string password, std::string username, std::string mail);
   size_t	disconnectUser(std::string mailUser, std::string token);
-  size_t	addCarPartInBDD(std::string name, std::vector<std::string> prices, std::string photo, std::string description);
+  //size_t	addCarPartInBDD(std::string name, std::vector<std::string> prices, std::string photo, std::string description);
+  size_t	addCarPartInBDD(std::string name, std::string month, std::string prices, std::string photo, std::string description);
   std::string	generateRandomString(size_t size);
   aho_corasick::trie	generateTree();
   std::vector<std::pair<std::string, size_t>>	parseKeyWordInTree(aho_corasick::trie trie, std::string keyWord);
@@ -53,9 +54,10 @@ public:
   std::vector<std::string>  parseCategoryNames();
   rapidjson::Document*	getInfoUser(std::string userToken, std::string userMail);
   rapidjson::Document*	getFullCarPart(std::string partName);
-  rapidjson::Document*	getCarPart(std::string partName);
+  rapidjson::Document*	getCarPart(std::string partName, std::vector<std::string> filters);
 private:
   void		connect();
+  void          getReferrals(rapidjson::Value *referrals, rapidjson::Document *document, rapidjson::Document::AllocatorType &allocator);
   void		getAllPrices(rapidjson::Value *price, std::string *priceToParse, rapidjson::Document::AllocatorType &allocator);
   void		addAllPrices(bsoncxx::builder::stream::document *document, std::string month, std::string price);
   void		addContentInBDD(auto collection, bsoncxx::builder::stream::document &doc);
