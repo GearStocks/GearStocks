@@ -8,5 +8,7 @@ export const environment = {
   updateProfileUrl: 'http://localhost:8000/updateInfoUser',
   searchUrl: 'http://localhost:8000/listParts',
   getItemUrl: 'http://localhost:8000/getFullCarPart',
-  getUserUrl: 'http://localhost:8000/infoUser'
+  getUserUrl: 'http://localhost:8000/infoUser',
+  categoriesUrl: 'http://localhost:8000/getNonEmptyCategoryNames',
+  searchByCategoryUrl: 'http://localhost:8000/listPartsByCategory'
 };

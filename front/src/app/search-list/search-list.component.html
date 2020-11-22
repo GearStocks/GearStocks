@@ -6,6 +6,14 @@
 
     <div class="search__bar">
       <div class="container input-group mb-3 input-group-lg">
+        <mat-form-field appearance="fill">
+          <mat-label>Categories</mat-label>
+          <mat-select [(ngModel)]="selectedCategorie" name="food">
+            <mat-option *ngFor="let categorie of categories" [value]="categorie.name">
+              {{categorie.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
         <div class="input-group-prepend">
           <button type="submit" class="input-group-text delete-css-button" (click)="search()">
             <i class="material-icons"> search </i>

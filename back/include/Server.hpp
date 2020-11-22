@@ -17,27 +17,37 @@ public:
   void	shutdown();
 private:
   int	Hello(const Pistache::Rest::Request& request,
-		Pistache::Http::ResponseWriter response);
+		    Pistache::Http::ResponseWriter response);
   int	PostRegister(const Pistache::Rest::Request& request,
-		       Pistache::Http::ResponseWriter response);
+		    Pistache::Http::ResponseWriter response);
   int	PostConnect(const Pistache::Rest::Request& request,
-		      Pistache::Http::ResponseWriter response);
+		    Pistache::Http::ResponseWriter response);
   int	OptionsConnect(const Pistache::Rest::Request& request,
-			 Pistache::Http::ResponseWriter response);
+			  Pistache::Http::ResponseWriter response);
   int	UpdateUser(const Pistache::Rest::Request &request,
-		   Pistache::Http::ResponseWriter reponse);
+		    Pistache::Http::ResponseWriter reponse);
   int	disconnect(const Pistache::Rest::Request &request,
-		   Pistache::Http::ResponseWriter reponse);
+        Pistache::Http::ResponseWriter reponse);
   int	infoUser(const Pistache::Rest::Request &request,
-		 Pistache::Http::ResponseWriter reponse);
+        Pistache::Http::ResponseWriter reponse);
   int	addCarPart(const Pistache::Rest::Request &request,
-		   Pistache::Http::ResponseWriter reponse);
+        Pistache::Http::ResponseWriter reponse);
   int	getFullCarPart(const Pistache::Rest::Request &request,
-		   Pistache::Http::ResponseWriter reponse);
+        Pistache::Http::ResponseWriter reponse);
   int	forgottenPassword(const Pistache::Rest::Request &request,
 			  Pistache::Http::ResponseWriter reponse);
   int	listParts(const Pistache::Rest::Request &request,
 			  Pistache::Http::ResponseWriter reponse);
+  int addBookmark(const Pistache::Rest::Request& request,
+        Pistache::Http::ResponseWriter response);
+  int delBookmark(const Pistache::Rest::Request& request,
+        Pistache::Http::ResponseWriter response);
+  int listPartsByCategory(const Pistache::Rest::Request &request,
+        Pistache::Http::ResponseWriter response);
+  int getNonEmptyCategoryNames(const Pistache::Rest::Request &request, 
+        Pistache::Http::ResponseWriter response);
+  int sendContact(const Pistache::Rest::Request &request, 
+        Pistache::Http::ResponseWriter response);
   void	mergeObjects(rapidjson::Value &dstObject, rapidjson::Value &srcObjects, rapidjson::Document::AllocatorType &allocator);
   
   void	setupRoutes();
