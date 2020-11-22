@@ -30,7 +30,7 @@ export default class ForgotPasswordComponent extends React.Component {
     const { email } = this.state;
 
     const JSONObj = JSON.stringify({
-      mail: this.state.email
+      email: this.state.email
     });
 
     if (`${email}` === '')

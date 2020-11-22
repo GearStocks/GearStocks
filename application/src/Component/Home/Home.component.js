@@ -35,7 +35,8 @@ export default class HomeComponent extends React.Component {
 
   launchSearch = (search) => {
     const JSONObj = JSON.stringify({
-      keyWord: search
+      keyWord: search,
+      filters: null
     });
     listParts(this, JSONObj);
   };
@@ -78,8 +79,8 @@ export default class HomeComponent extends React.Component {
         <TouchableOpacity onPress={() => this.onPress(item)} key={item} activeOpacity={0.75}
         style={{ width: '100%', borderWidth: 2, borderColor: "#5dade2", borderRadius: 6 }}>
           <View style={{ width: '99%', aspectRatio: 1 }} >
-          <Text style={{ fontSize: 30 }}>Name : {item.name}</Text>
-          <Text style={{ fontSize: 30 }}>Price : {item.price}</Text>
+          <Text style={{ fontSize: 30, textAlign: 'center', top: '10%' }}>{item.name.toUpperCase()}</Text>
+          <Text style={{ fontSize: 30, textAlign: 'center', top: '10%' }}>Price : {item.price.toUpperCase()} euros</Text>
             <Image style={{ resizeMode: 'contain', aspectRatio: 1 }} source={{ uri: item.image }} />
           </View>
         </TouchableOpacity>
