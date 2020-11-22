@@ -45,7 +45,8 @@ stages:
           sed -i 's/http:\/\/localhost/https:\/\/dev.gearstocks.store/g' front/src/environments/environment.mock.ts
           sed -i 's/http:\/\/localhost/https:\/\/dev.gearstocks.store/g' front/src/environments/environment.ts
           echo " -d dev.gearstocks.store; chmod -R 755 /etc/letsencrypt" >> certbot/Dockerfile
-          docker-compose up front api_builder app
+          echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+          docker-compose up front && docker-compose up api_builder && docker-compose up app
           echo Front, Back and App successfully build.
         displayName: 'Front, API and App Compilation Check'
       - script: |
