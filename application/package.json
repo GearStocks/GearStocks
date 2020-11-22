@@ -33,7 +33,8 @@
     "react-native-super-grid": "^3.1.1",
     "react-native-svg": "9.13.3",
     "react-native-web": "^0.11.7",
-    "react-navigation": "^3.11.0"
+    "react-navigation": "^3.11.0",
+    "type-fest": "^0.13.1"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.2",
