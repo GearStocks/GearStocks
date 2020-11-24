@@ -28,7 +28,7 @@ class User {
 
     setInfo(res) {
         if (res.data.token) this.token = res.data.token;
-        if (res.data.data[0].mail) this.email = res.data.data[0].mail;
+        if (res.data.data[0].email) this.email = res.data.data[0].mail;
         if (res.data.data[0].userName) this.username = res.data.data[0].userName;
         if (res.data.data[0].firstName) this.firstname = res.data.data[0].firstName;
         if (res.data.data[0].lastName) this.lastname = res.data.data[0].lastName;
@@ -38,11 +38,11 @@ class User {
     disconnect() {
         if (this.isConnected()) {
             const JSONObj = JSON.stringify({
-                mail: this.email
+                email: this.email
             });
             disconnect(JSONObj, callResetInfo)
             .catch((err) => {
-                console.log(err.name, err.message, err.response.data.error);
+                //console.log(err.name, err.message, err.response.data.error);
             });
         } else {
             console.log("You are not connected");
@@ -53,10 +53,10 @@ class User {
         if (!this.isConnected()) {
             connect(JSONObj, navigate, callSetInfo)
             .catch((err) => {
-                console.log(err.name, err.message, err.response.data.error);
+                console.log(err);
                 Alert.alert(
                     err.name,
-                    err.response.data.error,
+                    //err.response.data.error,
                     [ { text: "Fermer", onPress: () => null} ],
                     { cancelable: false }
                 )
@@ -74,7 +74,7 @@ class User {
             });
             userInfo(JSONObj, callSetInfo)
             .catch((err) => {
-                console.log(err.name, err.message, err.response.data.error);
+                //console.log(err.name, err.message, err.response.data.error);
             });
         } else {
             console.log("You are not connected");
@@ -85,7 +85,7 @@ class User {
         if (this.isConnected()) {
             updateUserInfo(JSONObj, callUserInfo)
             .catch((err) => {
-                console.log(err.name, err.message, err.response.data.error);
+                console.log(err);
             });
         } else {
             console.log("You are not connected");
@@ -95,14 +95,14 @@ class User {
     register(JSONObj, navigate) {
         register(JSONObj, navigate)
         .catch((err) => {
-            console.log(err.name, err.message, err.response.data.error);
+            //console.log(err.name, err.message, err.response.data.error);
         });
     }
 
     forgotPassword(JSONObj, navigate) {
         forgotPassword(JSONObj, navigate)
         .catch((err) => {
-            console.log(err.name, err.message, err.response.data.error);
+            //console.log(err.name, err.message, err.response.data.error);
         });
     }
 }

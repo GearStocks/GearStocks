@@ -7,11 +7,4 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  button: {
-    height: 50,
-    width: 350,
-    borderRadius: 5,
-    top: 30,
-    marginBottom: 20
-  }
 });

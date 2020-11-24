@@ -1,1 +1,1 @@
-export const address = "gearstocks.northeurope.cloudapp.azure.com/";
+export const address = "dev.gearstocks.store:8000/";
