@@ -619,10 +619,12 @@ size_t BddManager::addCarPartInBDD(std::string name, std::string month, std::str
      _carPartCollection.update_one(document << "name" << name << bsoncxx::builder::stream::finalize,
                         document << "$set" << bsoncxx::builder::stream::open_document <<
                         "prices" << arr_builder <<
+                        "photo" << photo <<
                         bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::finalize);
     std::cout << "Update Piece: " << name << std::endl;
   } else {
-    document << "name" << name <<"prices" << bsoncxx::builder::stream::open_array << bsoncxx::builder::stream::open_document << "month" << "Jan(Test)" << "price" << prices << bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::close_array << "description" << description;
+    document << "name" << name <<"prices" << bsoncxx::builder::stream::open_array << bsoncxx::builder::stream::open_document << "month" << "Jan(Test)" << 
+    "price" << prices << bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::close_array << "photo" << photo << "description" << description;
     addContentInBDD(_carPartCollection, document);
     std::cout << "A car part has been registered:" << name << std::endl;
   }
