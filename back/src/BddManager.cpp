@@ -202,13 +202,16 @@ rapidjson::Document*	BddManager::getFullCarPart(std::string partName)
     rapidjson::Document::AllocatorType& allocator = document2->GetAllocator();
     rapidjson::StringBuffer strbuf;
     rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
-    std::cout << name << std::endl;
+    std::cout << "MDR:" << name << std::endl;
     name.erase(0, name.find("\"name\" :") + 10);
     name.erase(name.find("\", \"photo\" "));
+    std::cout << "name:" << name << std::endl;
     path.erase(0, path.find("\"photo\" :") + 11);
     path.erase(path.find("\", \"descript"));
+    std::cout << "path:" << path << std::endl;
     description.erase(0, description.find("\"description\" :") + 17);
     description.erase(description.find("\", \"parts\""));
+    std::cout << "description:" << description << std::endl;
         
     rapidjson::Value valuePrices(rapidjson::kArrayType);
     while (price.find("month") != std::string::npos) {
