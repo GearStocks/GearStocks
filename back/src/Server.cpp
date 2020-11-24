@@ -676,16 +676,47 @@ int Server::listParts(const Pistache::Rest::Request& request, Pistache::Http::Re
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
-  document2.AddMember("success", "list parts", allocator);
+  if(!document["filters"].HasMember("maxPrice")) {
+    std::cout << "Il manque le champ maxPrice" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'maxPrice'", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  if(!document["filters"].HasMember("minPrice")) {
+    std::cout << "Il manque le champ minPrice" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'minPrice'", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  if(!document["filters"].HasMember("category")) {
+    std::cout << "Il manque le champ category" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'category'", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  if(!document["filters"].HasMember("model")) {
+    std::cout << "Il manque le champ model" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'model'", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
   
-  std::vector<std::string> filters;
-  //const rapidjson::Value& attributes = document["filters"];
-  //for (rapidjson::Value::ConstValueIterator itr = attributes.Begin(); itr != attributes.End(); ++itr) {
-    //std::cout << *itr << std::endl;
-    //const rapidjson::Value& attribute = *itr;
-    //std::cout << itr->GetString() << std::endl;
-  //}
+  document2.AddMember("success", "list parts", allocator);
 
+
+  //METTRE DES HASMEMBER
+  std::vector<std::string> filters;
+  const rapidjson::Value& attributes = document["filters"];
+  filters.push_back(document["filters"]["maxPrice"].GetString());
+  filters.push_back(document["filters"]["minPrice"].GetString());
+  filters.push_back(document["filters"]["category"].GetString());
+  filters.push_back(document["filters"]["model"].GetString());
+  //std::cout << document["filters"]["maxPrice"].GetString() << std::endl;
+  
   
   std::vector<std::pair<std::string, size_t>>	resultParsing;
   resultParsing = _manager->parseKeyWordInTree(_manager->generateTree(), document["keyWord"].GetString());
@@ -699,7 +730,8 @@ int Server::listParts(const Pistache::Rest::Request& request, Pistache::Http::Re
     int i = 1;
     while (it < resultParsing.end() && i <= 10) {
       doc3 = _manager->getCarPart((*it).first, filters);
-      mergeObjects(document2, *doc3, allocator);
+      if (doc3 != NULL)
+	mergeObjects(document2, *doc3, allocator);
       ++it;
       ++i;
     }

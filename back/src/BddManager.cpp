@@ -210,9 +210,9 @@ rapidjson::Document*	BddManager::getFullCarPart(std::string partName)
     description.erase(0, description.find("\"description\" :") + 17);
     description.erase(description.find("\", \"parts\""));
         
-    rapidjson::Value mdr2(rapidjson::kArrayType);
+    rapidjson::Value valuePrices(rapidjson::kArrayType);
     while (price.find("month") != std::string::npos) {
-      getAllPrices(&mdr2, &price, allocator);
+      getAllPrices(&valuePrices, &price, allocator);
     }
 
     rapidjson::Value referrals(rapidjson::kArrayType);
@@ -237,7 +237,7 @@ rapidjson::Document*	BddManager::getFullCarPart(std::string partName)
     document2->AddMember("photo", test, allocator);
     test.SetString(description.c_str(), allocator);
     document2->AddMember("description", test, allocator);
-    document2->AddMember("prices", mdr2, allocator);
+    document2->AddMember("prices", valuePrices, allocator);
     document2->AddMember("referrals", referrals, allocator);
     return document2;
   }
@@ -291,7 +291,7 @@ rapidjson::Document*	BddManager::getCarPart(std::string partName, std::vector<st
   
   valueInBDD = checkIfExist(_carPartCollection, "name", partName);
   if (valueInBDD.compare("") == 0) {
-    //return (std::make_pair(1, "Invalid part name"));
+    return NULL;
   }
   bsoncxx::builder::stream::document document{};
   bsoncxx::stdx::optional<bsoncxx::document::value> maybe_result =
@@ -306,6 +306,7 @@ rapidjson::Document*	BddManager::getCarPart(std::string partName, std::vector<st
     rapidjson::Document::AllocatorType& allocator = document2->GetAllocator();
     rapidjson::StringBuffer strbuf;
     rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
+    //std::cout << "name:" << name << std::endl;
     name.erase(0, name.find("\"name\" :") + 10);
     name.erase(name.find("\", \"photo\" "));
     price.erase(0, price.rfind("\"price\" :") + 11);
@@ -315,11 +316,16 @@ rapidjson::Document*	BddManager::getCarPart(std::string partName, std::vector<st
 
     //
     // FONCTION QUI CHECK LES FILTRES
+    if (filters.empty() == false) {
+      if (applyFilters(price, filters) == false) {
+	std::cout << "FILTERS NON RESPECTES" << std::endl;
+	return NULL;
+      }
+    }
+    else
+      std::cout << "LES FILTRES SONT VIDES" << std::endl;
     //
     
-    /*std::cout << "name:" << name << std::endl;
-    std::cout << "price:" << price << std::endl;
-    std::cout << "path:" << path << std::endl;*/
     rapidjson::Value mdr(rapidjson::kArrayType);
     rapidjson::Value test;
     rapidjson::Value s;
@@ -341,6 +347,20 @@ rapidjson::Document*	BddManager::getCarPart(std::string partName, std::vector<st
     return document2;
   }
       //return (std::make_pair(1, "Error encountered"));
+}
+
+bool	BddManager::applyFilters(std::string price, std::vector<std::string> filters)
+{
+  int priceInInt = std::stoi(price);
+  //int maxPrice = std::stoi(filters[0]);
+  //int minPrice = std::stoi(filters[1]);
+
+  std::cout << "voici le prix:" << priceInInt << std::endl;
+  std::cout << "voici le filter maxprice:" << filters[0] << std::endl;
+  std::cout << "voici le filter minprice:" << filters[1] << std::endl;
+  if (priceInInt > std::stoi(filters[0]) || priceInInt < std::stoi(filters[1]))
+    return false;
+  return true;
 }
 
 size_t  BddManager::updateNameUser(std::string token, std::string username, std::string firstname, std::string lastname)
