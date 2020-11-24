@@ -730,7 +730,7 @@ int Server::listParts(const Pistache::Rest::Request& request, Pistache::Http::Re
   resultParsing = _manager->parseKeyWordInTree(_manager->generateTree(), document["keyWord"].GetString());
   if (resultParsing.empty()) {
     std::cout << "Aucunes pièces ne correspondent" << std::endl;
-    document2.AddMember("data", "Part not found", allocator); 
+    document2.AddMember("data", "Part not found", allocator);
   }
   else {
     std::vector<std::pair<std::string, size_t>>::iterator it = resultParsing.begin();

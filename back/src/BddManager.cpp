@@ -202,17 +202,13 @@ rapidjson::Document*	BddManager::getFullCarPart(std::string partName)
     rapidjson::Document::AllocatorType& allocator = document2->GetAllocator();
     rapidjson::StringBuffer strbuf;
     rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
-    std::cout << "MDR:" << name << std::endl;
     name.erase(0, name.find("\"name\" :") + 10);
-    name.erase(name.find("\", \"photo\" "));
-    std::cout << "name:" << name << std::endl;
+    name.erase(name.find("\", \"prices\" "));
     path.erase(0, path.find("\"photo\" :") + 11);
     path.erase(path.find("\", \"descript"));
-    std::cout << "path:" << path << std::endl;
     description.erase(0, description.find("\"description\" :") + 17);
-    description.erase(description.find("\", \"parts\""));
-    std::cout << "description:" << description << std::endl;
-        
+    description.erase(description.find("\" }"));
+            
     rapidjson::Value valuePrices(rapidjson::kArrayType);
     while (price.find("month") != std::string::npos) {
       getAllPrices(&valuePrices, &price, allocator);
@@ -291,7 +287,7 @@ void	BddManager::getAllPrices(rapidjson::Value *price, std::string *priceToParse
 rapidjson::Document*	BddManager::getCarPart(std::string partName, std::vector<std::string> filters)
 {
   std::string	valueInBDD;
-  
+
   valueInBDD = checkIfExist(_carPartCollection, "name", partName);
   if (valueInBDD.compare("") == 0) {
     return NULL;
@@ -309,14 +305,13 @@ rapidjson::Document*	BddManager::getCarPart(std::string partName, std::vector<st
     rapidjson::Document::AllocatorType& allocator = document2->GetAllocator();
     rapidjson::StringBuffer strbuf;
     rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
-    //std::cout << "name:" << name << std::endl;
     name.erase(0, name.find("\"name\" :") + 10);
-    name.erase(name.find("\", \"photo\" "));
+    name.erase(name.find("\", \"prices\" "));
     price.erase(0, price.rfind("\"price\" :") + 11);
     price.erase(price.find("\" }"));
     path.erase(0, path.find("\"photo\" :") + 11);
     path.erase(path.find("\", \"descript"));
-
+    
     //
     // FONCTION QUI CHECK LES FILTRES
     if (filters.empty() == false) {
@@ -355,12 +350,10 @@ rapidjson::Document*	BddManager::getCarPart(std::string partName, std::vector<st
 bool	BddManager::applyFilters(std::string price, std::vector<std::string> filters)
 {
   int priceInInt = std::stoi(price);
-  //int maxPrice = std::stoi(filters[0]);
-  //int minPrice = std::stoi(filters[1]);
-
-  std::cout << "voici le prix:" << priceInInt << std::endl;
-  std::cout << "voici le filter maxprice:" << filters[0] << std::endl;
-  std::cout << "voici le filter minprice:" << filters[1] << std::endl;
+  
+  //std::cout << "voici le prix:" << priceInInt << std::endl;
+  //std::cout << "voici le filter maxprice:" << filters[0] << std::endl;
+  //std::cout << "voici le filter minprice:" << filters[1] << std::endl;
   if (priceInInt > std::stoi(filters[0]) || priceInInt < std::stoi(filters[1]))
     return false;
   return true;
@@ -639,11 +632,11 @@ size_t BddManager::addCarPartInBDD(std::string name, std::string month, std::str
     arr_builder.append(new_value);
      _carPartCollection.update_one(document << "name" << name << bsoncxx::builder::stream::finalize,
                         document << "$set" << bsoncxx::builder::stream::open_document <<
-                        "prices" << arr_builder <<
+                        "prices" << arr_builder << "photo" << photo <<
                         bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::finalize);
     std::cout << "Update Piece: " << name << std::endl;
   } else {
-    document << "name" << name <<"prices" << bsoncxx::builder::stream::open_array << bsoncxx::builder::stream::open_document << "month" << "Jan(Test)" << "price" << prices << bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::close_array << "description" << description;
+    document << "name" << name <<"prices" << bsoncxx::builder::stream::open_array << bsoncxx::builder::stream::open_document << "month" << "Jan(Test)" << "price" << prices << bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::close_array << "photo" << photo << "description" << description;
     addContentInBDD(_carPartCollection, document);
     std::cout << "A car part has been registered:" << name << std::endl;
   }
@@ -855,7 +848,7 @@ aho_corasick::trie	BddManager::generateTree()
   for (auto&& doc : cursor) {
     std::string name = bsoncxx::to_json(doc);
     name.erase(0, name.find("\"name\" :") + 10);
-    name.erase(name.find("\", \"photo\" "));
+    name.erase(name.find("\", \"prices\" "));
     trie.insert(name.c_str());
   }
   return trie;
@@ -867,7 +860,7 @@ std::vector<std::pair<std::string, size_t>>	BddManager::parseKeyWordInTree(aho_c
   std::transform(keyWord.begin(), keyWord.end(), keyWord.begin(), ::tolower);
   auto	result = trie.parse_text(keyWord.c_str());
   auto mdr = result.begin();
-
+  
   
   std::pair<std::string, size_t> resultPair;
   while (mdr != result.end()) {
@@ -877,10 +870,7 @@ std::vector<std::pair<std::string, size_t>>	BddManager::parseKeyWordInTree(aho_c
     parsingResult.push_back(resultPair);
     ++mdr;
   }
-
   
-
-
   
   std::stringstream ss(keyWord);
   std::istream_iterator<std::string> begin(ss);
@@ -897,7 +887,7 @@ std::vector<std::pair<std::string, size_t>>	BddManager::parseKeyWordInTree(aho_c
   for (auto&& doc : cursor) {
     std::string name = bsoncxx::to_json(doc);
     name.erase(0, name.find("\"name\" :") + 10);
-    name.erase(name.find("\", \"photo\" "));
+    name.erase(name.find("\", \"prices\" "));
     std::string nameInLower = name;
     std::transform(nameInLower.begin(), nameInLower.end(), nameInLower.begin(), ::tolower);
     while (it < keyWordSplited.end()) {
