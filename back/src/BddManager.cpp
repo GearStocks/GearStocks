@@ -601,13 +601,12 @@ size_t	BddManager::addBookmark(std::string name, std::vector<std::string> prices
 */
 
 //Il faut ajouter le mois dans les paramétres envoyés à la fonction
-size_t BddManager::addCarPartInBDD(std::string name, std::string month, std::string prices, std::string photo, std::string description)
+size_t BddManager::addCarPartInBDD(std::string name, std::string month, std::string prices, std::string photo, std::string description, std::vector<std::string> categories)
 {
   bsoncxx::builder::stream::document document{};
   rapidjson::Document	json1;
   bsoncxx::stdx::optional<bsoncxx::document::value> maybe_result = _carPartCollection.find_one(document << "name" << name << bsoncxx::builder::stream::finalize);
   if (maybe_result) {
-    
     std::string doc = bsoncxx::to_json(maybe_result->view());
     json1.Parse(doc.c_str());
     auto arr_builder = bsoncxx::builder::basic::array{};
@@ -626,17 +625,25 @@ size_t BddManager::addCarPartInBDD(std::string name, std::string month, std::str
       }
       arr_builder.append(in_array);
     }
-    bsoncxx::builder::stream::document new_value{};
-    new_value << "month" << month << "price" << prices;
+    bsoncxx::builder::stream::document newPriceValue{};
+    newPriceValue << "month" << month << "price" << prices;
     
-    arr_builder.append(new_value);
+    arr_builder.append(newPriceValue);
      _carPartCollection.update_one(document << "name" << name << bsoncxx::builder::stream::finalize,
                         document << "$set" << bsoncxx::builder::stream::open_document <<
                         "prices" << arr_builder << "photo" << photo <<
                         bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::finalize);
     std::cout << "Update Piece: " << name << std::endl;
   } else {
-    document << "name" << name <<"prices" << bsoncxx::builder::stream::open_array << bsoncxx::builder::stream::open_document << "month" << "Jan(Test)" << "price" << prices << bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::close_array << "photo" << photo << "description" << description;
+    document << "name" << name << "prices" << bsoncxx::builder::stream::open_array << bsoncxx::builder::stream::open_document << "month" << "Jan(Test)" << "price" << prices << bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::close_array << "photo" << photo << "description" << description;
+    auto itCategories = categories.begin();
+    auto inArrayCategories = document << "categories" << bsoncxx::builder::stream::open_array;
+    while (itCategories < categories.end()) {
+      inArrayCategories = inArrayCategories <<  bsoncxx::builder::stream::open_document << "name" << *itCategories << bsoncxx::builder::stream::close_document;
+      itCategories++;
+    }
+    auto afterArrayCategories = inArrayCategories << bsoncxx::builder::stream::close_array;
+
     addContentInBDD(_carPartCollection, document);
     std::cout << "A car part has been registered:" << name << std::endl;
   }
@@ -689,7 +696,11 @@ size_t	BddManager::disconnectUser(std::string mailUser, std::string token)
 
 void	BddManager::addContentInBDD(auto collection, bsoncxx::builder::stream::document &doc)
 {
+  std::cout << "First" << std::endl;
+  doc.view();
+  std::cout << "Second" << std::endl;
   collection.insert_one(doc.view());
+  std::cout << "Third" << std::endl;
 }
 
 void	BddManager::printCollection(auto collection)
@@ -931,6 +942,7 @@ std::vector<std::pair<std::string, size_t>>	BddManager::parseKeyWordInTree(aho_c
 std::vector<std::pair<std::string, size_t>> BddManager::parseKeyWordInTreeByCategory(aho_corasick::trie trie, std::string keyWordCategory)                                                        
 {
   std::vector<std::pair<std::string, size_t>>	parsingResult;
+  rapidjson::Document documentCategories;
   std::transform(keyWordCategory.begin(), keyWordCategory.end(), keyWordCategory.begin(), ::tolower);
   auto result = trie.parse_text(keyWordCategory.c_str());
   auto cursorKeyWord = result.begin();
@@ -954,35 +966,38 @@ std::vector<std::pair<std::string, size_t>> BddManager::parseKeyWordInTreeByCate
   for (auto&& doc : cursorCollection) {
 
     std::string partName = bsoncxx::to_json(doc);
-    std::string categoryName = bsoncxx::to_json(doc);
-
     partName.erase(0, partName.find("\"name\" : ") + 10);
-    partName.erase(partName.find("\", \"photo\" "));
-    categoryName.erase(0, categoryName.find("\"category\" :") + 14);
-    categoryName.erase(categoryName.find("\", \"parts\" "));
-
-    std::string CategoryNameInLower = categoryName;
+    partName.erase(partName.find("\", \"prices\" "));
     std::string partNameInLower = partName;
-    std::transform(CategoryNameInLower.begin(), CategoryNameInLower.end(), CategoryNameInLower.begin(), ::tolower);
 
-    while (it < keyWordSplited.end()) {
-      if (CategoryNameInLower.find(*it) != std::string::npos) {
-	      auto itez = std::find_if(parsingResult.begin(), parsingResult.end(), [&categoryName](const std::pair<std::string, int>& element){ return element.first == categoryName;});
-	      if (itez == parsingResult.end()) {
-          resultPair = std::make_pair(partName, 1);
-	        parsingResult.push_back(resultPair);
-          std::cout << "VOICI LE NAME" << partName << std::endl;
-	        std::cout << "VOICI LA CATEGORIE:" << categoryName << std::endl;
-	        std::cout << "VOICI LE SPLIT:" << *it << std::endl;
-	      } else {
-	        std::pair<std::string, int> new_pair = *itez;
-	        ++new_pair.second;
-	        *itez = new_pair;
-      	}
-      }
+    documentCategories.Parse(bsoncxx::to_json(doc).c_str());
+    const rapidjson::Value& attributesCategories = documentCategories["categories"];
+    for (rapidjson::Value::ConstValueIterator itCategories = attributesCategories.Begin() ; itCategories != attributesCategories.End() ; ++itCategories) {
+
+      const rapidjson::Value& attributeCategories = *itCategories;
+      std::string categoryName = (attributeCategories.MemberBegin())->value.GetString();
+      std::string CategoryNameInLower = categoryName;
+      std::transform(CategoryNameInLower.begin(), CategoryNameInLower.end(), CategoryNameInLower.begin(), ::tolower);
+
+      while (it < keyWordSplited.end()) {
+        if (CategoryNameInLower.find(*it) != std::string::npos) {
+	        auto itez = std::find_if(parsingResult.begin(), parsingResult.end(), [&categoryName](const std::pair<std::string, int>& element){ return element.first == categoryName;});
+	        if (itez == parsingResult.end()) {
+            resultPair = std::make_pair(partName, 1);
+	          parsingResult.push_back(resultPair);
+            std::cout << "VOICI LE NAME" << partName << std::endl;
+	          std::cout << "VOICI LA CATEGORIE:" << categoryName << std::endl;
+	          std::cout << "VOICI LE SPLIT:" << *it << std::endl;
+	        } else {
+  	        std::pair<std::string, int> new_pair = *itez;
+	          ++new_pair.second;
+	          *itez = new_pair;
+      	  }
+        }
       ++it;
-    }
+      } 
     it = keyWordSplited.begin();
+    } 
   }
   std::sort(parsingResult.begin(), parsingResult.end(), [](auto &left, auto &right) {
       return left.second > right.second;
