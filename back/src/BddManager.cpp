@@ -354,6 +354,20 @@ bool	BddManager::applyFilters(std::string price, std::vector<std::string> filter
   //std::cout << "voici le prix:" << priceInInt << std::endl;
   //std::cout << "voici le filter maxprice:" << filters[0] << std::endl;
   //std::cout << "voici le filter minprice:" << filters[1] << std::endl;
+  /*if (priceInInt > std::stoi(filters[0]) || priceInInt < std::stoi(filters[1]))
+    return false;*/
+  if (filters[0].compare("") == 0 && filters[1].compare("") == 0)
+    return true;
+  if (filters[0].compare("") == 0 && filters[1].compare("") != 0) {
+    if (priceInInt < std::stoi(filters[1]))
+      return false;
+    return true;
+  }
+  if (filters[1].compare("") == 0 && filters[0].compare("") != 0) {
+    if (priceInInt > std::stoi(filters[0]))
+      return false;
+    return true;
+  }
   if (priceInInt > std::stoi(filters[0]) || priceInInt < std::stoi(filters[1]))
     return false;
   return true;
@@ -375,6 +389,7 @@ size_t  BddManager::updateNameUser(std::string token, std::string username, std:
 //Suppression des favs
 size_t BddManager::delBookmark(std::string userToken, std::string partName) {
   rapidjson::Document json1;
+
   std::string valueInBDD;
   valueInBDD = checkIfExist(_userCollection, "token", userToken);
   if (valueInBDD.compare("") == 0) {
