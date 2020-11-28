@@ -11,12 +11,6 @@
   </div>
   <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
     <ul fxLayout fxLayoutGap="15px" class="navbar__elem">
-      <li>
-        <a class="navbar__iconAbove" routerLink="">
-          <mat-icon>home</mat-icon>
-          <p>Accueil</p>
-        </a>
-      </li>
       <li *ngIf="isAuthenticated">
         <mat-list-item [matMenuTriggerFor]="menu">
           <a class="navbar__iconAbove">
@@ -33,18 +27,6 @@
         <a class="navbar__iconAbove" (click)="open()" id="login">
           <mat-icon>person</mat-icon>
           <p>Se connecter</p>
-        </a>
-      </li>
-      <li>
-        <a class="navbar__iconAbove" routerLink="/description">
-          <mat-icon>help_outline</mat-icon>
-          <p>Qui sommes nous ?</p>
-        </a>
-      </li>
-      <li>
-        <a class="navbar__iconAbove" routerLink="/contact">
-          <mat-icon>phone</mat-icon>
-          <p>Contact</p>
         </a>
       </li>
     </ul>
