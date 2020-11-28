@@ -422,6 +422,7 @@ size_t BddManager::addBookmark(std::string userToken, std::string partName) {
   rapidjson::Document	json1;
   std::string	valueInBDD;
   valueInBDD = checkIfExist(_userCollection, "token", userToken);
+  std::cout << "Debut AddBookmark" << std::endl;
   if (valueInBDD.compare("") == 0) {
     std::cout << "Invalid token" << std::endl;
     return 1;
@@ -435,7 +436,7 @@ size_t BddManager::addBookmark(std::string userToken, std::string partName) {
       assert(json1["bookmarks"].IsArray());
       auto arr_builder = bsoncxx::builder::basic::array{};
       for (auto& i : json1["bookmarks"].GetArray()) {
-        auto arr_builder = bsoncxx::builder::basic::array{};
+        arr_builder.append(i.GetString());
       }
       arr_builder.append(partName);
       _userCollection.update_one(document << "token" << userToken << bsoncxx::builder::stream::finalize,
@@ -443,6 +444,7 @@ size_t BddManager::addBookmark(std::string userToken, std::string partName) {
                         "bookmarks" << arr_builder <<
                         bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::finalize);
   }
+  std::cout << "Fin AddBookmark" << std::endl;
   return 0;
 }
 
