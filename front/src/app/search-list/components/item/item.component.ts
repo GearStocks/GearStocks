@@ -12,6 +12,8 @@ import { Chart } from 'chart.js';
 
 /* Models */
 import { Item } from './models/item.model';
+import {addFavourite} from '../../../store/actions/core.actions';
+import {selectAuthState} from '../../../store/reducers/auth.reducer';
 
 @Component({
   selector: 'app-item',
@@ -23,9 +25,11 @@ export class ItemComponent implements OnInit {
   chart = [];
   chartLabel = [];
   chartPrice = [];
+  isAuthenticated: boolean;
 
   constructor(private store: Store<AppState>, private location: Location) {
     this.store.pipe(select(selectItem)).subscribe(x => this.itemData = x);
+    this.store.pipe(select(selectAuthState)).subscribe(x => this.isAuthenticated = x);
   }
 
   ngOnInit(): void {
@@ -71,6 +75,12 @@ export class ItemComponent implements OnInit {
         }
       }
     });
+  }
+
+  selectChange(event): void {
+    if (event) {
+      this.store.dispatch(addFavourite({name: this.itemData.name}));
+    }
   }
 
   back(): void {
