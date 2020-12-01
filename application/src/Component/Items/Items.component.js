@@ -22,7 +22,30 @@ export default class ItemsComponent extends React.Component {
     this.state = {
       name: "",
       description: "",
+      res: "",
+      isFavoris: false,
+      callBack: false,
     };
+
+    this.willFocusListener = this.props.navigation.addListener(
+      "willFocus",
+      () => {
+        this.componentWillFocus();
+      }
+    );
+    this.didBlurListener = this.props.navigation.addListener("didBlur", () => {
+      this.componentDidBlur();
+    });
+  }
+
+  componentWillFocus() {
+    if (user.isConnected()) {
+      this.infoUser();
+    }
+  }
+
+  componentDidBlur() {
+    this.setState({ isFavoris: false, res: "" });
   }
 
   static navigationOptions = {
@@ -34,12 +57,6 @@ export default class ItemsComponent extends React.Component {
       userToken: user.token,
       partName: partName,
     });
-    Alert.alert(
-      "Cette piece est desormais dans vos favoris",
-      "Pour la consulter, rendez-vous dans l'onglet favoris",
-      [{ text: "OK", onPress: () => null }],
-      { cancelable: false }
-    );
 
     axios
       .post(routes.ADD_BOOKMARK, JSONObj, {
@@ -50,12 +67,74 @@ export default class ItemsComponent extends React.Component {
         },
       })
       .then((res) => {
-        const json = JSON.parse(JSONObj);
-        console.log("RESPONSE RECEIVED: ", res.data);
-        //navigate('AppMenu', { token: res.data.token, email: json['mail'] });
+        Alert.alert(
+          "Cette piece est desormais dans vos favoris",
+          "Pour la consulter, rendez-vous dans l'onglet favoris",
+          [{ text: "OK", onPress: () => null }],
+          { cancelable: false }
+        );
+        this.setState({ isFavoris: true });
       })
       .catch((err) => {
         console.log(err);
+      });
+  };
+
+  delBookmark = (partName) => {
+    const JSONObj = JSON.stringify({
+      userToken: user.token,
+      partName: partName.name,
+    });
+
+    axios
+      .post(routes.ADD_BOOKMARK, JSONObj, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Accept: "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .then((res) => {
+        Alert.alert(
+          "Cette piece n'est desormais plus dans vos favoris",
+          "",
+          [{ text: "OK", onPress: () => null }],
+          { cancelable: false }
+        );
+        this.setState({ isFavoris: false });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  infoUser = () => {
+    const JSONObj = JSON.stringify({
+      userToken: user.token,
+      email: user.email,
+    });
+    axios
+      .post(routes.INFO_USER, JSONObj, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Accept: "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .then((res) => {
+        this.setState({ res: res.data.bookmarks });
+        if (this.state.res) {
+          this.state.res.map((value, idx) => {
+            if (value === this.props.navigation.state.params.itemDatas.name) {
+              this.setState({ isFavoris: true });
+            }
+          });
+        } 
+        // return res;
+      })
+      .catch((err) => {
+        console.log(err.name, err.message);
+        return err;
       });
   };
 
@@ -76,7 +155,7 @@ export default class ItemsComponent extends React.Component {
           <Icon
             name="format-align-justify"
             size={30}
-            color="black"
+            color={"black"}
             containerStyle={{ right: 170, bottom: 35 }}
             onPress={() => {
               this.props.navigation.openDrawer();
@@ -86,11 +165,21 @@ export default class ItemsComponent extends React.Component {
             <Icon
               name="star"
               size={30}
-              color="black"
+              color={this.state.isFavoris ? "red" : "black"}
               containerStyle={{ left: "60%", top: 0, position: "absolute" }}
-              onPress={() => {
-                this.addBookmark(params.params.itemDatas.name);
-              }}
+              onPress={
+                this.state.isFavoris
+                  ? () => {
+                      this.delBookmark(params.params.itemDatas);
+                    }
+                  : () => {
+                      this.addBookmark(params.params.itemDatas.name);
+                    }
+              }
+
+              // {() => {
+              //   this.addBookmark(params.params.itemDatas.name);
+              // }}
             />
           ) : null}
         </View>
