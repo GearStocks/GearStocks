@@ -21,5 +21,6 @@ export const routes = {
   FORGOT_PASSWORD: localAddress + 'forgottenPassword',
   LIST_PARTS: localAddress + 'listParts',
   GET_FULL_CAR_PART: localAddress + 'getFullCarPart',
-  ADD_BOOKMARK: localAddress + 'addBookmark'
+  ADD_BOOKMARK: localAddress + 'addBookmark',
+  DEL_BOOKMARK: localAddress + 'delBookmark'
 };
