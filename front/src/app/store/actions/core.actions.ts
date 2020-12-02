@@ -35,6 +35,11 @@ export const contact = createAction(
   props<{ data: any }>()
 );
 
+export const addFavourite = createAction(
+  '[App] Add favourite',
+  props<{ name: string }>()
+);
+
 export const contactSuccess = createAction(
   '[App] Contact Success'
 );
