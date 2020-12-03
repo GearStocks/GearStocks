@@ -1,0 +1,125 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+pr:
+  branches:
+    include:
+      - dev
+  paths:
+    include:
+      - docker-compose.yml
+      - dev_config.yml
+
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+#steps:
+#- script: echo Hello, world!
+#  displayName: 'Run a one-line script'
+
+#- script: |
+#    echo Add other tasks to build, test, and deploy your project.
+#    echo See https://aka.ms/yaml
+#  displayName: 'Run a multi-line script'
+
+stages:
+  - stage: Build
+    displayName: Build stage
+    jobs:
+    - job: BuildFrontAndApi
+      displayName: 'Build Front and API'
+      steps:
+      - script: |
+          set -e
+          echo MONGO_INITDB_ROOT_USERNAME=mongoadmin\nMONGO_INITDB_ROOT_PASSWORD=mongoadmin > database/secrets.env
+          docker pull gearstocks/api_builder:latest
+          echo "API_ADDR=dev.gearstocks.store" > .env
+          echo "API_PORT=8000" >> .env
+          sed -i '/- 80:80/d' docker-compose.yml
+          echo "export const address = 'dev.gearstocks.store:8000';" > application/config/address.js
+          sed -i 's/http:\/\/localhost/https:\/\/dev.gearstocks.store/g' front/src/environments/environment.prod.ts
+          sed -i 's/http:\/\/localhost/https:\/\/dev.gearstocks.store/g' front/src/environments/environment.mock.ts
+          sed -i 's/http:\/\/localhost/https:\/\/dev.gearstocks.store/g' front/src/environments/environment.ts
+          echo " -d dev.gearstocks.store; chmod -R 755 /etc/letsencrypt" >> certbot/Dockerfile
+          echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+          docker-compose up front && docker-compose up api_builder && docker-compose up app
+          echo Front, Back and App successfully build.
+        displayName: 'Front, API and App Compilation Check'
+      - script: |
+          set -e
+          mkdir -p drop
+          cp -R docker-compose.yml drop/
+          cp -R .env drop/
+          echo Docker Config OK
+        displayName: Prepare Docker Config for Archive
+      - script: |
+          set -e
+          rm database/secrets.env
+          cp -R database drop/
+          echo Database OK
+        displayName: Prepare Database for Archive
+      - script: |
+          set -e
+          mkdir -p drop/api_builder/build drop/back
+          cp -R api_builder/build/App drop/api_builder/build/
+          cp -R api_builder/lib drop/api_builder/
+          cp -R back/Dockerfile drop/back
+          echo API OK
+        displayName: Prepare API for Archive
+      - script: |
+          set -e
+          mkdir -p drop/front
+          cp -R front/dist drop/front/
+          mv apache/conf/httpd-ssl-dev.conf apache/conf/httpd-ssl.conf
+          cp -R apache drop/
+          echo Front OK
+        displayName: Prepare Front for Archive
+      - script: |
+          set -e
+          cp -R apk drop/
+          echo Application OK
+        displayName: Prepare Android App for Archive
+      - script: |
+          set -e
+          mkdir -p drop/certbot
+          cp -R certbot/Dockerfile drop/certbot/
+          echo certbot OK
+        displayName: Prepare certbot for Archive
+      - script: echo Archive OK
+        displayName: Archive Files
+      - task: ArchiveFiles@2
+        displayName: 'Archive Front and API files'
+        inputs:
+          rootFolderOrFile: '$(System.DefaultWorkingDirectory)/drop'
+          includeRootFolder: false
+          archiveType: zip
+          archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+          replaceExistingArchive: true
+      - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        artifact: drop
+  - stage: Deploy
+    displayName: Deploy
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - deployment: GearStockDev
+        displayName: 'Deploy Docker Dev'
+        environment:
+          name: 'Gearstocks Dev'
+          resourceType: VirtualMachine
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+              - script: |
+                  set -e
+                  unzip -o $(Build.ArtifactStagingDirectory)/../drop/$(Build.BuildId).zip -d /home/GearStocks/
+                  cd /home/GearStocks/
+                  mkdir -p images
+                  docker-compose stop
+                  docker-compose rm --force
+                  docker-compose up -d --build mongo api apache

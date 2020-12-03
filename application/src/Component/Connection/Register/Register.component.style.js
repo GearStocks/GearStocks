@@ -7,7 +7,6 @@
 
 import { StyleSheet } from 'react-native';
 
-import Constants from 'expo-constants';
 import colors from '../../../../config/colors';
 
 export default StyleSheet.create({
@@ -16,7 +15,6 @@ export default StyleSheet.create({
     backgroundColor: colors.WHITE,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: Constants.statusBarHeight,
   },
   title: {
     fontWeight: 'bold',

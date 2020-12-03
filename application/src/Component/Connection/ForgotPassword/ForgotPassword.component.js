@@ -10,6 +10,7 @@ import { View, Alert } from 'react-native';
 import { Input, Button, Text } from 'react-native-elements';
 import styles from './ForgotPassword.component.style';
 import { strings, errors } from '../../../../config/strings';
+import colors from '../../../../config/colors';
 
 import { user } from '../../../services/User'
 
@@ -29,7 +30,7 @@ export default class ForgotPasswordComponent extends React.Component {
     const { email } = this.state;
 
     const JSONObj = JSON.stringify({
-      mail: this.state.email
+      email: this.state.email
     });
 
     if (`${email}` === '')
@@ -45,19 +46,24 @@ export default class ForgotPasswordComponent extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={{bottom: '30%'}}>
-        <Text h4>Enter your email</Text>
+        <View style={{ bottom: '5%' }}>
+          <Text h4>Enter your email</Text>
         </View>
-        <Input
-          autoCapitalize='none'
-          autoCorrect={false}
-          keyboardType='email-address'
-          returnKeyType="send"
-          blurOnSubmit={false}
-          placeholder={strings.ENTER_EMAIL}
-          onChangeText={(email) => this.setState({ email })}
-        />
-        <Button title={strings.SEND} buttonStyle={styles.button} type="outline" onPress={() => this.handleClick()} />
+        <View style={{width: '100%'}}>
+          <Input
+            autoCapitalize='none'
+            autoCorrect={false}
+            keyboardType='email-address'
+            returnKeyType="send"
+            inputContainerStyle={{
+              borderColor: colors.PRIMARY_COLOR, borderWidth: 2
+            }}
+            blurOnSubmit={false}
+            placeholder={strings.ENTER_EMAIL}
+            onChangeText={(email) => this.setState({ email })}
+          />
+          <Button title={strings.SEND} buttonStyle={{ width: '100%', top: '5%' }} type="outline" onPress={() => this.handleClick()} />
+        </View>
       </View>
     );
   }

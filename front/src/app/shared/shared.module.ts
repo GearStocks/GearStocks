@@ -35,6 +35,7 @@ import { GearstocksSelectComponent } from './components/gearstocks-select/gearst
 import { GearstocksAlertComponent } from './components/gearstocks-alert/gearstocks-alert.component';
 import { GearstocksTextareaComponent } from './components/gearstocks-textarea/gearstocks-textarea.component';
 import { GearstocksBackToTopComponent } from './components/gearstocks-back-to-top/gearstocks-back-to-top.component';
+import { GearstocksFavouriteButtonComponent } from './components/gearstocks-favourite-button/gearstocks-favourite-button.component';
 
 export function playerFactory() {
   return player;
@@ -46,7 +47,8 @@ export function playerFactory() {
     GearstocksSelectComponent,
     GearstocksAlertComponent,
     GearstocksTextareaComponent,
-    GearstocksBackToTopComponent
+    GearstocksBackToTopComponent,
+    GearstocksFavouriteButtonComponent
   ],
   imports: [
     CommonModule,
@@ -99,7 +101,8 @@ export function playerFactory() {
     GearstocksSelectComponent,
     GearstocksAlertComponent,
     GearstocksTextareaComponent,
-    GearstocksBackToTopComponent
+    GearstocksBackToTopComponent,
+    GearstocksFavouriteButtonComponent
   ]
 })
 export class SharedModule { }
