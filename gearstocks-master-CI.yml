@@ -29,8 +29,8 @@ stages:
           echo "API_ADDR=api.gearstocks.store" > .env
           echo "API_PORT=80" >> .env
           sed -i '/- 80:80/d' docker-compose.yml
-          sed -i "s/PATHIMAGE*/PATHIMAGE=\'\/home\/GearStocks\/images\/\'/g" back/src/Scrapper/config.py
-          sed -i "s/URLGEAR*/URLGEAR=\'dev.gearstocks.store:8000\'/g" back/src/Scrapper/config.py
+          sed -i "/PATHIMAGE/c\PATHIMAGE=\'\/home\/GearStocks\/images\/\'" back/src/python/scripts/tools/Scrapper/Un/Chemin/Plus/Long/Pour/Faire/Plaisir/A/Valentin/Scrapper/config.py
+          sed -i "/URLGEAR/c\URLGEAR=\'api.gearstocks.store'" back/src/python/scripts/tools/Scrapper/Un/Chemin/Plus/Long/Pour/Faire/Plaisir/A/Valentin/Scrapper/config.py
           echo "export const address = 'api.gearstocks.store';" > application/config/address.js
           sed -i 's/http:\/\/localhost:8000/https:\/\/api.gearstocks.store/g' front/src/environments/environment.prod.ts
           sed -i 's/http:\/\/localhost:8000/https:\/\/api.gearstocks.store/g' front/src/environments/environment.mock.ts
@@ -59,7 +59,7 @@ stages:
           cp -R api_builder/build/App drop/api_builder/build/
           cp -R api_builder/lib drop/api_builder/
           cp -R back/Dockerfile drop/back
-          cp -R back/src/Scrapper drop/back
+          cp -R back/src/python/scripts/tools/Scrapper/Un/Chemin/Plus/Long/Pour/Faire/Plaisir/A/Valentin/Scrapper drop/back
           echo API OK
         displayName: Prepare API for Archive
       - script: |
