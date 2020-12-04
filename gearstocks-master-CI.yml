@@ -29,8 +29,8 @@ stages:
           echo "API_ADDR=api.gearstocks.store" > .env
           echo "API_PORT=80" >> .env
           sed -i '/- 80:80/d' docker-compose.yml
-          sed -i "s/PATHIMAGE*/PATHIMAGE=\'\/home\/GearStocks\/images\/\'/g" back/Scrapper/config.py
-          sed -i "s/URLGEAR*/URLGEAR=\'dev.gearstocks.store:8000\'/g" back/Scrapper/config.py
+          sed -i "s/PATHIMAGE*/PATHIMAGE=\'\/home\/GearStocks\/images\/\'/g" back/src/Scrapper/config.py
+          sed -i "s/URLGEAR*/URLGEAR=\'dev.gearstocks.store:8000\'/g" back/src/Scrapper/config.py
           echo "export const address = 'api.gearstocks.store';" > application/config/address.js
           sed -i 's/http:\/\/localhost:8000/https:\/\/api.gearstocks.store/g' front/src/environments/environment.prod.ts
           sed -i 's/http:\/\/localhost:8000/https:\/\/api.gearstocks.store/g' front/src/environments/environment.mock.ts
