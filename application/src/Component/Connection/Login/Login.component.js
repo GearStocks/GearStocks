@@ -29,10 +29,35 @@ export default class Login extends React.Component {
       errorPassword: "",
       hidePassword: true,
     };
+
+    this.willFocusListener = this.props.navigation.addListener(
+      "willFocus",
+      () => {
+        this.componentWillFocus();
+      }
+    );
+    this.didBlurListener = this.props.navigation.addListener("didBlur", () => {
+      this.componentDidBlur();
+    });
   }
 
-  resetInfo(navigate) {
+  componentWillFocus() {
+    this.resetInfo();
+  }
+
+  componentDidBlur() {}
+
+  resetInfo() {
     this.token = '';
+    this.username = '';
+    this.firstname = '';
+    this.lastname = '';
+    this.email = '';
+    this.birthday = '';
+}
+
+resetInfo2(navigate) {
+  this.token = '';
     this.username = '';
     this.firstname = '';
     this.lastname = '';
@@ -77,7 +102,7 @@ export default class Login extends React.Component {
 
   render() {
     const { navigate } = this.props.navigation;
-    if (user.isConnected()) navigate("AppMenu");
+  
     return (
       <View style={styles.container}>
         <Text style={styles.title}>GearStocks</Text>
@@ -155,7 +180,7 @@ export default class Login extends React.Component {
           title={"Continue without Log In"}
           buttonStyle={styles.button}
           type="outline"
-          onPress={() => this.resetInfo(navigate)}
+          onPress={() => this.resetInfo2(navigate)}
         />
         <Button
           title={strings.LOGIN}

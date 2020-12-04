@@ -47,9 +47,8 @@ export default class HomeComponent extends React.Component {
         minPrice: "",
         category: "",
         model: "",
-      }
+      },
     });
-    console.log(JSONObj)
     listParts(this, JSONObj);
   };
 
@@ -63,7 +62,6 @@ export default class HomeComponent extends React.Component {
       //   model: "",
       // },
     });
-    console.log(JSONObj);
     axios
       .post(routes.GET_FULL_CAR_PART, JSONObj, {
         headers: {
@@ -105,10 +103,10 @@ export default class HomeComponent extends React.Component {
           }}
         >
           <View style={{ width: "99%", aspectRatio: 1 }}>
-            <Text style={{ fontSize: 30, textAlign: "center", top: "10%" }}>
-              {item.name.toUpperCase()}
+            <Text style={{ fontSize: 20, textAlign: "left", top: "5%" }}>
+              Name : {item.name.toUpperCase()}
             </Text>
-            <Text style={{ fontSize: 30, textAlign: "center", top: "10%" }}>
+            <Text style={{ fontSize: 20, textAlign: "left", top: "10%" }}>
               Price : {item.price.toUpperCase()} euros
             </Text>
             <Image
@@ -144,6 +142,11 @@ export default class HomeComponent extends React.Component {
           onChangeText={(search) => this.updateSearch(search)}
           value={search}
         />
+        {response.length === 0 ? (
+          <View style={{ top: "5%" }}>
+            <Text>Maybe these articles will interest you : </Text>
+          </View>
+        ) : null}
         <ScrollView style={{ flex: 1 }}>
           <View>{images}</View>
         </ScrollView>
