@@ -48,6 +48,7 @@ void Server::setupRoutes() {
   Pistache::Rest::Routes::Post(router, "/delBookmark", Pistache::Rest::Routes::bind(&Server::delBookmark, this));
   Pistache::Rest::Routes::Options(router, "/delBookmark", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
   Pistache::Rest::Routes::Post(router, "/addCarPart", Pistache::Rest::Routes::bind(&Server::addCarPart, this));
+  //Pistache::Rest::Routes::Options(router, "/addCarPart", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
   Pistache::Rest::Routes::Post(router, "/getFullCarPart", Pistache::Rest::Routes::bind(&Server::getFullCarPart, this));
   Pistache::Rest::Routes::Options(router, "/getFullCarPart", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
   Pistache::Rest::Routes::Post(router, "/forgottenPassword", Pistache::Rest::Routes::bind(&Server::forgottenPassword, this));
@@ -573,7 +574,7 @@ int Server::addCarPart(const Pistache::Rest::Request& request, Pistache::Http::R
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
-  }  
+  }
   if(!document.HasMember("categories")) {
     std::cout << "Il manque le champ categories" << std::endl;
     document2.AddMember("error", "Bad JSON. Need a field 'categories'", allocator); 
@@ -592,7 +593,6 @@ int Server::addCarPart(const Pistache::Rest::Request& request, Pistache::Http::R
     }
   }
   */
-  
   std::vector<std::string> categories;
   const rapidjson::Value& attributesCategories = document["categories"];
   for (rapidjson::Value::ConstValueIterator itCategories = attributesCategories.Begin(); itCategories != attributesCategories.End() ; ++itCategories) {
