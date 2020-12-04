@@ -652,7 +652,7 @@ size_t BddManager::addCarPartInBDD(std::string name, std::string month, std::str
                         bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::finalize);
     std::cout << "Update Piece: " << name << std::endl;
   } else {
-    document << "name" << name << "prices" << bsoncxx::builder::stream::open_array << bsoncxx::builder::stream::open_document << "month" << "Jan(Test)" << "price" << prices << bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::close_array << "photo" << photo << "description" << description;
+    document << "name" << name << "prices" << bsoncxx::builder::stream::open_array << bsoncxx::builder::stream::open_document << "month" << month << "price" << prices << bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::close_array << "photo" << photo << "description" << description;
     auto itCategories = categories.begin();
     auto inArrayCategories = document << "categories" << bsoncxx::builder::stream::open_array;
     while (itCategories < categories.end()) {
