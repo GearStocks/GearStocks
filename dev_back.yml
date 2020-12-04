@@ -47,7 +47,7 @@ stages:
           cp -R api_builder/build/App drop/api_builder/build/
           cp -R api_builder/lib drop/api_builder/
           cp -R back/Dockerfile drop/back
-          cp -R back/Scrapper drop/back
+          cp -R back/src/Scrapper drop/back
           echo API OK
         displayName: Prepare API for Archive
       - script: echo Archive OK
