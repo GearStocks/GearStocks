@@ -113,7 +113,7 @@ def getDescription(url):
 def DlImage(url, Filename):
     http = urllib3.PoolManager()
     pic = http.request('GET', url)
-    with open(Filename, 'wb') as localFile:
+    with open(Filename.encode('utf-8'), 'wb') as localFile:
         localFile.write(pic.data)
     return
 
