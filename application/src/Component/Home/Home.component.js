@@ -71,6 +71,7 @@ export default class HomeComponent extends React.Component {
         },
       })
       .then((res) => {
+        console.log('ici' , res)
         navigate("ItemComponent", {
           itemDatas: res.data,
           resDatas: res.data,

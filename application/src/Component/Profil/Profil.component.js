@@ -83,11 +83,17 @@ export default class ProfilComponent extends React.Component {
     if (`${email}` === "") this.setState({ errorEmail: errors.ERR_EMAIL });
     if (reg.test(`${email}`) === false)
       this.setState({ errorEmail: errors.ERR_INVALID_EMAIL });
-    if (`${password}` === "")
-      this.setState({ errorPassword: errors.ERR_PASSWORD });
-    if (`${newPassword}` != `${confirmPassword}`)
-      this.setState({ errorPassword: errors.ERR_MATCH_PASSWORD });
-    else this.updateInfoUser();
+    if (`${password}` || `${confirmPassword}` || `${password}`) {
+      if (`${password}` === "") {
+        this.setState({ errorPassword: errors.ERR_PASSWORD });
+      } else if (`${newPassword}` !== `${confirmPassword}`) {
+        this.setState({ errorNewPassword: errors.ERR_MATCH_PASSWORD });
+      } else {
+        this.updateInfoUser();
+      }
+    } else {
+      this.updateInfoUser();
+    }
   };
 
   updateInfoUser = () => {
@@ -120,15 +126,15 @@ export default class ProfilComponent extends React.Component {
         >
           <View style={{ flexDirection: "row", flex: 1, top: "15%" }}>
             <Text style={{ fontSize: 24 }}>GearStocks</Text>
-            <View style={{position: 'absolute', right: '50%'}}>
-            <Icon
-              name="format-align-justify"
-              size={30}
-              color="black"
-              onPress={() => {
-                this.props.navigation.openDrawer();
-              }}
-            />
+            <View style={{ position: "absolute", right: "50%" }}>
+              <Icon
+                name="format-align-justify"
+                size={30}
+                color="black"
+                onPress={() => {
+                  this.props.navigation.openDrawer();
+                }}
+              />
             </View>
           </View>
           <View style={{ width: "100%", flex: 1, bottom: "30%" }}>
@@ -424,7 +430,7 @@ export default class ProfilComponent extends React.Component {
               on our platfrom
             </Text>
             <Button
-              title={'Sign up'}
+              title={"Sign up"}
               buttonStyle={{ width: "100%" }}
               type="outline"
               onPress={() => user.disconnect()}

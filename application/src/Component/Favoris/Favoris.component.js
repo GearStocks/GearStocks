@@ -112,27 +112,29 @@ export default class FavorisComponent extends React.Component {
               </View>
             </View>
 
-            {this.state.res
-              ? this.state.res.map((item, i) => (
-                  <View
-                    style={{
-                      alignSelf: "center",
-                      top: "20%",
-                      width: "90%",
-                    }}
-                  >
-                    <Text></Text>
-                    <TouchableOpacity onPress={() => console.log("test")}>
-                      <Text
-                        key={i}
-                        style={{ textAlign: "center", fontSize: 15 }}
-                      >
-                        {item}
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                ))
-              : null}
+            <View>
+              {this.state.res
+                ? this.state.res.map((item, i) => (
+                    <View
+                      style={{
+                        alignSelf: "center",
+                        top: "20%",
+                        width: "90%",
+                      }}
+                    >
+                      <Text></Text>
+                      <TouchableOpacity onPress={() => console.log("test")}>
+                        <Text
+                          key={i}
+                          style={{ textAlign: "center", fontSize: 15 }}
+                        >
+                          {item}
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  ))
+                : null}
+            </View>
           </View>
         </View>
       );
@@ -185,11 +187,11 @@ export default class FavorisComponent extends React.Component {
                 connected on our platfrom
               </Text>
               <Button
-              title={'Sign up'}
-              buttonStyle={{ width: "100%" }}
-              type="outline"
-              onPress={() => user.disconnect()}
-            />
+                title={"Sign up"}
+                buttonStyle={{ width: "100%" }}
+                type="outline"
+                onPress={() => user.disconnect()}
+              />
             </View>
           </View>
         </View>
