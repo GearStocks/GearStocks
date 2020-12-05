@@ -13,13 +13,13 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  Linking,
 } from "react-native";
 import { SearchBar, Icon } from "react-native-elements";
-
-import { styles } from "./Home.component.style";
 import { routes } from "../../../config/routes";
 
 import { listParts } from "../../services/Search";
+import { user } from "../../services/User";
 
 const axios = require("axios");
 
@@ -31,6 +31,16 @@ export default class HomeComponent extends React.Component {
       search: null,
       response: [],
       namePart: "",
+      randomPart: [
+        "Condensateur (pour allumeur en acier ou alu)  pour 356 pré-a - 1950 - 1100 (369) - Cabrio pré a - Boite manuelle 4 vitesses",
+        "Support transv. pont AR  pour 356 pré-a - 1950 - 1100 (369) - Cabrio pré a - Boite manuelle 4 vitesses",
+        "testststs",
+        "eldfpvloedkfvokeod",
+        "qwjsdicjwiedbfci",
+      ],
+      randomOne: null,
+      randomTwo: null,
+      randomThree: null,
     };
   }
 
@@ -71,7 +81,7 @@ export default class HomeComponent extends React.Component {
         },
       })
       .then((res) => {
-        console.log('ici' , res)
+        console.log("ici", res);
         navigate("ItemComponent", {
           itemDatas: res.data,
           resDatas: res.data,
@@ -88,6 +98,8 @@ export default class HomeComponent extends React.Component {
   };
 
   render() {
+    // console.log(randomOne)
+
     const { search, response } = this.state;
     var images = [];
     for (const item of response) {
@@ -111,7 +123,7 @@ export default class HomeComponent extends React.Component {
               Price : {item.price.toUpperCase()} euros
             </Text>
             <Image
-              style={{ resizeMode: "contain", aspectRatio: 1 }}
+              style={{ resizeMode: "contain", aspectRatio: 1, width: '70%', top: '10%', alignSelf: 'center' }}
               source={{ uri: item.image }}
             />
           </View>
@@ -144,8 +156,42 @@ export default class HomeComponent extends React.Component {
           value={search}
         />
         {response.length === 0 ? (
-          <View style={{ top: "5%" }}>
-            <Text>Maybe these articles will interest you : </Text>
+          <View style={{ top: "5%", width: "80%" }}>
+            {user.isConnected() ? (
+              <Text style={{ textAlign: "center", fontSize: 30 }}>
+                Welcome {user.username}
+              </Text>
+            ) : (
+              <View>
+                <Text style={{ textAlign: "center", fontSize: 25 }}>
+                  Welcome
+                </Text>
+                <Text
+                  style={{ textAlign: "center", fontSize: 25, color: "red" }}
+                >
+                  You are not connected
+                </Text>
+              </View>
+            )}
+            <Text style={{ textAlign: "center", fontSize: 20, top: "30%" }}>
+              You can search for your piece by entering it directly into the
+              search bar. You can also navigate through the application by using
+              the icon in the top left corner.
+            </Text>
+            <Text style={{ textAlign: "center", fontSize: 20, top: "60%" }}>
+              If you have a problem, please contact the support:
+            </Text>
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: 20,
+                top: "65%",
+                color: "blue",
+              }}
+              onPress={() => Linking.openURL("mailto:GearStocks@gmail.com")}
+            >
+              GearStocks@gmail.com
+            </Text>
           </View>
         ) : null}
         <ScrollView style={{ flex: 1 }}>

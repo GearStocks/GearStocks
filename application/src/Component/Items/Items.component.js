@@ -180,7 +180,7 @@ export default class ItemsComponent extends React.Component {
             />
           ) : null}
         </View>
-        <View style={{ bottom: '20%', width: '90%' }}>
+        <View style={{ bottom: '30%', width: '90%' }}>
           <Text style={{ fontSize: 20 }}>
             Name : {params.params.itemDatas.name.toUpperCase()}
           </Text>
@@ -190,7 +190,7 @@ export default class ItemsComponent extends React.Component {
         </View>
         <View style={{ width: "90%", aspectRatio: 1 }}>
           <Image
-            style={{ resizeMode: "contain", aspectRatio: 1, bottom: "20%" }}
+            style={{ resizeMode: "contain", aspectRatio: 1, bottom: "70%" }}
             source={{ uri: params.params.itemDatas.photo }}
           />
         </View>

@@ -9,6 +9,7 @@ import {
 import { Icon, ListItem, Button } from "react-native-elements";
 import { user } from "../../services/User";
 import { routes } from "../../../config/routes";
+import { listParts } from "../../services/Search";
 
 const axios = require("axios");
 
@@ -39,7 +40,41 @@ export default class FavorisComponent extends React.Component {
     }
   }
 
-  componentDidBlur() {}
+  getInfoPart(item, navigate) {
+    const JSONObj = JSON.stringify({
+      partName: item,
+      // filters: {
+      //   maxPrice: "",
+      //   minPrice: "",
+      //   category: "",
+      //   model: "",
+      // },
+    });
+    console.log(JSONObj);
+    axios
+      .post(routes.GET_FULL_CAR_PART, JSONObj, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Accept: "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .then((res) => {
+        console.log("ici", res);
+        navigate("ItemComponent", {
+          itemDatas: res.data,
+          resDatas: res.data,
+        });
+      })
+      .catch((err) => {
+        console.log("ici", err.name, err.message);
+      });
+  }
+
+  componentDidBlur() {
+    this.setState({ res: null });
+    this.setState({ favoris: null });
+  }
 
   infoUser = () => {
     const JSONObj = JSON.stringify({
@@ -68,11 +103,13 @@ export default class FavorisComponent extends React.Component {
   };
 
   render() {
-    const { navigation } = this.props;
+    const { navigate } = this.props.navigation;
 
     if (this.state.res) {
       this.state.res.map((item, i) => console.log(item));
     }
+
+    console.log(this.state.res);
 
     if (user.isConnected()) {
       return (
@@ -96,7 +133,6 @@ export default class FavorisComponent extends React.Component {
                   alignSelf: "center",
                 }}
               >
-                <View style={{ right: 70 }}>
                   <Icon
                     name="format-align-justify"
                     size={30}
@@ -105,36 +141,38 @@ export default class FavorisComponent extends React.Component {
                       this.props.navigation.openDrawer();
                     }}
                   />
-                </View>
                 <Text style={{ fontSize: 30, alignSelf: "center" }}>
                   Bookmark
                 </Text>
               </View>
             </View>
-
-            <View>
-              {this.state.res
-                ? this.state.res.map((item, i) => (
-                    <View
-                      style={{
-                        alignSelf: "center",
-                        top: "20%",
-                        width: "90%",
-                      }}
-                    >
-                      <Text></Text>
-                      <TouchableOpacity onPress={() => console.log("test")}>
-                        <Text
-                          key={i}
-                          style={{ textAlign: "center", fontSize: 15 }}
-                        >
-                          {item}
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
-                  ))
-                : null}
-            </View>
+          </View>
+          <View>
+            {this.state.res && this.state.res.length > 0 ? (
+              this.state.res.map((item, i) => (
+                <View
+                  style={{
+                    alignSelf: "center",
+                    width: "80%",
+                    bottom: "10%",
+                  }}
+                  key={i}
+                >
+                  <Text></Text>
+                  <Text
+                    key={i}
+                    onPress={() => this.getInfoPart(item, navigate)}
+                    style={{ textAlign: "center", fontSize: 20 }}
+                  >
+                    {item}
+                  </Text>
+                </View>
+              ))
+            ) : (
+              <View>
+                <Text style={{fontSize: 20}}>There is no bookmark</Text>
+              </View>
+            )}
           </View>
         </View>
       );
