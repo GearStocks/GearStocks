@@ -4,7 +4,7 @@ SITE = ( )
 
 PATHIMAGE = '/home/mrkikuchii/EIP_All/My_EIP_Definitiv_Edition/GearStocks/images/'
 URLGEAR = 'http://127.0.0.1:8000/'
-
+IMAGEURL = 'https://images.gearstocks.store/'
 
 URLRACINE = 'https://www.rosepassion.com/fr/pieces-porsche'
 

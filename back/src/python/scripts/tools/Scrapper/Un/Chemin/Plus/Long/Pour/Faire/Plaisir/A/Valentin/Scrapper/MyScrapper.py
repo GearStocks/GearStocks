@@ -92,7 +92,7 @@ def getImage(url, Name):
     tmp = soup.select('a[class="chocolat-image"] > img')
     for i in tmp:
         DlImage(i['src'].replace(u'\xa0', u' '), config.PATHIMAGE + Name + '.jpg')
-    return config.PATHIMAGE + Name + '.jpg'
+    return config.IMAGEURL + Name + '.jpg'
 
 def getDescription(url):
     description = ""
