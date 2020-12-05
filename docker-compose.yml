@@ -94,7 +94,7 @@ services:
         max-file: "10"
   
   #Open the api port to be externaly accessible. If you want to remove the external access to the api, just remove the "ports" option.
-  #It will be accessible only through "gearstocks" network (IE: by the front).
+  #It will be accessible only through "gearstocks" network (IE: through apache).
   api:
     build: ./back
   #  depends_on:

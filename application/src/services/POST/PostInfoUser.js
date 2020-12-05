@@ -8,7 +8,6 @@ const axios = require('axios');
 export default class PostRegister extends React.Component {
 
   infoUser = (token, email) => {
-    console.log(token, email);
     const JSONObj = JSON.stringify({
       userToken: token,
       mail: email

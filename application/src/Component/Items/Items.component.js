@@ -60,8 +60,8 @@ export default class ItemsComponent extends React.Component {
   };
 
   render() {
-    const monthData = [];
-    const priceData = [];
+    const monthData = ["month"];
+    const priceData = ["0"];
     const params = this.props.navigation.state;
 
     for (const month of params.params.resDatas.prices) {
@@ -94,12 +94,12 @@ export default class ItemsComponent extends React.Component {
             />
           ) : null}
         </View>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, top: "10%" }}>
           <Text style={{ fontSize: 20 }}>
-            Name : {params.params.itemDatas.name}
+            Name : {params.params.itemDatas.name.toUpperCase()}
           </Text>
           <Text style={{ fontSize: 20 }}>
-            Description : {params.params.resDatas.description}
+            {params.params.resDatas.description}
           </Text>
         </View>
         <View style={{ width: "90%", aspectRatio: 1 }}>

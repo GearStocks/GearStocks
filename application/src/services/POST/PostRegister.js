@@ -18,7 +18,6 @@ const axios = require('axios');
 export default class PostRegister extends React.Component {
 
   register = (JSONObj, navigate) => {
-    console.log(JSONObj);
     axios.post(routes.REGISTER, JSONObj, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
