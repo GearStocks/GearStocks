@@ -21,6 +21,8 @@ export class SearchListComponent implements OnInit {
   keyword: string;
   categories: any;
   selectedCategorie: string;
+  value = 0;
+  highValue = 15000;
 
   constructor(private route: ActivatedRoute, private store: Store<AppState>) {
     this.store.pipe(select(selectSearchList)).subscribe(x => this.data = x);

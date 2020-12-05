@@ -38,7 +38,12 @@ export class SearchService {
   search(keyword: string): Observable<Items> {
     const body = {
       keyWord: keyword,
-      filters: ''
+      filters: {
+        'maxPrice': '',
+        'minPrice': '',
+        'category': '',
+        'model': ''
+    }
     };
     return this.http.post<any>(this.searchUrl, body, httpOptions);
   }
