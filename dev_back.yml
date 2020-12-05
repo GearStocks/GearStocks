@@ -38,6 +38,7 @@ stages:
           sed -i '/- 80:80/d' docker-compose.yml
           sed -i "/PATHIMAGE/c\PATHIMAGE='\/home\/GearStocks\/images\/'" back/src/python/scripts/tools/Scrapper/Un/Chemin/Plus/Long/Pour/Faire/Plaisir/A/Valentin/Scrapper/config.py
           sed -i "/URLGEAR/c\URLGEAR='https:\/\/dev.gearstocks.store:8000\/'" back/src/python/scripts/tools/Scrapper/Un/Chemin/Plus/Long/Pour/Faire/Plaisir/A/Valentin/Scrapper/config.py
+          sed -i "/IMLAGEURL/c\IMLAGEURL='https:\/\/images.gearstocks.store\/'" back/src/python/scripts/tools/Scrapper/Un/Chemin/Plus/Long/Pour/Faire/Plaisir/A/Valentin/Scrapper/config.py
           docker-compose up api_builder
           echo Back successfully build.
         displayName: 'API Compilation Check'
