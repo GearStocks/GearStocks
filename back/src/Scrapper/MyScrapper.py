@@ -75,7 +75,7 @@ def main():
                             categories.append(myCategorie2)
                             month = datetime.datetime.now().strftime("%b")
                             my_json = {"name":Name,"prices":Price,"photo":photo,"description":Description, "month":month, "categories":categories}
-                            #print("MyJson : {}".format(my_json))
+                            print("MyJson : {}".format(my_json))
                             res = requests.post(config.URLGEAR+"addCarPart", json=my_json)
                             #print(res)
                         else:
@@ -100,12 +100,13 @@ def getDescription(url):
     if res.status_code != 200:
         print("Error code retour: {}".format(res.status_code))
         sys.exit(1)
-    #print("URL PIECE: {}".format(url))
+    print("URL PIECE: {}".format(url))
     soup = bs4.BeautifulSoup(res.text, 'lxml')
     tmp = soup.select('div[class="detail"]')
     tmp = tmp[0].select('ul > li')
     for i in tmp:
-        if i.find("span").getText() == "Poids :":
+        #print(i)
+        if i.find("span").getText().replace(u'/xe9', 'e') == "Poids :":
             description = i.find('p').getText()
     return description
 
@@ -113,7 +114,7 @@ def getDescription(url):
 def DlImage(url, Filename):
     http = urllib3.PoolManager()
     pic = http.request('GET', url)
-    with open(Filename, 'wb') as localFile:
+    with open(Filename.replace(u'/xe9', 'e'), 'wb') as localFile:
         localFile.write(pic.data)
     return
 
