@@ -48,6 +48,7 @@ void Server::setupRoutes() {
   Pistache::Rest::Routes::Post(router, "/delBookmark", Pistache::Rest::Routes::bind(&Server::delBookmark, this));
   Pistache::Rest::Routes::Options(router, "/delBookmark", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
   Pistache::Rest::Routes::Post(router, "/addCarPart", Pistache::Rest::Routes::bind(&Server::addCarPart, this));
+  //Pistache::Rest::Routes::Options(router, "/addCarPart", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
   Pistache::Rest::Routes::Post(router, "/getFullCarPart", Pistache::Rest::Routes::bind(&Server::getFullCarPart, this));
   Pistache::Rest::Routes::Options(router, "/getFullCarPart", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
   Pistache::Rest::Routes::Post(router, "/forgottenPassword", Pistache::Rest::Routes::bind(&Server::forgottenPassword, this));
@@ -56,8 +57,12 @@ void Server::setupRoutes() {
   Pistache::Rest::Routes::Options(router, "/listParts", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
   Pistache::Rest::Routes::Post(router, "/listPartsByCategory", Pistache::Rest::Routes::bind(&Server::listPartsByCategory, this));
   Pistache::Rest::Routes::Options(router, "/listPartsByCategory", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
+  Pistache::Rest::Routes::Post(router, "/getSubCategoriesFromCategory", Pistache::Rest::Routes::bind(&Server::getSubCategoriesFromCategory, this));
+  Pistache::Rest::Routes::Options(router, "/getSubcategoriesFromCategory", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
   Pistache::Rest::Routes::Post(router, "/getNonEmptyCategoryNames", Pistache::Rest::Routes::bind(&Server::getNonEmptyCategoryNames, this));
   Pistache::Rest::Routes::Options(router, "/getNonEmptyCategoryNames", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
+  Pistache::Rest::Routes::Post(router, "/getInitFilterValues", Pistache::Rest::Routes::bind(&Server::getInitFilterValues, this));
+  Pistache::Rest::Routes::Options(router, "/getInitFilterValues", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
   Pistache::Rest::Routes::Post(router, "/contact", Pistache::Rest::Routes::bind(&Server::sendContact, this));
   Pistache::Rest::Routes::Options(router, "/contact", Pistache::Rest::Routes::bind(&Server::OptionsConnect, this));
 }
@@ -534,6 +539,7 @@ int Server::addCarPart(const Pistache::Rest::Request& request, Pistache::Http::R
   rapidjson::StringBuffer strbuf;
   rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
 
+
   response.headers().add<Pistache::Http::Header::ContentType>(MIME(Application, Json));
   document.Parse(request.body().c_str());
   if(!document.HasMember("name")) {
@@ -542,7 +548,7 @@ int Server::addCarPart(const Pistache::Rest::Request& request, Pistache::Http::R
     document2.Accept(writer);
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
-  } //prices => price
+  }
   if(!document.HasMember("prices")) {
     std::cout << "Il manque le champ prices" << std::endl;
     document2.AddMember("error", "Bad JSON. Need a field 'price'", allocator); 
@@ -571,6 +577,26 @@ int Server::addCarPart(const Pistache::Rest::Request& request, Pistache::Http::R
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
+  if(!document.HasMember("categories")) {
+    std::cout << "Il manque le champ categories" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'categories'", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  if(!document.HasMember("brand")) {
+    std::cout << "Il manque le champ brand" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'brand'", allocator);
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  if(!document.HasMember("model")) {
+    std::cout << "Il manque le champ model" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'model'", allocator);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
 
 //std::vector<std::string> prices;
 /*
@@ -582,8 +608,14 @@ int Server::addCarPart(const Pistache::Rest::Request& request, Pistache::Http::R
     }
   }
   */
-  result = _manager->addCarPartInBDD(document["name"].GetString(), document["month"].GetString(), document["prices"].GetString(), document["photo"].GetString(), document["description"].GetString());
-  document2.AddMember("success", "Car part added", allocator); 
+  std::vector<std::string> categories;
+  const rapidjson::Value& attributesCategories = document["categories"];
+  for (rapidjson::Value::ConstValueIterator itCategories = attributesCategories.Begin(); itCategories != attributesCategories.End() ; ++itCategories) {
+    const rapidjson::Value& attributeCategories = *itCategories;
+    categories.push_back((attributeCategories.MemberBegin())->value.GetString());
+  }
+  result = _manager->addCarPartInBDD(document["name"].GetString(), document["month"].GetString(), document["prices"].GetString(), document["photo"].GetString(), document["description"].GetString(), categories, document["brand"].GetString(), document["model"].GetString());
+  document2.AddMember("success", "Car part added", allocator);
   document2.Accept(writer);
   response.send(Pistache::Http::Code::Ok, strbuf.GetString());
   //response.send(Pistache::Http::Code::Ok, "Test");
@@ -684,22 +716,53 @@ int Server::listParts(const Pistache::Rest::Request& request, Pistache::Http::Re
     response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
     return -1;
   }
-  document2.AddMember("success", "list parts", allocator);
+  if(!document["filters"].HasMember("maxPrice")) {
+    std::cout << "Il manque le champ maxPrice" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'maxPrice'", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  if(!document["filters"].HasMember("minPrice")) {
+    std::cout << "Il manque le champ minPrice" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'minPrice'", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  if(!document["filters"].HasMember("category")) {
+    std::cout << "Il manque le champ category" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'category'", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  if(!document["filters"].HasMember("model")) {
+    std::cout << "Il manque le champ model" << std::endl;
+    document2.AddMember("error", "Bad JSON. Need a field 'model'", allocator); 
+    document2.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
   
-  std::vector<std::string> filters;
-  //const rapidjson::Value& attributes = document["filters"];
-  //for (rapidjson::Value::ConstValueIterator itr = attributes.Begin(); itr != attributes.End(); ++itr) {
-    //std::cout << *itr << std::endl;
-    //const rapidjson::Value& attribute = *itr;
-    //std::cout << itr->GetString() << std::endl;
-  //}
+  document2.AddMember("success", "list parts", allocator);
 
+
+  //METTRE DES HASMEMBER
+  std::vector<std::string> filters;
+  const rapidjson::Value& attributes = document["filters"];
+  filters.push_back(document["filters"]["maxPrice"].GetString());
+  filters.push_back(document["filters"]["minPrice"].GetString());
+  filters.push_back(document["filters"]["category"].GetString());
+  filters.push_back(document["filters"]["model"].GetString());
+  //std::cout << document["filters"]["maxPrice"].GetString() << std::endl;
+  
   
   std::vector<std::pair<std::string, size_t>>	resultParsing;
   resultParsing = _manager->parseKeyWordInTree(_manager->generateTree(), document["keyWord"].GetString());
   if (resultParsing.empty()) {
     std::cout << "Aucunes pièces ne correspondent" << std::endl;
-    document2.AddMember("data", "Part not found", allocator); 
+    document2.AddMember("data", "Part not found", allocator);
   }
   else {
     std::vector<std::pair<std::string, size_t>>::iterator it = resultParsing.begin();
@@ -707,7 +770,8 @@ int Server::listParts(const Pistache::Rest::Request& request, Pistache::Http::Re
     int i = 1;
     while (it < resultParsing.end() && i <= 10) {
       doc3 = _manager->getCarPart((*it).first, filters);
-      mergeObjects(document2, *doc3, allocator);
+      if (doc3 != NULL)
+	mergeObjects(document2, *doc3, allocator);
       ++it;
       ++i;
     }
@@ -746,6 +810,7 @@ int Server::listPartsByCategory(const Pistache::Rest::Request &request, Pistache
     return -1;
   }
   if (!documentRequest.HasMember("pageNb")) {
+
     std::cout << "Il manque le champ pageNb" << std::endl;
     documentResponse.AddMember("error", "Bad JSON. Need a field 'pageNb'", allocator);
     documentResponse.Accept(writer);
@@ -776,6 +841,37 @@ int Server::listPartsByCategory(const Pistache::Rest::Request &request, Pistache
   return 0;
 }
 
+int Server::getSubCategoriesFromCategory(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response)
+{
+  rapidjson::Document documentRequest;
+  rapidjson::Document documentResponse;
+  documentResponse.SetObject();
+  rapidjson::Document::AllocatorType& allocator = documentResponse.GetAllocator();
+  rapidjson::StringBuffer strbuf;
+  rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
+
+  documentRequest.Parse(request.body().c_str());
+  response.headers().add<Pistache::Http::Header::AccessControlAllowOrigin>("*");
+  response.headers().add<Pistache::Http::Header::AccessControlAllowMethods>("*");
+  response.headers().add<Pistache::Http::Header::AccessControlAllowHeaders>("*");
+  response.headers().add<Pistache::Http::Header::ContentType>(MIME(Application, Json));
+
+  if (!documentRequest.HasMember("category")) {
+    std::cout << "Il manque le champ category" << std::endl;
+    documentResponse.AddMember("error", "Bad JSON. Need a field 'category'", allocator);
+    documentResponse.Accept(writer);
+    response.send(Pistache::Http::Code::Bad_Request, strbuf.GetString());
+    return -1;
+  }
+  documentResponse.AddMember("success", "list parts", allocator);
+  
+  std::vector<std::string>  resultCategories;
+
+  documentResponse.Accept(writer);
+  response.send(Pistache::Http::Code::Ok, strbuf.GetString());
+  return 0;
+}
+
 int Server::getNonEmptyCategoryNames(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response)
 {
   rapidjson::Document documentRequest;
@@ -793,27 +889,144 @@ int Server::getNonEmptyCategoryNames(const Pistache::Rest::Request &request, Pis
 
   documentResponse.AddMember("success", "list parts", allocatorResponse);
 
-  std::vector<std::string>  resultListCategories;
-  resultListCategories = _manager->parseCategoryNames();
-  if (resultListCategories.empty()) {
+  std::vector<std::pair<std::string, std::vector<std::string>>>  resultCategoryList;
+  resultCategoryList = _manager->parseCategoryNames();
+
+  if (resultCategoryList.empty()) {
     std::cout << "Aucune categorie n'est définie." << std::endl;
     documentResponse.AddMember("data", "Part not found", allocatorResponse);
   } else {
-    std::string arrayName = "categories";
-    rapidjson::Value arrayNameJson;
-    rapidjson::Value tmpArray(rapidjson::kArrayType);
-    for (int i = 0 ; i < resultListCategories.size() ; ++i) {
-      rapidjson::Value tmpObject;
-      tmpObject.SetObject();
-      std::string tmpCatName = resultListCategories.at(i);
-      rapidjson::Value tmpJsonCatName;
-      tmpJsonCatName.SetString(tmpCatName.c_str(), allocatorResponse);
-      tmpObject.AddMember("name", tmpJsonCatName, allocatorResponse);
-      tmpArray.PushBack(tmpObject, allocatorResponse);
+    std::string categoryArrayName = "categories";
+    rapidjson::Value categoryArrayNameJson;
+    rapidjson::Value tmpCategoryArray(rapidjson::kArrayType);
+    for (auto itCategory = std::begin(resultCategoryList) ; itCategory != std::end(resultCategoryList) ; ++itCategory) {
+      rapidjson::Value tmpCategoryObject;
+      tmpCategoryObject.SetObject();
+      std::string tmpCategoryName = itCategory->first;
+      rapidjson::Value tmpJsonCategoryName;
+      tmpJsonCategoryName.SetString(tmpCategoryName.c_str(), allocatorResponse);
+      tmpCategoryObject.AddMember("name", tmpJsonCategoryName, allocatorResponse);
+      
+      std::string modelArrayName = "subCategories";
+      rapidjson::Value subCategoryArrayNameJson;
+      rapidjson::Value tmpSubCategoryArray(rapidjson::kArrayType);
+
+      for (auto itSubCategory = itCategory->second.begin() ; itSubCategory != itCategory->second.end() ; ++itSubCategory) {
+        rapidjson::Value tmpSubCategoryObject;
+        tmpSubCategoryObject.SetObject();
+        std::string tmpSubCategoryName = *itSubCategory;
+        rapidjson::Value tmpJsonSubCategoryName;
+        tmpJsonSubCategoryName.SetString(tmpSubCategoryName.c_str(), allocatorResponse);
+        tmpSubCategoryObject.AddMember("name", tmpJsonSubCategoryName, allocatorResponse);
+        tmpSubCategoryArray.PushBack(tmpSubCategoryObject, allocatorResponse);
+      }
+      tmpCategoryObject.AddMember("subCategory", tmpSubCategoryArray, allocatorResponse);
+      tmpCategoryArray.PushBack(tmpCategoryObject, allocatorResponse);
     }
-    arrayNameJson.SetString(arrayName.c_str(), allocatorResponse);
-    documentResponse.AddMember(arrayNameJson, tmpArray, allocatorResponse);
+    categoryArrayNameJson.SetString(categoryArrayName.c_str(), allocatorResponse);
+    documentResponse.AddMember(categoryArrayNameJson, tmpCategoryArray, allocatorResponse);
   }
+
+  documentResponse.Accept(writer);
+  response.send(Pistache::Http::Code::Ok, strbuf.GetString());
+  return 0;
+}
+
+int Server::getInitFilterValues(const Pistache::Rest::Request &request, Pistache::Http::ResponseWriter response)
+{
+  rapidjson::Document documentRequest;
+  rapidjson::Document documentResponse;
+  documentResponse.SetObject();
+  rapidjson::Document::AllocatorType &allocatorResponse = documentResponse.GetAllocator();
+  rapidjson::StringBuffer strbuf;
+  rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
+
+  documentRequest.Parse(request.body().c_str());
+  response.headers().add<Pistache::Http::Header::AccessControlAllowOrigin>("*");
+  response.headers().add<Pistache::Http::Header::AccessControlAllowMethods>("*");
+  response.headers().add<Pistache::Http::Header::AccessControlAllowHeaders>("*");
+  response.headers().add<Pistache::Http::Header::ContentType>(MIME(Application, Json));
+
+  std::string maxPrice = _manager->getMaxPricePart();
+
+  std::string maxPriceName = "maxPrice";
+  rapidjson::Value maxPriceJson;
+    
+  maxPriceJson.SetString(maxPrice.c_str(), allocatorResponse);
+  documentResponse.AddMember("maxPrice", maxPriceJson, allocatorResponse);
+
+  std::vector<std::pair<std::string, std::vector<std::string>>> resultBrandAndModelList;
+
+  resultBrandAndModelList = _manager->parseBrandAndModel();
+
+  if (resultBrandAndModelList.empty()) {
+    std::cout << "Aucune marque et/ou modèle n'est définie." << std::endl;
+    documentResponse.AddMember("data", "Part not found", allocatorResponse);
+  } else {
+    std::string brandArrayName = "brands";
+    rapidjson::Value brandArrayNameJson;
+    rapidjson::Value tmpBrandArray(rapidjson::kArrayType);
+    for (auto itBrand = std::begin(resultBrandAndModelList) ; itBrand != std::end(resultBrandAndModelList) ; ++itBrand) {
+      rapidjson::Value tmpObjectBrand;
+      tmpObjectBrand.SetObject();
+      std::string tmpCatNameBrand = itBrand->first;
+      rapidjson::Value tmpJsonCatNameBrand;
+      tmpJsonCatNameBrand.SetString(tmpCatNameBrand.c_str(), allocatorResponse);
+      tmpObjectBrand.AddMember("name", tmpJsonCatNameBrand, allocatorResponse);
+      
+      rapidjson::Value tmpModelArray(rapidjson::kArrayType);
+      for (auto itModel = itBrand->second.begin() ; itModel != itBrand->second.end() ; ++itModel) {
+        rapidjson::Value tmpObjectModel;
+        tmpObjectModel.SetObject();
+        std::string tmpCatNameModel = *itModel;
+        rapidjson::Value tmpJsonCatNameModel;
+        tmpJsonCatNameModel.SetString(tmpCatNameModel.c_str(), allocatorResponse);
+        tmpObjectModel.AddMember("name", tmpJsonCatNameModel, allocatorResponse);
+        tmpModelArray.PushBack(tmpObjectModel, allocatorResponse);
+      }
+      tmpObjectBrand.AddMember("models", tmpModelArray, allocatorResponse);
+      tmpBrandArray.PushBack(tmpObjectBrand, allocatorResponse);
+    }
+    brandArrayNameJson.SetString(brandArrayName.c_str(), allocatorResponse);
+    documentResponse.AddMember(brandArrayNameJson, tmpBrandArray, allocatorResponse);
+  }
+  std::vector<std::pair<std::string, std::vector<std::string>>>  resultCategoryList;
+  resultCategoryList = _manager->parseCategoryNames();
+
+  if (resultCategoryList.empty()) {
+    std::cout << "Aucune categorie n'est définie." << std::endl;
+    documentResponse.AddMember("data", "Part not found", allocatorResponse);
+  } else {
+    std::string categoryArrayName = "categories";
+    rapidjson::Value categoryArrayNameJson;
+    rapidjson::Value tmpCategoryArray(rapidjson::kArrayType);
+    for (auto itCategory = std::begin(resultCategoryList) ; itCategory != std::end(resultCategoryList) ; ++itCategory) {
+      rapidjson::Value tmpCategoryObject;
+      tmpCategoryObject.SetObject();
+      std::string tmpCategoryName = itCategory->first;
+      rapidjson::Value tmpJsonCategoryName;
+      tmpJsonCategoryName.SetString(tmpCategoryName.c_str(), allocatorResponse);
+      tmpCategoryObject.AddMember("name", tmpJsonCategoryName, allocatorResponse);
+      
+      std::string modelArrayName = "subCategories";
+      rapidjson::Value subCategoryArrayNameJson;
+      rapidjson::Value tmpSubCategoryArray(rapidjson::kArrayType);
+      for (auto itSubCategory = itCategory->second.begin() ; itSubCategory != itCategory->second.end() ; ++itSubCategory) {
+        rapidjson::Value tmpSubCategoryObject;
+        tmpSubCategoryObject.SetObject();
+        std::string tmpSubCategoryName = *itSubCategory;
+        rapidjson::Value tmpJsonSubCategoryName;
+        tmpJsonSubCategoryName.SetString(tmpSubCategoryName.c_str(), allocatorResponse);
+        tmpSubCategoryObject.AddMember("name", tmpJsonSubCategoryName, allocatorResponse);
+        tmpSubCategoryArray.PushBack(tmpSubCategoryObject, allocatorResponse);
+      }
+      tmpCategoryObject.AddMember("subCategory", tmpSubCategoryArray, allocatorResponse);
+      tmpCategoryArray.PushBack(tmpCategoryObject, allocatorResponse);
+    }
+    categoryArrayNameJson.SetString(categoryArrayName.c_str(), allocatorResponse);
+    documentResponse.AddMember(categoryArrayNameJson, tmpCategoryArray, allocatorResponse);
+  }
+
   documentResponse.Accept(writer);
   response.send(Pistache::Http::Code::Ok, strbuf.GetString());
   return 0;

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 /* NgRx */
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import {
+  addFavourite,
   contact,
   contactSuccess,
   getItem,
@@ -26,7 +27,7 @@ export class CoreEffects {
   search$ = createEffect(() =>
     this.actions$.pipe(
       ofType(search),
-      switchMap(action => this.searchService.search(action.keyword)),
+      switchMap(action => this.searchService.search(action.filters)),
       map(list => searchSuccess({list: list}))
     )
   );
@@ -73,6 +74,12 @@ export class CoreEffects {
       switchMap(action => this.contactService.contact(action.data)),
       map(data => contactSuccess())
     )
+  );
+
+  addFavourite$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(addFavourite),
+      switchMap(action => this.searchService.addFavourite(action.name)))
   );
 
   constructor(private actions$: Actions, private searchService: SearchService,

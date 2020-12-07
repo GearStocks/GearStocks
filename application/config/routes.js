@@ -9,7 +9,7 @@ import {address} from './address';
 
 //Change address in address.js !
 
-var localAddress = 'https://' + 'dev.gearstocks.store:8000' + '/';
+var localAddress = 'https://' + address + '/';
 
 export const routes = {
   CONNECT: localAddress + 'connect',
@@ -18,9 +18,9 @@ export const routes = {
   UPDATE_INFO_USER: localAddress + 'updateInfoUser',
   DISCONNECT: localAddress + 'disconnect',
   ADD_CAR_PART: localAddress + 'addCarPart',
-  GET_FULL_CAR_PART: localAddress + 'getFullCarPart',
   FORGOT_PASSWORD: localAddress + 'forgottenPassword',
   LIST_PARTS: localAddress + 'listParts',
   GET_FULL_CAR_PART: localAddress + 'getFullCarPart',
-  ADD_BOOKMARK: localAddress + 'addBookmark'
+  ADD_BOOKMARK: localAddress + 'addBookmark',
+  DEL_BOOKMARK: localAddress + 'delBookmark'
 };

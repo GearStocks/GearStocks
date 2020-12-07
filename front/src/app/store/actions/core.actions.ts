@@ -7,7 +7,7 @@ import { Item } from '../../search-list/components/item/models/item.model';
 
 export const search = createAction(
   '[App] Search',
-  props<{ keyword: string }>()
+  props<{ filters: any }>()
 );
 
 export const searchByCategory = createAction(
@@ -33,6 +33,11 @@ export const getItemSuccess = createAction(
 export const contact = createAction(
   '[App] Contact',
   props<{ data: any }>()
+);
+
+export const addFavourite = createAction(
+  '[App] Add favourite',
+  props<{ name: string }>()
 );
 
 export const contactSuccess = createAction(

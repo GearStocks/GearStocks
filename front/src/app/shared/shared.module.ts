@@ -35,6 +35,10 @@ import { GearstocksSelectComponent } from './components/gearstocks-select/gearst
 import { GearstocksAlertComponent } from './components/gearstocks-alert/gearstocks-alert.component';
 import { GearstocksTextareaComponent } from './components/gearstocks-textarea/gearstocks-textarea.component';
 import { GearstocksBackToTopComponent } from './components/gearstocks-back-to-top/gearstocks-back-to-top.component';
+import { GearstocksFavouriteButtonComponent } from './components/gearstocks-favourite-button/gearstocks-favourite-button.component';
+
+import { NouisliderModule } from 'ng2-nouislider';
+
 
 export function playerFactory() {
   return player;
@@ -46,7 +50,8 @@ export function playerFactory() {
     GearstocksSelectComponent,
     GearstocksAlertComponent,
     GearstocksTextareaComponent,
-    GearstocksBackToTopComponent
+    GearstocksBackToTopComponent,
+    GearstocksFavouriteButtonComponent
   ],
   imports: [
     CommonModule,
@@ -70,6 +75,7 @@ export function playerFactory() {
     MatFormFieldModule,
     MatProgressBarModule,
     MatGridListModule,
+    NouisliderModule,
     LottieModule.forRoot({ player: playerFactory })
   ],
   exports: [
@@ -95,11 +101,13 @@ export function playerFactory() {
     MatProgressBarModule,
     MatGridListModule,
     LottieModule,
+    NouisliderModule,
     GearstocksInputComponent,
     GearstocksSelectComponent,
     GearstocksAlertComponent,
     GearstocksTextareaComponent,
-    GearstocksBackToTopComponent
+    GearstocksBackToTopComponent,
+    GearstocksFavouriteButtonComponent
   ]
 })
 export class SharedModule { }

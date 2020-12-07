@@ -4,25 +4,42 @@
 
     <app-gearstocks-back-to-top [element]="target"></app-gearstocks-back-to-top>
 
-    <div class="search__bar">
-      <div class="container input-group mb-3 input-group-lg">
-        <mat-form-field appearance="fill">
+    <form class="search__bar" [formGroup]="searchForm" (ngSubmit)="search()">
+      <div class="container input-group input-group-lg">
+        <mat-form-field>
           <mat-label>Categories</mat-label>
-          <mat-select [(ngModel)]="selectedCategorie" name="food">
-            <mat-option *ngFor="let categorie of categories" [value]="categorie.name">
-              {{categorie.name}}
+          <mat-select [formControlName]="'category'">
+            <mat-option *ngFor="let category of categories" [value]="category.name">
+              {{category.name}}
             </mat-option>
           </mat-select>
         </mat-form-field>
         <div class="input-group-prepend">
-          <button type="submit" class="input-group-text delete-css-button" (click)="search()">
+          <button type="submit" class="input-group-text delete-css-button">
             <i class="material-icons"> search </i>
           </button>
         </div>
-        <input type="text" [(ngModel)]="keyword" (keyup.enter)="search()" name="keyword" class="form-control" placeholder='Que recherchez-vous ?'>
+        <input type="text" [formControlName]="'keyWord'" (keyup.enter)="search()" name="keyword" class="form-control" placeholder='Que recherchez-vous ?'>
       </div>
-      <button type="submit" class="input-group-text search__bar__button" (click)="search()">Rechercher ({{this.getUnits()}} résultats)</button>
-    </div>
+
+      <div class="container search__filters">
+        <button mat-button [matMenuTriggerFor]="menu">Prix</button>
+        <mat-menu #menu="matMenu">
+          <div class="search__filters__price">
+            <h1>Prix</h1>
+            <div class="search__filters__price__range">
+              <h2>min.</h2>
+              <p>{{f.range.value[0] | currency:'EUR'}}</p>
+              <h3>max.</h3>
+              <p>{{f.range.value[1] | currency:'EUR'}}</p>
+            </div>
+            <nouislider [config]="sliderConfig" [formControl]="searchForm.get('range')"></nouislider>
+          </div>
+        </mat-menu>
+      </div>
+
+      <button type="submit" class="input-group-text search__bar__button">Rechercher ({{this.getUnits()}} résultats)</button>
+    </form>
 
     <div class="container search__list">
 

@@ -27,7 +27,7 @@ const routes: Routes = [
   { path: 'lost-password', component: LostPasswordComponent },
   { path: 'lost-password-confirmation', component: LostPasswordConfirmationComponent },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
-  { path: 'search-list', component: SearchListComponent, resolve: { categories: CategoriesResolver } },
+  { path: 'search-list', component: SearchListComponent,  },
   { path: 'contact', component: ContactComponent },
   { path: 'item', component: ItemComponent },
   { path: 'description', component: DescriptionComponent },

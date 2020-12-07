@@ -1,16 +1,41 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
+<app-gearstocks-back-to-top [element]="target"></app-gearstocks-back-to-top>
+
 <!-- Header content -->
-<div class="homeHeader">
+<div class="homeHeader" #target>
   <div class="homeHeader__search">
     <h1>Gearstocks</h1>
-    <form class="container input-group mb-3 input-group-lg">
+    <form class="container input-group mb-3 input-group-lg" [formGroup]="searchForm" (ngSubmit)="search()">
+      <mat-form-field>
+        <mat-label>Categories</mat-label>
+        <mat-select [formControlName]="'category'">
+          <mat-option *ngFor="let category of categories" [value]="category.name">
+            {{category.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
       <div class="input-group-prepend">
-        <button type="submit" class="input-group-text" (click)="search()">
+        <button type="submit" class="input-group-text">
           <i class="material-icons"> search </i>
         </button>
       </div>
-      <input type="text" [(ngModel)]="keyword" name="keyword" class="form-control" placeholder='Que recherchez-vous ?'>
+      <input type="text" [formControlName]="'keyWord'" (keyup.enter)="search()" name="keyword" class="form-control" placeholder='Que recherchez-vous ?'>
+      <div class="container homeHeader__search__filters">
+        <button type="button" mat-button [matMenuTriggerFor]="menu">Prix</button>
+        <mat-menu #menu="matMenu">
+          <div class="homeHeader__search__filters__price">
+            <h1>Prix</h1>
+            <div class="homeHeader__search__filters__price__range">
+              <h2>min.</h2>
+              <p>{{f.range.value[0] | currency:'EUR'}}</p>
+              <h3>max.</h3>
+              <p>{{f.range.value[1] | currency:'EUR'}}</p>
+            </div>
+            <nouislider [config]="sliderConfig" [formControl]="searchForm.get('range')"></nouislider>
+          </div>
+        </mat-menu>
+      </div>
     </form>
   </div>
   <a (click)="scrollTo(target)" class="ca3-scroll-down-link ca3-scroll-down-arrow" data-ca3_iconfont="ETmodules" data-ca3_icon=""></a>
@@ -97,10 +122,10 @@
 
   <div class="how__content">
     <img src="assets/img/logo.png">
-    <h1>Comment ca marche ?</h1>
-    <h3>Vous cherchez une pièce auto/moto d’occasion ?</h3>
-    <h2>Trouvez-là sur la première plateforme 100% auto/moto entre particuliers et professionnels !</h2>
-    <h3>GEARSTOCKS est un site crée et conçu pour nous, passionées</h3>
+    <h1>Comment ça marche ?</h1>
+    <h3>Vous cherchez une pièce Auto-Moto d’occasion ?</h3>
+    <h2>Trouvez là sur la première plateforme 100% auto/moto entre particuliers et professionnels !</h2>
+    <h3>GEARSTOCKS est un site crée et conçu pour nous, passionnées</h3>
   </div>
 
 </div>

@@ -27,6 +27,7 @@ export class SearchService {
   public searchUrl = environment.searchUrl;
   public searchByCategoryUrl = environment.searchByCategoryUrl;
   public getItemUrl = environment.getItemUrl;
+  public addBookmarkUrl = environment.addBookmarkUrl;
 
   token: string;
 
@@ -34,9 +35,15 @@ export class SearchService {
     this.store.pipe(select(selectAuthToken)).subscribe(x => this.token = x);
   }
 
-  search(keyword: string): Observable<Items> {
+  search(filters: any): Observable<Items> {
     const body = {
-      keyWord: keyword
+      keyWord: filters.keyWord,
+      filters: {
+        'maxPrice': filters.range[1].toString(),
+        'minPrice': filters.range[0].toString(),
+        'category': filters.category,
+        'model': filters.model
+    }
     };
     return this.http.post<any>(this.searchUrl, body, httpOptions);
   }
@@ -55,6 +62,14 @@ export class SearchService {
       partName: name
     };
     return this.http.post<any>(this.getItemUrl, body, httpOptions);
+  }
+
+  addFavourite(name: string): Observable<any> {
+    const body = {
+      userToken: this.token,
+      partName: name
+    };
+    return this.http.post<any>(this.addBookmarkUrl, body, httpOptions);
   }
 
 }

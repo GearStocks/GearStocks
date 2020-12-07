@@ -6,6 +6,7 @@
 //
 
 #include <iostream>
+#include <iomanip>
 #include <sstream>
 #include "../include/BddManager.hpp"
 
@@ -202,17 +203,18 @@ rapidjson::Document*	BddManager::getFullCarPart(std::string partName)
     rapidjson::Document::AllocatorType& allocator = document2->GetAllocator();
     rapidjson::StringBuffer strbuf;
     rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
-    std::cout << name << std::endl;
     name.erase(0, name.find("\"name\" :") + 10);
-    name.erase(name.find("\", \"photo\" "));
+    name.erase(name.find("\", \"prices\" "));
+    price.erase(0, price.find("\"prices\" :") + 12);
+    price.erase(price.find(", \"photo\" :"));
     path.erase(0, path.find("\"photo\" :") + 11);
     path.erase(path.find("\", \"descript"));
     description.erase(0, description.find("\"description\" :") + 17);
-    description.erase(description.find("\", \"parts\""));
-        
-    rapidjson::Value mdr2(rapidjson::kArrayType);
+    description.erase(description.find("\", \"categories\" :"));
+            
+    rapidjson::Value valuePrices(rapidjson::kArrayType);
     while (price.find("month") != std::string::npos) {
-      getAllPrices(&mdr2, &price, allocator);
+      getAllPrices(&valuePrices, &price, allocator);
     }
 
     rapidjson::Value referrals(rapidjson::kArrayType);
@@ -237,7 +239,7 @@ rapidjson::Document*	BddManager::getFullCarPart(std::string partName)
     document2->AddMember("photo", test, allocator);
     test.SetString(description.c_str(), allocator);
     document2->AddMember("description", test, allocator);
-    document2->AddMember("prices", mdr2, allocator);
+    document2->AddMember("prices", valuePrices, allocator);
     document2->AddMember("referrals", referrals, allocator);
     return document2;
   }
@@ -288,10 +290,10 @@ void	BddManager::getAllPrices(rapidjson::Value *price, std::string *priceToParse
 rapidjson::Document*	BddManager::getCarPart(std::string partName, std::vector<std::string> filters)
 {
   std::string	valueInBDD;
-  
+
   valueInBDD = checkIfExist(_carPartCollection, "name", partName);
   if (valueInBDD.compare("") == 0) {
-    //return (std::make_pair(1, "Invalid part name"));
+    return NULL;
   }
   bsoncxx::builder::stream::document document{};
   bsoncxx::stdx::optional<bsoncxx::document::value> maybe_result =
@@ -307,19 +309,24 @@ rapidjson::Document*	BddManager::getCarPart(std::string partName, std::vector<st
     rapidjson::StringBuffer strbuf;
     rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
     name.erase(0, name.find("\"name\" :") + 10);
-    name.erase(name.find("\", \"photo\" "));
+    name.erase(name.find("\", \"prices\" "));
     price.erase(0, price.rfind("\"price\" :") + 11);
     price.erase(price.find("\" }"));
     path.erase(0, path.find("\"photo\" :") + 11);
     path.erase(path.find("\", \"descript"));
-
+    
     //
     // FONCTION QUI CHECK LES FILTRES
+    if (filters.empty() == false) {
+      if (applyFilters(price, filters) == false) {
+	std::cout << "FILTERS NON RESPECTES" << std::endl;
+	return NULL;
+      }
+    }
+    else
+      std::cout << "LES FILTRES SONT VIDES" << std::endl;
     //
     
-    /*std::cout << "name:" << name << std::endl;
-    std::cout << "price:" << price << std::endl;
-    std::cout << "path:" << path << std::endl;*/
     rapidjson::Value mdr(rapidjson::kArrayType);
     rapidjson::Value test;
     rapidjson::Value s;
@@ -343,6 +350,32 @@ rapidjson::Document*	BddManager::getCarPart(std::string partName, std::vector<st
       //return (std::make_pair(1, "Error encountered"));
 }
 
+bool	BddManager::applyFilters(std::string price, std::vector<std::string> filters)
+{
+  int priceInInt = std::stoi(price);
+  
+  //std::cout << "voici le prix:" << priceInInt << std::endl;
+  //std::cout << "voici le filter maxprice:" << filters[0] << std::endl;
+  //std::cout << "voici le filter minprice:" << filters[1] << std::endl;
+  /*if (priceInInt > std::stoi(filters[0]) || priceInInt < std::stoi(filters[1]))
+    return false;*/
+  if (filters[0].compare("") == 0 && filters[1].compare("") == 0)
+    return true;
+  if (filters[0].compare("") == 0 && filters[1].compare("") != 0) {
+    if (priceInInt < std::stoi(filters[1]))
+      return false;
+    return true;
+  }
+  if (filters[1].compare("") == 0 && filters[0].compare("") != 0) {
+    if (priceInInt > std::stoi(filters[0]))
+      return false;
+    return true;
+  }
+  if (priceInInt > std::stoi(filters[0]) || priceInInt < std::stoi(filters[1]))
+    return false;
+  return true;
+}
+
 size_t  BddManager::updateNameUser(std::string token, std::string username, std::string firstname, std::string lastname)
 {
   std::string     valueInBDD;
@@ -359,6 +392,7 @@ size_t  BddManager::updateNameUser(std::string token, std::string username, std:
 //Suppression des favs
 size_t BddManager::delBookmark(std::string userToken, std::string partName) {
   rapidjson::Document json1;
+
   std::string valueInBDD;
   valueInBDD = checkIfExist(_userCollection, "token", userToken);
   if (valueInBDD.compare("") == 0) {
@@ -391,6 +425,7 @@ size_t BddManager::addBookmark(std::string userToken, std::string partName) {
   rapidjson::Document	json1;
   std::string	valueInBDD;
   valueInBDD = checkIfExist(_userCollection, "token", userToken);
+  std::cout << "Debut AddBookmark" << std::endl;
   if (valueInBDD.compare("") == 0) {
     std::cout << "Invalid token" << std::endl;
     return 1;
@@ -404,7 +439,7 @@ size_t BddManager::addBookmark(std::string userToken, std::string partName) {
       assert(json1["bookmarks"].IsArray());
       auto arr_builder = bsoncxx::builder::basic::array{};
       for (auto& i : json1["bookmarks"].GetArray()) {
-        auto arr_builder = bsoncxx::builder::basic::array{};
+        arr_builder.append(i.GetString());
       }
       arr_builder.append(partName);
       _userCollection.update_one(document << "token" << userToken << bsoncxx::builder::stream::finalize,
@@ -412,6 +447,7 @@ size_t BddManager::addBookmark(std::string userToken, std::string partName) {
                         "bookmarks" << arr_builder <<
                         bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::finalize);
   }
+  std::cout << "Fin AddBookmark" << std::endl;
   return 0;
 }
 
@@ -585,13 +621,12 @@ size_t	BddManager::addBookmark(std::string name, std::vector<std::string> prices
 */
 
 //Il faut ajouter le mois dans les paramétres envoyés à la fonction
-size_t BddManager::addCarPartInBDD(std::string name, std::string month, std::string prices, std::string photo, std::string description)
+size_t BddManager::addCarPartInBDD(std::string name, std::string month, std::string prices, std::string photo, std::string description, std::vector<std::string> categories, std::string brand, std::string model)
 {
   bsoncxx::builder::stream::document document{};
   rapidjson::Document	json1;
   bsoncxx::stdx::optional<bsoncxx::document::value> maybe_result = _carPartCollection.find_one(document << "name" << name << bsoncxx::builder::stream::finalize);
   if (maybe_result) {
-    
     std::string doc = bsoncxx::to_json(maybe_result->view());
     json1.Parse(doc.c_str());
     auto arr_builder = bsoncxx::builder::basic::array{};
@@ -610,17 +645,25 @@ size_t BddManager::addCarPartInBDD(std::string name, std::string month, std::str
       }
       arr_builder.append(in_array);
     }
-    bsoncxx::builder::stream::document new_value{};
-    new_value << "month" << month << "price" << prices;
+    bsoncxx::builder::stream::document newPriceValue{};
+    newPriceValue << "month" << month << "price" << prices;
     
-    arr_builder.append(new_value);
+    arr_builder.append(newPriceValue);
      _carPartCollection.update_one(document << "name" << name << bsoncxx::builder::stream::finalize,
                         document << "$set" << bsoncxx::builder::stream::open_document <<
-                        "prices" << arr_builder <<
+                        "prices" << arr_builder << "photo" << photo <<
                         bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::finalize);
     std::cout << "Update Piece: " << name << std::endl;
   } else {
-    document << "name" << name <<"prices" << bsoncxx::builder::stream::open_array << bsoncxx::builder::stream::open_document << "month" << "Jan(Test)" << "price" << prices << bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::close_array << "description" << description;
+    document << "name" << name << "prices" << bsoncxx::builder::stream::open_array << bsoncxx::builder::stream::open_document << "month" << month << "price" << prices << bsoncxx::builder::stream::close_document << bsoncxx::builder::stream::close_array << "photo" << photo << "description" << description;
+    auto itCategories = categories.begin();
+    auto inArrayCategories = document << "categories" << bsoncxx::builder::stream::open_array;
+    while (itCategories < categories.end()) {
+      inArrayCategories = inArrayCategories <<  bsoncxx::builder::stream::open_document << "name" << *itCategories << bsoncxx::builder::stream::close_document;
+      itCategories++;
+    }
+    auto afterArrayCategories = inArrayCategories << bsoncxx::builder::stream::close_array;
+    document << "brand" << brand << "model" << model;
     addContentInBDD(_carPartCollection, document);
     std::cout << "A car part has been registered:" << name << std::endl;
   }
@@ -673,7 +716,11 @@ size_t	BddManager::disconnectUser(std::string mailUser, std::string token)
 
 void	BddManager::addContentInBDD(auto collection, bsoncxx::builder::stream::document &doc)
 {
+  std::cout << "First" << std::endl;
+  doc.view();
+  std::cout << "Second" << std::endl;
   collection.insert_one(doc.view());
+  std::cout << "Third" << std::endl;
 }
 
 void	BddManager::printCollection(auto collection)
@@ -832,7 +879,7 @@ aho_corasick::trie	BddManager::generateTree()
   for (auto&& doc : cursor) {
     std::string name = bsoncxx::to_json(doc);
     name.erase(0, name.find("\"name\" :") + 10);
-    name.erase(name.find("\", \"photo\" "));
+    name.erase(name.find("\", \"prices\" "));
     trie.insert(name.c_str());
   }
   return trie;
@@ -844,7 +891,7 @@ std::vector<std::pair<std::string, size_t>>	BddManager::parseKeyWordInTree(aho_c
   std::transform(keyWord.begin(), keyWord.end(), keyWord.begin(), ::tolower);
   auto	result = trie.parse_text(keyWord.c_str());
   auto mdr = result.begin();
-
+  
   
   std::pair<std::string, size_t> resultPair;
   while (mdr != result.end()) {
@@ -854,10 +901,7 @@ std::vector<std::pair<std::string, size_t>>	BddManager::parseKeyWordInTree(aho_c
     parsingResult.push_back(resultPair);
     ++mdr;
   }
-
   
-
-
   
   std::stringstream ss(keyWord);
   std::istream_iterator<std::string> begin(ss);
@@ -874,7 +918,7 @@ std::vector<std::pair<std::string, size_t>>	BddManager::parseKeyWordInTree(aho_c
   for (auto&& doc : cursor) {
     std::string name = bsoncxx::to_json(doc);
     name.erase(0, name.find("\"name\" :") + 10);
-    name.erase(name.find("\", \"photo\" "));
+    name.erase(name.find("\", \"prices\" "));
     std::string nameInLower = name;
     std::transform(nameInLower.begin(), nameInLower.end(), nameInLower.begin(), ::tolower);
     while (it < keyWordSplited.end()) {
@@ -918,6 +962,7 @@ std::vector<std::pair<std::string, size_t>>	BddManager::parseKeyWordInTree(aho_c
 std::vector<std::pair<std::string, size_t>> BddManager::parseKeyWordInTreeByCategory(aho_corasick::trie trie, std::string keyWordCategory)                                                        
 {
   std::vector<std::pair<std::string, size_t>>	parsingResult;
+  rapidjson::Document documentCategories;
   std::transform(keyWordCategory.begin(), keyWordCategory.end(), keyWordCategory.begin(), ::tolower);
   auto result = trie.parse_text(keyWordCategory.c_str());
   auto cursorKeyWord = result.begin();
@@ -941,35 +986,38 @@ std::vector<std::pair<std::string, size_t>> BddManager::parseKeyWordInTreeByCate
   for (auto&& doc : cursorCollection) {
 
     std::string partName = bsoncxx::to_json(doc);
-    std::string categoryName = bsoncxx::to_json(doc);
-
     partName.erase(0, partName.find("\"name\" : ") + 10);
-    partName.erase(partName.find("\", \"photo\" "));
-    categoryName.erase(0, categoryName.find("\"category\" :") + 14);
-    categoryName.erase(categoryName.find("\", \"parts\" "));
-
-    std::string CategoryNameInLower = categoryName;
+    partName.erase(partName.find("\", \"prices\" "));
     std::string partNameInLower = partName;
-    std::transform(CategoryNameInLower.begin(), CategoryNameInLower.end(), CategoryNameInLower.begin(), ::tolower);
 
-    while (it < keyWordSplited.end()) {
-      if (CategoryNameInLower.find(*it) != std::string::npos) {
-	      auto itez = std::find_if(parsingResult.begin(), parsingResult.end(), [&categoryName](const std::pair<std::string, int>& element){ return element.first == categoryName;});
-	      if (itez == parsingResult.end()) {
-          resultPair = std::make_pair(partName, 1);
-	        parsingResult.push_back(resultPair);
-          std::cout << "VOICI LE NAME" << partName << std::endl;
-	        std::cout << "VOICI LA CATEGORIE:" << categoryName << std::endl;
-	        std::cout << "VOICI LE SPLIT:" << *it << std::endl;
-	      } else {
-	        std::pair<std::string, int> new_pair = *itez;
-	        ++new_pair.second;
-	        *itez = new_pair;
-      	}
-      }
+    documentCategories.Parse(bsoncxx::to_json(doc).c_str());
+    const rapidjson::Value& attributesCategories = documentCategories["categories"];
+    for (rapidjson::Value::ConstValueIterator itCategories = attributesCategories.Begin() ; itCategories != attributesCategories.End() ; ++itCategories) {
+
+      const rapidjson::Value& attributeCategories = *itCategories;
+      std::string categoryName = (attributeCategories.MemberBegin())->value.GetString();
+      std::string CategoryNameInLower = categoryName;
+      std::transform(CategoryNameInLower.begin(), CategoryNameInLower.end(), CategoryNameInLower.begin(), ::tolower);
+
+      while (it < keyWordSplited.end()) {
+        if (CategoryNameInLower.find(*it) != std::string::npos) {
+	        auto itez = std::find_if(parsingResult.begin(), parsingResult.end(), [&categoryName](const std::pair<std::string, int>& element){ return element.first == categoryName;});
+	        if (itez == parsingResult.end()) {
+            resultPair = std::make_pair(partName, 1);
+	          parsingResult.push_back(resultPair);
+            std::cout << "VOICI LE NAME" << partName << std::endl;
+	          std::cout << "VOICI LA CATEGORIE:" << categoryName << std::endl;
+	          std::cout << "VOICI LE SPLIT:" << *it << std::endl;
+	        } else {
+  	        std::pair<std::string, int> new_pair = *itez;
+	          ++new_pair.second;
+	          *itez = new_pair;
+      	  }
+        }
       ++it;
-    }
+      } 
     it = keyWordSplited.begin();
+    } 
   }
   std::sort(parsingResult.begin(), parsingResult.end(), [](auto &left, auto &right) {
       return left.second > right.second;
@@ -977,18 +1025,97 @@ std::vector<std::pair<std::string, size_t>> BddManager::parseKeyWordInTreeByCate
   return parsingResult;
 }
 
-std::vector<std::string>  BddManager::parseCategoryNames()
+std::vector<std::pair<std::string, std::vector<std::string>>>  BddManager::parseCategoryNames()
 {
-  std::vector<std::string>  categoryList;
+  std::vector<std::pair<std::string, std::vector<std::string>>>  categoryList;  
+  rapidjson::Document documentCategories;
+
   auto cursorCollection = _carPartCollection.find({});
   for (auto&& doc : cursorCollection) {
-    std::string categoryName = bsoncxx::to_json(doc);
-    categoryName.erase(0, categoryName.find("\"category\" :") + 14);
-    categoryName.erase(categoryName.find("\", \"parts\" "));
-    if (std::find(categoryList.begin(), categoryList.end(), categoryName) == categoryList.end())
-      categoryList.push_back(categoryName);
-  }  
+
+
+    documentCategories.Parse(bsoncxx::to_json(doc).c_str());
+    const rapidjson::Value& attributesCategories = documentCategories["categories"];
+    rapidjson::Value::ConstValueIterator itCategories = attributesCategories.Begin();
+
+    const rapidjson::Value& attributeCategories = *itCategories;
+    std::string categoryName = (attributeCategories.MemberBegin())->value.GetString();
+    ++itCategories;
+    std::string subCategoryName = "";
+    const rapidjson::Value& subAttributeCategories = *itCategories;
+    if (itCategories != attributesCategories.End()) {
+      subCategoryName = (subAttributeCategories.MemberBegin())->value.GetString();
+    }
+
+    auto it = std::find_if(categoryList.begin(), categoryList.end(), [&categoryName](const std::pair<std::string, std::vector<std::string>>& element) {return element.first == categoryName;});
+    if (it == categoryList.end()) {
+
+      std::vector<std::string> subCategoryList;
+      if (subCategoryName != "")
+        subCategoryList = {subCategoryName};
+      categoryList.push_back(std::make_pair(categoryName, subCategoryList));
+    }
+    else {
+      if (std::find(it->second.begin(), it->second.end(), subCategoryName) == it->second.end() && !subCategoryName.empty()) {
+        it->second.push_back(subCategoryName);
+      }
+    }
+  }
   return categoryList;
+}
+
+std::vector<std::pair<std::string, std::vector<std::string>>> BddManager::parseBrandAndModel()
+{
+  std::vector<std::pair<std::string, std::vector<std::string>>> brandAndModelList;
+
+  auto cursorCollection = _carPartCollection.find({});
+
+  for (auto&& doc : cursorCollection) {
+
+    std::string brandName = bsoncxx::to_json(doc);
+    brandName.erase(0, brandName.find("\"brand\" :") + 11);
+    brandName.erase(brandName.find("\", \"model\" "));
+
+    std::string modelName = bsoncxx::to_json(doc);
+    modelName.erase(0, modelName.find("\"model\" :") + 11);
+    modelName.erase(modelName.find("\" }"));
+
+    auto it = std::find_if(brandAndModelList.begin(), brandAndModelList.end(), [&brandName](const std::pair<std::string, std::vector<std::string>>& element) {return element.first == brandName;});
+
+    if (it == brandAndModelList.end()) {
+      std::vector<std::string> modelList = {modelName};
+      if (modelName != "")
+        modelList = {modelName};
+      brandAndModelList.push_back(std::make_pair(brandName, modelList));
+    }
+    else {
+      if (std::find(it->second.begin(), it->second.end(), modelName) == it->second.end() && !modelName.empty()) {
+        it->second.push_back(modelName);
+      }
+    }
+  }
+  return brandAndModelList;
+}
+
+std::string BddManager::getMaxPricePart()
+{
+  auto cursorCollection = _carPartCollection.find({});
+  float currentMaxPrice = 0;
+
+  for (auto&& doc : cursorCollection) {
+
+    std::string price = bsoncxx::to_json(doc);
+    price.erase(0, price.rfind("\"price\" :") + 11);
+    price.erase(price.find("\" }"));
+
+    float convertedPrice = std::stof(price);
+    if (convertedPrice >= currentMaxPrice)
+      currentMaxPrice = convertedPrice;
+  }
+  std::stringstream stream;
+  stream << std::fixed << std::setprecision(2) << currentMaxPrice;
+  std::string strMaxPrice = stream.str();
+  return strMaxPrice;
 }
 
 /*if (std::find(parsingResult.begin(), parsingResult.end(), name) == parsingResult.end())
