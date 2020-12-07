@@ -36,7 +36,7 @@ stages:
       - task: Cache@2
         inputs:
           key: 'docker | "$(Agent.OS)" | caching-docker.yml'
-          path: $(System.DefaultWorkingDirectory)/docker/api_builder.tar
+          path: $(System.DefaultWorkingDirectory)/docker
           cacheHitVar: DOCKER_CACHE_RESTORED
         displayName: Load Docker images Cache
       - script: |
