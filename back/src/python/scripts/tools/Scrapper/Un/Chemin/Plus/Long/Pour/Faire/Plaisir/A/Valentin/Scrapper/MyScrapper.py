@@ -83,8 +83,8 @@ def main():
                                 categories.append(myCategorie2)
                                 month = datetime.datetime.now().strftime("%b")
                                 my_json = {"name":Name,"prices":Price,"photo":photo,"description":Description, "month":month, "categories":categories, "model":model, "brand":brand}
-                                print("MyJson : {}".format(my_json))
-                                #res = requests.post(config.URLGEAR+"addCarPart", json=my_json)
+                                #print("MyJson : {}".format(my_json))
+                                res = requests.post(config.URLGEAR+"addCarPart", json=my_json)
                                 #print(res)
                             else:
                                 print("Plus Livrable :(")
@@ -92,12 +92,12 @@ def main():
     return
 
 def normalizeCat(cat):
-    print("Test: {}".format(cat))
+    #print("Test: {}".format(cat))
     tmpCategori = cat.split('-')
     categorie = ""
     it = 0
     while it < len(tmpCategori)-1:
-        print("Test2 : {}".format(tmpCategori[it]))
+        #print("Test2 : {}".format(tmpCategori[it]))
         categorie = categorie + ' ' + tmpCategori[it]
         it +=1
     categorie = {"name": categorie.strip()}
@@ -120,7 +120,7 @@ def getDescription(url):
     if res.status_code != 200:
         print("Error code retour: {}".format(res.status_code))
         sys.exit(1)
-    print("URL PIECE: {}".format(url))
+    #print("URL PIECE: {}".format(url))
     soup = bs4.BeautifulSoup(res.text, 'lxml')
     tmp = soup.select('div[class="detail"]')
     tmp = tmp[0].select('ul > li')
