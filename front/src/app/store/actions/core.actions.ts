@@ -7,7 +7,7 @@ import { Item } from '../../search-list/components/item/models/item.model';
 
 export const search = createAction(
   '[App] Search',
-  props<{ keyword: string }>()
+  props<{ filters: any }>()
 );
 
 export const searchByCategory = createAction(

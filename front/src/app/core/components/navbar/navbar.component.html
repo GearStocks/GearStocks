@@ -11,6 +11,12 @@
   </div>
   <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
     <ul fxLayout fxLayoutGap="15px" class="navbar__elem">
+      <li>
+        <a class="navbar__iconAbove" routerLink="/search-list" id="search">
+          <mat-icon>search</mat-icon>
+          <p>Rechercher</p>
+        </a>
+      </li>
       <li *ngIf="isAuthenticated">
         <mat-list-item [matMenuTriggerFor]="menu">
           <a class="navbar__iconAbove">

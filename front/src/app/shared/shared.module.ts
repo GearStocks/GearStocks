@@ -37,6 +37,9 @@ import { GearstocksTextareaComponent } from './components/gearstocks-textarea/ge
 import { GearstocksBackToTopComponent } from './components/gearstocks-back-to-top/gearstocks-back-to-top.component';
 import { GearstocksFavouriteButtonComponent } from './components/gearstocks-favourite-button/gearstocks-favourite-button.component';
 
+import { NouisliderModule } from 'ng2-nouislider';
+
+
 export function playerFactory() {
   return player;
 }
@@ -72,6 +75,7 @@ export function playerFactory() {
     MatFormFieldModule,
     MatProgressBarModule,
     MatGridListModule,
+    NouisliderModule,
     LottieModule.forRoot({ player: playerFactory })
   ],
   exports: [
@@ -97,6 +101,7 @@ export function playerFactory() {
     MatProgressBarModule,
     MatGridListModule,
     LottieModule,
+    NouisliderModule,
     GearstocksInputComponent,
     GearstocksSelectComponent,
     GearstocksAlertComponent,

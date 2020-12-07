@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 
 .search {
-  background-color: powderblue;
+  background: linear-gradient(120deg, #171616 50%, #22202B 50%);
   min-height: 100vh;
   padding-top: 2em;
   padding-bottom: 2em;
@@ -28,7 +28,14 @@
       box-sizing: content-box;
     }
 
+    mat-form-field {
+      button {
+        margin: 0;
+      }
+    }
+
     &__button {
+      border: none;
       background-color: #4183d7;
       color: white;
       cursor: pointer;
@@ -36,6 +43,50 @@
       position: absolute;
       right: 0;
       left: 0;
+    }
+  }
+
+  &__filters {
+    text-align: left;
+
+    button {
+      color: lightseagreen;
+      border: solid 1px lightgrey;
+      border-radius: 3px;
+      outline: none;
+
+      .mat-menu-item{ outline:none; }
+    }
+
+    &__price {
+      padding: 10px;
+
+      nouislider {
+        margin: 10px 20px 10px 20px;
+      }
+
+      h1 {
+        font: 500 20px/32px Roboto, "Helvetica Neue", sans-serif;
+      }
+
+      &__range {
+        display: inline-flex;
+        align-items: baseline;
+        font: 15px/32px Roboto, "Helvetica Neue", sans-serif;
+
+        h2 {
+          font: 15px/32px Roboto, "Helvetica Neue", sans-serif;
+        }
+
+        h3 {
+          font: 15px/32px Roboto, "Helvetica Neue", sans-serif;
+          margin-left: 10px;
+        }
+
+        p {
+          color: darkorange;
+        }
+      }
     }
   }
 
