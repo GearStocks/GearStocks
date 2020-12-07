@@ -205,12 +205,12 @@ rapidjson::Document*	BddManager::getFullCarPart(std::string partName)
     rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
     name.erase(0, name.find("\"name\" :") + 10);
     name.erase(name.find("\", \"prices\" "));
-    price.erase(0, price.rfind("\"price\" :") + 11);
-    price.erase(price.find("\" }"));
+    price.erase(0, price.find("\"prices\" :") + 12);
+    price.erase(price.find(", \"photo\" :"));
     path.erase(0, path.find("\"photo\" :") + 11);
     path.erase(path.find("\", \"descript"));
     description.erase(0, description.find("\"description\" :") + 17);
-    description.erase(description.find("\" }"));
+    description.erase(description.find("\", \"categories\" :"));
             
     rapidjson::Value valuePrices(rapidjson::kArrayType);
     while (price.find("month") != std::string::npos) {
