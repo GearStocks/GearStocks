@@ -41,8 +41,8 @@ stages:
         displayName: Load Docker images Cache
       - script: |
           docker load < $(System.DefaultWorkingDirectory)/docker/api_builder.tar
-#          docker load <  $(System.DefaultWorkingDirectory)/docker/front.tar
-#          docker load <  $(System.DefaultWorkingDirectory)/docker/app.tar
+          docker load < $(System.DefaultWorkingDirectory)/docker/front.tar
+          docker load < $(System.DefaultWorkingDirectory)/docker/app.tar
         condition: and(not(canceled()), eq(variables.DOCKER_CACHE_RESTORED, 'true'))
       - script: |
           set -e
@@ -61,18 +61,14 @@ stages:
           sed -i 's/http:\/\/localhost/https:\/\/dev.gearstocks.store/g' front/src/environments/environment.ts
           echo " -d dev.gearstocks.store; chmod -R 755 /etc/letsencrypt" >> certbot/Dockerfile
           echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-          docker-compose up api_builder
+          docker-compose up api_builder && docker-compose up front && docker-compose up app
           echo Front, Back and App successfully build.
-#          docker-compose up api_builder && docker-compose up front && docker-compose up app
         displayName: 'Front, API and App Compilation Check'
       - script: |
           mkdir -p  $(System.DefaultWorkingDirectory)/docker
-          ls  $(System.DefaultWorkingDirectory)/docker/
           docker save s_api_builder >  $(System.DefaultWorkingDirectory)/docker/api_builder.tar
-          docker images
-          ls  $(System.DefaultWorkingDirectory)/docker/
-#          docker save s_front >  $(System.DefaultWorkingDirectory)/docker/front.tar
-#          docker save s_app >  $(System.DefaultWorkingDirectory)/docker/app.tar
+          docker save s_front >  $(System.DefaultWorkingDirectory)/docker/front.tar
+          docker save s_app >  $(System.DefaultWorkingDirectory)/docker/app.tar
         condition: and(not(canceled()), or(failed(), ne(variables.DOCKER_CACHE_RESTORED, 'true')))
         displayName: Caching Docker images
       - script: |
@@ -96,27 +92,27 @@ stages:
           cp -R back/Dockerfile drop/back
           echo API OK
         displayName: Prepare API for Archive
-#      - script: |
-#          set -e
-#          mkdir -p drop/front
-#          cp -R front/dist drop/front/
-#          mv apache/conf/httpd-ssl-dev.conf apache/conf/httpd-ssl.conf
-#          cp -R apache drop/
-#          echo Front OK
-#        displayName: Prepare Front for Archive
-#      - script: |
-#          set -e
-#          cp -R apk drop/
-#          echo Application OK
-#        displayName: Prepare Android App for Archive
-#      - script: |
-#          set -e
-#          mkdir -p drop/certbot
-#          cp -R certbot/Dockerfile drop/certbot/
-#          echo certbot OK
-#        displayName: Prepare certbot for Archive
-#      - script: echo Archive OK
-#        displayName: Archive Files
+      - script: |
+          set -e
+          mkdir -p drop/front
+          cp -R front/dist drop/front/
+          mv apache/conf/httpd-ssl-dev.conf apache/conf/httpd-ssl.conf
+          cp -R apache drop/
+          echo Front OK
+        displayName: Prepare Front for Archive
+      - script: |
+          set -e
+          cp -R apk drop/
+          echo Application OK
+        displayName: Prepare Android App for Archive
+      - script: |
+          set -e
+          mkdir -p drop/certbot
+          cp -R certbot/Dockerfile drop/certbot/
+          echo certbot OK
+        displayName: Prepare certbot for Archive
+      - script: echo Archive OK
+        displayName: Archive Files
       - task: ArchiveFiles@2
         displayName: 'Archive Front and API files'
         inputs:
