@@ -40,9 +40,9 @@ stages:
           cacheHitVar: DOCKER_CACHE_RESTORED
         displayName: Load Docker images Cache
       - script: |
-          docker load < $(Pipeline.Workspace)/docker/front.tar
+#          docker load < $(Pipeline.Workspace)/docker/front.tar
           docker load < $(Pipeline.Workspace)/docker/api_builder.tar
-          docker load < $(Pipeline.Workspace)/docker/app.tar
+#          docker load < $(Pipeline.Workspace)/docker/app.tar
         condition: and(not(canceled()), eq(variables.DOCKER_CACHE_RESTORED, 'true'))
       - script: |
           set -e
@@ -61,14 +61,18 @@ stages:
           sed -i 's/http:\/\/localhost/https:\/\/dev.gearstocks.store/g' front/src/environments/environment.ts
           echo " -d dev.gearstocks.store; chmod -R 755 /etc/letsencrypt" >> certbot/Dockerfile
           echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-          docker-compose up front && docker-compose up api_builder && docker-compose up app
+#          docker-compose up front && docker-compose up api_builder && docker-compose up app
+          docker-compose up api_builder
           echo Front, Back and App successfully build.
         displayName: 'Front, API and App Compilation Check'
       - script: |
           mkdir -p $(Pipeline.Workspace)/docker
-          docker save $(Pipeline.Workspace)_front > $(Pipeline.Workspace)/docker/front.tar
+#          docker save $(Pipeline.Workspace)_front > $(Pipeline.Workspace)/docker/front.tar
+          echo $(Pipeline.Workspace)
+          docker images
+          ls
           docker save $(Pipeline.Workspace)_api_builder > $(Pipeline.Workspace)/docker/api_builder.tar
-          docker save $(Pipeline.Workspace)_app > $(Pipeline.Workspace)/docker/app.tar
+#          docker save $(Pipeline.Workspace)_app > $(Pipeline.Workspace)/docker/app.tar
         condition: and(not(canceled()), or(failed(), ne(variables.DOCKER_CACHE_RESTORED, 'true')))
         displayName: Caching Docker images
       - script: |
