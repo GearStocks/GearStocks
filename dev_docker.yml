@@ -43,7 +43,7 @@ stages:
           docker load < $(Build.SourcesDirectory)/docker/api_builder.tar
 #          docker load <  $(Build.SourcesDirectory)/docker/front.tar
 #          docker load <  $(Build.SourcesDirectory)/docker/app.tar
-        condition: and(not(canceled()), eq(variables.DOCKER_CACHE_RESTORED, 'true'))
+#        condition: and(not(canceled()), eq(variables.DOCKER_CACHE_RESTORED, 'true'))
       - script: |
           set -e
           mkdir -p  $(Build.SourcesDirectory)/docker
