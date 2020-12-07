@@ -48,8 +48,6 @@ private:
         Pistache::Http::ResponseWriter response);
   int getNonEmptyCategoryNames(const Pistache::Rest::Request &request, 
         Pistache::Http::ResponseWriter response);
-  int getInitFilterValues(const Pistache::Rest::Request &request,
-        Pistache::Http::ResponseWriter response);
   int sendContact(const Pistache::Rest::Request &request, 
         Pistache::Http::ResponseWriter response);
   void	mergeObjects(rapidjson::Value &dstObject, rapidjson::Value &srcObjects, rapidjson::Document::AllocatorType &allocator);
