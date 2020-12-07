@@ -36,17 +36,17 @@ stages:
       - task: Cache@2
         inputs:
           key: 'docker | "$(Agent.OS)" | caching-docker.yml'
-          path: $(Build.SourcesDirectory)/docker/api_builder.tar
+          path: $(System.DefaultWorkingDirectory)/docker/api_builder.tar
           cacheHitVar: DOCKER_CACHE_RESTORED
         displayName: Load Docker images Cache
       - script: |
-          docker load < $(Build.SourcesDirectory)/docker/api_builder.tar
-#          docker load <  $(Build.SourcesDirectory)/docker/front.tar
-#          docker load <  $(Build.SourcesDirectory)/docker/app.tar
+          docker load < $(System.DefaultWorkingDirectory)/docker/api_builder.tar
+#          docker load <  $(System.DefaultWorkingDirectory)/docker/front.tar
+#          docker load <  $(System.DefaultWorkingDirectory)/docker/app.tar
         condition: and(not(canceled()), eq(variables.DOCKER_CACHE_RESTORED, 'true'))
       - script: |
           set -e
-          mkdir -p  $(Build.SourcesDirectory)/docker
+          mkdir -p  $(System.DefaultWorkingDirectory)/docker
           echo MONGO_INITDB_ROOT_USERNAME=mongoadmin\nMONGO_INITDB_ROOT_PASSWORD=mongoadmin > database/secrets.env
           docker pull gearstocks/api_builder:latest
           echo "API_ADDR=dev.gearstocks.store" > .env
@@ -66,13 +66,13 @@ stages:
 #          docker-compose up api_builder && docker-compose up front && docker-compose up app
         displayName: 'Front, API and App Compilation Check'
       - script: |
-          mkdir -p  $(Build.SourcesDirectory)/docker
-          ls  $(Build.SourcesDirectory)/docker/
-          docker save s_api_builder >  $(Build.SourcesDirectory)/docker/api_builder.tar
+          mkdir -p  $(System.DefaultWorkingDirectory)/docker
+          ls  $(System.DefaultWorkingDirectory)/docker/
+          docker save s_api_builder >  $(System.DefaultWorkingDirectory)/docker/api_builder.tar
           docker images
-          ls  $(Build.SourcesDirectory)/docker/
-#          docker save s_front >  $(Build.SourcesDirectory)/docker/front.tar
-#          docker save s_app >  $(Build.SourcesDirectory)/docker/app.tar
+          ls  $(System.DefaultWorkingDirectory)/docker/
+#          docker save s_front >  $(System.DefaultWorkingDirectory)/docker/front.tar
+#          docker save s_app >  $(System.DefaultWorkingDirectory)/docker/app.tar
         condition: and(not(canceled()), or(failed(), ne(variables.DOCKER_CACHE_RESTORED, 'true')))
         displayName: Caching Docker images
       - script: |
