@@ -10,7 +10,7 @@ pr:
   paths:
     include:
       - docker-compose.yml
-      - dev_config.yml
+      - dev_docker.yml
 
 trigger: none
 
@@ -33,8 +33,20 @@ stages:
     - job: BuildFrontAndApi
       displayName: 'Build Front and API'
       steps:
+      - task: Cache@2
+        inputs:
+          key: 'docker | "$(Agent.OS)" | caching-docker.yml'
+          path: $(Pipeline.Workspace)/docker
+          cacheHitVar: DOCKER_CACHE_RESTORED
+        displayName: Load Docker images Cache
+      - script: |
+          docker load < $(Pipeline.Workspace)/docker/front.tar
+          docker load < $(Pipeline.Workspace)/docker/api_builder.tar
+          docker load < $(Pipeline.Workspace)/docker/app.tar
+        condition: and(not(canceled()), eq(variables.DOCKER_CACHE_RESTORED, 'true'))
       - script: |
           set -e
+          mkdir -p $(Pipeline.Workspace)/docker
           echo MONGO_INITDB_ROOT_USERNAME=mongoadmin\nMONGO_INITDB_ROOT_PASSWORD=mongoadmin > database/secrets.env
           docker pull gearstocks/api_builder:latest
           echo "API_ADDR=dev.gearstocks.store" > .env
@@ -49,6 +61,13 @@ stages:
           docker-compose up front && docker-compose up api_builder && docker-compose up app
           echo Front, Back and App successfully build.
         displayName: 'Front, API and App Compilation Check'
+      - script: |
+          mkdir -p $(Pipeline.Workspace)/docker
+          docker save front > $(Pipeline.Workspace)/docker/front.tar
+          docker save api_builder > $(Pipeline.Workspace)/docker/api_builder.tar
+          docker save app > $(Pipeline.Workspace)/docker/app.tar
+        condition: and(not(canceled()), or(failed(), ne(variables.DOCKER_CACHE_RESTORED, 'true')))
+        displayName: Caching Docker images
       - script: |
           set -e
           mkdir -p drop
