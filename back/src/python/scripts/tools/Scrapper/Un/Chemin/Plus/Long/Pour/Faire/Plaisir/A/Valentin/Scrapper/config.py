@@ -8,18 +8,55 @@ IMAGEURL = 'https://images.gearstocks.store/'
 
 URLRACINE = 'https://www.rosepassion.com/fr/pieces-porsche'
 
+URLARRAY = {
+    'https://www.rosepassion.com/fr/pieces-porsche-356-pre-a-1950-eu-1100-369-cabrio-pre-a-boite-manuelle-4-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-356-pre-a-1950-eu-1100-369-coupe-pre-a-boite-manuelle-4-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-356-pre-a-1951-eu-1100-369-cabrio-pre-a-boite-manuelle-4-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-356-pre-a-1951-eu-1100-369-coupe-pre-a-boite-manuelle-4-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-356-pre-a-1951-eu-1300-506-cabrio-pre-a-boite-manuelle-4-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-356-pre-a-1951-eu-1300-506-coupe-pre-a-boite-manuelle-4-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-356-pre-a-1951-eu-1500-527-cabrio-pre-a-boite-manuelle-4-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-356-pre-a-1951-eu-1500-527-coupe-pre-a-boite-manuelle-4-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-356-pre-a-1952-eu-1100-369-cabrio-pre-a-boite-manuelle-4-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-356-pre-a-1952-eu-1100-369-coupe-pre-a-boite-manuelle-4-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-356-pre-a-1952-eu-1300-506-coupe-pre-a-boite-manuelle-4-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-356-pre-a-1952-eu-1300-506-cabrio-pre-a-boite-manuelle-4-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-356-pre-a-1952-eu-1500-527-cabrio-pre-a-boite-manuelle-4-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-356-pre-a-1952-eu-1500-527-coupe-pre-a-boite-manuelle-4-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-356-pre-a-1952-eu-1500-546-cabrio-pre-a-boite-manuelle-4-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-356-pre-a-1952-eu-1500-546-coupe-pre-a-boite-manuelle-4-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-911-classic-1965-eu-2-0l-coupe-boite-manuelle-5-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-911-classic-1966-eu-2-0l-coupe-boite-manuelle-5-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-911-classic-1967-eu-2-0l-coupe-boite-manuelle-4-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-911-classic-1967-eu-2-0l-targa-boite-manuelle-5-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-911-classic-1967-eu-2-0s-coupe-boite-manuelle-5-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-911-classic-1967-eu-2-0s-targa-boite-manuelle-5-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-911-classic-1968-eu-2-0l-coupe-boite-manuelle-5-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-911-classic-1968-eu-2-0l-coupe-boite-auto',
+    'https://www.rosepassion.com/fr/pieces-porsche-911-classic-1968-eu-2-0l-targa-boite-manuelle-5-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-911-classic-1968-eu-2-0l-targa-boite-auto',
+    'https://www.rosepassion.com/fr/pieces-porsche-911-classic-1968-eu-2-0s-coupe-boite-manuelle-5-vitesses',
+    'https://www.rosepassion.com/fr/pieces-porsche-911-classic-1968-eu-2-0s-coupe-boite-auto',
+    'https://www.rosepassion.com/fr/pieces-porsche-911-classic-1968-eu-2-0s-targa-boite-manuelle-5-vitesses',
+}
+
+BRAND = {
+    'porsche'
+}
+
 URLMODEL = (
     '356-pre-a',
-    '356-a'
+    '911-classic'
 )
 
 URLANNEE = (
     '1950',
     '1951',
     '1952',
-    '1953',
-    '1954',
-    '1955'
+    '1965',
+    '1966',
+    '1967',
+    '1968'
 )
 
 URLVARIANT =(
