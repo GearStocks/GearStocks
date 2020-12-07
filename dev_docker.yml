@@ -67,9 +67,10 @@ stages:
         displayName: 'Front, API and App Compilation Check'
       - script: |
           mkdir -p $(Pipeline.Workspace)/docker
-          echo $(Pipeline.Workspace)
+          ls $(Pipeline.Workspace)/docker/
           docker save s_api_builder > $(Pipeline.Workspace)/docker/api_builder.tar
           docker images
+          ls $(Pipeline.Workspace)/docker/
 #          docker save s_front > $(Pipeline.Workspace)/docker/front.tar
 #          docker save s_app > $(Pipeline.Workspace)/docker/app.tar
         condition: and(not(canceled()), or(failed(), ne(variables.DOCKER_CACHE_RESTORED, 'true')))
