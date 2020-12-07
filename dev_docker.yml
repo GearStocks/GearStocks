@@ -69,9 +69,7 @@ stages:
           mkdir -p $(Pipeline.Workspace)/docker
           echo $(Pipeline.Workspace)
           docker images
-          ls
-          pwd
-          docker save $(Pipeline.Workspace)_api_builder > $(Pipeline.Workspace)/docker/api_builder.tar
+          docker save s_api_builder > $(Pipeline.Workspace)/docker/api_builder.tar
 #          docker save $(Pipeline.Workspace)_front > $(Pipeline.Workspace)/docker/front.tar
 #          docker save $(Pipeline.Workspace)_app > $(Pipeline.Workspace)/docker/app.tar
         condition: and(not(canceled()), or(failed(), ne(variables.DOCKER_CACHE_RESTORED, 'true')))
