@@ -36,14 +36,14 @@ stages:
       - task: Cache@2
         inputs:
           key: 'docker | "$(Agent.OS)" | caching-docker.yml'
-          path: $(Build.SourcesDirectory)/docker
+          path: $(Build.SourcesDirectory)/docker/api_builder.tar
           cacheHitVar: DOCKER_CACHE_RESTORED
         displayName: Load Docker images Cache
       - script: |
           docker load < $(Build.SourcesDirectory)/docker/api_builder.tar
 #          docker load <  $(Build.SourcesDirectory)/docker/front.tar
 #          docker load <  $(Build.SourcesDirectory)/docker/app.tar
-#        condition: and(not(canceled()), eq(variables.DOCKER_CACHE_RESTORED, 'true'))
+        condition: and(not(canceled()), eq(variables.DOCKER_CACHE_RESTORED, 'true'))
       - script: |
           set -e
           mkdir -p  $(Build.SourcesDirectory)/docker
