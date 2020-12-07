@@ -40,9 +40,13 @@ URLARRAY = {
     'https://www.rosepassion.com/fr/pieces-porsche-911-classic-1968-eu-2-0s-targa-boite-manuelle-5-vitesses',
 }
 
+BRAND = {
+    'porsche'
+}
+
 URLMODEL = (
     '356-pre-a',
-    'porsche-911-classic'
+    '911-classic'
 )
 
 URLANNEE = (

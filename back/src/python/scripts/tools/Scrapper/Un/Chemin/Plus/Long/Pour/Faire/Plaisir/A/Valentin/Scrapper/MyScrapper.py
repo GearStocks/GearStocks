@@ -22,8 +22,7 @@ import unidecode
 
 def main():
     for url in config.URLARRAY:
-        model, modelYear = getModel(url)
-        print('Model: {}\tYear: {}'.format(model, modelYear))
+        model, brand = getModel(url)
     #Construction des url des different models de voiture à partire du fichier config.py
         schem_list = []
     
@@ -41,10 +40,13 @@ def main():
             for family in familyList:
                 res2 = requests.get(family)
                 caterogiesArr = family.split("/")
-                myCategorie = caterogiesArr[len(caterogiesArr)-1].replace('-', ' ')
-                myCategorie = {"name": myCategorie}
-                myCategorie2 = caterogiesArr[len(caterogiesArr) -2].replace('-', ' ')
-                myCategorie2 = {"name": myCategorie2}
+                myCategorie = normalizeCat(caterogiesArr[len(caterogiesArr) - 1])
+                
+                #myCategorie = caterogiesArr[len(caterogiesArr)-1].replace('-', ' ')
+                #myCategorie = {"name": myCategorie}
+                #print("MDR: {}".format(myCategorie))
+                #myCategorie2 = caterogiesArr[len(caterogiesArr) -2].replace('-', ' ')
+                #myCategorie2 = {"name": myCategorie2}
                 if res2.status_code != 200:
                     print("Error code retour: {}".format(res2.status_code))
                 else:
@@ -52,10 +54,13 @@ def main():
                     tmp2_list = soup2.find_all("div", class_="bloc to_that h_child")
                     for schema in tmp2_list:
                         schem_list.append(schema.find("a").get("href"))
-                
+                    
                     #print("schem: {}".format(schem_list))
                     #Récupération, formatage en json et envoie en BDD via url des données de la pieces détachée
                     for i in schem_list:
+                        caterogiesArr = i.split("/")
+                        myCategorie2 = normalizeCat(caterogiesArr[len(caterogiesArr) - 1])
+                        
                         res = requests.get(i)
                         if res.status_code != 200:
                             print("Error code retour: {}".format(res.status_code))
@@ -69,22 +74,34 @@ def main():
                                 piecesList.append(a['href'].replace(' ', ''))
                         for url in piecesList:
                             Name = unidecode.unidecode(getName(url).replace('•', '-').replace('/', '').replace('\\', ''))
-                            Price = getPrice(url).strip().replace('T', '').replace('C', '').replace('€', '').replace(' ', '')
-                            if Price != "Plus livrable":
+                            Price = getPrice(url).strip().replace('T', '').replace('C', '').replace('€', '').replace(' ', '').strip()
+                            if Price != "Pluslivrable":
                                 Description = getDescription(url)
                                 photo = getImage(url, Name)
                                 categories = []
                                 categories.append(myCategorie)
                                 categories.append(myCategorie2)
                                 month = datetime.datetime.now().strftime("%b")
-                                my_json = {"name":Name,"prices":Price,"photo":photo,"description":Description, "month":month, "categories":categories, "model":model}
+                                my_json = {"name":Name,"prices":Price,"photo":photo,"description":Description, "month":month, "categories":categories, "model":model, "brand":brand}
                                 print("MyJson : {}".format(my_json))
-                                res = requests.post(config.URLGEAR+"addCarPart", json=my_json)
+                                #res = requests.post(config.URLGEAR+"addCarPart", json=my_json)
                                 #print(res)
                             else:
                                 print("Plus Livrable :(")
                     schem_list.clear()
     return
+
+def normalizeCat(cat):
+    print("Test: {}".format(cat))
+    tmpCategori = cat.split('-')
+    categorie = ""
+    it = 0
+    while it < len(tmpCategori)-1:
+        print("Test2 : {}".format(tmpCategori[it]))
+        categorie = categorie + ' ' + tmpCategori[it]
+        it +=1
+    categorie = {"name": categorie.strip()}
+    return categorie
 
 def getImage(url, Name):
     res = requests.get(url)
@@ -122,14 +139,14 @@ def DlImage(url, Filename):
 
 def getModel(url):
     currentModel = "No Model"
-    currentYear = "No Year"
+    currentBrand = "No Year"
     for model in config.URLMODEL:
         if url.find(model) != -1:
             currentModel = model
-    for year in config.URLANNEE:
-        if url.find(year) != -1:
-            currentYear = year
-    return currentModel, currentYear
+    for brand in config.BRAND:
+        if url.find(brand) != -1:
+            currentBrand = brand
+    return currentModel, currentBrand
 
 def constructUrl_rose():
     list = []
