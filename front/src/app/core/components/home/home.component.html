@@ -6,37 +6,37 @@
 <div class="homeHeader" #target>
   <div class="homeHeader__search">
     <h1>Gearstocks</h1>
-    <div class="container input-group mb-3 input-group-lg">
+    <form class="container input-group mb-3 input-group-lg" [formGroup]="searchForm" (ngSubmit)="search()">
       <mat-form-field>
         <mat-label>Categories</mat-label>
-        <mat-select [(ngModel)]="selectedCategorie" name="category">
-          <mat-option *ngFor="let categorie of categories" [value]="categorie.name">
-            {{categorie.name}}
+        <mat-select [formControlName]="'category'">
+          <mat-option *ngFor="let category of categories" [value]="category.name">
+            {{category.name}}
           </mat-option>
         </mat-select>
       </mat-form-field>
       <div class="input-group-prepend">
-        <button type="submit" class="input-group-text" (click)="search()">
+        <button type="submit" class="input-group-text">
           <i class="material-icons"> search </i>
         </button>
       </div>
-      <input type="text" [(ngModel)]="keyword" name="keyword" class="form-control" placeholder='Que recherchez-vous ?'>
+      <input type="text" [formControlName]="'keyWord'" (keyup.enter)="search()" name="keyword" class="form-control" placeholder='Que recherchez-vous ?'>
       <div class="container homeHeader__search__filters">
-        <button mat-button [matMenuTriggerFor]="menu">Prix</button>
+        <button type="button" mat-button [matMenuTriggerFor]="menu">Prix</button>
         <mat-menu #menu="matMenu">
           <div class="homeHeader__search__filters__price">
             <h1>Prix</h1>
             <div class="homeHeader__search__filters__price__range">
               <h2>min.</h2>
-              <p>{{value | currency:'EUR'}}</p>
+              <p>{{f.range.value[0] | currency:'EUR'}}</p>
               <h3>max.</h3>
-              <p>{{highValue | currency:'EUR'}}</p>
+              <p>{{f.range.value[1] | currency:'EUR'}}</p>
             </div>
-            <nouislider [connect]="true" [min]="0" [max]="15" [(ngModel)]="range"></nouislider>
+            <nouislider [config]="sliderConfig" [formControl]="searchForm.get('range')"></nouislider>
           </div>
         </mat-menu>
       </div>
-    </div>
+    </form>
   </div>
   <a (click)="scrollTo(target)" class="ca3-scroll-down-link ca3-scroll-down-arrow" data-ca3_iconfont="ETmodules" data-ca3_icon=""></a>
 </div>

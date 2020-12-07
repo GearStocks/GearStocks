@@ -59,7 +59,34 @@
     }
 
     &__price {
-      min-width: 300px;
+      padding: 10px;
+
+      nouislider {
+        margin: 10px 20px 10px 20px;
+      }
+
+      h1 {
+        font: 500 20px/32px Roboto, "Helvetica Neue", sans-serif;
+      }
+
+      &__range {
+        display: inline-flex;
+        align-items: baseline;
+        font: 15px/32px Roboto, "Helvetica Neue", sans-serif;
+
+        h2 {
+          font: 15px/32px Roboto, "Helvetica Neue", sans-serif;
+        }
+
+        h3 {
+          font: 15px/32px Roboto, "Helvetica Neue", sans-serif;
+          margin-left: 10px;
+        }
+
+        p {
+          color: darkorange;
+        }
+      }
     }
   }
 

@@ -1,15 +1,18 @@
 /* Angular Modules */
-import {AfterViewInit, Component, EventEmitter, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, OnInit, ViewChild} from '@angular/core';
 
 /* NgRx */
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/reducers';
 import { search } from '../../../store/actions/core.actions';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import {debounceTime, filter} from 'rxjs/operators';
 
 /* Material Angular */
 import { MatMenu } from '@angular/material/menu';
+import {SearchFormService} from '../../../search-list/services/search-form.service';
+import {FormGroup} from '@angular/forms';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -17,25 +20,40 @@ import { MatMenu } from '@angular/material/menu';
   styleUrls: ['./home.component.scss']
 })
 
-export class HomeComponent implements AfterViewInit{
+export class HomeComponent implements AfterViewInit, OnInit {
   @ViewChild('menu') menu!: MatMenu;
 
   video = 'assets/video/gearstocks.mp4';
-  keyword: string;
-  value = 0;
-  highValue = 15000;
+  searchForm: FormGroup;
+  categories: any;
   range = [0, 15000];
+  sliderConfig: any = {
+    connect: true,
+    step: 100,
+    range: {
+      min: 0,
+      max: 15000
+    },
+    behaviour: 'drag',
+  };
 
-  constructor(private store: Store<AppState>) {}
+  constructor(private route: ActivatedRoute, private store: Store<AppState>, private searchFormService: SearchFormService) {
+    this.searchForm = this.searchFormService.buildForm();
+  }
+
+  ngOnInit() {
+    this.route.data.subscribe((data: { categories }) => this.categories = data.categories.categories);
+  }
 
   ngAfterViewInit() {
     (this.menu as any).closed = this.menu.close = this.configureMenuClose(this.menu.close);
   }
 
+  get f() { return this.searchForm.controls; }
 
   search(): void {
-    if (this.keyword) {
-      this.store.dispatch(search({keyword: this.keyword}));
+    if (this.f.keyWord.value) {
+      this.store.dispatch(search({filters: this.searchForm.getRawValue()}));
     }
   }
 
