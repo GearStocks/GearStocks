@@ -87,7 +87,7 @@ export default class ItemsComponent extends React.Component {
     });
 
     axios
-      .post(routes.ADD_BOOKMARK, JSONObj, {
+      .post(routes.DEL_BOOKMARK, JSONObj, {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           Accept: "application/json",
@@ -139,13 +139,14 @@ export default class ItemsComponent extends React.Component {
   };
 
   render() {
-    const monthData = ["month"];
-    const priceData = ["0"];
+    const monthData = [];
+    const priceData = [];
     const params = this.props.navigation.state;
 
     for (const month of params.params.resDatas.prices) {
+      console.log(month)
       monthData.push(month.month);
-      priceData.push(month.price);
+      priceData.push(parseInt(month.price, 10));
     }
 
     return (
@@ -176,29 +177,25 @@ export default class ItemsComponent extends React.Component {
                       this.addBookmark(params.params.itemDatas.name);
                     }
               }
-
-              // {() => {
-              //   this.addBookmark(params.params.itemDatas.name);
-              // }}
             />
           ) : null}
         </View>
-        <View style={{ flex: 1, top: "10%" }}>
+        <View style={{ bottom: '30%', width: '90%' }}>
           <Text style={{ fontSize: 20 }}>
             Name : {params.params.itemDatas.name.toUpperCase()}
           </Text>
           <Text style={{ fontSize: 20 }}>
-            {params.params.resDatas.description}
+            Description : {params.params.resDatas.description}
           </Text>
         </View>
         <View style={{ width: "90%", aspectRatio: 1 }}>
           <Image
-            style={{ resizeMode: "contain", aspectRatio: 1, bottom: "20%" }}
+            style={{ resizeMode: "contain", aspectRatio: 1, bottom: "70%" }}
             source={{ uri: params.params.itemDatas.photo }}
           />
         </View>
-        <View style={{ bottom: "10%" }}>
-          <Text>Stocks</Text>
+        <View style={{ bottom: 0, width: '90%', alignItems: 'center', position: 'absolute' }}>
+          <Text>Stocks :</Text>
           <LineChart
             data={{
               labels: monthData,

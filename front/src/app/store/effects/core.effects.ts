@@ -27,7 +27,7 @@ export class CoreEffects {
   search$ = createEffect(() =>
     this.actions$.pipe(
       ofType(search),
-      switchMap(action => this.searchService.search(action.keyword)),
+      switchMap(action => this.searchService.search(action.filters)),
       map(list => searchSuccess({list: list}))
     )
   );

@@ -35,10 +35,15 @@ export class SearchService {
     this.store.pipe(select(selectAuthToken)).subscribe(x => this.token = x);
   }
 
-  search(keyword: string): Observable<Items> {
+  search(filters: any): Observable<Items> {
     const body = {
-      keyWord: keyword,
-      filters: ''
+      keyWord: filters.keyWord,
+      filters: {
+        'maxPrice': filters.range[1].toString(),
+        'minPrice': filters.range[0].toString(),
+        'category': filters.category,
+        'model': filters.model
+    }
     };
     return this.http.post<any>(this.searchUrl, body, httpOptions);
   }
