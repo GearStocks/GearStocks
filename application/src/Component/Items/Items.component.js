@@ -129,7 +129,7 @@ export default class ItemsComponent extends React.Component {
               this.setState({ isFavoris: true });
             }
           });
-        } 
+        }
         // return res;
       })
       .catch((err) => {
@@ -138,16 +138,21 @@ export default class ItemsComponent extends React.Component {
       });
   };
 
+  fixurl(url) {
+    return url.replace(/ /g, "%20");
+  }
+
   render() {
     const monthData = [];
     const priceData = [];
     const params = this.props.navigation.state;
 
     for (const month of params.params.resDatas.prices) {
-      console.log(month)
       monthData.push(month.month);
       priceData.push(parseInt(month.price, 10));
     }
+
+    const image = this.fixurl(params.params.itemDatas.photo);
 
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
@@ -180,7 +185,7 @@ export default class ItemsComponent extends React.Component {
             />
           ) : null}
         </View>
-        <View style={{ bottom: '30%', width: '90%' }}>
+        <View style={{ bottom: "30%", width: "90%" }}>
           <Text style={{ fontSize: 20 }}>
             Name : {params.params.itemDatas.name.toUpperCase()}
           </Text>
@@ -191,47 +196,60 @@ export default class ItemsComponent extends React.Component {
         <View style={{ width: "90%", aspectRatio: 1 }}>
           <Image
             style={{ resizeMode: "contain", aspectRatio: 1, bottom: "70%" }}
-            source={{ uri: params.params.itemDatas.photo }}
+            source={{ uri: image }}
           />
         </View>
-        <View style={{ bottom: 0, width: '90%', alignItems: 'center', position: 'absolute' }}>
+        <View
+          style={{
+            bottom: 0,
+            width: "90%",
+            alignItems: "center",
+            position: "absolute",
+          }}
+        >
           <Text>Stocks :</Text>
-          <LineChart
-            data={{
-              labels: monthData,
-              datasets: [
-                {
-                  data: priceData,
+          {priceData.length > 0 ? (
+            <LineChart
+              data={{
+                labels: monthData,
+                datasets: [
+                  {
+                    data: priceData,
+                  },
+                ],
+              }}
+              width={Dimensions.get("window").width} // from react-native
+              height={200}
+              yAxisLabel=""
+              yAxisSuffix="€"
+              yAxisInterval={1} // optional, defaults to 1
+              chartConfig={{
+                backgroundColor: "#e26a00",
+                backgroundGradientFrom: "#fb8c00",
+                backgroundGradientTo: "#ffa726",
+                decimalPlaces: 2, // optional, defaults to 2dp
+                color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                style: {
+                  borderRadius: 16,
                 },
-              ],
-            }}
-            width={Dimensions.get("window").width} // from react-native
-            height={200}
-            yAxisLabel=""
-            yAxisSuffix="€"
-            yAxisInterval={1} // optional, defaults to 1
-            chartConfig={{
-              backgroundColor: "#e26a00",
-              backgroundGradientFrom: "#fb8c00",
-              backgroundGradientTo: "#ffa726",
-              decimalPlaces: 2, // optional, defaults to 2dp
-              color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-              style: {
+                propsForDots: {
+                  r: "6",
+                  strokeWidth: "2",
+                  stroke: "#ffa726",
+                },
+              }}
+              bezier
+              style={{
+                marginVertical: 8,
                 borderRadius: 16,
-              },
-              propsForDots: {
-                r: "6",
-                strokeWidth: "2",
-                stroke: "#ffa726",
-              },
-            }}
-            bezier
-            style={{
-              marginVertical: 8,
-              borderRadius: 16,
-            }}
-          />
+              }}
+            />
+          ) : (
+            <View style={{ bottom: "50%" }}>
+              <Text>il n'y a pas de prix pour cette piece</Text>
+            </View>
+          )}
         </View>
       </View>
     );

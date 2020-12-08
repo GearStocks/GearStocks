@@ -162,7 +162,7 @@ export default class FavorisComponent extends React.Component {
                   <Text
                     key={i}
                     onPress={() => this.getInfoPart(item, navigate)}
-                    style={{ textAlign: "center", fontSize: 20 }}
+                    style={{ textAlign: 'left', fontSize: 20}}
                   >
                     {item}
                   </Text>
