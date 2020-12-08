@@ -78,7 +78,7 @@ def main():
                             if Price != "Pluslivrable":
                                 Description = getDescription(url)
                                 photo = getImage(url, Name)
-                                print("Photo: {}".format(photo))
+                                #print("Photo: {}".format(photo))
                                 categories = []
                                 categories.append(myCategorie)
                                 categories.append(myCategorie2)
@@ -135,7 +135,7 @@ def getDescription(url):
 def DlImage(url, Filename):
     http = urllib3.PoolManager()
     pic = http.request('GET', url)
-    print("Filename: {}".format(Filename.encode('utf-8')))
+    #print("Filename: {}".format(Filename.encode('utf-8')))
     with open(Filename.encode('utf-8'), 'wb') as localFile:
         localFile.write(pic.data)
     return
