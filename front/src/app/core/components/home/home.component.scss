@@ -23,11 +23,59 @@
 
     button, input {
       color: white;
-      background: rgba(0, 0, 0, 0.3)
+      background: rgba(0, 0, 0, 0.3);
+      border-left: none;
     }
 
     button {
       cursor: pointer;
+      border-right: none;
+    }
+
+    &__filters {
+      text-align: left;
+      padding: 0;
+      margin-top: 10px;
+
+      button {
+        color: lightseagreen;
+        border: solid 1px lightgrey;
+        border-radius: 3px;
+        outline: none;
+
+        .mat-menu-item{ outline:none; }
+      }
+
+      &__price {
+        padding: 10px;
+
+        nouislider {
+          margin: 10px 20px 10px 20px;
+        }
+
+        h1 {
+          font: 500 20px/32px Roboto, "Helvetica Neue", sans-serif;
+        }
+
+        &__range {
+          display: inline-flex;
+          align-items: baseline;
+          font: 15px/32px Roboto, "Helvetica Neue", sans-serif;
+
+          h2 {
+            font: 15px/32px Roboto, "Helvetica Neue", sans-serif;
+          }
+
+          h3 {
+            font: 15px/32px Roboto, "Helvetica Neue", sans-serif;
+            margin-left: 10px;
+          }
+
+          p {
+            color: darkorange;
+          }
+        }
+      }
     }
   }
 }

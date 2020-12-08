@@ -7,6 +7,8 @@ import userInfo from "./userInfo";
 import updateUserInfo from "./updateUserInfo";
 import forgotPassword from "./forgotPassword";
 
+import { Updates } from "expo";
+
 class User {
   constructor() {
     this.resetInfo();
@@ -40,15 +42,13 @@ class User {
         email: this.email,
       });
       disconnect(JSONObj, callResetInfo).catch((err) => {
-        //console.log(err.name, err.message, err.response.data.error);
       });
     } else {
-      console.log("You are not connected");
+      Updates.reload();
     }
   }
 
   connect(JSONObj, navigate) {
-    if (!this.isConnected()) {
       connect(
         JSONObj,
         navigate,
@@ -62,9 +62,6 @@ class User {
           { cancelable: false }
         );
       });
-    } else {
-      console.log("You are already connected");
-    }
   }
 
   userInfo() {

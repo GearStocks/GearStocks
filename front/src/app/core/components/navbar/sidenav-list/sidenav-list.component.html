@@ -2,6 +2,9 @@
   <a mat-list-item routerLink="" (click)="onSidenavClose()" id="home">
     <mat-icon>home</mat-icon> <span class="nav-caption">Accueil</span>
   </a>
+  <a mat-list-item routerLink="/search-list" (click)="onSidenavClose()" id="search">
+    <mat-icon>search</mat-icon> <span class="nav-caption">Rechercher</span>
+  </a>
   <a *ngIf="!isAuthenticated" mat-list-item (click)="login()" id="login">
     <mat-icon>person</mat-icon><span class="nav-caption">Se connecter</span>
   </a>
