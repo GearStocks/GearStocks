@@ -73,18 +73,19 @@ def main():
                             if a.find('span', class_="ref").getText() != "Plusieurs versions disponibles":
                                 piecesList.append(a['href'].replace(' ', ''))
                         for url in piecesList:
-                            Name = unidecode.unidecode(getName(url).replace('•', '-').replace('/', '').replace('\\', ''))
+                            Name = unidecode.unidecode(getName(url).replace('•', '-').replace('/', '').replace('\\', '')).replace('"', '')
                             Price = getPrice(url).strip().replace('T', '').replace('C', '').replace('€', '').replace(' ', '').strip()
                             if Price != "Pluslivrable":
                                 Description = getDescription(url)
                                 photo = getImage(url, Name)
+                                print("Photo: {}".format(photo))
                                 categories = []
                                 categories.append(myCategorie)
                                 categories.append(myCategorie2)
                                 month = datetime.datetime.now().strftime("%b")
                                 my_json = {"name":Name,"prices":Price,"photo":photo,"description":Description, "month":month, "categories":categories, "model":model, "brand":brand}
                                 #print("MyJson : {}".format(my_json))
-                                res = requests.post(config.URLGEAR+"addCarPart", json=my_json)
+                                #res = requests.post(config.URLGEAR+"addCarPart", json=my_json)
                                 #print(res)
                             else:
                                 print("Plus Livrable :(")
@@ -112,7 +113,8 @@ def getImage(url, Name):
     tmp = soup.select('a[class="chocolat-image"] > img')
     for i in tmp:
         DlImage(i['src'].replace(u'\xa0', u' '), config.PATHIMAGE + Name + '.jpg')
-    return config.IMAGEURL + Name + '.jpg'
+    myName = config.IMAGEURL + Name + '.jpg'
+    return myName
 
 def getDescription(url):
     description = ""
@@ -133,6 +135,7 @@ def getDescription(url):
 def DlImage(url, Filename):
     http = urllib3.PoolManager()
     pic = http.request('GET', url)
+    print("Filename: {}".format(Filename.encode('utf-8')))
     with open(Filename.encode('utf-8'), 'wb') as localFile:
         localFile.write(pic.data)
     return
