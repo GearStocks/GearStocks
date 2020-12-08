@@ -73,7 +73,7 @@ def main():
                             if a.find('span', class_="ref").getText() != "Plusieurs versions disponibles":
                                 piecesList.append(a['href'].replace(' ', ''))
                         for url in piecesList:
-                            Name = unidecode.unidecode(getName(url).replace('•', '-').replace('/', '').replace('\\', '')).replace('"', '').replace(' ', '-').replace('\'', '')
+                            Name = unidecode.unidecode(getName(url).replace('•', '-').replace('/', '').replace('\\', '')).replace('"', '').replace('\'', '')
                             Price = getPrice(url).strip().replace('T', '').replace('C', '').replace('€', '').replace(' ', '').strip()
                             if Price != "Pluslivrable":
                                 Description = getDescription(url)
@@ -85,7 +85,7 @@ def main():
                                 month = datetime.datetime.now().strftime("%b")
                                 my_json = {"name":Name,"prices":Price,"photo":photo,"description":Description, "month":month, "categories":categories, "model":model, "brand":brand}
                                 #print("MyJson : {}".format(my_json))
-                                #res = requests.post(config.URLGEAR+"addCarPart", json=my_json)
+                                res = requests.post(config.URLGEAR+"addCarPart", json=my_json)
                                 #print(res)
                             else:
                                 print("Plus Livrable :(")
