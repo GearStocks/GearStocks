@@ -1,7 +1,6 @@
 /* Angular Modules */
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatCarouselModule } from '@ngmodule/material-carousel';
 
 /* App Modules */
 import { SharedModule } from '../shared/shared.module';
@@ -26,12 +25,11 @@ import { DescriptionComponent } from './components/description/description.compo
     ContactComponent,
     DescriptionComponent
   ],
-    imports: [
-        CommonModule,
-        SharedModule,
-        FontAwesomeModule,
-        MatCarouselModule
-    ],
+  imports: [
+    CommonModule,
+    SharedModule,
+    FontAwesomeModule,
+  ],
     exports: [
         FooterComponent,
         NavbarComponent,
