@@ -40,9 +40,9 @@ stages:
           cacheHitVar: DOCKER_CACHE_RESTORED
         displayName: Load Docker images Cache
       - script: |
-          docker load < $(System.DefaultWorkingDirectory)/docker/api_builder.tar
-          docker load < $(System.DefaultWorkingDirectory)/docker/front.tar
           docker load < $(System.DefaultWorkingDirectory)/docker/app.tar
+#          docker load < $(System.DefaultWorkingDirectory)/docker/api_builder.tar
+#          docker load < $(System.DefaultWorkingDirectory)/docker/front.tar
         condition: and(not(canceled()), eq(variables.DOCKER_CACHE_RESTORED, 'true'))
       - script: |
           set -e
@@ -66,9 +66,9 @@ stages:
         displayName: 'Front, API and App Compilation Check'
       - script: |
           mkdir -p  $(System.DefaultWorkingDirectory)/docker
-          docker save s_api_builder > $(System.DefaultWorkingDirectory)/docker/api_builder.tar
-          docker save s_front > $(System.DefaultWorkingDirectory)/docker/front.tar
           docker save s_app > $(System.DefaultWorkingDirectory)/docker/app.tar
+#          docker save s_api_builder > $(System.DefaultWorkingDirectory)/docker/api_builder.tar
+#          docker save s_front > $(System.DefaultWorkingDirectory)/docker/front.tar
         condition: and(not(canceled()), or(failed(), ne(variables.DOCKER_CACHE_RESTORED, 'true')))
         displayName: Caching Docker images
       - script: |
