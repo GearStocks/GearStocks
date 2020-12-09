@@ -10,7 +10,7 @@ pr:
   paths:
     include:
       - docker-compose.yml
-      - dev_config.yml
+      - dev_docker.yml
 
 trigger: none
 
@@ -33,22 +33,44 @@ stages:
     - job: BuildFrontAndApi
       displayName: 'Build Front and API'
       steps:
+      - task: Cache@2
+        inputs:
+          key: 'v2 | docker | "$(Agent.OS)" | caching-docker.yml'
+          path: $(System.DefaultWorkingDirectory)/docker
+          cacheHitVar: DOCKER_CACHE_RESTORED
+        displayName: Load Docker images Cache
+      - script: |
+          docker load < $(System.DefaultWorkingDirectory)/docker/app.tar
+#          docker load < $(System.DefaultWorkingDirectory)/docker/api_builder.tar
+#          docker load < $(System.DefaultWorkingDirectory)/docker/front.tar
+        condition: and(not(canceled()), eq(variables.DOCKER_CACHE_RESTORED, 'true'))
       - script: |
           set -e
+          mkdir -p  $(System.DefaultWorkingDirectory)/docker
           echo MONGO_INITDB_ROOT_USERNAME=mongoadmin\nMONGO_INITDB_ROOT_PASSWORD=mongoadmin > database/secrets.env
           docker pull gearstocks/api_builder:latest
           echo "API_ADDR=dev.gearstocks.store" > .env
           echo "API_PORT=8000" >> .env
           sed -i '/- 80:80/d' docker-compose.yml
+          sed -i "/PATHIMAGE/c\PATHIMAGE='\/home\/GearStocks\/images\/'" back/Scrapper/config.py
+          sed -i "/URLGEAR/c\URLGEAR='https:\/\/dev.gearstocks.store:8000\/'" back/Scrapper/config.py
+          sed -i "/IMLAGEURL/c\IMLAGEURL='https:\/\/images.gearstocks.store\/'" back/Scrapper/config.py
           echo "export const address = 'dev.gearstocks.store:8000';" > application/config/address.js
           sed -i 's/http:\/\/localhost/https:\/\/dev.gearstocks.store/g' front/src/environments/environment.prod.ts
           sed -i 's/http:\/\/localhost/https:\/\/dev.gearstocks.store/g' front/src/environments/environment.mock.ts
           sed -i 's/http:\/\/localhost/https:\/\/dev.gearstocks.store/g' front/src/environments/environment.ts
           echo " -d dev.gearstocks.store; chmod -R 755 /etc/letsencrypt" >> certbot/Dockerfile
           echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-          docker-compose up front && docker-compose up api_builder && docker-compose up app
+          docker-compose up api_builder && docker-compose up front && docker-compose up app
           echo Front, Back and App successfully build.
         displayName: 'Front, API and App Compilation Check'
+      - script: |
+          mkdir -p  $(System.DefaultWorkingDirectory)/docker
+          docker save s_app > $(System.DefaultWorkingDirectory)/docker/app.tar
+#          docker save s_api_builder > $(System.DefaultWorkingDirectory)/docker/api_builder.tar
+#          docker save s_front > $(System.DefaultWorkingDirectory)/docker/front.tar
+        condition: and(not(canceled()), or(failed(), ne(variables.DOCKER_CACHE_RESTORED, 'true')))
+        displayName: Caching Docker images
       - script: |
           set -e
           mkdir -p drop
@@ -68,6 +90,7 @@ stages:
           cp -R api_builder/build/App drop/api_builder/build/
           cp -R api_builder/lib drop/api_builder/
           cp -R back/Dockerfile drop/back
+          cp -R back/Scrapper drop/back
           echo API OK
         displayName: Prepare API for Archive
       - script: |
