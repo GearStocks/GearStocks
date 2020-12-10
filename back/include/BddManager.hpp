@@ -61,7 +61,7 @@ public:
   rapidjson::Document*	getCarPart(std::string partName, std::vector<std::string> filters);
 private:
   void		connect();
-  bool		applyFilters(std::string price, std::vector<std::string> filters);
+  bool		applyFilters(std::string price, std::string model, std::string category, std::vector<std::string> filters);
   void    getReferrals(rapidjson::Value *referrals, rapidjson::Document *document, rapidjson::Document::AllocatorType &allocator);
   void		getAllPrices(rapidjson::Value *price, std::string *priceToParse, rapidjson::Document::AllocatorType &allocator);
   void		addAllPrices(bsoncxx::builder::stream::document *document, std::string month, std::string price);
