@@ -133,21 +133,28 @@ export default class FavorisComponent extends React.Component {
                   alignSelf: "center",
                 }}
               >
-                  <Icon
-                    name="format-align-justify"
-                    size={30}
-                    color="black"
-                    onPress={() => {
-                      this.props.navigation.openDrawer();
-                    }}
-                  />
+                <Icon
+                  name="format-align-justify"
+                  size={30}
+                  color="black"
+                  onPress={() => {
+                    this.props.navigation.openDrawer();
+                  }}
+                />
                 <Text style={{ fontSize: 30, alignSelf: "center" }}>
                   Bookmark
                 </Text>
               </View>
+              <View style={{ top: 100, width: "90%" }}>
+                <Text style={{ fontSize: 15 }}>
+                  This is your bookmark list
+                  piece.
+                </Text>
+                <Text style={{ fontSize: 15 }}>You can click on the name of the piece to access it.</Text>
+              </View>
             </View>
           </View>
-          <View>
+          <View style={{top: '20%'}}>
             {this.state.res && this.state.res.length > 0 ? (
               this.state.res.map((item, i) => (
                 <View
@@ -162,7 +169,7 @@ export default class FavorisComponent extends React.Component {
                   <Text
                     key={i}
                     onPress={() => this.getInfoPart(item, navigate)}
-                    style={{ textAlign: "center", fontSize: 20 }}
+                    style={{ textAlign: "left", fontSize: 20 }}
                   >
                     {item}
                   </Text>
@@ -170,7 +177,7 @@ export default class FavorisComponent extends React.Component {
               ))
             ) : (
               <View>
-                <Text style={{fontSize: 20}}>There is no bookmark</Text>
+                <Text style={{ fontSize: 20 }}>There is no bookmark</Text>
               </View>
             )}
           </View>
