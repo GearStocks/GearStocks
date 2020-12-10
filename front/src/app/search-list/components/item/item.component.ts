@@ -12,8 +12,9 @@ import { Chart } from 'chart.js';
 
 /* Models */
 import { Item } from './models/item.model';
-import {addFavourite} from '../../../store/actions/core.actions';
-import {selectAuthState} from '../../../store/reducers/auth.reducer';
+import {addFavourite, getItem} from '../../../store/actions/core.actions';
+import {selectAuthState, selectAuthUser} from '../../../store/reducers/auth.reducer';
+import {User} from '../../../auth/models/user.model';
 
 @Component({
   selector: 'app-item',
@@ -22,22 +23,40 @@ import {selectAuthState} from '../../../store/reducers/auth.reducer';
 })
 export class ItemComponent implements OnInit {
   itemData: Item;
-  chart = [];
+  chart = null;
   chartLabel = [];
   chartPrice = [];
+  user: User;
   isAuthenticated: boolean;
+  selected = false;
 
   constructor(private store: Store<AppState>, private location: Location) {
-    this.store.pipe(select(selectItem)).subscribe(x => this.itemData = x);
     this.store.pipe(select(selectAuthState)).subscribe(x => this.isAuthenticated = x);
+    this.store.pipe(select(selectAuthUser)).subscribe(x => this.user = x);
   }
 
   ngOnInit(): void {
-    this.itemData.prices.forEach(elem => {
-      this.chartLabel.push(elem.month);
-      this.chartPrice.push(elem.price);
+    this.store.pipe(select(selectItem)).subscribe(x => {
+      this.itemData = x;
+      this.chartLabel = [];
+      this.chartPrice = [];
+      this.itemData.prices.forEach(elem => {
+        const price = elem.price.split(',')[0];
+        this.chartLabel.push(elem.month);
+        this.chartPrice.push(price);
+      });
+
+      if (this.chart) {
+        this.chart.destroy();
+        this.createChart();
+      }
     });
     this.createChart();
+    this.user.bookmarks.forEach(element => {
+      if (element === this.itemData.name) {
+        this.selected = true;
+      }
+    });
   }
 
   createChart(): void {
@@ -81,6 +100,14 @@ export class ItemComponent implements OnInit {
     if (event) {
       this.store.dispatch(addFavourite({name: this.itemData.name}));
     }
+  }
+
+  price(nb): number {
+    return parseInt(nb, 10);
+  }
+
+  navigate(item: Item): void {
+    this.store.dispatch(getItem({name: item.name}));
   }
 
   back(): void {

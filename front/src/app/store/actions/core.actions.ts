@@ -40,6 +40,10 @@ export const addFavourite = createAction(
   props<{ name: string }>()
 );
 
+export const addFavouriteSuccess = createAction(
+  '[App] Add Favourite Success'
+);
+
 export const contactSuccess = createAction(
   '[App] Contact Success'
 );

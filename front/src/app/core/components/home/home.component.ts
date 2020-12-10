@@ -25,11 +25,13 @@ export class HomeComponent implements AfterViewInit, OnInit {
 
   video = 'assets/video/gearstocks.mp4';
   searchForm: FormGroup;
-  categories: any;
+  filters: any;
+  subcategories: any;
+  models: any;
   range = [0, 15000];
   sliderConfig: any = {
     connect: true,
-    step: 100,
+    step: 50,
     range: {
       min: 0,
       max: 15000
@@ -42,7 +44,7 @@ export class HomeComponent implements AfterViewInit, OnInit {
   }
 
   ngOnInit() {
-    this.route.data.subscribe((data: { categories }) => this.categories = data.categories.categories);
+    this.route.data.subscribe((data: { filters }) => this.filters = data.filters);
   }
 
   ngAfterViewInit() {
@@ -54,6 +56,22 @@ export class HomeComponent implements AfterViewInit, OnInit {
   search(): void {
     if (this.f.keyWord.value) {
       this.store.dispatch(search({filters: this.searchForm.getRawValue()}));
+    }
+  }
+
+  addSelect(value): void {
+    if (value && value.subCategory) {
+      this.subcategories = value.subCategory;
+    } else {
+      this.subcategories = null;
+    }
+  }
+
+  addModel(value): void {
+    if (value && value.models) {
+      this.models = value.models;
+    } else {
+      this.models = null;
     }
   }
 

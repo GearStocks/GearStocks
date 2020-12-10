@@ -7,10 +7,11 @@
   <div class="homeHeader__search">
     <h1>Gearstocks</h1>
     <form class="container input-group mb-3 input-group-lg" [formGroup]="searchForm" (ngSubmit)="search()">
-      <mat-form-field>
+      <mat-form-field floatLabel="never">
         <mat-label>Categories</mat-label>
-        <mat-select [formControlName]="'category'">
-          <mat-option *ngFor="let category of categories" [value]="category.name">
+        <mat-select [formControlName]="'category'" (selectionChange)="addSelect($event.value)">
+          <mat-option>Aucune</mat-option>
+          <mat-option *ngFor="let category of filters.categories" [value]="category">
             {{category.name}}
           </mat-option>
         </mat-select>
@@ -22,15 +23,46 @@
       </div>
       <input type="text" [formControlName]="'keyWord'" (keyup.enter)="search()" name="keyword" class="form-control" placeholder='Que recherchez-vous ?'>
       <div class="container homeHeader__search__filters">
+
+        <mat-form-field floatLabel="never" *ngIf="subcategories">
+          <mat-label>Sous-categories</mat-label>
+          <mat-select [formControlName]="'subCategory'">
+            <mat-option>Aucune</mat-option>
+            <mat-option *ngFor="let category of subcategories" [value]="category">
+              {{category.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field floatLabel="never" *ngIf="filters.brands">
+          <mat-label>Marque</mat-label>
+          <mat-select [formControlName]="'brand'" (selectionChange)="addModel($event.value)">
+            <mat-option>Aucune</mat-option>
+            <mat-option *ngFor="let brand of filters.brands" [value]="brand">
+              {{brand.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field floatLabel="never" *ngIf="models">
+          <mat-label>Model</mat-label>
+          <mat-select [formControlName]="'model'">
+            <mat-option>Aucune</mat-option>
+            <mat-option *ngFor="let model of models" [value]="model">
+              {{model.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
         <button type="button" mat-button [matMenuTriggerFor]="menu">Prix</button>
         <mat-menu #menu="matMenu">
           <div class="homeHeader__search__filters__price">
             <h1>Prix</h1>
             <div class="homeHeader__search__filters__price__range">
               <h2>min.</h2>
-              <p>{{f.range.value[0] | currency:'EUR'}}</p>
+              <p>{{f.range.value[0] | currency : 'EUR' : 'symbol' : '1.0-0' }}</p>
               <h3>max.</h3>
-              <p>{{f.range.value[1] | currency:'EUR'}}</p>
+              <p>{{f.range.value[1] | currency : 'EUR' : 'symbol' : '1.0-0' }}</p>
             </div>
             <nouislider [config]="sliderConfig" [formControl]="searchForm.get('range')"></nouislider>
           </div>

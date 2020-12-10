@@ -21,13 +21,13 @@ import { DescriptionComponent } from './core/components/description/description.
 import { LostPasswordConfirmationComponent } from './auth/components/lost-password/lost-password-confirmation/lost-password-confirmation.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent, pathMatch: 'full' },
+  { path: '', component: HomeComponent, pathMatch: 'full', resolve: { filters: CategoriesResolver } },
   { path: 'register', component: SignupComponent },
   { path: 'signup-confirmation', component: SignupConfirmationComponent },
   { path: 'lost-password', component: LostPasswordComponent },
   { path: 'lost-password-confirmation', component: LostPasswordConfirmationComponent },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
-  { path: 'search-list', component: SearchListComponent,  },
+  { path: 'search-list', component: SearchListComponent, resolve: { filters: CategoriesResolver } },
   { path: 'contact', component: ContactComponent },
   { path: 'item', component: ItemComponent },
   { path: 'description', component: DescriptionComponent },

@@ -1,6 +1,7 @@
 /* NgRx */
 import { createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
 import {
+  addFavouriteSuccess,
   contact,
   contactSuccess,
   getItem,
