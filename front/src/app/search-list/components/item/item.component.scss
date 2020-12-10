@@ -1,5 +1,13 @@
+.back {
+  background: linear-gradient(120deg, #171616 50%, #22202B 50%);
+}
 .container {
   min-height: 100vh;
+  color: white;
+}
+
+.item {
+  cursor: pointer;
 }
 
 .item {
@@ -9,7 +17,7 @@
   }
 
   &__back {
-    color: black;
+    color: white;
     margin-right: 2em;
 
     &:focus {

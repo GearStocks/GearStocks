@@ -148,13 +148,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.profilePasswordGroup.get('password').reset();
     this.profilePasswordGroup.get('oldPassword').reset();
   }
-  
+
   submitProfileData(): void {
     const updateData = {
       username: this.profileDataGroup.get('username').value,
       firstName: this.profileDataGroup.get('firstName').value,
       lastName: this.profileDataGroup.get('lastName').value,
-      token: this.userToken
+      email: '',
+      password: '',
+      userToken: this.userToken
     };
 
     this.store.dispatch(updateUserData({updateData: updateData}));
@@ -173,8 +175,12 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     const updateData = {
-      mail: this.profileEmailGroup.get('email').value,
-      token: this.userToken
+      email: this.profileEmailGroup.get('email').value,
+      username: '',
+      firstName: '',
+      lastName: '',
+      password: '',
+      userToken: this.userToken
     };
 
     this.store.dispatch(updateUserData({updateData: updateData}));

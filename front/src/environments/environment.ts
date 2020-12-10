@@ -1,15 +1,15 @@
 export const environment = {
   production: false,
-  loginUrl: 'https://dev.gearstocks.store:8000/connect',
-  logoutUrl: 'https://dev.gearstocks.store:8000/disconnect',
-  registerUrl: 'https://dev.gearstocks.store:8000/register',
-  resetPasswordUrl: 'https://dev.gearstocks.store:8000/forgottenPassword',
-  contactUrl: 'https://dev.gearstocks.store:8000/contact',
-  searchUrl: 'https://dev.gearstocks.store:8000/listParts',
-  getItemUrl: 'https://dev.gearstocks.store:8000/getFullCarPart',
-  updateProfileUrl: 'https://dev.gearstocks.store:8000/updateInfoUser',
-  getUserUrl: 'https://dev.gearstocks.store:8000/infoUser',
-  categoriesUrl: 'https://dev.gearstocks.store:8000/getNonEmptyCategoryNames',
-  searchByCategoryUrl: 'https://dev.gearstocks.store:8000/listPartsByCategory',
-  addBookmarkUrl: 'https://dev.gearstocks.store:8000/addBookmark'
+  loginUrl: 'http://localhost:8000/connect',
+  logoutUrl: 'http://localhost:8000/disconnect',
+  registerUrl: 'http://localhost:8000/register',
+  resetPasswordUrl: 'http://localhost:8000/forgottenPassword',
+  contactUrl: 'http://localhost:8000/contact',
+  searchUrl: 'http://localhost:8000/listParts',
+  getItemUrl: 'http://localhost:8000/getFullCarPart',
+  updateProfileUrl: 'http://localhost:8000/updateInfoUser',
+  getUserUrl: 'http://localhost:8000/infoUser',
+  filtersUrl: 'http://localhost:8000/getInitFilterValues',
+  searchByCategoryUrl: 'http://localhost:8000/listPartsByCategory',
+  addBookmarkUrl: 'http://localhost:8000/addBookmark'
 };

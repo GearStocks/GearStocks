@@ -12,7 +12,9 @@ export class SearchFormService {
     return this.formBuilder.group({
         keyWord: ([null]),
         category: (['']),
+        subCategory: (['']),
         model: (['']),
+        brand: (['']),
         range: ([[0, 15000]])
       }
     );
