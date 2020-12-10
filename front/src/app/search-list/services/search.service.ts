@@ -36,15 +36,33 @@ export class SearchService {
   }
 
   search(filters: any): Observable<Items> {
+    let category = '';
+    let model = '';
+
+    if (filters.category) {
+      category = filters.category.name;
+    }
+
+    if (filters.category && filters.subCategory) {
+      category = filters.subCategory.name;
+    }
+
+    if (filters.brand) {
+      model = filters.brand.name;
+    }
+    if (filters.brand && filters.model) {
+      model = filters.model.name;
+    }
     const body = {
       keyWord: filters.keyWord,
       filters: {
         'maxPrice': filters.range[1].toString(),
         'minPrice': filters.range[0].toString(),
-        'category': filters.category,
-        'model': filters.model
+        'category': category,
+        'model': model
     }
     };
+
     return this.http.post<any>(this.searchUrl, body, httpOptions);
   }
 

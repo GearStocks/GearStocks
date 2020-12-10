@@ -46,6 +46,6 @@ export class UserService {
   }
 
   updateUser(data: User): Observable<User> {
-    return this.http.patch<User>(this.updateProfileUrl, data, httpOptions);
+    return this.http.post<User>(this.updateProfileUrl, data, httpOptions);
   }
 }

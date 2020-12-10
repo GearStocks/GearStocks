@@ -16,11 +16,11 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class CategoriesService {
-  public categoriesUrl = environment.categoriesUrl;
+  public filtersUrl = environment.filtersUrl;
 
   constructor(private http: HttpClient) { }
 
   getCategories() {
-    return this.http.post<any>(this.categoriesUrl, httpOptions);
+    return this.http.post<any>(this.filtersUrl, httpOptions);
   }
 }

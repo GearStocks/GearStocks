@@ -37,6 +37,11 @@
       padding: 0;
       margin-top: 10px;
 
+      mat-form-field {
+        margin-right: 10px;
+
+      }
+
       button {
         color: lightseagreen;
         border: solid 1px lightgrey;
@@ -348,7 +353,7 @@
     }
 
     ul li a {
-     width: 60px;
+      width: 60px;
       height: 60px;
       line-height: 60px;
       font-size: 25px;

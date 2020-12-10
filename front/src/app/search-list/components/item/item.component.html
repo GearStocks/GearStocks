@@ -1,71 +1,48 @@
-<div class="container" #target>
+<div class="back">
+  <div class="container" #target>
 
-  <div class="item__title">
-    <button (click)="back()" mat-icon-button aria-label="Page précédente" class="item__back">
-      <mat-icon>arrow_back</mat-icon>
-    </button>
-    <h1> {{itemData.name}} </h1>
-  </div>
+    <div class="item__title">
+      <button (click)="back()" mat-icon-button aria-label="Page précédente" class="item__back">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <h1> {{itemData.name}} </h1>
+    </div>
 
-  <div class="row">
-    <div class="col-md-4 item__desc">
-      <img *ngIf="!itemData.photo" class="img-fluid" src="../../../../assets/img/NoImageAvailableIcon.png" alt="">
-      <img *ngIf="itemData.photo" class="img-fluid" [src]="itemData.photo" alt="">
-      <!--
+    <div class="row">
+      <div class="col-md-4 item__desc">
+        <img *ngIf="!itemData.photo" class="img-fluid" src="../../../../assets/img/NoImageAvailableIcon.png" alt="">
+        <img *ngIf="itemData.photo" class="img-fluid" [src]="itemData.photo"
+             onerror="this.src='../../../../assets/img/NoImageAvailableIcon.png';" alt="">
+        <h5 style="color: darkorange; margin-top: 15px">Prix : {{ price(itemData.prices[itemData.prices.length -1].price) | currency : 'EUR' : 'symbol' : '1.0-0' }}</h5>
         <h3>Details du produit</h3>
-        <ul>
-            <li>Marque: {{itemData.details.brand}}</li>
-            <li>Année: {{itemData.details.year}}</li>
-            <li>Référence de la pièce: {{itemData.details.ref}}</li>
-        </ul>
-            -->
-
+        <p>{{ itemData.description }}</p>
+      </div>
+      <div class="col-md-8 item__desc">
+        <canvas id="canvas">{{ chart }}</canvas>
+      </div>
     </div>
-    <div class="col-md-8 item__desc">
-      <canvas id="canvas">{{ chart }}</canvas>
+
+    <div class="item__desc row" *ngIf="isAuthenticated" style=" display: flex; align-items: flex-end;">
+      <h6 style="margin-right: 10px">Ajouter aux favoris</h6>
+      <app-gearstocks-favourite-button
+        (selectedChange)="selectChange($event)"
+        [selected]="selected">
+      </app-gearstocks-favourite-button>
     </div>
-  </div>
 
-  <div class="item__desc row" *ngIf="isAuthenticated">
-    <h3>Description du produit</h3>
-    <p> {{itemData.description}} </p>
-    <app-gearstocks-favourite-button
-    (selectedChange)="selectChange($event)">
-    </app-gearstocks-favourite-button>
-  </div>
-
-
-  <!--
-    <h3 class="my-4">Related Product</h3>
+    <h3 class="my-4">Recommandations</h3>
 
     <div class="row">
 
-        <div class="col-md-3 col-sm-6 mb-4">
-            <a routerLink="">
-                <img class="img-fluid" style="height:200px; width:340px" src="https://medias.mehariclub.com/3335165_index_1.jpg" alt="">
-            </a>
+      <div class="col-md-3 col-sm-6 mb-4" *ngFor="let item of itemData.referrals">
+        <div (click)="navigate(item)" class="item">
+          <img *ngIf="!item.photo" class="card-img-top" src="../../assets/img/NoImageAvailableIcon.png" alt="">
+          <img *ngIf="item.photo" class="card-img-top" [src]="item.photo"
+               onerror="this.src='../../assets/img/NoImageAvailableIcon.png';" alt="">
         </div>
-
-        <div class="col-md-3 col-sm-6 mb-4">
-            <a routerLink="">
-                <img class="img-fluid" style="height:200px; width:340px" src="http://photo.slideperformance.com/home_box_2/hb-2003-2-2.png" alt="">
-            </a>
-        </div>
-
-        <div class="col-md-3 col-sm-6 mb-4">
-            <a routerLink="">
-                <img class="img-fluid" style="height:200px; width:340px" src="https://az25411.vo.msecnd.net/bmp/zoom/15/2667-bkr7eix.jpg" alt="">
-            </a>
-        </div>
-
-        <div class="col-md-3 col-sm-6 mb-4">
-            <a routerLink="">
-                <img class="img-fluid" style="height:200px; width:340px" src="https://medias.mehariclub.com/1200500_index_1.jpg" alt="">
-            </a>
-        </div>
-
+        <h4 style="font-size: 1em; padding: 10px; background-color: rgba(0, 0, 0, 0.5);">{{item.name}}</h4>
+      </div>
     </div>
 
-  -->
-
+  </div>
 </div>

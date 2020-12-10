@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 /* NgRx */
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import {
-  addFavourite,
+  addFavourite, addFavouriteSuccess,
   contact,
   contactSuccess,
   getItem,
@@ -20,6 +20,8 @@ import { map, switchMap, tap } from 'rxjs/operators';
 /* Services */
 import { SearchService } from '../../search-list/services/search.service';
 import { ContactService } from '../../core/components/contact/services/contact.service';
+import {updateUserDataSuccess} from '../actions/auth.actions';
+import {AlertService} from '../../shared/components/gearstocks-alert/services/alert.service';
 
 @Injectable()
 export class CoreEffects {
@@ -79,11 +81,24 @@ export class CoreEffects {
   addFavourite$ = createEffect(() =>
     this.actions$.pipe(
       ofType(addFavourite),
-      switchMap(action => this.searchService.addFavourite(action.name)))
+      switchMap(action => this.searchService.addFavourite(action.name)),
+      map(data => addFavouriteSuccess())
+    )
+  );
+
+  addFavouriteSuccess$ = createEffect(() =>
+      this.actions$.pipe(
+        ofType(addFavouriteSuccess),
+        tap(() => {
+          this.alertService.success('Pièce ajoutée aux favoris');
+        }),
+      ),
+    { dispatch: false }
   );
 
   constructor(private actions$: Actions, private searchService: SearchService,
-              private contactService: ContactService, private router: Router
+              private contactService: ContactService, private router: Router,
+              private alertService: AlertService
   ) {}
 
 }

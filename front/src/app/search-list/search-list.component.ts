@@ -15,6 +15,7 @@ import {MatMenu} from '@angular/material/menu';
 import {SearchFormService} from './services/search-form.service';
 import {Observable, Subject, Subscription} from 'rxjs';
 import {filter} from 'rxjs/operators';
+import {selectAuthState, selectAuthUser} from '../store/reducers/auth.reducer';
 
 @Component({
   selector: 'app-search-list',
@@ -26,11 +27,15 @@ export class SearchListComponent implements OnInit, AfterViewInit {
 
   data: Items;
   searchForm: FormGroup;
-  categories: any;
+  filters: any;
+  subcategories: any;
+  models: any;
+  bookmarks: any;
+  isAuthenticated: boolean;
   range = [0, 15000];
   sliderConfig: any = {
     connect: true,
-    step: 100,
+    step: 50,
     range: {
       min: 0,
       max: 15000
@@ -40,11 +45,13 @@ export class SearchListComponent implements OnInit, AfterViewInit {
 
   constructor(private route: ActivatedRoute, private store: Store<AppState>, private searchFormService: SearchFormService) {
     this.store.pipe(select(selectSearchList)).subscribe(x => this.data = x);
+    this.store.pipe(select(selectAuthUser)).subscribe(x => this.bookmarks = x.bookmarks);
+    this.store.pipe(select(selectAuthState)).subscribe(x => this.isAuthenticated = x);
     this.searchForm = this.searchFormService.buildForm();
   }
 
   ngOnInit() {
-    this.route.data.subscribe((data: { categories }) => this.categories = data.categories.categories);
+    this.route.data.subscribe((data: { filters }) => this.filters = data.filters);
   }
 
   ngAfterViewInit() {
@@ -52,6 +59,22 @@ export class SearchListComponent implements OnInit, AfterViewInit {
   }
 
   get f() { return this.searchForm.controls; }
+
+  addSelect(value): void {
+    if (value && value.subCategory) {
+      this.subcategories = value.subCategory;
+    } else {
+      this.subcategories = null;
+    }
+  }
+
+  addModel(value): void {
+    if (value && value.models) {
+      this.models = value.models;
+    } else {
+      this.models = null;
+    }
+  }
 
   search(): void {
     if (this.f.keyWord.value) {
@@ -69,6 +92,14 @@ export class SearchListComponent implements OnInit, AfterViewInit {
 
   navigate(item: Item): void {
     this.store.dispatch(getItem({name: item.name}));
+  }
+
+  navigateToBookmark(value): void {
+    this.store.dispatch(getItem({name: value}));
+  }
+
+  price(nb): number {
+    return parseInt(nb, 10);
   }
 
   private configureMenuClose(old: MatMenu['close']): MatMenu['close'] {

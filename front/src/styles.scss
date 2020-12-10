@@ -81,7 +81,6 @@ app-search-list {
     border: solid 1px lightgrey;
     border-radius: 3px;
     height: 100%;
-    border-right: none;
     align-items: center;
   }
 
@@ -135,6 +134,10 @@ app-home {
   }
 
   .mat-form-field-type-mat-select .mat-form-field-label {
+    color: white;
+  }
+
+  .mat-select-value-text {
     color: white;
   }
 }

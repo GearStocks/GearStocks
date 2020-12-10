@@ -12,7 +12,8 @@ export class Details {
 export class Item {
     id: number;
     name: string;
-    prices: ChartTab[];
-    photo: string;
-    description: string;
+    prices?: ChartTab[];
+    photo?: string;
+    description?: string;
+    referrals?: Item[];
 }
